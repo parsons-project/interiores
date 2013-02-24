@@ -1,18 +1,17 @@
-package interiores;
+package interiores.views;
 
+import interiores.mvc.View;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import javax.swing.JPanel;
 
 /**
  * Base class for all the views.
  * @author hector
  */
-abstract public class View extends JPanel implements PropertyChangeListener {
+abstract public class TerminalView implements View {
     
-    public View()
+    public TerminalView()
     {
-        super();
+        
     }
     
     @Override
@@ -20,5 +19,14 @@ abstract public class View extends JPanel implements PropertyChangeListener {
     {
         System.out.println("Property " + evt.getPropertyName() + " changed from " + evt.getOldValue() +
                 "to" + evt.getNewValue());
+    }
+    
+   abstract public void print();
+    
+    @Override
+    public void setVisible(boolean visible)
+    {
+        if(visible)
+            print();
     }
 }

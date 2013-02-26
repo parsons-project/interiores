@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package interiores.mvc;
 
 import java.util.HashMap;
@@ -15,84 +11,108 @@ import java.util.Map;
  */
 public class ViewLoader
 {
-    private Map<String, Class> names;
-    private Map<Class, Class> controllers;
-    private Map<Class, Class[]> dependencies;
+    private static final String APP_PACKAGE = "interiores";
+    
+    private String gui;
+    private Map<String, Class> view_controller;
+    private Map<Class, Controller> controllers;
+    private Map<String, String[]> dependencies;
 
-    public ViewLoader()
+    public ViewLoader(String gui)
     {
-        names = new HashMap<String, Class>();
-        controllers = new HashMap<Class, Class>();
-        dependencies = new HashMap<Class, Class[]>();
+        this.gui = gui;
+        view_controller = new HashMap<String, Class>();
+        controllers = new HashMap<Class, Controller>();
+        dependencies = new HashMap<String, String[]>();
     }
 
-    public void addViews(Class controller, Class[] views)
+    public void addViews(Class controller, String[] views)
     {
-        for (Class view : views)
-        {
-            controllers.put(view, controller);
-        }
+        for (String view : views)
+            view_controller.put(view, controller);
     }
 
-    public void setDependencies(Class view, Class[] deps)
+    public void setDependencies(String view, String[] deps)
     {
         dependencies.put(view, deps);
     }
     
-    public View getView(String viewName) throws Exception
-    {
-        if (!names.containsKey(viewName))
-            throw new Exception("There is no view named: " + viewName
-                    + " in the ViewLoader");
-        
-        return getView(names.get(viewName));
+    public void loadView(String viewName, Model model) throws ClassNotFoundException, Exception
+    {        
+        View view = getView(viewName, model);
+        view.showView();
     }
     
-    public View getView(Class view) throws Exception
+    public View getView(String viewName, Model model) throws Exception
     {
-        if (!controllers.containsKey(view))
-        {
-            throw new Exception("The view " + view.getName() + " is not defined"
+        String className = APP_PACKAGE + ".views." + gui + "." + viewName + "View";
+        Class viewClass = Class.forName(className);
+        
+        if (!view_controller.containsKey(viewName))
+            throw new Exception("The view " + viewClass.getName() + " is not defined "
                     + "in the ViewLoader.");
-        }
 
-        Object instance;
-        View[] vdeps = getDependencies(view);
+        View instance;
+        View[] vdeps = getDependencies(viewName, model);
 
         switch (vdeps.length)
         {
             case 1:
-                instance = view.getConstructor(View.class).newInstance(vdeps[0]);
+                instance = (View)viewClass.getConstructor(View.class).newInstance(vdeps[0]);
+                break;
 
             case 2:
-                instance = view.getConstructor(View.class, View.class).newInstance(
+                instance = (View)viewClass.getConstructor(View.class, View.class).newInstance(
                         vdeps[0],
                         vdeps[1]);
+                break;
 
             case 3:
-                instance = view.getConstructor(View.class, View.class,
-                        View.class).newInstance(
+                instance = (View)viewClass.getConstructor(View.class, View.class, View.class).newInstance(
                         vdeps[0],
                         vdeps[1],
                         vdeps[2]);
+                break;
 
             default:
-                instance = view.newInstance();
+                instance = (View)viewClass.newInstance();
         }
-
-        return (View) instance;
+        
+        Controller viewController = getController(viewName);
+        viewController.addView(instance);
+        
+        if(model != null)
+            viewController.setModel(model);
+        
+        return instance;
     }
 
-    private View[] getDependencies(Class view) throws Exception
+    private View[] getDependencies(String viewName, Model model) throws Exception
     {
-        Class[] deps = dependencies.get(view);
+        if(! dependencies.containsKey(viewName))
+            return new View[0];
+        
+        String[] deps = dependencies.get(viewName);
         View[] vdeps = new View[deps.length];
 
         for (int i = 0; i < vdeps.length; ++i)
-        {
-            vdeps[i] = getView(deps[i]);
-        }
+            vdeps[i] = getView(deps[i], model);
 
         return vdeps;
+    }
+    
+    private Controller getController(String viewName) throws Exception
+    {
+        Class controllerClass = view_controller.get(viewName);
+        
+        if(controllers.containsKey(controllerClass))
+            return controllers.get(controllerClass);
+        
+        Controller controller = (Controller)controllerClass.newInstance();
+        controller.setViewLoader(this);
+        
+        controllers.put(controllerClass, controller);
+        
+        return controller;
     }
 }

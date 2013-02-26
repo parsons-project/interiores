@@ -2,10 +2,8 @@
  */
 package interiores;
 
-import interiores.controllers.RoomController;
-import interiores.models.Room;
-import interiores.mvc.Controller;
-import interiores.views.RoomInfoView;
+import interiores.controllers.MainController;
+import interiores.mvc.ViewLoader;
 
 /**
  *
@@ -13,18 +11,14 @@ import interiores.views.RoomInfoView;
  */
 public class Interiores
 {
-    private static Room room;
-
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws ClassNotFoundException, Exception
     {
-        room = new Room();
+        ViewLoader loader = new ViewLoader("terminal");
         
-        Controller controller = new RoomController(room);
-        room.addListener(controller);
-        
-        controller.addView(new RoomInfoView());
+        loader.addViews(MainController.class, new String[]{ "Main" });
+        loader.loadView("Main", null);
     }
 }

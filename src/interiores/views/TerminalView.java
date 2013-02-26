@@ -20,9 +20,7 @@ abstract public class TerminalView implements View {
         System.out.println("Property " + evt.getPropertyName() + " changed from " + evt.getOldValue() +
                 "to" + evt.getNewValue());
     }
-    
-   abstract public void print();
-    
+        
     @Override
     public void showView()
     {

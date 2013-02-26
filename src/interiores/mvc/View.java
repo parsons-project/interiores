@@ -10,5 +10,5 @@ import java.beans.PropertyChangeListener;
  */
 public interface View extends PropertyChangeListener
 {
-    public void setVisible(boolean visible);
+    public void showView();
 }

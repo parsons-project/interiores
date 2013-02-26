@@ -24,9 +24,8 @@ abstract public class TerminalView implements View {
    abstract public void print();
     
     @Override
-    public void setVisible(boolean visible)
+    public void showView()
     {
-        if(visible)
-            print();
+       
     }
 }

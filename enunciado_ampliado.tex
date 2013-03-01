@@ -1,38 +1,69 @@
 \documentclass[a4paper,11pt]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
 
+% Para ver como queda -> pdflatex enunciado_ampliado.tex
 
-\title{Diseño Interiores}
-\author{}
+% Propongo (para hacerlo más ``seguible'') crear un archivo
+% .tex para cada apartado y uno que sea un \input{} de todos.
+
+% Definimos un nuevo comando (\newpar) que básicamente
+% añade un espacio vertical de 3mm. Lo hacemos así para
+% que haya más espacio que el de por defecto. 
+\newcommand{\newpar}{\vskip 3mm}
+
+\title{\bf{PROP: Diseño Interiores}}
+\author{\small{Lorenzo Arribas} \and \small{Nil Mamano}
+\and \small{Héctor Ramón} \and \small{Alvaro Espuña}}
+\date{}
 
 \begin{document}
 \maketitle
-\section{Enunciado Original}
-Es  desitja realitzar una aplicació útil per al disseny automàtic d'habitacions de diferents tipus. 
-Per simplificar, podeu suposar que només volem fer un disseny en 2D (la vista des de dalt). 
-Cada tipus d'habitació requereix, per sentit comú,  cert tipus de mobiliari. Per exemple, una 
-nevera es pot posar a la cuina però una banyera no. Un televisor pot posar-se en qualsevol 
-tipus d'habitació, inclòs el bany. Es pot disposar  de mobiliari amb diferents mides, colors, 
-textures, etc. (podeu suposar que els elements tenen forma rectangular). A més a més, el 
-mobiliari pot tenir restriccions respecte la topologia de l'habitació (per exemple, no es pot posar 
-res davant d’una porta, una prestatgeria no es pot posar davant d’una finestra) o respecte a 
-altre mobiliari (per exemple, un forn no pot estar al costat d'una nevera, un televisor té una 
-distància mínima recomanada respecte el sofà de Y metres).
+\section{Análisis de requisitos}
+\subsection{Enunciado ampliado}
+% De momento es solo una traducción del enunciado original
+Se desea realitzar una aplicación útil para el diseño automático de
+habitaciones de diferentes tipos. Para simplificar, podéis suponer que
+solo queremos hacer un diseño en 2D (la vista desde arriba).  Cada
+tipo de habitación requiere, por sentido común, cierto tipo de
+mobiliario. Por ejemplo, una nevera se puede poner en la cocina pero
+una bañera no. Un televisor puede ponerse en cualquier tipo de
+habitación, incluso el baño. Se puede disponer de mobiliario con
+diferentes medidas, colores, texturas, etc. (podéis suponer que los
+elementos tienen forma rectangular).  Además, el mobiliario puede
+tener restricciones respecto la topologia de la habitación (por
+ejemplo, no se puede poner nada delante de una porta, una estanteria
+no se puede poner delante de una ventana) o respecto a otro mobiliario
+(por ejemplo, un horno no puede estar al lado de una nevera, un
+televisor tiene una distancia mínima recomendada respecto el sofá de Y
+metros).
+\newpar
+El usuario indicará el mobiliario que se tiene que añadir.
+Adicionalmente, se deberá añadir al diseño el mobiliario que
+el usuario no ha requerido pero que, por sentido comun, siempre existe
+en una habitación del tipo que se quiere diseñar. Por ejemplo,
+supongamos que el usuario quiere que se diseñe su cocina. Quizás no
+requiere nada sobre la nevera. Aún así, es de sentido común, hoy en
+día, que cualquier cocina disponga de nevera. Por contra, un televisor
+no es indispensable en ninguna habitación de una casa.
+\newpar
+La aplicación debe permitir añadir en 2D la topologia de la habitación
+que se quiere diseñar: sus dimensiones (también la podéis suponer
+rectangular), la ubicación y dimensiones de ventanas y puertas. También
+debe permitir que el usuario defina que elementos quiere que aparezcan en
+su habitación. El sistema debe dar como resultado un posible diseño
+2D que cumpla las restricciones definidas por el usuario.
 
-L’usuari indicarà el mobiliari que s'ha d'afegir. Addicionalment, s'haurà d'afegir al disseny aquell 
-mobiliari que l’usuari no ha requerit però que, per sentit comú, sempre existeix en una habitació 
-del tipus que es vol dissenyar. Per exemple, suposem que l’usuari vol que es dissenyi la seva 
-cuina. Potser no requereix res sobre la nevera. Tot i així, es de sentit comú, avui dia, que 
-qualsevol cuina disposi de nevera. Per contra, un televisor no es indispensable en cap habitació 
-d'una casa.
-
-L'aplicació ha de permetre introduir en 2D la topologia de l'habitació que es vol dissenyar: les 
-seves dimensions (també la podeu suposar rectangular), la ubicació i dimensions de finestres i 
-portes. També ha de permetre que l’usuari defineixi quins elements vol que apareguin a la seva 
-habitació. El sistema ha de donar com a resultat un possible disseny 2D que compleixi les 
-restriccions definides per l’usuari.
-
-\section{Enunciado Ampliado}
-
+\subsection{Diagrama de casos de uso}
+% Aqui iria la imagen o lo que sea de los casos de uso con sus descripciones
+% del estilo:
+% \begin{description}
+% \item[Nombre] Caso de Uso 1
+% \item[Actores] Jim Carrey
+% ...
+% \end{description}
+\section{Especificación}
+\subsection{Diagrama de clases del dominio}
+% Más o menos la misma idea que con el diagrama de casos de uso
 
 \end{document}

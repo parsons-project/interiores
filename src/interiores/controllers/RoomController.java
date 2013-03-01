@@ -16,9 +16,9 @@ public class RoomController extends Controller
         this.room = room;
     }
     
-    public void saveRoom(String name, int width, int height)
+    public void newRoom(String type, int width, int height)
     {
-       room.setName(name);
+       // ...
        room.setWidth(width);
        room.setHeight(height);
     }

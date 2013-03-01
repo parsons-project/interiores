@@ -2,6 +2,11 @@
  */
 package interiores;
 
+import interiores.core.Application;
+import interiores.core.ViewLoader;
+import interiores.core.terminal.Terminal;
+import interiores.views.swing.SwingLoader;
+
 /**
  *
  * @author hector
@@ -13,10 +18,12 @@ public class Interiores
      */
     public static void main(String[] args)
     {
-        GUI gui = new GUI("swing");
+        ViewLoader loader = new SwingLoader();
         
         Terminal terminal = new Terminal();
-        terminal.setGUI(gui);
-        terminal.init();
+        terminal.setViewLoader(loader);
+        
+        Application app = new Application(terminal);
+        app.init();
     }
 }

@@ -10,34 +10,10 @@ import java.util.ArrayList;
  */
 abstract public class Controller implements PropertyChangeListener {
     private ArrayList<View> views;
-    private ViewLoader loader;
     
     public Controller()
     {
         views = new ArrayList();
-    }
-    
-    public void setViewLoader(ViewLoader loader)
-    {
-        this.loader = loader;
-    }
-    
-    public void loadView(String name)
-    {
-        loadView(name, null);
-    }
-    
-    public void loadView(String name, Model model)
-    {
-        try
-        {
-            loader.loadView(name, model);
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            System.exit(1);
-        }
     }
     
     public void addView(View view)

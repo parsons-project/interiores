@@ -22,7 +22,7 @@ public class Intermediary implements PropertyChangeListener
         listeners.add(listener);
     }
     
-    public void removeView(PropertyChangeListener listener)
+    public void removeListener(PropertyChangeListener listener)
     {
         listeners.remove(listener);
     }

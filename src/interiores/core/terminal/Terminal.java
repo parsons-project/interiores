@@ -1,7 +1,12 @@
 package interiores.core.terminal;
 
+import interiores.core.Utils;
 import interiores.core.ViewLoader;
 import interiores.core.mvc.View;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,27 +16,43 @@ import java.util.Map;
  */
 public class Terminal
 {
-    private Input input;
+    private IOStream iostream;
     private Map<String, CommandGroup> commands;
     private ViewLoader vloader;
     
     public Terminal()
     {
-        input = new Input();
+        iostream = new IOStream();
         commands = new HashMap<String, CommandGroup>();
         vloader = null;
     }
     
-    public void init()
+    public void init() throws Exception
     {
         if(hasGui())
+        {
             vloader.init();
+            iostream.setOutputStream(new PrintStream("/dev/null")); // Ignore System output with GUI
+        }
         else
-            exec(input.readLine());
+        {
+            // Terminal mode
+            iostream.setInputStream(System.in);
+            iostream.setOutputStream(System.out);
+            
+            String line = iostream.readLine();
+            
+            while(line != null && !line.startsWith("quit"))
+            {
+                exec(line);
+                line = iostream.readLine();
+            }
+        }
     }
     
     public void addCommands(String subject, CommandGroup commands)
     {
+        commands.setIOStream(iostream);
         this.commands.put(subject, commands);
     }
     
@@ -49,39 +70,78 @@ public class Terminal
     {
         try
         {
-            input.set(line);
-            String action = input.getString();
-            String subject = input.getString();
+            iostream.setInputBuffer(line);
+            
+            String action, method;
+            action = method = iostream.readString();
+            
+            if(isReserved(action))
+                method = "_" + action;
+            
+            String subject = iostream.readString();
+            
+            System.out.println("Action is " + action + " on subject " + subject);
+            
+            if(! commands.containsKey(subject))
+                throw new Exception("There is no subject known as " + subject);
             
             CommandGroup comgroup = commands.get(subject);
-            
-            if(hasGui() && !vloader.isLoaded(name))
-            {
-                vloader.load(name);
-                
-                View view = vloader.get(name);
-                comgroup.addListener(view);
-            }
-                
-            
-            
             Class comgroupClass = comgroup.getClass();
             
             try
             {
-                comgroupClass.getMethod(action).invoke(comgroup);
+                try
+                {
+                    comgroupClass.getMethod(method).invoke(comgroup);
+                }
+                catch(InvocationTargetException e)
+                {
+                    throw e.getCause();
+                }
             }
-            catch(Exception e)
+            catch(IOException e)
             {
-                
+                if(hasGui())
+                    loadView(comgroup, action, subject);
+                else
+                    throw e;
             }
-            
-            if(hasGui())
-                vloader.unload(name);
+            catch(Throwable e)
+            {
+                e.printStackTrace(); // @TODO Improve exception handling
+            }
         }
         catch(Exception e)
         {
-            System.out.println(e.getMessage());
+            e.printStackTrace(); // @TODO Improve exception handling
         }
+    }
+    
+    private boolean isReserved(String s)
+    {
+        return (s.equals("new"));
+    }
+    
+    private void loadView(CommandGroup comgroup, String action, String subject) throws Exception
+    {
+        String viewName = getViewName(action, subject);
+        
+        boolean loaded = vloader.isLoaded(viewName);
+        
+        if(!loaded)
+            vloader.load(viewName);
+        
+        View view = vloader.get(viewName);
+        view.showView();
+        
+        if(loaded)
+            throw new Exception("The view " + viewName + " may not be working correctly.");
+        else
+            comgroup.addListener(view);
+    }
+    
+    private String getViewName(String action, String subject)
+    {
+        return Utils.capitalize(action) + Utils.capitalize(subject);
     }
 }

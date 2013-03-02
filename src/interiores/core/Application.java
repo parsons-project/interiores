@@ -4,6 +4,7 @@ import interiores.commands.RoomCommands;
 import interiores.controllers.RoomController;
 import interiores.core.terminal.Terminal;
 import interiores.models.Room;
+import java.io.IOException;
 
 /**
  *
@@ -22,7 +23,14 @@ public class Application
     {
         addCommands();
         
-        terminal.init();
+        try
+        {
+            terminal.init();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
     }
     
     private void addCommands()

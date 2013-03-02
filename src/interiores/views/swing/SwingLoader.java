@@ -14,10 +14,15 @@ public class SwingLoader implements ViewLoader
     private final static String VIEWS_PKG = "interiores.views.swing";
     private Map<String, View> views;
     
+    public SwingLoader()
+    {
+        views = new HashMap<String, View>();
+    }
+    
     @Override
     public void init()
     {
-        views = new HashMap<String, View>();
+        
     }
     
     @Override

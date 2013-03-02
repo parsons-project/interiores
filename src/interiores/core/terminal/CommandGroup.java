@@ -2,6 +2,7 @@ package interiores.core.terminal;
 
 import interiores.core.mvc.Controller;
 import interiores.core.mvc.Intermediary;
+import java.io.IOException;
 
 /**
  *
@@ -9,14 +10,25 @@ import interiores.core.mvc.Intermediary;
  */
 abstract public class CommandGroup extends Intermediary
 {
-    public String readString(String question)
+    private IOStream iostream;
+    
+    public void setIOStream(IOStream iostream)
     {
-        return "Ye";
+        this.iostream = iostream;
     }
     
-    public int readInt(String question)
+    public String readString(String question) throws IOException
     {
-        return 0;
+        iostream.println(question);
+        
+        return iostream.readString();
+    }
+    
+    public int readInt(String question) throws IOException
+    {
+        iostream.println(question);
+        
+        return iostream.readInt();
     }
     
     abstract public void setController(Controller controller);

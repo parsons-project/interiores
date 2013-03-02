@@ -1,8 +1,9 @@
 package interiores.commands;
 
 import interiores.controllers.RoomController;
-import interiores.core.terminal.CommandGroup;
 import interiores.core.mvc.Controller;
+import interiores.core.terminal.CommandGroup;
+import java.io.IOException;
 
 /**
  *
@@ -12,7 +13,7 @@ public class RoomCommands extends CommandGroup
 {
     private RoomController controller;
     
-    public void _new()
+    public void _new() throws IOException
     {
         String type = readString("Especifica qué tipo de habitación quieres crear");
         int width = readInt("Introduce el ancho de la habitación en cm");
@@ -25,5 +26,6 @@ public class RoomCommands extends CommandGroup
     public void setController(Controller controller)
     {
         this.controller = (RoomController) controller;
+        controller.addListener(this);
     }
 }

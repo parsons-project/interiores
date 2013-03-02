@@ -1,6 +1,7 @@
 package interiores.core.terminal;
 
 import interiores.core.ViewLoader;
+import interiores.core.mvc.View;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,11 +11,13 @@ import java.util.Map;
  */
 public class Terminal
 {
+    private Input input;
     private Map<String, CommandGroup> commands;
     private ViewLoader vloader;
     
     public Terminal()
     {
+        input = new Input();
         commands = new HashMap<String, CommandGroup>();
         vloader = null;
     }
@@ -23,6 +26,8 @@ public class Terminal
     {
         if(hasGui())
             vloader.init();
+        else
+            exec(input.readLine());
     }
     
     public void addCommands(String subject, CommandGroup commands)
@@ -44,13 +49,35 @@ public class Terminal
     {
         try
         {
-            // Load GUI View
-            // Add line to scanner
-            // Execute command
-            // If fails:
-            // - Show GUI View, if not shown
-            // - Throw error, if shown (view is not working correctly)
-            // Unload GUI View
+            input.set(line);
+            String action = input.getString();
+            String subject = input.getString();
+            
+            CommandGroup comgroup = commands.get(subject);
+            
+            if(hasGui() && !vloader.isLoaded(name))
+            {
+                vloader.load(name);
+                
+                View view = vloader.get(name);
+                comgroup.addListener(view);
+            }
+                
+            
+            
+            Class comgroupClass = comgroup.getClass();
+            
+            try
+            {
+                comgroupClass.getMethod(action).invoke(comgroup);
+            }
+            catch(Exception e)
+            {
+                
+            }
+            
+            if(hasGui())
+                vloader.unload(name);
         }
         catch(Exception e)
         {

@@ -2,7 +2,7 @@ package interiores.commands;
 
 import interiores.controllers.RoomController;
 import interiores.core.terminal.CommandGroup;
-import interiores.mvc.Controller;
+import interiores.core.mvc.Controller;
 
 /**
  *

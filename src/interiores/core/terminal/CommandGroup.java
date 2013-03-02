@@ -1,18 +1,14 @@
 package interiores.core.terminal;
 
-import interiores.mvc.Controller;
+import interiores.core.mvc.Controller;
+import interiores.core.mvc.Intermediary;
 
 /**
  *
  * @author hector
  */
-abstract public class CommandGroup
+abstract public class CommandGroup extends Intermediary
 {
-    public CommandGroup()
-    {
-    
-    }
-    
     public String readString(String question)
     {
         return "Ye";

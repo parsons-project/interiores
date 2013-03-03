@@ -1,0 +1,31 @@
+Se desea realitzar una aplicación útil para el diseño automático de
+habitaciones de diferentes tipos. Para simplificar, podéis suponer que
+solo queremos hacer un diseño en 2D (la vista desde arriba).  Cada
+tipo de habitación requiere, por sentido común, cierto tipo de
+mobiliario. Por ejemplo, una nevera se puede poner en la cocina pero
+una bañera no. Un televisor puede ponerse en cualquier tipo de
+habitación, incluso el baño. Se puede disponer de mobiliario con
+diferentes medidas, colores, texturas, etc. (podéis suponer que los
+elementos tienen forma rectangular).  Además, el mobiliario puede
+tener restricciones respecto la topologia de la habitación (por
+ejemplo, no se puede poner nada delante de una porta, una estanteria
+no se puede poner delante de una ventana) o respecto a otro mobiliario
+(por ejemplo, un horno no puede estar al lado de una nevera, un
+televisor tiene una distancia mínima recomendada respecto el sofá de Y
+metros).
+\newpar
+El usuario indicará el mobiliario que se tiene que añadir.
+Adicionalmente, se deberá añadir al diseño el mobiliario que
+el usuario no ha requerido pero que, por sentido comun, siempre existe
+en una habitación del tipo que se quiere diseñar. Por ejemplo,
+supongamos que el usuario quiere que se diseñe su cocina. Quizás no
+requiere nada sobre la nevera. Aún así, es de sentido común, hoy en
+día, que cualquier cocina disponga de nevera. Por contra, un televisor
+no es indispensable en ninguna habitación de una casa.
+\newpar
+La aplicación debe permitir añadir en 2D la topologia de la habitación
+que se quiere diseñar: sus dimensiones (también la podéis suponer
+rectangular), la ubicación y dimensiones de ventanas y puertas. También
+debe permitir que el usuario defina que elementos quiere que aparezcan en
+su habitación. El sistema debe dar como resultado un posible diseño
+2D que cumpla las restricciones definidas por el usuario.

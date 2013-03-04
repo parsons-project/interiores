@@ -1,7 +1,7 @@
 package interiores.controllers;
 
 import interiores.models.Room;
-import interiores.mvc.Controller;
+import interiores.core.mvc.Controller;
 
 /**
  * Controller for rooms!
@@ -14,11 +14,12 @@ public class RoomController extends Controller
     public RoomController(Room room)
     {
         this.room = room;
+        room.addListener(this);
     }
     
-    public void saveRoom(String name, int width, int height)
+    public void newRoom(String type, int width, int height)
     {
-       room.setName(name);
+       // ...
        room.setWidth(width);
        room.setHeight(height);
     }

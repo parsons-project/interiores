@@ -7,21 +7,41 @@ Una habitació té almenys una porta
 L'espai actiu de 2 elements no es pot sobreposar
 L'espai passiu d'un element no es pot sobreposar amb l'espai actiu d'un altre
 Un element pinned no es pot moure: accidents, Permanents i mobles pinned (caso particular: redimensión)
+Los accidentes no pueden dividir la habitación en 2.
+No tapar interruptores
+No tapar enchufes excpeto por electrodomesticos
 
 Criterios de calidad generales:
 Las puertas deben abrirse de modo que haya más visibilidad sobre la habitación.
+"Sempre hi ha una manera millor i una manera pitjor de col·locar una porta"
+Se debe minimizar la superficie de la habitación inaccesible.
+El interruptor debe estar cerca de la puerta.
+Los muebles deben estar el máximo apartados posibles (ie contra las paredes)
+Los enchufes deben estar bien distribuidos.
+La televisión no puede tener una ventana delante (por los reflejos. ¿O depende de la orientación de la casa?).
+
+
 
 Dormitorio:
+
 Restricciones:
 
 Muebles:
 Cama (,100x190,)
 Espejo
+Armario
+Mesilla de noche
 
 Criterios de calidad:
-	- Alrededor de la cama debería haber entre 60 y 75 libres
+	- Alrededor de la cama debería haber entre 60 y 75 libres (espacio pasivo)
 	- Contiene un espejo de cuerpo entero
 	- Contiene un armario por cama, con superfície no menor de 10000 (en el caso de camas dobles, 20000)
+	- La mesilla de noche está al lado de la cama, junto al cabezal.
+	- Un interruptor accesible desde la cama
+
+
+
+
 
 Baño:
 Restricciones:
@@ -45,7 +65,7 @@ Criterios de calidad:
 - El lavamanos debe encontrarse, por lo menos, a 20 de los demás sanitarios y paredes, y a 5 de los armarios
 - Si el baño es pequeño, los colores deberían ser claros
 - Bañera más larga
-
+- Espejo encima el lavamanos
 
 
 
@@ -61,7 +81,7 @@ Silla (,45x45,)
 
 Criterios de calidad:
 	- Cada persona necesita un espacio de 60x40 de mesa para comer
-
+	- Sillas distribuidas uniformemente alrededor de la mesa
 	
 	
 	
@@ -74,6 +94,7 @@ Restricciones:
 - Superfície mínima de 250000
 - La nevera no puede estar al lado del horno
 - Muebles esenciales: Mármol, Fogones, Fregadero, Escurridor
+- El escurridor debe ser continuo al fregadero.
 
 Muebles (w = width, d = depth):
 - Mármol (,60x60,)
@@ -81,7 +102,7 @@ Muebles (w = width, d = depth):
 	- Incorpora una campana extractora
 	- Requiere mayor espacio de movimiento
 - Fregadero (,90x60,)
-- Escurridor (,60x60,)
+- Escurridor (,60x60,) (sitio para dejar los utensilios de cocina a secarse)
 - Armario alto (,35x,)
 	- Hangable (debe ir pegado a una pared)
 	- Puede ir encima del mármol
@@ -96,7 +117,7 @@ Criterios de calidad:
 - Recorridos cortos
 - Suficiente espacio de movimiento
 - Pocos trabajos de pie
-
+- Cuanta más superfície de mármol (hasta ..?) mejor.
 
 
 

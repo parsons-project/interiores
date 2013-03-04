@@ -1,0 +1,111 @@
+Notas:
+Todas las medidas son en cm
+
+
+Restricciones generales:
+Una habitació té almenys una porta
+L'espai actiu de 2 elements no es pot sobreposar
+L'espai passiu d'un element no es pot sobreposar amb l'espai actiu d'un altre
+Un element pinned no es pot moure: accidents, Permanents i mobles pinned (caso particular: redimensión)
+
+Criterios de calidad generales:
+Las puertas deben abrirse de modo que haya más visibilidad sobre la habitación.
+
+Dormitorio:
+Restricciones:
+
+Muebles:
+Cama (,100x190,)
+Espejo
+
+Criterios de calidad:
+	- Alrededor de la cama debería haber entre 60 y 75 libres
+	- Contiene un espejo de cuerpo entero
+	- Contiene un armario por cama, con superfície no menor de 10000 (en el caso de camas dobles, 20000)
+
+Baño:
+Restricciones:
+- Muebles esenciales: ducha O bañera, WC
+Muebles:
+- Ducha (,80x80,)
+- Bañera (105x70,170x75,)
+- Lavamanos (45x35,60x55,)
+- WC (40x75,40x75,55x80)
+- Bidé (40x60,40x60,40x60)
+- Espejo
+	- Hangable (debe ir pegado a una pared)
+- Armario
+- Toallero
+- Lavadora (60x60,60x60,60x60)
+- Secadora (60x60,60x60,60x60)
+
+Criterios de calidad:
+- Ducha, Bañera, WC, Pica y Bidé comparten pared (simplica instalación y aislamento acústico)
+- El Bidé y el WC deben encontrarse, por lo menos, a 25 de los demás muebles y paredes
+- El lavamanos debe encontrarse, por lo menos, a 20 de los demás sanitarios y paredes, y a 5 de los armarios
+- Si el baño es pequeño, los colores deberían ser claros
+- Bañera más larga
+
+
+
+
+
+Comedor:
+Restricciones:
+- Muebles esenciales: Mesa, Silla
+
+Muebles:
+Mesa (,80x,)
+	- 
+Silla (,45x45,)
+
+Criterios de calidad:
+	- Cada persona necesita un espacio de 60x40 de mesa para comer
+
+	
+	
+	
+	
+	
+	
+	
+Cocina:
+Restricciones:
+- Superfície mínima de 250000
+- La nevera no puede estar al lado del horno
+- Muebles esenciales: Mármol, Fogones, Fregadero, Escurridor
+
+Muebles (w = width, d = depth):
+- Mármol (,60x60,)
+- Fogones (,60x60,)
+	- Incorpora una campana extractora
+	- Requiere mayor espacio de movimiento
+- Fregadero (,90x60,)
+- Escurridor (,60x60,)
+- Armario alto (,35x,)
+	- Hangable (debe ir pegado a una pared)
+	- Puede ir encima del mármol
+- Armarios bajos/enteros (,60x60,)
+- Nevera (55x55,,80x75)
+- Horno (,60x60,)
+- Lavaplatos (,60x60,)
+- Mesa
+- Silla	
+
+Criterios de calidad:
+- Recorridos cortos
+- Suficiente espacio de movimiento
+- Pocos trabajos de pie
+
+
+
+
+
+
+
+
+Restricciones:
+Muebles:
+Criterios de calidad:
+
+pag 97

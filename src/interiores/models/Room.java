@@ -1,6 +1,6 @@
 package interiores.models;
 
-import interiores.core.mvc.Model;
+import interiores.mvc.Model;
 
 /**
  *

@@ -1,6 +1,6 @@
 /*
  */
-package interiores.core.mvc;
+package interiores.mvc;
 
 import java.beans.PropertyChangeListener;
 

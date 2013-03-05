@@ -2,10 +2,8 @@
  */
 package interiores;
 
-import interiores.core.Application;
-import interiores.core.ViewLoader;
-import interiores.core.terminal.Terminal;
-import interiores.views.swing.SwingLoader;
+import interiores.controllers.MainController;
+import interiores.mvc.ViewLoader;
 
 /**
  *
@@ -16,14 +14,11 @@ public class Interiores
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws ClassNotFoundException, Exception
     {
-        ViewLoader loader = new SwingLoader();
+        ViewLoader loader = new ViewLoader("terminal");
         
-        Terminal terminal = new Terminal();
-        //terminal.setViewLoader(loader);
-        
-        Application app = new Application(terminal);
-        app.init();
+        loader.addViews(MainController.class, new String[]{ "Main" });
+        loader.loadView("Main", null);
     }
 }

@@ -31,7 +31,8 @@ public class Terminal
         if(hasGui())
         {
             loadView(null, "main", "app");
-            iostream.setOutputStream(new PrintStream("/dev/null")); // Ignore System output with GUI
+            // Ignore System output with GUI
+            iostream.setOutputStream(new PrintStream("/dev/null"));
         }
         else
         {

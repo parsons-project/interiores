@@ -19,7 +19,7 @@ public class Application
         this.terminal = terminal;
     }
     
-    public void init()
+    public void init() throws Exception
     {
         addCommands();
         

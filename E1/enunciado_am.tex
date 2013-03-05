@@ -1,31 +1,146 @@
-Se desea realitzar una aplicación útil para el diseño automático de
-habitaciones de diferentes tipos. Para simplificar, podéis suponer que
-solo queremos hacer un diseño en 2D (la vista desde arriba).  Cada
-tipo de habitación requiere, por sentido común, cierto tipo de
-mobiliario. Por ejemplo, una nevera se puede poner en la cocina pero
-una bañera no. Un televisor puede ponerse en cualquier tipo de
-habitación, incluso el baño. Se puede disponer de mobiliario con
-diferentes medidas, colores, texturas, etc. (podéis suponer que los
-elementos tienen forma rectangular).  Además, el mobiliario puede
-tener restricciones respecto la topologia de la habitación (por
-ejemplo, no se puede poner nada delante de una porta, una estanteria
-no se puede poner delante de una ventana) o respecto a otro mobiliario
-(por ejemplo, un horno no puede estar al lado de una nevera, un
-televisor tiene una distancia mínima recomendada respecto el sofá de Y
-metros).
+`Diseño de interiores' es un software que permite al usuario diseñar
+una habitación y distribuir su mobiliario. El programa dispone de
+varias herramientas, tanto visuales como algorítmicas, que ayudan al
+usuario a obtener una distribución óptima del mobiliario bajo unas
+restricciones altamente personalizables.
 \newpar
-El usuario indicará el mobiliario que se tiene que añadir.
-Adicionalmente, se deberá añadir al diseño el mobiliario que
-el usuario no ha requerido pero que, por sentido comun, siempre existe
-en una habitación del tipo que se quiere diseñar. Por ejemplo,
-supongamos que el usuario quiere que se diseñe su cocina. Quizás no
-requiere nada sobre la nevera. Aún así, es de sentido común, hoy en
-día, que cualquier cocina disponga de nevera. Por contra, un televisor
-no es indispensable en ninguna habitación de una casa.
+Antes de comenzar, haremos una distinción entre:
+\begin{description}
+\item[Elementos fijos] Esto es, las características que se determinan
+  en el momento de construir la habitación, y no pueden modificarse
+  sin pasar por una reforma estructural.  Dentro de esta categoría
+  entran: las dimensiones de la habitación, las columnas y otros tipos
+  de accidentes que hacen variar su forma rectangular, las puertas,
+  las ventanas, y los radiadores.  Adicionalmente podrían tenerse en
+  cuenta interruptores y enchufes como propiedades fijas.
+\item[Elementos desplazables] Es decir, los elementos que pueden
+  moverse libremente por el espacio libre de la habitación. Dentro de
+  esta categoría se encuentran los muebles y los electrodomésticos.
+\end{description}
+\newpar Atendiendo a estas dos posibilidades, podemos encontrarnos con
+dos grupos bien diferenciados de usuarios:
+\begin{itemize}
+\item Aquellos que estén diseñando una vivienda desde cero, y por lo
+  tanto tengan control sobre los elementos fijos de la habitación.
+\item Aquellos que estén delante de una habitación ya construida, y
+  por lo tanto necesiten respetar los elementos fijos de la misma,
+  pudiendo simplemente variar la distribución de los elementos
+  desplazables.
+\end{itemize}
+Con el objetivo de crear una solución general que sea de ayuda para
+ambos perfiles de usuario, ofreceremos al usuario herramientas para
+modificar tanto los elementos fijos como los elementos desplazables de
+la habitación.
+\begin{center}
+\rule{0.75\linewidth}{0.5mm} % Linea que tienes puesta
+\end{center}
+En primer lugar, el usuario deberá escoger la clase de habitación que
+desea diseñar, de entre uno de los siguientes tipos: Dormitorio,
+Estudio, Cocina, Comedor, Salón y Baño.
 \newpar
-La aplicación debe permitir añadir en 2D la topologia de la habitación
-que se quiere diseñar: sus dimensiones (también la podéis suponer
-rectangular), la ubicación y dimensiones de ventanas y puertas. También
-debe permitir que el usuario defina que elementos quiere que aparezcan en
-su habitación. El sistema debe dar como resultado un posible diseño
-2D que cumpla las restricciones definidas por el usuario.
+En segundo lugar, se preguntará al usuario cuáles son las dimensiones
+de la habitación que va a diseñar.  Existen unas dimensiones mínimas
+permitidas, las cuales dependen de los muebles que por sentido común
+consideramos esenciales en una habitación y, por ende, dependen del
+tipo de esta. Por ejemplo, en un dormitorio es esencial tener una
+cama. En un baño es esencial tener una ducha/bañera y un retrete. En
+una cocina es esencial tener una pila, etc. Asimismo, ninguna
+habitación podrá superar los 50m$^2$ de superficie. El diseño de
+interiores se hará sobre dos dimensiones (no consideraremos la
+altura).
+\newpar
+A continuación, se mostrará al usuario la planta de la habitación (
+que formará un rectángulo), y se le pedirá que coloque los elementos
+fijos de esta: Puertas, Ventanas, Radiadores, y Accidentes
+estructurales. Entendemos por accidentes estructurales todo tipo de
+elementos que modifiquen la forma rectangular de la habitación. Estos
+elementos también serán, a su vez, de forma rectangular.
+\newpar
+Una vez colocados los elementos fijos de la habitación, se le
+presentará al usuario:
+\begin{itemize}
+\item Una lista de muebles que podría contener la habitación.
+\item La vista de planta del diseño actual.
+\end{itemize}
+Para entender el modo en que el programa ayuda al usuario es vital
+estudiar el funcionamiento de estos dos elementos.
+
+\subsubsection*{Vista de planta} % el asterisco es para que no lo numere
+Inicialmente, la vista de planta muestra la habitación que el usuario
+ha configurado hasta el momento, incluyendo los elementos fijos. Las
+dimensiones de la habitación se escalarán de modo que el usuario pueda
+visualizar la superficie completa en todo momento. 
+\newpar
+Ahora, cada vez que se coloca un mueble en la vista de la habitación,
+el usuario puede arrastrarlo libremente por su superficie. El programa
+le marcará en verde la superficie sobre la que puede soltarlo, y en
+rojo aquella sobre la que no puede, debido a restricciones de
+cualquier tipo. Además, el usuario puede marcar un mueble (que esté en
+una posición válida) como fijo. Esto hará que el algoritmo de
+redistribución tenga en cuenta el deseo del usuario de dejar el mueble
+en tal lugar, pase lo que pase.
+\subsubsection*{Lista de muebles} 
+La lista contiene los muebles que el usuario podría poner en su
+habitación, ordenados por prioridad.  Inicialmente, la lista contiene
+muebles sugeridos por el software. La tipología de los muebles depende
+del tipo de habitación que el usuario esté diseñando, mientras que la
+cantidad de muebles sugeridos depende del espacio útil que haya
+quedado en la habitación descontando de sus dimensiones el espacio
+ocupado por los elementos fijos.
+\newpage
+\noindent Respecto de la lista, el usuario puede:
+\begin{enumerate}[label=\textbf{\alph*)}] % letras como contador a), b)
+\item Añadir o Quitar muebles de la lista según sus preferencias.
+\item Reordenarlos según sus prioridades.
+\end{enumerate}
+Ahora, respecto de los muebles, el usuario puede:
+\begin{enumerate}[label=\textbf{\alph*)}]
+\item Modificar un mueble en concreto, cambiando su tamaño o su
+  aspecto (color, dibujo). Su tamaño, igual que el de las
+  habitaciones, estará acotado entre un mínimo y un máximo.
+\item Marcarlos como activos o inactivos.
+\end{enumerate}
+Cada vez que el usuario marca un mueble como activo, el programa
+intenta buscarle un hueco en la habitación. Para ello, redistribuye
+todos los elementos desplazables de la misma, incluido el recién
+activado. Cada vez que el usuario marca un mueble como inactivo, el
+programa lo elimina del diseño de la habitación y redistribuye los
+demás muebles acorde al espacio que el reci én desactivado deja libre.
+\newpar 
+N.B. Si el programa fuese lo suficientemente rápido, esto se
+produciría de forma instantánea cada vez que un usuario
+activase/desactivase un mueble. Si no fuera posible hacerlo de manera
+instantánea, habría un botón para aplicar esta función, que el usuario
+pulsaría después de haber hecho los cambios oportunos en la lista.
+\newpar
+Es importante entender que añadir/quitar elementos de la lista, y
+marcarlos como activo/inactivo son dos funciones totalmente
+distintas. La primera determina si un elemento es del interés del
+usuario en aquella habitación. La segunda permite jugar con la
+distribución de un subconjunto de los muebles que le interesan al
+usuario.
+\newpar
+Una vez el usuario tiene el diseño final que quiere para su
+habitación, dispone de las siguientes opciones:
+
+\begin{enumerate}
+\item Exportarlo a formato PDF.
+\item Guardar el diseño como un archivo propio del programa, de modo
+  que pueda volver a cargarlo y seguir haciendo modificaciones en otro
+  momento.
+\item Salir del programa. Si no ha guardado los cambios, al salir se
+  le preguntará si quiere hacerlo.
+\end{enumerate}
+\textbf{Posibles ampliaciones del programa}
+\newpar
+Una posibilidad de ampliación del software presentado sería la de
+incluir la posibilidad de importar tipos de habitaciones y tipos de
+muebles personalizados a partir de archivos de texto con un
+determinado formato. Esto permitiría a terceras personas desarrollar
+plug-ins que amplíen el campo de aplicación del programa,
+aprovechando su motor de redistribución y diseño.
+\newpar
+Un ejemplo de esto sería el de un módulo que permitiese diseñar
+jardines, y añadiera los elementos propios de un jardín.
+\newpar
+\noindent \textbf{\emph{\LARGE Faltan los tipos de restricciones.}}

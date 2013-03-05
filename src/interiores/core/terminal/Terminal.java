@@ -3,7 +3,6 @@ package interiores.core.terminal;
 import interiores.core.Utils;
 import interiores.core.ViewLoader;
 import interiores.core.mvc.View;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
@@ -31,7 +30,7 @@ public class Terminal
     {
         if(hasGui())
         {
-            vloader.init();
+            loadView(null, "main", "app");
             iostream.setOutputStream(new PrintStream("/dev/null")); // Ignore System output with GUI
         }
         else
@@ -137,7 +136,12 @@ public class Terminal
         if(loaded)
             throw new Exception("The view " + viewName + " may not be working correctly.");
         else
-            comgroup.addListener(view);
+        {
+            view.setTerminal(this);
+            
+            if(comgroup != null)
+                comgroup.addListener(view);
+        }
     }
     
     private String getViewName(String action, String subject)

@@ -21,7 +21,7 @@ public class Interiores
         ViewLoader loader = new SwingLoader();
         
         Terminal terminal = new Terminal();
-        //terminal.setViewLoader(loader);
+        terminal.setViewLoader(loader);
         
         Application app = new Application(terminal);
         app.init();

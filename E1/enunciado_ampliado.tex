@@ -1,26 +1,25 @@
 \subsubsection{Objetivo}
-`Diseño de interiores` es un software destinado al diseño de habitaciones
+`Diseño de interiores' es un software destinado al diseño de habitaciones
 y distribución de su mobiliario. La aplicación es capaz de generar diseños
-de habitaciones cumpliendo restricciones definidas por el usuario.
+de habitaciones cumpliendo con una serie de restricciones, permitiendo
+al usuario definir cuáles y cómo deben ser estas restricciones.
 
 \subsubsection{Flujo de la aplicación}
-En este apartado se explica cuál es el flujo de la aplicación, es decir, cuales
+En este apartado se explica cuál es el flujo de la aplicación, es decir, cuáles
 son las posibilidades del usuario desde que abre el programa hasta que resuelve
 su problema. En los siguientes apartados se explica con mucho más detalle
 cada uno de los elementos más importantes que conforman el software.
 \newpar
 Al iniciar la aplicación se le pregunta al usuario si desea:
 \begin{description}
-  
   \item[Crear un nuevo diseño]
     En este caso el usuario deberá especificar el tipo de habitación que quiere crear
     y con qué dimensiones.
   
   \item[Abrir un diseño ya existente]
-    El usuario podrá abrir diseños que haya guardado préviamente. En este caso se cargará
+    El usuario podrá abrir diseños que haya guardado previamente. En este caso se cargará
     la habitación en el mismo estado que cuando se guardó para que el usuario pueda seguir
     trabajando en su diseño.
-
 \end{description}
 
 Una vez el usuario haya creado o abierto una habitación, la aplicación pasará a mostrarle
@@ -32,24 +31,58 @@ diversos elementos para facilitarle el diseño de la habitación. Estos son:
     Su tamaño varía en función de las dimensiones de la habitación.
     Se encontrará en el centro de la aplicación y tendrá un fondo blanco.
 
-  \item[Cátalogo de muebles]
-    Menú lateral que contendrá todos los muebles que pueden añadirse a la habitación en función
-    del tipo de habitación que se esté diseñando.
-    En primera instancia aparecerán los muebles que obligatoriamente deben incluirse en el diseño (debe haber
-    una cama en un dormitorio).
-    A continuación, estarán aquellos muebles que no son de inclusión obligatoria, pero son comunes
-    en el tipo de habitación (un lavavajillas en la cocina, por ejemplo).
-    Finalmente aparecerán todos los demás muebles que pueden incluirse en la habitación.
-    Este menú no contendrá los muebles que NO pueden ser incluidos en la habitación (es ilógico tener un
-    horno en un baño).
+  \item[Catálogo de muebles disponibles]
+    Menú lateral que contendrá los muebles que se puedan añadir a la habitación.
+    Más detalles en el apartado 1.1.5.
+  
+  \item[Menú de accidentes]
+    Menú adyacente al catálogo de muebles disponibles (pestañas?).
+    Mostrará los accidentes (detalles en el apartado 1.4) que se puedan añadir a la habitación.
 
+  \item[Barra de acciones]
+    Es la típica barra situada en la parte superior de la aplicación.
+    Permitirá al usuario realizar las siguientes acciones:
+    \begin{description}
+        \item Crear una nueva habitación
+        \item Abrir una habitación
+        \item Guardar la habitación
+        \item Modificar catálogo de muebles
+        \item Modificar restricciones de la habitación
+        \item Acceder a la información Acerca de... de la aplicación.
+    \end{description}
 \end{description}
+
+El usuario podrá utilizar el catálogo de muebles y el menú de accidentes para añadir los objetos que desee
+a su habitación. Para ello solo deberá seleccionar el mueble o accidente que desee añadir y hacer click en la
+posición del mapa donde quiere que se sitúe. (CONDICIONES PARA CONSIDERAR UNA POSICION COMO CORRECTA)
+\newpar
+Sin embargo, el principal objetivo de la aplicación es la generación de diseños de manera automática. Por lo
+tanto, el usuario podrá especificar en el catálogo de muebles cuáles deberán incluirse en los diseños que
+genere la aplicación. Adicionalmente, el usuario podrá fijar la posición de los muebles en el mapa. Aquellos muebles
+que estén fijados no serán redistribuidos por la aplicación al generar los diseños.
+Por otra parte, los diseños generados deben cumplir ciertas restricciones (apartado 1.6) que
+el usuario podrá añadir y/o modificar a través del respectivo menú de la barra de acciones (¿alguna otra idea?).
+\newpar
+Una vez el usuario haya especificado muebles, accidentes y restricciones podrá pedir que la aplicación genere o
+termine su diseño cumpliendo con todas las restricciones que ha establecido anteriormente. Si no existe ninguna
+solución que satisfaga las restricciones se avisará al usuario con un mensaje informativo.
 
 \subsubsection{La habitación}
 
 \subsubsection{Los accidentes}
 
 \subsubsection{El cátalogo de muebles}
+[...]
+\newpar
+El catálogo de muebles disponibles es un menú lateral que contendrá todos los muebles que puedan añadirse
+a la habitación en función del tipo de habitación que se esté diseñando.
+En primera instancia aparecerán los muebles que obligatoriamente deban incluirse en el diseño (debe haber
+una cama en un dormitorio).
+A continuación, estarán aquellos muebles que no son de inclusión obligatoria, pero son comunes
+en el tipo de habitación (un lavavajillas en la cocina, por ejemplo).
+Finalmente aparecerán todos los demás muebles que puedan incluirse en la habitación.
+Este menú no contendrá los muebles que NO puedan ser incluidos en la habitación (es ilógico tener un
+horno en un baño).
 
 \subsubsection{Las restricciones}
 

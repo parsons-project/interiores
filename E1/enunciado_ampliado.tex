@@ -135,9 +135,10 @@ manera más exacta la forma de la habitación que se quiere diseñar. Los
 accidentes no son redistribuidos cuando la aplicación genera el diseño de la
 habitación.
 \newpar
-Al añadir accidentes el usuario debe determinar la posición del accidente y
-sus dimensiones. En el mapa de la habitación los accidentes tienen forma
-rectangular.
+Al añadir elementos fijos el usuario debe determinar la posición del elemento
+y sus dimensiones. En el mapa de la habitación los accidentes tienen forma
+rectangular, mientras que las puertas y ventanas se representan gráficamente
+igual que en diseños arquitectónicos.
 
 \subsubsection{Los modelos de muebles}
 \label{modelos}
@@ -186,7 +187,14 @@ horno en un baño).
 
 \subsubsection{Las restricciones}
 \label{restricciones}
-
+Las restricciones son reglas que todo diseño de la habitación debe cumplir.
+Las restricciones pueden relacionar diversos modelos de muebles o instancias
+de muebles entre sí. Sin embargo, la habitación también puede contener
+restricciones que se apliquen a todos los muebles que vayan a añadirse a la
+habitación.
+\newpar
+Para ver una lista completa de los tipos de restricciones disponibles,
+consultar el Anexo.
 
 \subsubsection{La generación de diseños}
 \label{generacion}
@@ -219,5 +227,5 @@ las siguientes funcionalidades:
 
   \item[Generación de diseños alternativos] El usuario podrá obtener
   diferentes distribuciones de su habitación ejecutando la generación de
-  diseños de manera seguida.
+  diseños consecutivamente.
 \end{description}

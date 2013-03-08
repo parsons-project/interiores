@@ -41,7 +41,7 @@ Estos son:
     Menú adyacente al catálogo de muebles disponibles (pestañas?). Mostrará
     los accidentes (detalles en el apartado 1.4) que se puedan añadir a la
     habitación.
-
+\clearpage
   \item[Barra de acciones]
     Es la típica barra situada en la parte superior de la aplicación.
     Permitirá al usuario realizar las siguientes acciones:
@@ -101,22 +101,23 @@ representan pilares o pilastros. Se utilizan para definir de manera más exacta
 la forma de la habitación que se quiere diseñar. Los accidentes no son
 redistribuidos cuando la aplicación genera el diseño de la habitación.
 
+\subsubsection{Los muebles}
+Los muebles están caracterizados por:
+
+\begin{description}
+  \item[Espacio activo] Es el espacio que ocupa el mueble debido a sus
+  dimensiones.
+  \item[Espacio inactivo] Es el espacio que es necesario para que el mueble
+  sea utilizado.
+  \item[Color] El color del mueble.
+  \item[Material] El material del que está hecho el mueble.
+  \item[Precio] Precio orientativo del mueble.
+\end{description}
+
 \subsubsection{El cátalogo de muebles}
 El catálogo de muebles representa el conjunto total de muebles que están
 disponibles en la aplicación. El usuario puede añadir y modificar muebles del
 catálogo libremente.
-
-\textbf{Los muebles}
-
-Los muebles están caracterizados por:
-
-\begin{description}
-  \item[]
-
-  \item[]
-\end{description}
-
-\textbf{Menú de muebles disponibles}
 
 El menú de de muebles disponibles es un menú lateral que contendrá todos los
 muebles que puedan añadirse a la habitación en función del tipo de habitación
@@ -133,3 +134,20 @@ ser incluidos en la habitación (es ilógico tener un horno en un baño).
 
 \subsubsection{La generación de diseños}
 
+\clearpage
+\subsubsection{Extras}
+Adicionalmente, si se dispone del tiempo suficiente se intentarán proporcionar
+al usuario las siguientes funcionalidades:
+
+\begin{description}
+  \item[Enchufes e interruptores] El usuario podrá posicionar, además de
+  muebles y accidentes, enchufes e interruptores en la habitación. Los muebles
+  tendrán en cuenta estos elementos para no tapar los interruptores y
+  posicionarse relativamente cerca de los enchufes en caso de que necesiten
+  electricidad para funcionar.
+
+  \item[Línea de comandos] Una interfaz en línea de comandos donde el usuario
+  pueda diseñar su habitación introduciendo comandos. Esto puede ser útil
+  sobre todo para debuggear o desarrollar sin necesidad de interfaz gráfica
+  y generar diseños de habitaciones a partir de un conjunto de comandos.
+\end{description}

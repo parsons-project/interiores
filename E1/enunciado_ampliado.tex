@@ -33,14 +33,13 @@ Estos son:
     muebles. Su tamaño varía en función de las dimensiones de la habitación.
     Se encontrará en el centro de la aplicación y tendrá un fondo blanco.
 
-  \item[Catálogo de muebles disponibles]
+  \item[Menú de muebles disponibles]
     Menú lateral que contendrá los muebles que se puedan añadir a la
-    habitación. Más detalles en el apartado 1.1.5.
+    habitación. Más detalles en \nameref{catalogo_muebles}.
   
   \item[Menú de accidentes]
-    Menú adyacente al catálogo de muebles disponibles (pestañas?). Mostrará
-    los accidentes (detalles en el apartado 1.4) que se puedan añadir a la
-    habitación.
+    Menú adyacente al catálogo de muebles disponibles. Mostrará
+    \nameref{accidentes} que se puedan añadir a la habitación.
 \clearpage
   \item[Barra de acciones]
     Es la típica barra situada en la parte superior de la aplicación.
@@ -58,8 +57,11 @@ Estos son:
 El usuario podrá utilizar el catálogo de muebles y el menú de accidentes para
 añadir los objetos que desee a su habitación. Para ello solo deberá
 seleccionar el mueble o accidente que desee añadir y hacer click en la
-posición del mapa donde quiere que se sitúe. (CONDICIONES PARA CONSIDERAR UNA
-POSICION COMO CORRECTA)
+posición del mapa donde quiere que se sitúe. La posición será considerada como
+correcta si al añadir el mueble en dicha posición se siguen cumpliendo todas
+las restricciones definidas en el momento de la inserción. En caso de que la
+posición sea incorrecta se le notificará al usuario, en forma de mensaje, la
+restricción que se ha visto comprometida.
 \newpar
 Sin embargo, el principal objetivo de la aplicación es la generación de
 diseños de manera automática. Por lo tanto, el usuario podrá especificar en el
@@ -68,71 +70,118 @@ aplicación. Adicionalmente, el usuario podrá fijar la posición de los muebles
 en el mapa. Aquellos muebles que estén fijados no serán redistribuidos por la
 aplicación al generar los diseños. Por otra parte, los diseños generados deben
 cumplir ciertas restricciones  que el usuario podrá añadir y/o modificar a
-través del respectivo menú de la barra de acciones (¿alguna otra idea?).
+través del respectivo menú de la barra de acciones.
 \newpar
-
 Una vez el usuario haya especificado muebles, accidentes y restricciones podrá
 pedir que la aplicación genere o termine su diseño cumpliendo con todas las
-restricciones (más información en \ref{restricciones}) que ha establecido
+restricciones (más información en \nameref{restricciones}) que ha establecido
 anteriormente. Si no existe ninguna solución que satisfaga las restricciones
-se avisará al usuario con un mensaje informativo.
+se avisará al usuario con un mensaje informativo. Más información en
+\nameref{generacion}.
 
 \subsubsection{La habitación}
 Una habitación se caracteriza por tener:
 
 \begin{description}
-  \item[Dimensiones] Expresadas en centímetros.
-  \item[Tipo] Cada tipo de habitación tiene unas restricciones determinadas
-  por defecto. Información detallada en el Anexo X.
+  \item[Dimensiones] Ancho y largo, en centímetros.
+  \item[Tipo] Uno de los tipos de habitación presentes en el
+  catálogo de habitaciones. Más información en
+  \nameref{catalogo_habitaciones}.
 \end{description}
 
+\clearpage
 El usuario podrá añadir a la habitación:
 
 \begin{description}
-  \item[Muebles] Utilizando el catálogo de muebles disponibles.
+  \item[Muebles] Utilizando el menú de muebles disponibles.
   \item[Accidentes] A través del menú de accidentes.
   \item[Restricciones] Ya sean de la habitación en general o entre muebles
-  específicos. Más información en apartado X.
+  específicos. Más información en \nameref{restricciones}.
+\end{description}
+
+\subsubsection{El catálogo de habitaciones}
+\label{catalogo_habitaciones}
+El catálogo de habitaciones contiene los diferentes tipos de habitaciones que
+el usuario puede seleccionar para diseñar su habitación.
+\newpar
+Se incluye un catálogo de habitaciones por defecto (ver anexo Z) que siempre
+estará disponible. Si el usuario realiza cambios sobre el catálogo por
+defecto y decide guardar los cambios se le preguntará dónde desea guardar
+el catálogo. Por ende, el usuario también podrá cargar catálogos desde un
+archivo que haya guardado previamente, o bien, volver al catálogo por defecto.
+\newpar
+Cada tipo de habitación tiene las siguientes características:
+
+\begin{description}
+  \item[Nombre] Por ejemplo: cocina, dormitorio, baño, etc.
+  \item[Dimensiones mínimas] Ancho y largo mínimos que una habitación de este
+  tipo puede tener. En centímetros.
+  \item[Dimensiones máximas] Ancho y largo máximos que una habitación de este
+  tipo puede tener. En centímetros.
+  \item[Restricciones] Puede contener cualquier tipo de restricción aplicable
+  a la habitación o a modelos de muebles. Más información en
+  \nameref{restricciones}.
 \end{description}
 
 \subsubsection{Los accidentes}
+\label{accidentes}
 Los accidentes son objetos fijos que se pueden situar en la habitación y que
 representan pilares o pilastros. Se utilizan para definir de manera más exacta
 la forma de la habitación que se quiere diseñar. Los accidentes no son
 redistribuidos cuando la aplicación genera el diseño de la habitación.
+\newpar
+Al añadir accidentes el usuario debe determinar la posición del accidente y
+sus dimensiones. En el mapa de la habitación los accidentes tienen forma
+rectangular.
 
-\subsubsection{Los muebles}
-Los muebles están caracterizados por:
+\subsubsection{Los modelos de muebles}
+\label{modelos}
+Los modelos de muebles son abstracciones de los muebles que pueden añadirse
+a la habitación. Los modelos de muebles están caracterizados por:
 
 \begin{description}
+  \item[Dimensiones] Las dimensiones del mueble en dos dimensiones.
   \item[Espacio activo] Es el espacio que ocupa el mueble debido a sus
-  dimensiones.
+  dimensiones. Este espacio no puede superponerse con el de otros muebles.
   \item[Espacio inactivo] Es el espacio que es necesario para que el mueble
-  sea utilizado.
+  sea utilizado. Este espacio puede superponerse con el de otros muebles.
   \item[Color] El color del mueble.
   \item[Material] El material del que está hecho el mueble.
   \item[Precio] Precio orientativo del mueble.
+  \item[]
 \end{description}
 
 \subsubsection{El cátalogo de muebles}
-El catálogo de muebles representa el conjunto total de muebles que están
-disponibles en la aplicación. El usuario puede añadir y modificar muebles del
-catálogo libremente.
-
+\label{catalogo_muebles}
+El catálogo de muebles representa el conjunto total de modelos de muebles que
+están disponibles en la aplicación. El usuario puede añadir y modificar
+modelos de muebles del catálogo.
+\newpar
+Se incluye un catálogo de muebles por defecto (ver anexo Y) que siempre
+estará disponible. Si el usuario realiza cambios sobre el catálogo por
+defecto y decide guardar los cambios se le preguntará dónde desea guardar
+el catálogo. Por ende, el usuario también podrá cargar catálogos desde un
+archivo que haya guardado previamente, o bien, volver al catálogo por defecto.
+\newpar
 El menú de de muebles disponibles es un menú lateral que contendrá todos los
-muebles que puedan añadirse a la habitación en función del tipo de habitación
-que se esté diseñando. En primera instancia aparecerán los muebles que
-obligatoriamente deban incluirse en el diseño (debe haber una cama en un
-dormitorio). A continuación, estarán aquellos muebles que no son de inclusión
-obligatoria, pero son comunes en el tipo de habitación (un lavavajillas en la
-cocina, por ejemplo). Finalmente aparecerán todos los demás muebles que puedan
-incluirse en la habitación. Este menú no contendrá los muebles que NO puedan
-ser incluidos en la habitación (es ilógico tener un horno en un baño).
+muebles que puedan añadirse a la habitación en función de las restricciones
+del  tipo de habitación que se esté diseñando. En primera instancia aparecerán
+los muebles que obligatoriamente deban incluirse en el diseño (debe haber una
+cama en un dormitorio). A continuación, estarán aquellos muebles que no son de
+inclusión obligatoria, pero son comunes en el tipo de habitación (un
+lavavajillas en la cocina, por ejemplo). Finalmente aparecerán todos los demás
+muebles que puedan incluirse en la habitación. Este menú no contendrá los
+muebles que NO puedan ser incluidos en la habitación (es ilógico tener un
+horno en un baño).
 
 \subsubsection{Las restricciones}
 \label{restricciones}
 
+
 \subsubsection{La generación de diseños}
+\label{generacion}
+La generación de diseños es la funcionalidad más importante de la aplicación.
+
 
 \clearpage
 \subsubsection{Extras}
@@ -148,6 +197,6 @@ al usuario las siguientes funcionalidades:
 
   \item[Línea de comandos] Una interfaz en línea de comandos donde el usuario
   pueda diseñar su habitación introduciendo comandos. Esto puede ser útil
-  sobre todo para debuggear o desarrollar sin necesidad de interfaz gráfica
+  sobre todo para hacer debugging sin necesidad de interfaz gráfica
   y generar diseños de habitaciones a partir de un conjunto de comandos.
 \end{description}

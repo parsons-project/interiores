@@ -65,7 +65,7 @@ restricción que se ha visto comprometida.
 \newpar
 Sin embargo, el principal objetivo de la aplicación es la generación de
 diseños de manera automática. Por lo tanto, el usuario podrá especificar en el
-catálogo de muebles cuáles deberán incluirse en los diseños que genere la
+menú de muebles cuáles deberán incluirse en los diseños que genere la
 aplicación. Adicionalmente, el usuario podrá fijar la posición de los muebles
 en el mapa. Aquellos muebles que estén fijados no serán redistribuidos por la
 aplicación al generar los diseños. Por otra parte, los diseños generados deben
@@ -181,12 +181,16 @@ horno en un baño).
 \subsubsection{La generación de diseños}
 \label{generacion}
 La generación de diseños es la funcionalidad más importante de la aplicación.
+El usuario podrá requerir que se ejecute la generación de diseños en cualquier
+momento para que la aplicación ofrezca un diseño donde se satisfagan todas las
+restricciones que se hayan definido.
+\newpar
+El diseño generado se aplicará automáticamente al diseño actual del usuario
+y el mapa mostrará el nuevo diseño.
 
-
-\clearpage
 \subsubsection{Extras}
-Adicionalmente, si se dispone del tiempo suficiente se intentarán proporcionar
-al usuario las siguientes funcionalidades:
+Adicionalmente, si se dispone del tiempo suficiente se intentarán implementar
+las siguientes funcionalidades:
 
 \begin{description}
   \item[Enchufes e interruptores] El usuario podrá posicionar, además de
@@ -199,4 +203,11 @@ al usuario las siguientes funcionalidades:
   pueda diseñar su habitación introduciendo comandos. Esto puede ser útil
   sobre todo para hacer debugging sin necesidad de interfaz gráfica
   y generar diseños de habitaciones a partir de un conjunto de comandos.
+
+  \item[Deshacer/Rehacer] El usuario podrá deshacer/rehacer los cambios que
+  haya efectuado desde que ha empezado a diseñar la habitación, paso por paso.
+
+  \item[Generación de diseños alternativos] El usuario podrá obtener
+  diferentes distribuciones de su habitación ejecutando la generación de
+  diseños de manera seguida.
 \end{description}

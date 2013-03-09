@@ -1,0 +1,100 @@
+\subsubsection{Diseñar una habitación}
+Engloba las acciones relacionadas con el diseño de
+la habitación. El actor es siempre el usuario.
+\begin{description}
+\item[Cargar diseño] Permite recuperar el estado
+  de un diseño anteriormente guardado.
+\item[Especificar la topología] Determinar la topología de
+  la habitación a diseñar.
+  \begin{description}
+    \item[Especificar tipo] El usuario escoge un tipo de habitación de
+      entre todos los disponibles.
+    \item[Especificar dimensiones] El usuario indica las medidas de la
+      habitación. Ésta tendrá forma rectangular.
+    \item[Colocar elemento fijo] El usuario selecciona un elemento
+      fijo de entre los disponibles y lo sitúa en la habitación.
+  \end{description}
+\item[Escoger muebles] De entre una lista de muebles que pueden
+  encontrarse dentro de la habitación, el usuario escoge aquellos que
+  quiere que se tengan en cuenta cuando se genere el diseño de la
+  misma. El programa podrá añadir muebles a un diseño, aunque el
+  usuario no los haya escogido, si deben aparecer de forma obligatoria
+  en el tipo de habitación seleccionado.
+\item[Especificar restricciones]
+  Gestionar las restricciones de la habitación así como
+  de los elementos que contiene.
+  \begin{description}
+  \item[Añadir restricción] El usuario añade una restricción a tener
+    en cuenta a la hora de diseñar la habitación. Esta restricción
+    será escogida de entre unos tipos determinados ofrecidos por el
+    programa, y tendrá asociado un cierto número de parámetros.
+  \item[Modificar restricción] El usuario selecciona una
+    restricción existente y modifica los parámetros con los
+    que se aplica dicha restricción.
+  \item[Quitar restricción] El usuario selecciona una restricción
+    existente y la elimina del sistema.
+  \end{description}
+\item[Generar una distribución automática de los muebles] El usuario
+  indica al programa que le muestre un diseño posible de la
+  habitación. Este tendrá en cuenta la lista de muebles que el usuario
+  desea poner en la habitación, y las restricciones que quiere que se
+  cumplan.  Si es posible generar un diseño que contenga todos los
+  muebles deseados y cumpla las restricciones puestas, se mostrará tal
+  diseño.  Si no es posible, se le mostrará un mensaje indicando el
+  porqué del error.
+\item[Desplazar un mueble a una posición determinada]El usuario
+  selecciona un mueble de la habitación e indica la posición a la que
+  quiere desplazarlo.  Si la nueva posición es válida, el mueble se
+  desplaza hasta ella.  Si por el contrario se trata de una posición
+  inválida, el mueble se mantiene en su posición anterior y se muestra
+  un mensaje indicando por qué se ha producido el error.
+\item[Guardar diseño] El usuario guarda el estado del diseño actual
+  de la habitación en disco de forma permanente.
+\item[Exportar diseño a formato imprimible]El usuario exporta el
+  diseño en un formato gráfico preparado para su impresión.
+\end{description}
+\subsubsection{Gestionar catálogo de muebles}
+Engloba las acciones relacionadas con el catálogo de muebles.
+\begin{description}
+  \item[Añadir mueble]El usuario añade un modelo de mueble al catálogo
+    de muebles disponibles. Existen ciertas características que es
+    necesario especificar (nombre, tipo, dimensiones, color...) con
+    tal de crear un nuevo mueble. También existen características que
+    pueden especificarse opcionalmente.
+  \item[Modificar mueble]El usuario selecciona un mueble existente en
+    el catálogo y modifica algunas de sus características.
+  \item[Quitar mueble]El usuario selecciona un mueble existente y lo
+    elimina del catálogo.
+  \item[Guardar catálogo]El usuario guarda en un fichero externo el
+    catálogo de muebles con el que está trabajando en el diseño
+    actual. Este incluye los muebles que han sido añadidos o
+    modificados, y no incluye los que hayan sido eliminados del
+    catálogo durante la ejecución del programa.
+  \item[Cargar catálogo]El usuario importa desde un fichero externo un
+    catálogo determinado de muebles. A partir de este momento, el
+    programa trabajará únicamente con los muebles de este catálogo.
+\end{description}
+\subsubsection{Gestionar catálogo de habitaciones}
+Engloba las acciones relacionadas con el catálogo de habitaciones.
+\begin{description}
+  \item[Añadir tipo de habitación]El usuario añade un tipo de
+    habitación al catálogo de habitaciones disponibles. Existen
+    ciertas características que es necesario especificar (tipo,
+    dimensiones mínimas, dimensiones máximas...) con tal de crear un
+    nuevo mueble. También existen características que pueden
+    especificarse opcionalmente.
+  \item[Modificar tipo de habitación]El usuario selecciona un tipo de
+    habitación existente en el catálogo y modifica algunas de sus
+    características.
+  \item[Quitar tipo de habitación]El usuario selecciona un tipo de
+    habitación existente y lo elimina del catálogo.
+  \item[Guardar catálogo]El usuario guarda en un fichero externo el
+    catálogo de habitaciones con el que está trabajando en el diseño
+    actual. Este incluye los tipos de habitaciones que han sido
+    añadidos o modificados, y no incluye los que hayan sido eliminados
+    del catálogo durante la ejecución del programa.
+  \item[Cargar catálogo]El usuario importa desde un fichero externo un
+    catálogo determinado de habitaciones. A partir de este momento, el
+    programa trabajará únicamente con los tipos de habitación de este
+    catálogo.
+\end{description}

@@ -105,11 +105,12 @@ El usuario podrá añadir a la habitación:
 El catálogo de habitaciones contiene los diferentes tipos de habitaciones que
 el usuario puede seleccionar para diseñar su habitación.
 \newpar
-Se incluye un catálogo de habitaciones por defecto (ver anexo Z) que siempre
-estará disponible. Si el usuario realiza cambios sobre el catálogo por
-defecto y decide guardar los cambios se le preguntará dónde desea guardar
-el catálogo. Por ende, el usuario también podrá cargar catálogos desde un
-archivo que haya guardado previamente, o bien, volver al catálogo por defecto.
+Se incluye un catálogo de habitaciones por defecto (consultar
+\nameref{anexo_habitaciones}) que siempre estará disponible. Si el usuario
+realiza cambios sobre el catálogo por defecto y decide guardar los cambios se
+le preguntará dónde desea guardar el catálogo. Por ende, el usuario también
+podrá cargar catálogos desde un archivo que haya guardado previamente, o bien,
+volver al catálogo por defecto.
 \newpar
 Cada tipo de habitación tiene las siguientes características:
 
@@ -131,9 +132,7 @@ nunca serán distribuidos por la aplicación en la generación de diseños.
 Son elementos fijos los accidentes, las ventanas y las puertas.
 \newpar
 Los accidentes representan pilares o pilastros. Se utilizan para definir de
-manera más exacta la forma de la habitación que se quiere diseñar. Los
-accidentes no son redistribuidos cuando la aplicación genera el diseño de la
-habitación.
+manera más exacta la forma de la habitación que se quiere diseñar.
 \newpar
 Al añadir elementos fijos el usuario debe determinar la posición del elemento
 y sus dimensiones. En el mapa de la habitación los accidentes tienen forma
@@ -147,19 +146,20 @@ a la habitación. Los modelos de muebles están caracterizados por:
 
 \begin{description}
   \item[Nombre] Identifica el modelo.
-  \item[Dimensiones] Las dimensiones del mueble: ancho y largo. Además se
-  tiene en cuenta la altura.
+  \item[Dimensiones] Las dimensiones del mueble: ancho, largo y altura.
+  La altura, aunque la habitación se represente en dos dimensiones, puede ser
+  utilizada por algunas restricciones.
   \item[Espacio activo] Es el espacio que ocupa el mueble debido a sus
   dimensiones. Este espacio no puede superponerse con el de otros muebles.
-  \item[Espacio pasivo] Es el espacio que es necesario para que el mueble
-  sea utilizado. Este espacio puede superponerse con el de otros muebles.
-  \item[Color] El color del mueble.
+  \item[Color]
   \item[Material] El material del que está hecho el mueble.
   \item[Precio] Precio orientativo del mueble.
   \item[Capacidad] Litros que se pueden almacenar en el mueble.
   \item[Plazas] Personas que pueden utilizar el mueble al mismo tiempo.
   \item[Tipo] Grupo al que pertenece el mueble. Por ejemplo: cama, silla,
   mesa, sofá, etc.
+  \item[Restricciones] Inherentes al propio mueble. Más detalles en
+  \nameref{restricciones}.
 \end{description}
 
 \subsubsection{El cátalogo de muebles}
@@ -168,13 +168,14 @@ El catálogo de muebles representa el conjunto total de modelos de muebles que
 están disponibles en la aplicación. El usuario puede añadir y modificar
 modelos de muebles del catálogo.
 \newpar
-Se incluye un catálogo de muebles por defecto (ver anexo Y) que siempre
-estará disponible. Si el usuario realiza cambios sobre el catálogo por
-defecto y decide guardar los cambios se le preguntará dónde desea guardar
-el catálogo. Por ende, el usuario también podrá cargar catálogos desde un
-archivo que haya guardado previamente, o bien, volver al catálogo por defecto.
+Se incluye un catálogo de muebles por defecto (consultar
+\nameref{anexo_muebles}) que siempre estará disponible. Si el usuario realiza
+cambios sobre el catálogo por defecto y decide guardar los cambios se le
+preguntará dónde desea guardar el catálogo. Por ende, el usuario también podrá
+cargar catálogos desde un archivo que haya guardado previamente, o bien,
+volver al catálogo por defecto.
 \newpar
-El menú de de muebles disponibles es un menú lateral que contendrá todos los
+El menú de muebles disponibles es un menú lateral que contendrá todos los
 muebles que puedan añadirse a la habitación en función de las restricciones
 del  tipo de habitación que se esté diseñando. En primera instancia aparecerán
 los muebles que obligatoriamente deban incluirse en el diseño (debe haber una
@@ -193,8 +194,8 @@ de muebles entre sí. Sin embargo, la habitación también puede contener
 restricciones que se apliquen a todos los muebles que vayan a añadirse a la
 habitación.
 \newpar
-Para ver una lista completa de los tipos de restricciones disponibles,
-consultar el Anexo.
+Para ver una lista completa de los tipos de restricciones disponibles
+consultar \nameref{anexo_restricciones}.
 
 \subsubsection{La generación de diseños}
 \label{generacion}
@@ -207,8 +208,8 @@ El diseño generado se aplicará automáticamente al diseño actual del usuario
 y el mapa mostrará el nuevo diseño.
 
 \subsubsection{Extras}
-Adicionalmente, si se dispone del tiempo suficiente se intentarán implementar
-las siguientes funcionalidades:
+Adicionalmente, si se dispone del tiempo suficiente se implementarán las
+siguientes funcionalidades:
 
 \begin{description}
   \item[Enchufes e interruptores] El usuario podrá posicionar, además de

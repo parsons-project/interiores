@@ -121,7 +121,7 @@ Cada tipo de habitación tiene las siguientes características:
   \item[Dimensiones máximas] Ancho y largo máximos que una habitación de este
   tipo puede tener. En centímetros.
   \item[Restricciones] Puede contener cualquier tipo de restricción aplicable
-  a la habitación o a modelos de muebles. Más información en
+  a la habitación o a modelos de muebles y sus tipos. Más información en
   \nameref{restricciones}.
 \end{description}
 
@@ -191,10 +191,20 @@ horno en un baño).
 \label{restricciones}
 Las restricciones son reglas que todo diseño de la habitación debe cumplir.
 Las restricciones pueden relacionar diversos modelos de muebles o instancias
-de muebles entre sí. Sin embargo, la habitación también puede contener
-restricciones que se apliquen a todos los muebles que vayan a añadirse a la
-habitación.
+de muebles entre sí.
 \newpar
+Sin embargo, la habitación también puede contener restricciones aplicables a:
+\begin{description}
+  \item[Todos los muebles que vayan a añadirse a la habitación] El usuario
+  puede indicar que quiere que todos los muebles sean de un mismo color, por
+  ejemplo.
+  \item[Tipos de muebles] La habitación puede contener restricciones que
+  obliguen o prohiban la inclusión de cierto tipo de mueble al diseño, por
+  ejemplo.
+  \item[Modelos de muebles] Cuando el usuario indica que un modelo de mueble
+  debe incluirse en su diseño, por ejemplo.
+\end{description}
+
 Para ver una lista completa de los tipos de restricciones disponibles
 consultar \nameref{anexo_restricciones}.
 

@@ -154,18 +154,24 @@ a la habitación. Los modelos de muebles están caracterizados por:
   \item[Color]
   \item[Material] El material del que está hecho el mueble.
   \item[Precio] Precio orientativo del mueble.
-  \item[Tipo] Grupo al que pertenece el mueble. Por ejemplo: cama, silla,
-  mesa, sofá, etc.
-  \item[Restricciones] Inherentes al propio mueble. Más detalles en
-  \nameref{restricciones}.
+  \item[Tipo] Más información en \nameref{tipos}.
 \end{description}
 
-El tipo del modelo de un mueble especifica las utilidades implícitas del
-mueble. El usuario podrá modificar los tipos de muebles disponibles, así como
-definir nuevos tipos indicando sus utilidades.
+\subsubsection{Los tipos de modelos de muebles}
+\label{tipos}
+Los tipos de modelos de muebles se utilizan para clasificar los modelos según
+su utilidad. El tipo del modelo de un mueble especifica:
+\begin{description}
+  \item[Dimensiones máximas y mínimas] En centímetros.
+  \item[Utilidades] El modelo se especializará en función de las utilidades
+  del tipo de mueble, adquiriendo nuevas propiedades.
+  \item[Restricciones] Inherentes al propio tipo.
+\end{description}
+
+El usuario podrá modificar los tipos de muebles disponibles, así como
+definir nuevos tipos indicando sus propiedades.
 \newpar
-El modelo del mueble se especializa en función de las utilidades del tipo de
-mueble, adquiriendo nuevas propiedades. Las utilidades disponibles son:
+Las utilidades disponibles son:
 \begin{description}
   \item[Contenedor] El mueble puede ser utilizado para almacenar cosas de
   carácter general (por ejemplo, la papelera o la nevera no sirven para
@@ -180,8 +186,8 @@ mueble, adquiriendo nuevas propiedades. Las utilidades disponibles son:
   Se caracteriza porque el mueble se utiliza estando sentado.
 \end{description}
 
-Para una lista detallada de los tipos de muebles disponibles consultar
-\nameref{anexo_tipos}.
+Para una lista detallada de los tipos de muebles disponibles y sus propiedades
+consultar \nameref{anexo_tipos}.
 
 \subsubsection{El cátalogo de muebles}
 \label{catalogo_muebles}

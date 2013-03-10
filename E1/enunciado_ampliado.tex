@@ -154,14 +154,33 @@ a la habitación. Los modelos de muebles están caracterizados por:
   \item[Color]
   \item[Material] El material del que está hecho el mueble.
   \item[Precio] Precio orientativo del mueble.
-  \item[Capacidad] Litros que se pueden almacenar en el mueble.
-  \item[Plazas] Máximo número de personas que pueden utilizar el mueble al
-  mismo tiempo.
   \item[Tipo] Grupo al que pertenece el mueble. Por ejemplo: cama, silla,
   mesa, sofá, etc.
   \item[Restricciones] Inherentes al propio mueble. Más detalles en
   \nameref{restricciones}.
 \end{description}
+
+El tipo del modelo de un mueble especifica las utilidades implícitas del
+mueble. El usuario podrá modificar los tipos de muebles disponibles, así como
+definir nuevos tipos indicando sus utilidades.
+\newpar
+El modelo del mueble se especializa en función de las utilidades del tipo de
+mueble, adquiriendo nuevas propiedades. Las utilidades disponibles son:
+\begin{description}
+  \item[Contenedor] El mueble puede ser utilizado para almacenar cosas de
+  carácter general (por ejemplo, la papelera o la nevera no sirven para
+  guardar cualquier cosa). Añade la propiedad: capacidad, que se mide en
+  decimetros cúbicos o litros.
+  \item[Asiento] El mueble se puede utilizar para sentarse. Añade la
+  propiedad: número de plazas.
+  \item[Lugar para dormir] Las personas pueden dormir en el mueble. Añade la
+  propiedad: número de plazas.
+  \item[Soporte] Se pueden poner otros muebles encima.
+  \item[Trabajo/Comida] El mueble puede utilizarse para trabajar o para comer.
+\end{description}
+
+Para una lista detallada de los tipos de muebles disponibles consultar
+\nameref{anexo_tipos}.
 
 \subsubsection{El cátalogo de muebles}
 \label{catalogo_muebles}

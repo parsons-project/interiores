@@ -2,8 +2,11 @@
 Engloba las acciones relacionadas con el diseño de
 la habitación. El actor es siempre el usuario.
 \begin{description}
-\item[Cargar diseño] Permite recuperar el estado
-  de un diseño anteriormente guardado.
+\item[Cargar diseño] El usuario carga, desde un fichero de texto, un conjunto 
+de parámetros que determinan el estado de un diseño (en cualquiera de sus fases).
+Esto significa:
+1) Que el usuario puede guardar su progreso en cualquier punto y volver a él más adelante.
+2) Que el usuario puede manejar el programa de manera textual a través de comandos y parámetros.
 \item[Especificar la topología] Determinar la topología de
   la habitación a diseñar.
   \begin{description}
@@ -48,8 +51,12 @@ la habitación. El actor es siempre el usuario.
   desplaza hasta ella.  Si por el contrario se trata de una posición
   inválida, el mueble se mantiene en su posición anterior y se muestra
   un mensaje indicando por qué se ha producido el error.
-\item[Guardar diseño] El usuario guarda el estado del diseño actual
-  de la habitación en disco de forma permanente.
+\item[Guardar diseño] El usuario guarda el estado del diseño actual de la 
+habitación en un fichero de texto. Este fichero contiene los comandos y 
+parámetros que el usuario ha empleado de manera gráfica con tal de llegar 
+al punto actual. Así pues, un usuario puede trabajar en un mismo diseño 
+en días diferentes u ordenadores diferentes, y puede compartir con otras 
+personas sus diseños, para que estos los reaprovechen.
 \item[Exportar diseño a formato imprimible]El usuario exporta el
   diseño en un formato gráfico preparado para su impresión.
 \end{description}

@@ -1,39 +1,64 @@
 \section{Anexo I. Tipos de restricciones disponibles}
 \label{anexo_restricciones}
+
+\subsection{Habitación - Elemento fijo}
+Son los que relacionan la habitación con algun elemento fijo que
+contiene. Ejemplos:
 \begin{itemize}
 \item Una habitación debe tener almenos una puerta.
+\item Un elemento topológico no se puede mover una vez colocado.
+\item ...
+\end{itemize}
+\subsection{Elemento - Elemento}
+Relacionan elementos entre ellos. Ejemplos:
+\begin{itemize}
+\item Un mueble con funcionalidad comida/trabajo debe tener cerca
+de un mueble con funcionalidad de asiento.
 \item El espacio activo de dos elementos no se puede sobreponer,
 excepto por un objeto encima de otro con utilidad soporte
 de dimensiones mayores.
-
+\item La tele debe estar enfrente del sofa.
+\item La nevera no puede estar cerca del horno.
 \item El espacio pasivo de un elemento no se puede sobreponer
 con el espacio activo de otro.
-
-\item Un elemento topológico no se puede mover una vez colocado.
-
-\item Un elemento marcado como fijo por el usuario no se puede mover.
-
+\item Dos elementos deben estar a una distancia X el uno del otro.
+\item ...
+\end{itemize}
+\subsection{Habitación - Elemento}
+Relacionan el global de la habitación con algun elemento genérico que
+contenga. Ejemplos:
+\begin{itemize}
 \item El espacio pasivo de todo elemento debe ser accesible andando (con un
 pasaje libre de almenos 50cm de ancho) desde todas las puertas.
-
+\item Ningún mueble puede salirse del perímetro de la habitación
+\item ...
+\end{itemize}
+\subsection{Mueble - Tipo Mueble}
+Relacionan los muebles con su tipo de mueble. Ejemplos:
+\begin{itemize}
+\item El mueble no puede tener dimensiones fuera del rango permitido.
+\item El mueble debe tener la funcionalidad que le indica su tipo.
+\item ...
+\end{itemize}
+\subsection{Tipo Mueble - Tipo habitación}
+\begin{itemize}
+\item Todo modelo de mueble de la habitación debe tener un tipo
+existente en el catálogo de tipos de muebles.
+\item Todo modelo de mueble de la habitación debe tener un tipo que pueda
+ir en el tipo de habitación de la habitación.
+\item La habitación debe contener modelos de muebles de todos los tipos de
+muebles que deben ir en el tipo de habitación de la habitación.
 \item Un tipo de mueble respecto un tipo de habitación, tiene uno y sólo uno
 de los estados siguientes:
 \begin{itemize}
- \item Debe ir
+ \item Básico
  \item Puede ir
  \item No debe ir
 \end{itemize}
-\item Un mueble con funcionalidad comida/trabajo debe tener cerca
-de un mueble con funcionalidad de asiento
-
-\item Ningún mueble puede salirse del perímetro de la habitación
-
-\item Todo modelo de mueble de la habitación debe tenir un tipo de mueble
-existente en el catálogo de tipos de muebles.
-
-\item Todo modelo de mueble de la habitación debe tener un tipo que pueda
-ir en el tipo de habitación de la habitación.
-
-\item La habitación debe contener modelos de muebles de todos los tipos de
-muebles que deben ir en el tipo de habitación de la habitación.
 \end{itemize}
+
+\subsection{Definidas por el usuario}
+Puede definir restricciones de diseño (colores, materiales),
+generales para la habitación (tamaños, topología, marcar como fijo un
+elemento), de precio (máximo, mínimo) o capacidad (que puedan dormir 2
+personas).

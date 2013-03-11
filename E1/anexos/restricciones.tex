@@ -1,2 +1,39 @@
 \section{Anexo I. Tipos de restricciones disponibles}
 \label{anexo_restricciones}
+\begin{itemize}
+\item Una habitación debe tener almenos una puerta.
+\item El espacio activo de dos elementos no se puede sobreponer,
+excepto por un objeto encima de otro con utilidad soporte
+de dimensiones mayores.
+
+\item El espacio pasivo de un elemento no se puede sobreponer
+con el espacio activo de otro.
+
+\item Un elemento topológico no se puede mover una vez colocado.
+
+\item Un elemento marcado como fijo por el usuario no se puede mover.
+
+\item El espacio pasivo de todo elemento debe ser accesible andando (con un
+pasaje libre de almenos 50cm de ancho) desde todas las puertas.
+
+\item Un tipo de mueble respecto un tipo de habitación, tiene uno y sólo uno
+de los estados siguientes:
+\begin{itemize}
+ \item Debe ir
+ \item Puede ir
+ \item No debe ir
+\end{itemize}
+\item Un mueble con funcionalidad comida/trabajo debe tener cerca
+de un mueble con funcionalidad de asiento
+
+\item Ningún mueble puede salirse del perímetro de la habitación
+
+\item Todo modelo de mueble de la habitación debe tenir un tipo de mueble
+existente en el catálogo de tipos de muebles.
+
+\item Todo modelo de mueble de la habitación debe tener un tipo que pueda
+ir en el tipo de habitación de la habitación.
+
+\item La habitación debe contener modelos de muebles de todos los tipos de
+muebles que deben ir en el tipo de habitación de la habitación.
+\end{itemize}

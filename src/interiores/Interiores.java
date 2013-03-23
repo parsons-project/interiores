@@ -3,9 +3,6 @@
 package interiores;
 
 import interiores.core.Application;
-import interiores.core.ViewLoader;
-import interiores.core.terminal.Terminal;
-import interiores.views.swing.SwingLoader;
 
 /**
  *
@@ -18,12 +15,7 @@ public class Interiores
      */
     public static void main(String[] args) throws Exception
     {
-        ViewLoader loader = new SwingLoader();
-        
-        Terminal terminal = new Terminal();
-        terminal.setViewLoader(loader);
-        
-        Application app = new Application(terminal);
+        Application app = new Application(args);
         app.init();
     }
 }

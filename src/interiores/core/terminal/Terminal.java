@@ -1,8 +1,10 @@
 package interiores.core.terminal;
 
+import interiores.core.Observer;
 import interiores.core.Utils;
-import interiores.core.ViewLoader;
-import interiores.core.mvc.View;
+import interiores.core.business.Controller;
+import interiores.core.presentation.ViewLoader;
+import interiores.core.presentation.View;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
@@ -13,7 +15,7 @@ import java.util.Map;
  *
  * @author hector0193
  */
-public class Terminal
+public class Terminal implements Observer
 {
     private IOStream iostream;
     private Map<String, CommandGroup> commands;
@@ -50,10 +52,20 @@ public class Terminal
         }
     }
     
-    public void addCommands(String subject, CommandGroup commands)
+    public void addCommands(String subject, CommandGroup commands, Controller controller)
     {
+        controller.registerObserver(this);
+        commands.setController(controller);
         commands.setIOStream(iostream);
         this.commands.put(subject, commands);
+    }
+    
+    public void notify(String name, Map<String, Object> data)
+    {
+        System.out.println(name);
+        
+        for(Map.Entry<String, Object> e : data.entrySet())
+            System.out.println(e.getKey() + ": " + e.getValue().toString());
     }
     
     public void setViewLoader(ViewLoader vloader)
@@ -137,12 +149,7 @@ public class Terminal
         if(loaded)
             throw new Exception("The view " + viewName + " may not be working correctly.");
         else
-        {
             view.setTerminal(this);
-            
-            if(comgroup != null)
-                comgroup.addListener(view);
-        }
     }
     
     private String getViewName(String action, String subject)

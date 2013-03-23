@@ -1,9 +1,11 @@
 package interiores.core;
 
-import interiores.commands.RoomCommands;
-import interiores.controllers.RoomController;
+import interiores.business.controllers.RoomController;
+import interiores.core.presentation.ViewLoader;
 import interiores.core.terminal.Terminal;
-import interiores.models.Room;
+import interiores.data.DataController;
+import interiores.presentation.swing.SwingLoader;
+import interiores.terminal.RoomCommands;
 import java.io.IOException;
 
 /**
@@ -12,11 +14,16 @@ import java.io.IOException;
  */
 public class Application
 {
+    private DataController data;
     private Terminal terminal;
     
-    public Application(Terminal terminal)
+    public Application(String args[])
     {
-        this.terminal = terminal;
+        data = new DataController();
+        terminal = new Terminal();
+        
+        ViewLoader loader = new SwingLoader();
+        terminal.setViewLoader(loader);
     }
     
     public void init() throws Exception
@@ -27,7 +34,7 @@ public class Application
         {
             terminal.init();
         }
-        catch(IOException e)
+        catch(Exception e)
         {
             e.printStackTrace();
         }
@@ -35,12 +42,7 @@ public class Application
     
     private void addCommands()
     {
-        Room room = new Room();
-        
-        RoomCommands rcom = new RoomCommands();
-        rcom.setController(new RoomController(room));
-        
-        terminal.addCommands("room", rcom);
+        terminal.addCommands("room", new RoomCommands(), new RoomController(data));
     }
 
 }

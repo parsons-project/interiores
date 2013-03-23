@@ -1,8 +1,8 @@
 /*
  */
-package interiores.core;
+package interiores.core.presentation;
 
-import interiores.core.mvc.View;
+import interiores.core.presentation.View;
 
 /**
  *

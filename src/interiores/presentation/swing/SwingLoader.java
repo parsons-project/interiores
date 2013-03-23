@@ -1,7 +1,7 @@
-package interiores.views.swing;
+package interiores.presentation.swing;
 
-import interiores.core.ViewLoader;
-import interiores.core.mvc.View;
+import interiores.core.presentation.ViewLoader;
+import interiores.core.presentation.View;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class SwingLoader implements ViewLoader
 {
-    private final static String VIEWS_PKG = "interiores.views.swing";
+    private final static String VIEWS_PKG = "interiores.presentation.swing.views";
     private Map<String, View> views;
     
     public SwingLoader()

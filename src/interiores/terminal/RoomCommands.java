@@ -1,7 +1,7 @@
-package interiores.commands;
+package interiores.terminal;
 
-import interiores.controllers.RoomController;
-import interiores.core.mvc.Controller;
+import interiores.business.controllers.RoomController;
+import interiores.core.business.Controller;
 import interiores.core.terminal.CommandGroup;
 import java.io.IOException;
 
@@ -26,6 +26,5 @@ public class RoomCommands extends CommandGroup
     public void setController(Controller controller)
     {
         this.controller = (RoomController) controller;
-        controller.addListener(this);
     }
 }

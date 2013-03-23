@@ -1,14 +1,13 @@
 package interiores.core.terminal;
 
-import interiores.core.mvc.Controller;
-import interiores.core.mvc.Intermediary;
+import interiores.core.business.Controller;
 import java.io.IOException;
 
 /**
  *
  * @author hector
  */
-abstract public class CommandGroup extends Intermediary
+abstract public class CommandGroup
 {
     private IOStream iostream;
     

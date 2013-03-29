@@ -22,6 +22,7 @@ abstract public class SwingFrame extends JFrame implements View
         setVisible(true);
     }
     
+    @Override
     public void setPresentation(PresentationController presentation)
     {
         this.presentation = presentation;

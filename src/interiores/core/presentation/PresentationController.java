@@ -44,6 +44,11 @@ public class PresentationController implements Observer
         terminal.exec(command);
     }
     
+    public void closeView(String name)
+    {
+        vloader.unload(name);
+    }
+    
     @Override
     public void notify(String name, Map<String, Object> data)
     {

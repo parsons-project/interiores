@@ -34,7 +34,7 @@ public class NewRoom extends SwingFrame
 
         jTextField1 = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Nueva habitación...");
 
         jTextField1.setText("jTextField1");
 

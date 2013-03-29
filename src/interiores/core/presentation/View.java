@@ -2,7 +2,6 @@
  */
 package interiores.core.presentation;
 
-import interiores.core.terminal.Terminal;
 import java.beans.PropertyChangeListener;
 
 /**
@@ -12,5 +11,5 @@ import java.beans.PropertyChangeListener;
 public interface View extends PropertyChangeListener
 {
     public void showView();
-    public void setTerminal(Terminal terminal);
+    public void setPresentation(PresentationController presentation);
 }

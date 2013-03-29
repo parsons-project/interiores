@@ -3,7 +3,7 @@ package interiores.core.terminal;
 import interiores.core.Observer;
 import interiores.core.Utils;
 import interiores.core.business.Controller;
-import interiores.core.presentation.ViewLoader;
+import interiores.core.presentation.PresentationController;
 import interiores.core.presentation.View;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -19,20 +19,20 @@ public class Terminal implements Observer
 {
     private IOStream iostream;
     private Map<String, CommandGroup> commands;
-    private ViewLoader vloader;
+    private PresentationController presentation;
     
     public Terminal()
     {
         iostream = new IOStream();
         commands = new HashMap<String, CommandGroup>();
-        vloader = null;
+        presentation = null;
     }
     
     public void init() throws Exception
     {
         if(hasGui())
         {
-            loadView(null, "main", "app");
+            presentation.showView("main", "app");
             // Ignore System output with GUI
             iostream.setOutputStream(new PrintStream("/dev/null"));
         }
@@ -52,7 +52,7 @@ public class Terminal implements Observer
         }
     }
     
-    public void addCommands(String subject, CommandGroup commands, Controller controller)
+    public void addCommandGroup(String subject, CommandGroup commands, Controller controller)
     {
         controller.registerObserver(this);
         commands.setController(controller);
@@ -60,22 +60,29 @@ public class Terminal implements Observer
         this.commands.put(subject, commands);
     }
     
+    @Override
     public void notify(String name, Map<String, Object> data)
     {
-        System.out.println(name);
+        if(hasGui())
+            presentation.notify(name, data);
         
-        for(Map.Entry<String, Object> e : data.entrySet())
-            System.out.println(e.getKey() + ": " + e.getValue().toString());
+        else
+        {
+            System.out.println(name);
+        
+            for(Map.Entry<String, Object> e : data.entrySet())
+                System.out.println(e.getKey() + ": " + e.getValue().toString());
+        }
     }
     
-    public void setViewLoader(ViewLoader vloader)
+    public void setPresentation(PresentationController presentation)
     {
-        this.vloader = vloader;
+        this.presentation = presentation;
     }
     
     public boolean hasGui()
     {
-        return vloader != null;
+        return presentation != null;
     }
     
     public void exec(String line)
@@ -114,7 +121,7 @@ public class Terminal implements Observer
             catch(IOException e)
             {
                 if(hasGui())
-                    loadView(comgroup, action, subject);
+                    presentation.showView(action, subject);
                 else
                     throw e;
             }
@@ -132,28 +139,5 @@ public class Terminal implements Observer
     private boolean isReserved(String s)
     {
         return (s.equals("new"));
-    }
-    
-    private void loadView(CommandGroup comgroup, String action, String subject) throws Exception
-    {
-        String viewName = getViewName(action, subject);
-        
-        boolean loaded = vloader.isLoaded(viewName);
-        
-        if(!loaded)
-            vloader.load(viewName);
-        
-        View view = vloader.get(viewName);
-        view.showView();
-        
-        if(loaded)
-            throw new Exception("The view " + viewName + " may not be working correctly.");
-        else
-            view.setTerminal(this);
-    }
-    
-    private String getViewName(String action, String subject)
-    {
-        return Utils.capitalize(action) + Utils.capitalize(subject);
     }
 }

@@ -2,11 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interiores.presentation.swing;
+package interiores.presentation;
 
+import interiores.core.presentation.PresentationController;
 import interiores.core.presentation.View;
-import interiores.core.terminal.Terminal;
-import java.beans.PropertyChangeEvent;
 import javax.swing.JFrame;
 
 /**
@@ -15,7 +14,7 @@ import javax.swing.JFrame;
  */
 abstract public class SwingFrame extends JFrame implements View
 {
-    private Terminal terminal;
+    private PresentationController presentation;
     
     @Override
     public void showView()
@@ -23,13 +22,13 @@ abstract public class SwingFrame extends JFrame implements View
         setVisible(true);
     }
     
-    public void setTerminal(Terminal terminal)
+    public void setPresentation(PresentationController presentation)
     {
-        this.terminal = terminal;
+        this.presentation = presentation;
     }
     
     public void exec(String cmd)
     {
-        terminal.exec(cmd);
+        presentation.exec(cmd);
     }
 }

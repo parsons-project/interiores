@@ -1,12 +1,11 @@
 package interiores.core;
 
-import interiores.business.controllers.RoomController;
+import interiores.core.business.Controller;
+import interiores.core.presentation.PresentationController;
 import interiores.core.presentation.ViewLoader;
+import interiores.core.terminal.CommandGroup;
 import interiores.core.terminal.Terminal;
 import interiores.data.DataController;
-import interiores.presentation.swing.SwingLoader;
-import interiores.terminal.RoomCommands;
-import java.io.IOException;
 
 /**
  *
@@ -14,22 +13,27 @@ import java.io.IOException;
  */
 public class Application
 {
+    private String appPkg;
     private DataController data;
     private Terminal terminal;
     
-    public Application(String args[])
+    public Application(String appPkg)
     {
+        this.appPkg = appPkg;
         data = new DataController();
         terminal = new Terminal();
+    }
+    
+    public void enableGUI()
+    {
+        ViewLoader vloader = new ViewLoader(appPkg + ".presentation.views");
+        PresentationController presentation = new PresentationController(vloader, terminal);
         
-        ViewLoader loader = new SwingLoader();
-        terminal.setViewLoader(loader);
+        terminal.setPresentation(presentation);
     }
     
     public void init() throws Exception
-    {
-        addCommands();
-        
+    {   
         try
         {
             terminal.init();
@@ -40,9 +44,26 @@ public class Application
         }
     }
     
-    private void addCommands()
+    public void addCommandGroup(String name)
     {
-        terminal.addCommands("room", new RoomCommands(), new RoomController(data));
+        try
+        {
+            Class comgroupClass = Class.forName(appPkg + ".terminal." + Utils.capitalize(name) + "Commands");
+            Class controllerClass = Class.forName(appPkg + ".business.controllers." + Utils.capitalize(name) +
+                    "Controller");
+            
+            addCommandGroup(name,
+                    (CommandGroup) comgroupClass.newInstance(),
+                    (Controller)   controllerClass.getConstructor(DataController.class).newInstance(data));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
-
+    
+    public void addCommandGroup(String name, CommandGroup comgroup, Controller controller)
+    {
+        terminal.addCommandGroup(name, comgroup, controller);
+    }
 }

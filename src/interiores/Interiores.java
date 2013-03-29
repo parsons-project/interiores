@@ -15,7 +15,11 @@ public class Interiores
      */
     public static void main(String[] args) throws Exception
     {
-        Application app = new Application(args);
+        Application app = new Application("interiores");
+        
+        app.addCommandGroup("room");
+        
+        app.enableGUI();
         app.init();
     }
 }

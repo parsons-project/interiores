@@ -8,6 +8,6 @@ import java.util.Map;
  */
 public interface Observable
 {
-    public void registerObserver(Observer obs);
+    public void addListener(Observer obs);
     public void notify(String name, Map<String, Object> data);
 }

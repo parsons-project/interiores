@@ -1,11 +1,10 @@
 package interiores.core;
 
-import interiores.core.business.Controller;
+import interiores.core.business.BusinessController;
 import interiores.core.presentation.PresentationController;
-import interiores.core.presentation.ViewLoader;
-import interiores.core.terminal.CommandGroup;
-import interiores.core.terminal.Terminal;
 import interiores.data.DataController;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,46 +14,30 @@ public class Application
 {
     private String appPkg;
     private DataController data;
-    private Terminal terminal;
+    private List<PresentationController> presentations;
     
     public Application(String appPkg)
     {
         this.appPkg = appPkg;
         data = new DataController();
-        terminal = new Terminal();
-    }
-    
-    public void enableGUI()
-    {
-        ViewLoader vloader = new ViewLoader(appPkg + ".presentation.views");
-        PresentationController presentation = new PresentationController(vloader, terminal);
-        
-        terminal.setPresentation(presentation);
+        presentations = new ArrayList();
     }
     
     public void init() throws Exception
     {   
-        try
-        {
-            terminal.init();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        for(PresentationController presentation : presentations)
+            presentation.init();
     }
     
-    public void addCommandGroup(String name)
+    public void addBusiness(String name)
     {
         try
         {
-            Class comgroupClass = Class.forName(appPkg + ".terminal." + Utils.capitalize(name) + "Commands");
             Class controllerClass = Class.forName(appPkg + ".business.controllers." + Utils.capitalize(name) +
                     "Controller");
             
-            addCommandGroup(name,
-                    (CommandGroup) comgroupClass.newInstance(),
-                    (Controller)   controllerClass.getConstructor(DataController.class).newInstance(data));
+            addBusiness(name,
+                    (BusinessController) controllerClass.getConstructor(DataController.class).newInstance(data));
         }
         catch(Exception e)
         {
@@ -62,8 +45,14 @@ public class Application
         }
     }
     
-    public void addCommandGroup(String name, CommandGroup comgroup, Controller controller)
+    public void addBusiness(String name, BusinessController controller)
     {
-        terminal.addCommandGroup(name, comgroup, controller);
+        for(PresentationController presentation : presentations)
+            presentation.addBusinessController(name, controller);
+    }
+    
+    public void addPresentation(PresentationController presentation)
+    {
+        presentations.add(presentation);
     }
 }

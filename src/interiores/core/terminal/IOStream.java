@@ -40,9 +40,6 @@ public class IOStream
     
     public String readLine() throws IOException
     {
-        if(istream == null)
-            throw new IOException();
-        
         return istream.readLine();
     }
     

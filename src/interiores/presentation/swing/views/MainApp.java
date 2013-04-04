@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interiores.presentation.views;
+package interiores.presentation.swing.views;
 
-import interiores.presentation.SwingFrame;
+import interiores.presentation.swing.SwingFrame;
 import java.beans.PropertyChangeEvent;
 
 /**
@@ -73,7 +73,6 @@ public class MainApp extends SwingFrame
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton2ActionPerformed
     {//GEN-HEADEREND:event_jButton2ActionPerformed
-        exec(jTextField1.getText());
         jTextField1.setText("");
     }//GEN-LAST:event_jButton2ActionPerformed
 

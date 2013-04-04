@@ -1,62 +1,32 @@
 package interiores.core.presentation;
 
+import interiores.core.Initiable;
 import interiores.core.Observer;
-import interiores.core.Utils;
-import interiores.core.terminal.Terminal;
+import interiores.core.business.BusinessController;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  *
  * @author hector
  */
-public class PresentationController implements Observer
+abstract public class PresentationController implements Initiable, Observer
 {
-    private ViewLoader vloader;
-    private Terminal terminal;
+    private Map<String, BusinessController> controllers;
     
-    public PresentationController(ViewLoader vloader, Terminal terminal)
+    public PresentationController()
     {
-        this.vloader = vloader;
-        this.terminal = terminal;
+        controllers = new HashMap();
     }
     
-    public void showView(String action, String subject) throws Exception
+    public void addBusinessController(String name, BusinessController controller)
     {
-        String viewName = getViewName(action, subject);
-        
-        View view;
-        
-        if(! vloader.isLoaded(viewName))
-        {
-            vloader.load(viewName);
-            view = vloader.get(viewName);
-            
-            view.setPresentation(this);
-        }
-        else
-            view = vloader.get(viewName);
-        
-        view.showView();
+        controller.addListener(this);
+        controllers.put(name, controller);
     }
     
-    public void exec(String command)
+    public BusinessController getBusinessController(String name)
     {
-        terminal.exec(command);
-    }
-    
-    public void closeView(String name)
-    {
-        vloader.unload(name);
-    }
-    
-    @Override
-    public void notify(String name, Map<String, Object> data)
-    {
-        
-    }
-    
-    static private String getViewName(String action, String subject)
-    {
-        return Utils.capitalize(action) + Utils.capitalize(subject);
+        return controllers.get(name);
     }
 }

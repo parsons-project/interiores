@@ -1,6 +1,6 @@
 package interiores.core.terminal;
 
-import interiores.core.business.Controller;
+import interiores.core.presentation.TerminalController;
 import java.io.IOException;
 
 /**
@@ -10,6 +10,12 @@ import java.io.IOException;
 abstract public class CommandGroup
 {
     private IOStream iostream;
+    protected TerminalController terminal;
+    
+    public void setTerminal(TerminalController terminal)
+    {
+        this.terminal = terminal;
+    }
     
     public void setIOStream(IOStream iostream)
     {
@@ -29,6 +35,4 @@ abstract public class CommandGroup
         
         return iostream.readInt();
     }
-    
-    abstract public void setController(Controller controller);
 }

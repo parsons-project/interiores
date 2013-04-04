@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interiores.presentation;
+package interiores.presentation.swing;
 
 import interiores.core.presentation.PresentationController;
 import interiores.core.presentation.View;
@@ -14,7 +14,7 @@ import javax.swing.JFrame;
  */
 abstract public class SwingFrame extends JFrame implements View
 {
-    private PresentationController presentation;
+    protected PresentationController presentation;
     
     @Override
     public void showView()
@@ -26,10 +26,5 @@ abstract public class SwingFrame extends JFrame implements View
     public void setPresentation(PresentationController presentation)
     {
         this.presentation = presentation;
-    }
-    
-    public void exec(String cmd)
-    {
-        presentation.exec(cmd);
     }
 }

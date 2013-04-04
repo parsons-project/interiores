@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interiores.presentation.views;
+package interiores.presentation.swing.views;
 
-import interiores.presentation.SwingFrame;
+import interiores.presentation.swing.SwingFrame;
 import java.beans.PropertyChangeEvent;
 
 /**

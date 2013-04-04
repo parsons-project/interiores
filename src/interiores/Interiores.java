@@ -3,6 +3,8 @@
 package interiores;
 
 import interiores.core.Application;
+import interiores.core.presentation.SwingController;
+import interiores.core.presentation.TerminalController;
 
 /**
  *
@@ -17,9 +19,11 @@ public class Interiores
     {
         Application app = new Application("interiores");
         
-        app.addCommandGroup("room");
+        app.addPresentation(new SwingController("interiores.presentation.swing.views"));
+        app.addPresentation(new TerminalController("interiores.terminal"));
         
-        app.enableGUI();
+        app.addBusiness("room");
+        
         app.init();
     }
 }

@@ -1,4 +1,4 @@
-package interiores.terminal;
+package interiores.presentation.terminal;
 
 import interiores.business.controllers.RoomController;
 import interiores.core.terminal.CommandGroup;

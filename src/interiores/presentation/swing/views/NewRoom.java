@@ -106,9 +106,4 @@ public class NewRoom extends SwingFrame
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void propertyChange(PropertyChangeEvent pce)
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

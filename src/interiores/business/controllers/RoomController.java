@@ -20,6 +20,6 @@ public class RoomController extends BusinessController
        Room room = new Room(type, width, height);
        
        data.set("room", room);
-       notify("room.created", room.toMap());
+       notify("roomCreated", room.toMap());
     }
 }

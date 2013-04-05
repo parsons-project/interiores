@@ -20,7 +20,7 @@ public class Interiores
         Application app = new Application("interiores");
         
         app.addPresentation(new SwingController("interiores.presentation.swing.views"));
-        app.addPresentation(new TerminalController("interiores.terminal"));
+        app.addPresentation(new TerminalController("interiores.presentation.terminal"));
         
         app.addBusiness("room");
         

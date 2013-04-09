@@ -5,6 +5,7 @@ import interiores.core.presentation.PresentationController;
 import interiores.data.DataController;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -16,7 +17,7 @@ public class Application
     private DataController data;
     private List<PresentationController> presentations;
     
-    public Application(String appPkg)
+    public Application(String appPkg) throws JAXBException
     {
         this.appPkg = appPkg;
         data = new DataController();

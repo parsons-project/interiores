@@ -43,7 +43,7 @@ public class MainApp extends SwingFrame
 
         jLabel1.setText("Tipo:");
 
-        jLabel2.setText("Datos última habitación creada:");
+        jLabel2.setText("Datos última habitación creada/cargada:");
 
         jLabel3.setText("Dimensiones:");
 
@@ -68,7 +68,7 @@ public class MainApp extends SwingFrame
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(roomType)
                             .add(roomSize))))
-                .addContainerGap(188, Short.MAX_VALUE))
+                .addContainerGap(132, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -145,7 +145,8 @@ public class MainApp extends SwingFrame
     public String[] getEvents()
     {
         return new String[]{
-            "roomCreated"
+            "roomCreated",
+            "roomLoaded"
         };
     }
     
@@ -153,5 +154,10 @@ public class MainApp extends SwingFrame
     {
         roomType.setText((String) data.get("type"));
         roomSize.setText(data.get("width") + " x " + data.get("height") + " (cm)");
+    }
+    
+    public void roomLoaded(Map<String, Object> data)
+    {
+        roomCreated(data);
     }
 }

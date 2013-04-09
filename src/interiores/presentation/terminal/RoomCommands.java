@@ -16,7 +16,25 @@ public class RoomCommands extends CommandGroup
         int width = readInt("Introduce el ancho de la habitación en cm");
         int height = readInt("Introduce la altura de la habitación en cm");
         
-        RoomController c = (RoomController) terminal.getBusinessController("room");
-        c.newRoom(type, width, height);
+        getRoomController().newRoom(type, width, height);
+    }
+    
+    public void save() throws IOException
+    {
+        String path = readString("Especifica la ruta donde guardar la habitación");
+        
+        getRoomController().saveRoom(path);
+    }
+    
+    public void load() throws IOException
+    {
+        String path = readString("Especifica la ruta desde donde cargar");
+        
+        getRoomController().loadRoom(path);
+    }
+    
+    public RoomController getRoomController()
+    {
+        return (RoomController) terminal.getBusinessController("room");
     }
 }

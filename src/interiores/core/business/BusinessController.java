@@ -34,4 +34,9 @@ abstract public class BusinessController implements Observable
         for(Observer o : listeners)
             o.notify(name, data);
     }
+    
+    public void notify(String name, Model m)
+    {
+        notify(name, m.toMap());
+    }
 }

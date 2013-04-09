@@ -29,7 +29,7 @@ public class RoomController extends BusinessController
     {
         try
         {
-            data.save("room", path);
+            data.save(data.get("room"), path);
             notify("roomSaved", (Model) data.get("room"));
         }
         catch(JAXBException e)

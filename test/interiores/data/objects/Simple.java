@@ -18,20 +18,17 @@ public class Simple {
     @XmlAttribute
     private String c;
     
-    public Simple()
-    {
+    public Simple() {
         
     }
     
-    public Simple(int a, int b, String c)
-    {
+    public Simple(int a, int b, String c) {
         this.a = a;
         this.b = b;
         this.c = c;
     }
     
-    public boolean equals(Simple s)
-    {
+    public boolean equals(Simple s) {
         System.out.println("lol");
         return (s.a == a && s.b == b && s.c.equals(c));
     }

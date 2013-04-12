@@ -10,7 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author hector
  */
 @XmlRootElement
-public class Container {
+public class Container
+{
     @XmlElement
     private Simple a;
     

@@ -1,6 +1,5 @@
 package interiores.data;
 
-import interiores.core.business.Model;
 import java.io.File;
 import java.util.HashMap;
 import javax.xml.bind.JAXBContext;
@@ -74,8 +73,9 @@ public class DataController {
     {
         JAXBContext jc = JAXBContext.newInstance(o.getClass());
         Marshaller m = jc.createMarshaller();
+        m.setProperty("jaxb.formatted.output", true);
         
-        m.marshal(o, new File("data/" + path));
+        m.marshal(o, new File(path));
     }
     
     /**
@@ -90,6 +90,6 @@ public class DataController {
         JAXBContext jc = JAXBContext.newInstance(c);
         Unmarshaller u = jc.createUnmarshaller();
         
-        return u.unmarshal(new File("data/" + path));
+        return u.unmarshal(new File(path));
     }
 }

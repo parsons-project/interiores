@@ -1,5 +1,6 @@
 package interiores.data.objects;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -20,7 +21,8 @@ public class Container
     private List<Simple> list;
     
     public Container() {
-        
+        a = new Simple();
+        list = new ArrayList();
     }
     
     public Container(Simple a, List<Simple> list) {

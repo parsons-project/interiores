@@ -19,7 +19,8 @@ public class Simple {
     private String c;
     
     public Simple() {
-        
+        a = b = 0;
+        c = "Default value!";
     }
     
     public Simple(int a, int b, String c) {
@@ -29,7 +30,6 @@ public class Simple {
     }
     
     public boolean equals(Simple s) {
-        System.out.println("lol");
         return (s.a == a && s.b == b && s.c.equals(c));
     }
 }

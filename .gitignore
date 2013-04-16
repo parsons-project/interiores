@@ -15,6 +15,9 @@ nbproject/private/
 /build/
 /dist/
 
+# Data files
+/data/
+
 # LaTeX files
 *.aux
 *.log

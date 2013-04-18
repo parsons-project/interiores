@@ -25,7 +25,7 @@ public class SwingController extends PresentationController
     @Override
     public void init()
     {
-        showView("MainApp");
+        show("MainApp");
     }
     
     @Override
@@ -48,12 +48,12 @@ public class SwingController extends PresentationController
         }
     }
     
-    public void showView(String viewName)
-    {         
+    public View load(String viewName)
+    {
+        View view = null;
+        
         try
         {
-            View view;
-            
             if(! vloader.isLoaded(viewName))
             {
                 vloader.load(viewName);
@@ -66,13 +66,18 @@ public class SwingController extends PresentationController
             }
             else
                 view = vloader.get(viewName);
-            
-            view.showView();
         }
         catch(Exception e)
         {
             e.printStackTrace();
-        } 
+        }
+        
+        return view;
+    }
+    
+    public void show(String viewName)
+    {
+        load(viewName).showView();
     }
     
     private void addViewToEvent(String event, View view)
@@ -83,7 +88,7 @@ public class SwingController extends PresentationController
         events.get(event).add(view);
     }
     
-    public void closeView(String name)
+    public void close(String name)
     {
         vloader.unload(name);
     }

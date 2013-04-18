@@ -6,6 +6,7 @@ package interiores.presentation.swing.views;
 
 import interiores.presentation.swing.SwingFrame;
 import java.util.Map;
+import javax.swing.JPanel;
 
 /**
  *
@@ -20,6 +21,14 @@ public class MainApp extends SwingFrame
     public MainApp()
     {
         initComponents();
+    }
+    
+    @Override
+    public void showView()
+    {
+        super.showView();
+        
+        presentation.show("RoomMap");
     }
 
     /**
@@ -40,6 +49,7 @@ public class MainApp extends SwingFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Diseño de interiores");
+        setAlwaysOnTop(true);
 
         jLabel1.setText("Tipo:");
 
@@ -68,7 +78,7 @@ public class MainApp extends SwingFrame
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(roomType)
                             .add(roomSize))))
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)

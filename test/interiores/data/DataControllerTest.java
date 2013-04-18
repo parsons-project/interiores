@@ -83,7 +83,11 @@ public class DataControllerTest
     private void testSave(Object o, String savePath, String correctionPath) throws Exception {
         data.save(o, savePath);
         
-        assertTrue("The files differ!", areFilesIdentical(new File(correctionPath), new File(savePath)));
+        File f = new File(savePath);
+        
+        assertTrue("The files differ!", areFilesIdentical(new File(correctionPath), f));
+        
+        f.delete();
     }
     
     private void testLoad(Class c, String path, Object original) throws Exception {

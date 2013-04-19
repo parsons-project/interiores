@@ -1,8 +1,13 @@
 package interiores.presentation.swing.views;
 
 import interiores.presentation.swing.SwingPanel;
+import interiores.presentation.swing.views.map.Drawable;
+import interiores.presentation.swing.views.map.Furniture;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -10,20 +15,64 @@ import java.awt.Graphics;
  */
 public class RoomMapPanel extends SwingPanel
 {
+    private final int GRID_RES = 5;
+    private int width;
+    private int height;
+    private List<Drawable> elements;
+    private boolean update;
 
     /**
      * Creates new form RoomMap
      */
     public RoomMapPanel()
     {
+        elements = new ArrayList();
+        width = 800;
+        height = 600;
+        
         initComponents();
+        setPreferredSize(new Dimension(width, height));
+        
+        Furniture bed = new Furniture("Bed", 40, 40, 100, 60);
+        
+        Furniture tv = new Furniture("TV", 40, 200, 100, 20);
+        tv.setColor("0xEEEEEE");
+        
+        elements.add(bed);
+        elements.add(tv);
+        
+        update = true;
     }
     
     @Override
     public void paintComponent(Graphics g)
     {
+        if(! update)
+            return;
+        
         g.setColor(Color.white);
-        g.fillRect(0, 0, 800, 600);
+        g.fillRect(0, 0, width, height);
+        
+        drawGrid(g);
+        
+        for(Drawable element : elements)
+            element.draw(g);
+        
+        update = false;
+    }
+    
+    private void drawGrid(Graphics g)
+    {
+        int rows = width / GRID_RES;
+        int cols = height / GRID_RES;
+        
+        g.setColor(Color.decode("0xEEEEEE"));
+        
+        for(int i = 0; i < rows; i++)
+        {
+            for(int j = 0; j < cols; j++)
+                g.drawRect(i*5, j*5, 5, 5);
+        }
     }
 
     /**
@@ -35,7 +84,6 @@ public class RoomMapPanel extends SwingPanel
     private void initComponents()
     {
 
-        setPreferredSize(new java.awt.Dimension(800, 600));
         setLayout(null);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables

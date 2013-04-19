@@ -41,6 +41,7 @@ public class RoomMap extends SwingFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Mapa de la habitación");
         setAlwaysOnTop(true);
+        setResizable(false);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

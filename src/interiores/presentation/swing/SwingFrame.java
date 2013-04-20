@@ -30,6 +30,12 @@ abstract public class SwingFrame extends JFrame implements View
     }
     
     @Override
+    public void onLoad() throws Exception
+    {
+        
+    }
+    
+    @Override
     public String[] getEvents()
     {
         return new String[]{};

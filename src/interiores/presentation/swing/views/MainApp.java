@@ -6,7 +6,6 @@ package interiores.presentation.swing.views;
 
 import interiores.presentation.swing.SwingFrame;
 import java.util.Map;
-import javax.swing.JPanel;
 
 /**
  *
@@ -24,13 +23,11 @@ public class MainApp extends SwingFrame
     }
     
     @Override
-    public void showView()
+    public void onLoad() throws Exception
     {
-        super.showView();
-        
-        presentation.show("RoomMap");
+        presentation.load("RoomMap");
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -150,7 +147,7 @@ public class MainApp extends SwingFrame
     private javax.swing.JLabel roomSize;
     private javax.swing.JLabel roomType;
     // End of variables declaration//GEN-END:variables
-
+    
     @Override
     public String[] getEvents()
     {

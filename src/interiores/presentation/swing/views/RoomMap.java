@@ -2,6 +2,7 @@ package interiores.presentation.swing.views;
 
 import interiores.presentation.swing.SwingFrame;
 import java.awt.BorderLayout;
+import java.util.Map;
 
 /**
  *
@@ -9,20 +10,25 @@ import java.awt.BorderLayout;
  */
 public class RoomMap extends SwingFrame
 {
-
     /**
      * Creates new form RoomMap
      */
     public RoomMap()
     {
         initComponents();
+        setLayout(new BorderLayout());
+    }
+    
+    @Override
+    public void onLoad() throws Exception
+    {
+        presentation.load("RoomMapPanel"); 
     }
     
     @Override
     public void showView()
     {
-        RoomMapPanel map = (RoomMapPanel) presentation.load("RoomMapPanel");
-        setLayout(new BorderLayout());
+        RoomMapPanel map = (RoomMapPanel) presentation.get("RoomMapPanel");
         add(map, BorderLayout.CENTER);
         pack();
         
@@ -92,4 +98,23 @@ public class RoomMap extends SwingFrame
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+    
+    @Override
+    public String[] getEvents()
+    {
+        return new String[]{
+            "roomCreated",
+            "roomLoaded"
+        };
+    }
+    
+    public void roomCreated(Map<String, Object> data)
+    {
+        showView();
+    }
+    
+    public void roomLoaded(Map<String, Object> data)
+    {
+        roomCreated(data);
+    }
 }

@@ -1,13 +1,12 @@
 package interiores.presentation.swing.views;
 
+import interiores.core.Debug;
 import interiores.presentation.swing.SwingPanel;
-import interiores.presentation.swing.views.map.Drawable;
-import interiores.presentation.swing.views.map.Furniture;
-import java.awt.Color;
+import interiores.presentation.swing.views.map.GridMap;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Graphics2D;
+import java.util.Map;
 
 /**
  *
@@ -15,64 +14,15 @@ import java.util.List;
  */
 public class RoomMapPanel extends SwingPanel
 {
-    private final int GRID_RES = 5;
-    private int width;
-    private int height;
-    private List<Drawable> elements;
-    private boolean update;
+    private GridMap map;
 
     /**
      * Creates new form RoomMap
      */
     public RoomMapPanel()
     {
-        elements = new ArrayList();
-        width = 800;
-        height = 600;
-        
+        map = null;
         initComponents();
-        setPreferredSize(new Dimension(width, height));
-        
-        Furniture bed = new Furniture("Bed", 40, 40, 100, 60);
-        
-        Furniture tv = new Furniture("TV", 40, 200, 100, 20);
-        tv.setColor("0xEEEEEE");
-        
-        elements.add(bed);
-        elements.add(tv);
-        
-        update = true;
-    }
-    
-    @Override
-    public void paintComponent(Graphics g)
-    {
-        if(! update)
-            return;
-        
-        g.setColor(Color.white);
-        g.fillRect(0, 0, width, height);
-        
-        drawGrid(g);
-        
-        for(Drawable element : elements)
-            element.draw(g);
-        
-        update = false;
-    }
-    
-    private void drawGrid(Graphics g)
-    {
-        int rows = width / GRID_RES;
-        int cols = height / GRID_RES;
-        
-        g.setColor(Color.decode("0xEEEEEE"));
-        
-        for(int i = 0; i < rows; i++)
-        {
-            for(int j = 0; j < cols; j++)
-                g.drawRect(i*5, j*5, 5, 5);
-        }
     }
 
     /**
@@ -88,4 +38,35 @@ public class RoomMapPanel extends SwingPanel
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void paintComponent(Graphics g)
+    {
+        if(map != null)
+            map.draw((Graphics2D) g);
+    }
+    
+    @Override
+    public String[] getEvents()
+    {
+        return new String[]{
+            "roomCreated",
+            "roomLoaded"
+        };
+    }
+    
+    public void roomCreated(Map<String, Object> data)
+    {
+        map = new GridMap((Integer)data.get("width"), (Integer)data.get("height"));
+        
+        if(Debug.isEnabled())
+            map.enableGrid();
+        
+        setPreferredSize(new Dimension(map.getWidth(), map.getHeight()));  
+    }
+    
+    public void roomLoaded(Map<String, Object> data)
+    {
+        roomCreated(data);
+    }
 }

@@ -14,9 +14,9 @@ public class GridMap
     implements Drawable
 {
     private static final int GRID_RES = 5;
-    private static final int GRID_PAD = 5;
+    private static final int GRID_PAD = 10;
     private static final String GRID_COLOR = "0xEEEEEE";
-    private static final double SCALE = 1.5;
+    private static final double SCALE = 2;
     
     private int width;
     private int height;
@@ -30,6 +30,17 @@ public class GridMap
         elements = new ArrayList();
         // Add initial walls
         elements.add(new Walls(roomWidth, roomHeight));
+        
+        Furniture sofa = new Furniture("Sofa", 0, 0, 100, 40);
+        sofa.setOrientation('R');
+        sofa.setColor("#BDB76B");
+        
+        Furniture tv = new Furniture("TV", 100, 15, 70, 20);
+        tv.setOrientation('L');
+        tv.setColor("#EEEEEE");
+        
+        elements.add(sofa);
+        elements.add(tv);
        
         isGridEnabled = false;
     }

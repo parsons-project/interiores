@@ -28,7 +28,5 @@ public class Walls implements Drawable {
         g.fillRect(padding - DEPTH, padding + height, width + DEPTH * 2, DEPTH);
         g.fillRect(padding - DEPTH, padding, DEPTH, height);
         g.fillRect(padding + width, padding, DEPTH, height);
-        
-        
     }
 }

@@ -29,8 +29,12 @@ public class GridMap
         height = roomHeight + getPadding() * 2;
         
         elements = new ArrayList();
-        // Add initial walls
-        elements.add(new Walls(roomWidth, roomHeight));
+
+        
+        Walls walls = new Walls(roomWidth, roomHeight);
+        walls.addDoor(Orientation.N, 50, 50, Orientation.N);
+        
+        elements.add(walls);
         
         Furniture sofa = new Furniture("Sofa", 0, 0, 100, 40);
         sofa.setOrientation(Orientation.E);

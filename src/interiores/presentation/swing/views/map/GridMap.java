@@ -1,5 +1,6 @@
 package interiores.presentation.swing.views.map;
 
+import interiores.business.models.Orientation;
 import interiores.core.Debug;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -32,11 +33,11 @@ public class GridMap
         elements.add(new Walls(roomWidth, roomHeight));
         
         Furniture sofa = new Furniture("Sofa", 0, 0, 100, 40);
-        sofa.setOrientation('R');
+        sofa.setOrientation(Orientation.E);
         sofa.setColor("#BDB76B");
         
         Furniture tv = new Furniture("TV", 100, 15, 70, 20);
-        tv.setOrientation('L');
+        tv.setOrientation(Orientation.W);
         tv.setColor("#EEEEEE");
         
         elements.add(sofa);

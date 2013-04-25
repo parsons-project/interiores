@@ -9,7 +9,7 @@
 *.out
 
 # netbeans ignore personal stuff 
-nbproject/
+nbproject/*
 
 # Built files
 /build/

@@ -23,9 +23,10 @@ public class SwingController extends PresentationController
     }
     
     @Override
-    public void init()
+    public void init() throws Exception
     {
-        showView("MainApp");
+        load("MainApp");
+        show("MainApp");
     }
     
     @Override
@@ -48,31 +49,39 @@ public class SwingController extends PresentationController
         }
     }
     
-    public void showView(String viewName)
-    {         
-        try
-        {
-            View view;
+    public void load(String viewName) throws Exception
+    {            
+        if(! vloader.isLoaded(viewName))
+        {   
+            vloader.load(viewName);
             
-            if(! vloader.isLoaded(viewName))
+            View view = vloader.get(viewName);
+            
+            view.setPresentation(this);
+            
+            try
             {
-                vloader.load(viewName);
-                view = vloader.get(viewName);
-            
-                view.setPresentation(this);
+                view.onLoad();
                 
                 for(String event : view.getEvents())
                     addViewToEvent(event, view);
             }
-            else
-                view = vloader.get(viewName);
-            
-            view.showView();
+            catch(Exception e)
+            {
+                vloader.unload(viewName);
+                throw e;
+            }
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        } 
+    }
+    
+    public void show(String viewName)
+    {
+        get(viewName).showView();
+    }
+    
+    public View get(String viewName)
+    {
+        return vloader.get(viewName);
     }
     
     private void addViewToEvent(String event, View view)
@@ -83,7 +92,7 @@ public class SwingController extends PresentationController
         events.get(event).add(view);
     }
     
-    public void closeView(String name)
+    public void close(String name)
     {
         vloader.unload(name);
     }

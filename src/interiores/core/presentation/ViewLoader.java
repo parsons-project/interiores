@@ -40,11 +40,8 @@ public class ViewLoader
         views.remove(name);
     }
 
-    public View get(String name) throws Exception
+    public View get(String name)
     {
-        if(! isLoaded(name))
-            throw new Exception("The view: " + name + " has not been loaded.");
-        
         return views.get(name);
     }
 }

@@ -3,6 +3,7 @@
 package interiores;
 
 import interiores.core.Application;
+import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.TerminalController;
 
@@ -18,6 +19,8 @@ public class Interiores
      */
     public static void main(String[] args) throws Exception
     {
+        Debug.enable();
+        
         Application app = new Application("interiores");
 
         app.addPresentation(new SwingController("interiores.presentation.swing.views"));

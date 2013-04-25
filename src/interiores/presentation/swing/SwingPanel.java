@@ -1,20 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package interiores.presentation.swing;
 
 import interiores.core.presentation.PresentationController;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.View;
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  *
- * @author hector0193
+ * @author hector
  */
-abstract public class SwingFrame extends JFrame implements View
-{
+public class SwingPanel extends JPanel implements View {
     protected SwingController presentation;
     
     @Override

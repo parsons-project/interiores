@@ -21,7 +21,13 @@ public class MainApp extends SwingFrame
     {
         initComponents();
     }
-
+    
+    @Override
+    public void onLoad() throws Exception
+    {
+        presentation.load("RoomMap");
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,6 +46,7 @@ public class MainApp extends SwingFrame
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Diseño de interiores");
+        setAlwaysOnTop(true);
 
         jLabel1.setText("Tipo:");
 
@@ -68,7 +75,7 @@ public class MainApp extends SwingFrame
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(roomType)
                             .add(roomSize))))
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -140,7 +147,7 @@ public class MainApp extends SwingFrame
     private javax.swing.JLabel roomSize;
     private javax.swing.JLabel roomType;
     // End of variables declaration//GEN-END:variables
-
+    
     @Override
     public String[] getEvents()
     {

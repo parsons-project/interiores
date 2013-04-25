@@ -15,7 +15,7 @@ public class GridMap
     implements Drawable
 {
     private static final int GRID_RES = 5;
-    private static final int GRID_PAD = 10;
+    private static final int GRID_PAD = 5;
     private static final String GRID_COLOR = "#EEEEEE";
     private static final double SCALE = 2;
     
@@ -32,7 +32,7 @@ public class GridMap
 
         
         Walls walls = new Walls(roomWidth, roomHeight);
-        walls.addDoor(Orientation.N, 50, 50, Orientation.N);
+        walls.addDoor(Orientation.N, 50, 30, "out");
         
         elements.add(walls);
         

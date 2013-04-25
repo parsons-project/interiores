@@ -3,8 +3,9 @@ package interiores.presentation.swing.views.map;
 import interiores.business.models.Orientation;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -15,31 +16,64 @@ public class Walls implements Drawable {
     private static final String COLOR = "0x999999";
     private int width;
     private int height;
-    private List<Door> doors;
+    private Map<Point, Door> doors;
     
     public Walls(int width, int height) {
         this.width = width;
         this.height = height;
-        doors = new ArrayList();
+        doors = new HashMap();
+    }
+    
+    public static int getDepth() {
+        return DEPTH;
     }
     
     @Override
     public void draw(Graphics2D g) {
         g.setColor(Color.decode(COLOR));
         
-        int padding = GridMap.getPadding();
+        drawHorizontalWall(g, 0, DEPTH);
+        drawHorizontalWall(g, height, 0);
         
-        g.fillRect(padding - DEPTH, padding - DEPTH, width + DEPTH * 2, DEPTH);
-        g.fillRect(padding - DEPTH, padding + height, width + DEPTH * 2, DEPTH);
-        g.fillRect(padding - DEPTH, padding, DEPTH, height);
-        g.fillRect(padding + width, padding, DEPTH, height);
+        drawVerticalWall(g, 0, DEPTH);
+        drawVerticalWall(g, width, 0);
         
-        for(Door door : doors)
+        for(Door door : doors.values())
             door.draw(g);
     }
     
-    public void addDoor(Orientation where, int pos, int size, Orientation o) {
-        int x = 0, y = 0;
+    public void drawHorizontalWall(Graphics2D g, int y, int valign) {
+        int padding = GridMap.getPadding();
+        int drawableWidth = width + DEPTH;
+        
+        for(int i = 0 - DEPTH; i < drawableWidth; i += DEPTH) {
+            Point p = new Point(i, y);
+        
+            if(doors.containsKey(p))
+                i += doors.get(p).getSize();
+            else
+                g.fillRect(i + padding, y + padding - valign, DEPTH, DEPTH);
+        }
+    }
+    
+    public void drawVerticalWall(Graphics2D g, int x, int halign) {
+        int padding = GridMap.getPadding();
+        
+        for(int i = 0; i < width; i += DEPTH) {
+            Point p = new Point(x, i);
+        
+            if(doors.containsKey(p))
+                i += doors.get(p).getSize();
+            else
+                g.fillRect(x + padding - halign, i + padding, DEPTH, DEPTH);
+        }
+    }
+    
+    public void addDoor(Orientation where, int pos, int size, String opensTo) {
+        int x, y;
+        Orientation o;
+        
+        x = y = 0;
         
         switch(where) {
             case E:
@@ -57,6 +91,8 @@ public class Walls implements Drawable {
                 break;
         }
         
-        doors.add(new Door(x, y, size, o));
+        o = opensTo.equals("out") ? where.complementary() : where; 
+        
+        doors.put(new Point(x, y), new Door(x, y, size, o));
     }
 }

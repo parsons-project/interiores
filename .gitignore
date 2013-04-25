@@ -9,7 +9,8 @@
 *.out
 
 # netbeans ignore personal stuff 
-/nbproject/
+/nbproject/*
+
 
 # Built files
 /build/
@@ -23,7 +24,3 @@
 *.log
 *.pdf
 *.toc
-
-/nbproject/build-impl.xml
-/nbproject/genfiles.properties
-/nbproject/project.xml

@@ -15,7 +15,7 @@ public class FurnitureModel {
     
     private String name;        // Comercial name of the furniture model
     private Dimension size;     // Size of the furniture model
-    private int price;          // Market price of the furniture model
+    private float price;          // Market price of the furniture model
     private Color color;        // Color of the furniture model
     private String material;    // Material the furniture model is made in
     
@@ -34,7 +34,7 @@ public class FurnitureModel {
      * @param color Color of the furniture model
      * @param material Material the furniture model is made in
      */
-    public FurnitureModel(String name, Dimension size, int price, Color color, String material) {
+    public FurnitureModel(String name, Dimension size, float price, Color color, String material) {
         this.name = name;
         this.size = size;
         this.price = price;

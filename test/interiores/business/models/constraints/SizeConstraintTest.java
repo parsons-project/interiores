@@ -1,9 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package interiores.business.models;
+package interiores.business.models.constraints;
 
+import interiores.business.models.FurnitureModel;
+import interiores.business.models.constraints.SizeConstraint;
 import java.awt.Color;
 import java.awt.Dimension;
 import org.junit.AfterClass;

@@ -50,6 +50,30 @@ public class FurnitureModel {
         return size;
     }
     
+    /**
+     * Gets the color of the furniture model
+     * @return Color object representing the color of the model
+     */
+    public Color getColor() {
+        return color;
+    }
+
+    /**
+     * Gets the material of the furniture model
+     * @return String representing the material the model is made from
+     */
+    public String getMaterial() {
+        return material;
+    }
+
+    /**
+     * Gets the price of the furniture model
+     * @return float object representing the market price of the model 
+     */
+    public float getPrice() {
+        return price;
+    }
+    
     
     
     

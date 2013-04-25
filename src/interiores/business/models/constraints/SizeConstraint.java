@@ -2,30 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interiores.business.models;
+package interiores.business.models.constraints;
 
+import interiores.business.models.FurnitureModel;
 import java.awt.Dimension;
 
 /**
- * SizeConstraint represents a constraint imposed over the size of a furniture model.
+ * SizeConstraint represents a constraint imposed over the size of a piece of furniture
  * @author larribas
  */
 public class SizeConstraint {
     
-    // minSize and maxSize determine the range within which the model's size should fall
+    // minSize and maxSize determine the range within which the furniture's size should fall
     private Dimension minSize, maxSize;
-    
-    /**
-     * Default constructor. Dimensions are initialized to zero.
-     */
-    public SizeConstraint() {
         
-    }
-    
     /**
      * Builds a SizeConstraint with specific minimum and maximum sizes
-     * @param min The smallest size a model should have so as to satisfy the constraint
-     * @param max The largest size a model should have so as to satisfy the constraint
+     * @param min The smallest size a piece of furniture should have so as to satisfy the constraint
+     * @param max The largest size a piece of furniture should have so as to satisfy the constraint
      */
     public SizeConstraint(Dimension min, Dimension max) {
         minSize = min;
@@ -33,11 +27,11 @@ public class SizeConstraint {
     }
     
     /**
-     * Determines whether a furniture model satisfies the constraint.
+     * Determines whether a piece of furniture (a model) satisfies the constraint.
      * This occurs when the model size falls within the specified range.
      * For flexibility matters, a height or width of 0 is considered not to be a constraint
-     * @param model The model whose size will be checked.
-     * @return true if the model satisfies the size constraint; false otherwise
+     * @param model The specific piece of furniture whose size will be checked.
+     * @return 'true' if the model satisfies the size constraint; 'false' otherwise
      */
     public boolean isSatisfied(FurnitureModel model) {
         Dimension modelSize = model.getSize();
@@ -53,5 +47,6 @@ public class SizeConstraint {
         
         return heightConstraint && widthConstraint;        
     }
+    
         
 }

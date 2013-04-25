@@ -2,6 +2,8 @@ package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
 import interiores.core.Debug;
+import interiores.presentation.swing.views.map.doors.LeftDoor;
+import interiores.presentation.swing.views.map.doors.RightDoor;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -30,12 +32,19 @@ public class GridMap
         
         elements = new ArrayList();
 
-        
         Walls walls = new Walls(roomWidth, roomHeight);
-        walls.addDoor(Orientation.S, 50, 30, "out");
-        walls.addDoor(Orientation.E, 50, 30, "in");
         
-        elements.add(walls);
+        Door door1 = new RightDoor(30);
+        door1.openOutwards();
+        
+        Door door2 = new LeftDoor(30);
+        door2.openOutwards();
+        
+        Door door3 = new RightDoor(30);
+        
+        walls.addDoor(door1, Orientation.N, 50);
+        walls.addDoor(door2, Orientation.S, 50);
+        walls.addDoor(door3, Orientation.E, 80);
         
         Furniture sofa = new Furniture("Sofa", 0, 0, 100, 40);
         sofa.setOrientation(Orientation.E);
@@ -45,6 +54,7 @@ public class GridMap
         tv.setOrientation(Orientation.W);
         tv.setColor("#EEEEEE");
         
+        elements.add(walls);
         elements.add(sofa);
         elements.add(tv);
        

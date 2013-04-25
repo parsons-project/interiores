@@ -69,13 +69,13 @@ public class Walls implements Drawable {
         }
     }
     
-    public void addDoor(Orientation where, int pos, int size, String opensTo) {
+    public void addDoor(Door door, Orientation wall, int pos) {
         int x, y;
         Orientation o;
         
         x = y = -DEPTH;
         
-        switch(where) {
+        switch(wall) {
             case E:
                 x = width;
                 
@@ -92,7 +92,7 @@ public class Walls implements Drawable {
         }
         
         Point key = new Point(x, y);
-        Door door = new Door(x, y, size, opensTo.equals("out") ? where : where.complementary());
+        door.setPosition(x, y, door.hasToOpenOutwards() ? wall : wall.complementary());
         
         doors.put(key, door);
     }

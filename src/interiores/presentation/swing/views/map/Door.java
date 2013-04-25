@@ -13,20 +13,36 @@ import java.awt.Graphics2D;
 public class Door
     implements Drawable
 {
-    private static final int DEPTH = Walls.getDepth();
+    protected static final int DEPTH = Walls.getDepth();
     private static final Color COLOR = Color.decode("#EEEEEE");
     
-    private int x;
-    private int y;
-    private OrientedRectangle r;
-    private int size;
+    protected int x;
+    protected int y;
+    protected OrientedRectangle r;
+    protected int size;
+    private boolean hasToOpenOutwards;
+
     
-    public Door(int x, int y, int size, Orientation o) {
+    public Door(int size) {
+        this(0, 0, size);
+    }
+        
+    public Door(int x, int y, int size) {
         this.x = x;
         this.y = y;
         this.size = size;
+        hasToOpenOutwards = false;
         
-        setOrientation(o);
+        r = new OrientedRectangle(x + GridMap.getPadding(), y + GridMap.getPadding(), DEPTH, size,
+                Orientation.S);
+    }
+    
+    public void openOutwards() {
+        hasToOpenOutwards = true;
+    }
+    
+    public boolean hasToOpenOutwards() {
+        return hasToOpenOutwards;
     }
     
     public int getSize() {
@@ -44,11 +60,14 @@ public class Door
         Debug.println("Drawing door at (" + r.getX() + ", " + r.getY() + ") and size " + r.getHeight());
     }
     
-    public final void setOrientation(Orientation o) {
+    public void setPosition(int x, int y, Orientation orientation) {
+        this.x = x;
+        this.y = y;
+        
         int renderX = x;
         int renderY = y;
         
-        switch(o) {
+        switch(orientation) {
             case E:
                 renderX += Walls.getDepth();
                 break;
@@ -66,8 +85,7 @@ public class Door
                 break;
         }
         
-        r = new OrientedRectangle(renderX + GridMap.getPadding(), renderY + GridMap.getPadding(),
-                DEPTH, size, Orientation.S);
-        r.setOrientation(o);
+        r.setLocation(renderX + GridMap.getPadding(), renderY + GridMap.getPadding());
+        r.setOrientation(orientation);
     }
 }

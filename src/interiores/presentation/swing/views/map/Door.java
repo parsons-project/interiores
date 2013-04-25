@@ -16,12 +16,17 @@ public class Door
     private static final int DEPTH = Walls.getDepth();
     private static final Color COLOR = Color.decode("#EEEEEE");
     
+    private int x;
+    private int y;
     private OrientedRectangle r;
     private int size;
     
     public Door(int x, int y, int size, Orientation o) {
-        r = new OrientedRectangle(x + GridMap.getPadding(), y + GridMap.getPadding(), DEPTH, size, o);
+        this.x = x;
+        this.y = y;
         this.size = size;
+        
+        setOrientation(o);
     }
     
     public int getSize() {
@@ -37,5 +42,32 @@ public class Door
         g.draw(r);
 
         Debug.println("Drawing door at (" + r.getX() + ", " + r.getY() + ") and size " + r.getHeight());
+    }
+    
+    public final void setOrientation(Orientation o) {
+        int renderX = x;
+        int renderY = y;
+        
+        switch(o) {
+            case E:
+                renderX += Walls.getDepth();
+                break;
+                
+            case N:
+                renderY -= size;
+                break;
+                
+            case W:
+                renderX -= size;
+                break;
+                
+            default:
+                renderY += Walls.getDepth();
+                break;
+        }
+        
+        r = new OrientedRectangle(renderX + GridMap.getPadding(), renderY + GridMap.getPadding(),
+                DEPTH, size, Orientation.S);
+        r.setOrientation(o);
     }
 }

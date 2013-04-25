@@ -47,7 +47,7 @@ public class Walls implements Drawable {
         int drawableWidth = width + DEPTH;
         
         for(int i = 0 - DEPTH; i < drawableWidth; i += DEPTH) {
-            Point p = new Point(i, y);
+            Point p = new Point(i, y - valign);
         
             if(doors.containsKey(p))
                 i += doors.get(p).getSize();
@@ -60,7 +60,7 @@ public class Walls implements Drawable {
         int padding = GridMap.getPadding();
         
         for(int i = 0; i < width; i += DEPTH) {
-            Point p = new Point(x, i);
+            Point p = new Point(x - halign, i);
         
             if(doors.containsKey(p))
                 i += doors.get(p).getSize();
@@ -73,7 +73,7 @@ public class Walls implements Drawable {
         int x, y;
         Orientation o;
         
-        x = y = 0;
+        x = y = -DEPTH;
         
         switch(where) {
             case E:
@@ -91,8 +91,9 @@ public class Walls implements Drawable {
                 break;
         }
         
-        o = opensTo.equals("out") ? where.complementary() : where; 
+        Point key = new Point(x, y);
+        Door door = new Door(x, y, size, opensTo.equals("out") ? where : where.complementary());
         
-        doors.put(new Point(x, y), new Door(x, y, size, o));
+        doors.put(key, door);
     }
 }

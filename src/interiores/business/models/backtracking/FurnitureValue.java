@@ -11,7 +11,7 @@ import interiores.business.models.OrientedRectangle;
  * Represents a specific furniture model on a specific position and a determined orientation.
  * @author larribas
  */
-public class Value {
+public class FurnitureValue {
     
     // Represents a positioned-and-oriented area
     private OrientedRectangle area;
@@ -19,7 +19,7 @@ public class Value {
     // Represents a specific model
     private FurnitureModel model;
     
-    public Value(OrientedRectangle area, FurnitureModel model) {
+    public FurnitureValue(OrientedRectangle area, FurnitureModel model) {
         this.area = area;
         this.model = model;
     }

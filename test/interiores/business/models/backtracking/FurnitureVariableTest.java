@@ -7,7 +7,10 @@ package interiores.business.models.backtracking;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.Room;
+import interiores.business.models.constraints.ColorConstraint;
+import interiores.business.models.constraints.MaterialConstraint;
 import interiores.business.models.constraints.ModelConstraint;
+import interiores.business.models.constraints.PriceConstraint;
 import interiores.shared.Value;
 import interiores.shared.Variable;
 import java.awt.Color;
@@ -34,14 +37,14 @@ public class FurnitureVariableTest {
         
         // Preparing initial values for FurnitureVariable
         l.add(new FurnitureModel("Model1",new Dimension(10,20), (float) 10,Color.BLACK,"wood"));
-        l.add(new FurnitureModel("Model2",new Dimension(20,30), (float) 20,Color.BLUE,"metal"));
-        l.add(new FurnitureModel("Model3",new Dimension(30,40), (float) 30,Color.RED,"stone"));
-        l.add(new FurnitureModel("Model4",new Dimension(40,50), (float) 40,Color.GREEN,"velvet"));
-        l.add(new FurnitureModel("Model5",new Dimension(50,60), (float) 50,Color.YELLOW,"feather"));
-        l.add(new FurnitureModel("Model6",new Dimension(60,70), (float) 60,Color.WHITE,"steel"));
+        l.add(new FurnitureModel("Model2",new Dimension(20,30), (float) 20,Color.BLACK,"wood"));
+        l.add(new FurnitureModel("Model3",new Dimension(30,40), (float) 30,Color.WHITE,"wood"));
+        l.add(new FurnitureModel("Model4",new Dimension(40,50), (float) 40,Color.WHITE,"steel"));
+        l.add(new FurnitureModel("Model5",new Dimension(50,60), (float) 50,Color.BLACK,"steel"));
+        l.add(new FurnitureModel("Model6",new Dimension(60,70), (float) 60,Color.BLACK,"wood"));
         
         // Creating a room for which FurnitureVariable will work
-        room = new Room("Kitchen",1000,200);
+        room = new Room("Kitchen",1000,1000);
         
         
     }
@@ -55,6 +58,54 @@ public class FurnitureVariableTest {
     public static void tearDownClass() {
     }
 
+    @Test
+    public void genericTest2() {
+        System.out.println("Preparing for test #2... (Bringing constraints into play!)");
+        FurnitureVariable instance = new FurnitureVariable(l, room);
+        
+        System.out.println("The first thing we will do is apply some constraints to the variable.");
+        
+        instance.applyConstraint(new ColorConstraint(Color.BLACK));
+        System.out.println("Color=Black will leave us with models 1,2,5,6");
+        System.out.println("#models left = " + instance.getConstraints());
+        
+        instance.applyConstraint(new MaterialConstraint("wood"));
+        System.out.println("Material=Wood will leave us with models 1,2,6");
+        System.out.println("#models left = " + instance.getConstraints());
+        
+        instance.applyConstraint(new PriceConstraint((float) 55.00));
+        System.out.println("Price<=55 will leave us with models 1,2");
+        System.out.println("#models left = " + instance.getConstraints());
+        
+        instance.restrictOrientation(Orientation.E);
+        System.out.println("We want the furniture to be oriented towards the East of the room");
+        
+        Boolean[][] intersect = new Boolean[room.getHeight()][room.getWidth()];
+        for (int i = 0; i < intersect.length; i++)
+            for (int j = 0; j < intersect[i].length; j++)
+                intersect[i][j] = (i == 0) || (i == room.getWidth()-1 ) || (j == 0) || (j == room.getHeight()-1 );
+        //This means the only valid positions are those clung to the walls
+        instance.restrictArea(intersect);
+        System.out.println("We want the furniture to be stuck to a wall");
+        
+        System.out.println("Now we'll try out every possible value in the domain of the variable, and see what happens:");
+        int i = 0;
+        while (instance.hasMoreValues()) {
+            if (i % 1 == 0) {
+                FurnitureValue nextVal = instance.getNextDomainValue();
+                String s = "The #" + i + " value is a model named \"" + nextVal.getModel().getName() + "\". ";
+                s += "Positioned at (" + nextVal.getPosition().x + "," + nextVal.getPosition().y + "). ";
+                s += "With an area of width=" + nextVal.getArea().width + " and height=" + nextVal.getArea().height + ".";
+                s += " And oriented towards the " + nextVal.getArea().getOrientation().toString() + ".";
+                System.out.println(s);
+            }
+            i++;
+        }
+        
+        System.out.println("AND THAT'S ABOUT EVERYTHING THERE IS TO TEST AS TO CONSTRAINT MANAGEMENT ON A VARIABLE");
+        
+    }
+    
     /**
      * Test of getNextDomainValue method, of class FurnitureVariable.
      */
@@ -108,8 +159,8 @@ public class FurnitureVariableTest {
         System.out.println("Clock'll be tickin' slow, so you better wait...");
         
         int i = 0;
-        while (instance.hasMoreValues() && i <= 1600) {
-            if (i % 400 == 0) {
+        while (instance.hasMoreValues()) {
+            if (i % 163632 == 0) {
                 FurnitureValue nextVal = instance.getNextDomainValue();
                 String s = "The #" + i + " value is a model named \"" + nextVal.getModel().getName() + "\". ";
                 s += "Positioned at (" + nextVal.getPosition().x + "," + nextVal.getPosition().y + "). ";
@@ -120,7 +171,7 @@ public class FurnitureVariableTest {
             i++;
         }
         
-        // TODO review the generated test code and remove the default call to fail.
+        System.out.println("QUITE NEAT INDEED. TEST 2 WILL DEEPEN A LITTLE MORE IN THE FUNCTIONALITY OF THE CLASS");
         
     }
 //

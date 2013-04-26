@@ -62,6 +62,8 @@ public class FurnitureVariable extends Variable
         // Inclusion of every possible orientation (pending review)
         orientations = new ArrayList<Orientation>();
         defaultOrientations();
+        
+        constraints = new ArrayList<ModelConstraint>();
     }
     
     @Override
@@ -134,7 +136,7 @@ public class FurnitureVariable extends Variable
         orientations.add(o);
     }
     
-    public void restrictArea(boolean[][] intersect) {
+    public void restrictArea(Boolean[][] intersect) {
         int width = (positions[0].length == intersect[0].length) ? positions[0].length : 0;
         int height = (positions.length == intersect.length) ? positions.length : 0;
         
@@ -143,6 +145,10 @@ public class FurnitureVariable extends Variable
                 positions[i][j] = positions[i][j] && intersect[i][j];
     }
     
+    // Only for testing purposes
+    public int getConstraints() {
+        return models.size();
+    }
 
 //    public void removeConstraint(ModelConstraint oldConstr) {
 //        constraints.remove(oldConstr);
@@ -163,19 +169,19 @@ public class FurnitureVariable extends Variable
         
         do {
             currentPosition.x++;
-            if (currentPosition.x > roomWidth) {
+            if (currentPosition.x >= roomWidth) {
                 currentPosition.x = 0;
                 currentPosition.y++;
-                if (currentPosition.y > roomHeight) {
+                if (currentPosition.y >= roomHeight) {
                     currentPosition.y = 0;
                     currentOrientation++;
-                    if (currentOrientation == orientations.size()) {
+                    if (currentOrientation >= orientations.size()) {
                         currentOrientation = 0;
                         currentModel++;
                     }
                 }
             }
-        } while ( !positions[currentPosition.y][currentPosition.x] && currentModel < models.size() );
+        } while ( currentModel < models.size() && !positions[currentPosition.y][currentPosition.x] );
     }
     
     

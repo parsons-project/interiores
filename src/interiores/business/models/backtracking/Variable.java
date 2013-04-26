@@ -6,18 +6,12 @@ public abstract class Variable
 {
 
 /**
-* Rearranges the values the variable can take , attending to
-* a particular criteria , specific to each implementation .
-*/
-public abstract void sortDomainValues ( void );
-
-/**
 * Returns the value to be evaluated next by the algorithm ,
 * attending to a particular criteria , specific to each
 * implementation .
 * pre: not all values have been checked yet
 */
-public abstract Value getNextDomainValue ( void );
+public abstract Value getNextDomainValue ();
 
 /**
 * Returns whether the variable being avaluated has more possible values.
@@ -28,12 +22,12 @@ public abstract boolean hasMoreValues();
 * Assigns a particular 'value ' to the variable . Doing this
 * changes the state of the variable to 'assigned '.
 */
-public boolean setValue ( Value value );
+public abstract void setAssignedValue ( Value value );
 
 /**
 * Changes the state of the variable to 'unassigned '.
 */
-public boolean unsetValue ( void );
+public abstract void unsetValue ( void );
 
 /**
 * Given a 'variable ' that has been recently assigned to
@@ -55,6 +49,10 @@ public abstract void undoTrimDomain ( Variable variable , Value value );
 * Returns 'true ' if the variable is assigned to a valid
 * value , and 'false ' otherwise .
 */
-public abstract boolean isAssigned ( void );
+public abstract boolean isAssigned ();
 
+/**
+* Returns the assigned value óf the variable, given it has one.
+*/
+public abstract Value getAssignedValue (); 
 }

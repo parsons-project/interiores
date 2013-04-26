@@ -10,7 +10,7 @@ import interiores.business.models.FurnitureModel;
  * PriceConstraint represents a constraint imposed over the highest price a piece of furniture can cost
  * @author larribas
  */
-public class PriceConstraint {
+public class PriceConstraint extends ModelConstraint {
     
     // 'maxPrice' represents the topmost price a furniture model should cost in order to satisfy the constraint
     float maxPrice;

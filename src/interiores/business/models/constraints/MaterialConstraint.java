@@ -10,7 +10,7 @@ import interiores.business.models.FurnitureModel;
  * MaterialConstraint represents a constraint imposed over the material a piece of furniture is made from
  * @author larribas
  */
-public class MaterialConstraint {
+public class MaterialConstraint extends ModelConstraint {
     
     // 'material' represents the exact material a piece of furniture
     // should be made from in order to satisfy the constraint

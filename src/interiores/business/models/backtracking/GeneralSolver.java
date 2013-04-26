@@ -1,3 +1,6 @@
+
+import interiores.shared.Variable;
+
 /**
 * GeneralSolver deals with finding a solution to a Constraint
 * Satisfaction Problem materialized by the set of variables it

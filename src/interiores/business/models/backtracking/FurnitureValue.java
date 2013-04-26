@@ -6,12 +6,13 @@ package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.OrientedRectangle;
+import interiores.shared.Value;
 
 /**
  * Represents a specific furniture model on a specific position and a determined orientation.
  * @author larribas
  */
-public class FurnitureValue {
+public class FurnitureValue extends Value {
     
     // Represents a positioned-and-oriented area
     private OrientedRectangle area;
@@ -23,5 +24,7 @@ public class FurnitureValue {
         this.area = area;
         this.model = model;
     }
+    
+    
     
 }

@@ -11,7 +11,7 @@ import java.awt.Color;
  * ColorConstraint represents a constraint imposed over the color of a piece of furniture
  * @author larribas
  */
-public class ColorConstraint {
+public class ColorConstraint extends ModelConstraint {
     
     // 'color' represents the exact color a piece of furniture should be in order to satisfy the constraint
     private Color color;

@@ -43,6 +43,14 @@ public class FurnitureModel {
     }
     
     /**
+     * Gets the name of the furniture model
+     * @return String object representing the name of the model
+     */
+    public String getName() {
+        return name;
+    }
+    
+    /**
      * Gets the size of the furniture model
      * @return Dimension object representing the size of the model
      */

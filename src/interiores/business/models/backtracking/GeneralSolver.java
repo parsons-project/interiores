@@ -1,3 +1,5 @@
+// UNCONTINUED CLASS !!!!!!!!!!1
+
 /**
 * GeneralSolver deals with finding a solution to a Constraint
 * Satisfaction Problem materialized by the set of variables it
@@ -11,41 +13,34 @@ public class GeneralSolver {
 
     /**
     * Constructor .
-    * @param variableSet The VariableSet where assign values .
+    * @param variableSet The VariableSet where assign values.
     */
-    public GeneralSolver ( VariableSet variableSet ) {
-            this.variableSet = variableSet;
+    public GeneralSolver (VariableSet variableSet) {
+        this.variableSet = variableSet;
     }
 
-    /**
-    * Tries to find a solution , that is , a value for each
-    * variable such that no restriction is violated .
-    * @throws NoSolutionException if not found a solution .
-    */
-    public void solve ( void ) throws NoSolutionException {
-            backtracking(0);
-    }
+
 
 
     private void backtracking(int depth) throws NoSolutionException {
             if (variableSet.allAssigned()) return;
 
             else {
-                    Variable variable = variableSet.next();
-                    while (variable.hasMoreValues()) {
-                            Value value = variable.getNextDomainValue();
-                            if (variableSet.canAssign(variable, value)) {
-                                    variable.setAssignedValue(value);
-                                    variableSet.trimDomains(variable); 		
+                    variableSet.setActualVariable();
+                    while (variableSet.actualHasMoreValues()) {
+                            Value value = variableSet.getNextActualDomainValue();
+                            if (variableSet.canAssignToActual(value)) {
+                                    variableSet.assignToActual(value);
+                                    variableSet.trimDomains(); 		
 
                                     backtracking(depth+1);
 
-                                    variable.unsetValue();
-                                    variableSet.undoTrimDomains(variable, value);
+                                    variableSet.undoAssignToActual();
+                                    variableSet.undoTrimDomains(value);
                             }
                     }
             }
-            if (profundidad == 0) throw NoSolutionException;
+            if (depth == 0) throw NoSolutionException;
     }
 
 }

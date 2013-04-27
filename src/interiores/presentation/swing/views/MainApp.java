@@ -4,8 +4,8 @@
  */
 package interiores.presentation.swing.views;
 
+import interiores.core.presentation.annotation.Event;
 import interiores.presentation.swing.SwingFrame;
-import java.util.Map;
 
 /**
  *
@@ -148,23 +148,16 @@ public class MainApp extends SwingFrame
     private javax.swing.JLabel roomType;
     // End of variables declaration//GEN-END:variables
     
-    @Override
-    public String[] getEvents()
+    @Event(paramNames = {"type", "width", "height"})
+    public void roomCreated(String type, int width, int height)
     {
-        return new String[]{
-            "roomCreated",
-            "roomLoaded"
-        };
+        roomType.setText(type);
+        roomSize.setText(width + " x " + height + " (cm)");
     }
     
-    public void roomCreated(Map<String, Object> data)
+    @Event(paramNames = {"type", "width", "height"})
+    public void roomLoaded(String type, int width, int height)
     {
-        roomType.setText((String) data.get("type"));
-        roomSize.setText(data.get("width") + " x " + data.get("height") + " (cm)");
-    }
-    
-    public void roomLoaded(Map<String, Object> data)
-    {
-        roomCreated(data);
+        roomCreated(type, width, height);
     }
 }

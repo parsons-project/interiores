@@ -1,12 +1,12 @@
 package interiores.presentation.swing.views;
 
 import interiores.core.Debug;
+import interiores.core.presentation.annotation.Event;
 import interiores.presentation.swing.SwingPanel;
 import interiores.presentation.swing.views.map.GridMap;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.Map;
 
 /**
  *
@@ -46,18 +46,10 @@ public class RoomMapPanel extends SwingPanel
             map.draw((Graphics2D) g);
     }
     
-    @Override
-    public String[] getEvents()
+    @Event(paramNames = {"width", "height"})
+    public void roomCreated(int width, int height)
     {
-        return new String[]{
-            "roomCreated",
-            "roomLoaded"
-        };
-    }
-    
-    public void roomCreated(Map<String, Object> data)
-    {
-        map = new GridMap((Integer)data.get("width"), (Integer)data.get("height"));
+        map = new GridMap(width, height);
         
         if(Debug.isEnabled())
             map.enableGrid();
@@ -65,8 +57,30 @@ public class RoomMapPanel extends SwingPanel
         setPreferredSize(new Dimension(map.getWidth(), map.getHeight()));  
     }
     
-    public void roomLoaded(Map<String, Object> data)
+    @Event(paramNames = {"width", "height"})
+    public void roomLoaded(int width, int height)
     {
-        roomCreated(data);
+        roomCreated(width, height);
+    }
+    
+    @Event(paramNames = {"orientation", "size", "displacement", "hasToOpenLeft", "hasToOpenOutwards"})
+    public void doorAdded(String orientation, int size, int displacement, boolean hasToOpenLeft,
+            boolean hasToOpenOutwards) {
+        map.addDoor(orientation, size, displacement, hasToOpenLeft, hasToOpenOutwards);
+    }
+    
+    @Event(paramNames = {"orientation", "size", "displacement"})
+    public void windowAdded(String orientation, int size, int displacement) {
+        map.addWindow(orientation, size, displacement);
+    }
+    
+    @Event(paramNames = {"x", "y", "width", "depth"})
+    public void pillarAdded(int x, int y, int width, int depth) {
+        map.addPillar(x, y, width, depth);
+    }
+    
+    @Event(paramNames = {"name", "x", "y", "width", "depth", "orientation"})
+    public void furnitureAdded(String name, int x, int y, int width, int depth, String orientation) {
+        map.addFurniture(name, x, y, width, depth, orientation);
     }
 }

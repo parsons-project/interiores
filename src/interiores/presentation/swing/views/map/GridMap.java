@@ -6,8 +6,9 @@ import interiores.presentation.swing.views.map.doors.LeftDoor;
 import interiores.presentation.swing.views.map.doors.RightDoor;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 
@@ -23,49 +24,43 @@ public class GridMap
     
     private int width;
     private int depth;
-    private List<Drawable> elements;
+    private Map<Point, Drawable> elements;
+    private Walls walls;
     private boolean isGridEnabled;
     
     public GridMap(int roomWidth, int roomDepth) {
         width = roomWidth + getPadding() * 2;
         depth = roomDepth + getPadding() * 2;
-        
-        elements = new ArrayList();
-
-        Walls walls = new Walls(roomWidth, roomDepth);
-        
-        Door door1 = new RightDoor(30);
-        door1.openOutwards();
-        
-        Door door2 = new LeftDoor(30);
-        door2.openOutwards();
-        
-        Door door3 = new RightDoor(30);
-        
-        walls.addDoor(door1, Orientation.N, 50);
-        walls.addDoor(door2, Orientation.S, 50);
-        walls.addDoor(door3, Orientation.E, 80);
-        
-        Window window1 = new Window(50);
-        Window window2 = new Window(80);
-        
-        walls.addWindow(window1, Orientation.W, 150);
-        walls.addWindow(window2, Orientation.N, 170);
-        
-        Furniture sofa = new Furniture("Sofa", 0, 0, 100, 40);
-        sofa.setOrientation(Orientation.E);
-        sofa.setColor("#BDB76B");
-        
-        Furniture tv = new Furniture("TV", 100, 15, 70, 20);
-        tv.setOrientation(Orientation.W);
-        tv.setColor("#EEEEEE");
-        
-        elements.add(walls);
-        elements.add(sofa);
-        elements.add(tv);
-        elements.add(new RoomElement(270, 270, 30, 30));
-       
+        elements = new HashMap();
+        walls = new Walls(roomWidth, roomDepth);
         isGridEnabled = false;
+    }
+    
+    public void addDoor(String wall, int size, int displacement, boolean hasToOpenToLeft,
+            boolean hasToOpenOutwards) {
+        Door door;
+        
+        if(hasToOpenToLeft) door = new LeftDoor(size);
+        else door = new RightDoor(size);
+        
+        walls.addDoor(door, Orientation.valueOf(wall), displacement);
+    }
+    
+    public void addWindow(String wall, int size, int displacement) {
+        Window window = new Window(size);
+        
+        walls.addWindow(window, Orientation.valueOf(wall), displacement);
+    }
+    
+    public void addPillar(int x, int y, int width, int depth) {
+        elements.put(new Point(x, y), new RoomElement(x, y, width, depth));
+    }
+    
+    public void addFurniture(String name, int x, int y, int width, int depth, String orientation) {
+        Furniture furniture = new Furniture(name, x, y, width, depth);
+        furniture.setOrientation(Orientation.valueOf(orientation));
+        
+        elements.put(new Point(x, y), furniture);
     }
     
     @Override
@@ -80,7 +75,9 @@ public class GridMap
         if(isGridEnabled)
             drawGrid(g);
         
-        for(Drawable element : elements)
+        walls.draw(g);
+        
+        for(Drawable element : elements.values())
             element.draw(g);
     }
     

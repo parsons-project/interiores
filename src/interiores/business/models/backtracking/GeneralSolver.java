@@ -1,3 +1,7 @@
+
+import interiores.shared.backtracking.VariableSet;
+import interiores.shared.backtracking.Value;
+
 // UNCONTINUED CLASS !!!!!!!!!!1
 
 /**

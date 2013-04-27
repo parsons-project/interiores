@@ -1,4 +1,6 @@
 
+import interiores.shared.backtracking.Value;
+import interiores.shared.backtracking.Variable;
 import interiores.business.models.backtracking.AATree;
 import interiores.core.business.Model;
 import java.util.List;

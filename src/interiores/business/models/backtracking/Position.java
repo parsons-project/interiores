@@ -1,42 +1,20 @@
-// WASTE ========================================
-// WASTE ========================================
-// WASTE ========================================
-// WASTE ========================================
+package interiores.business.models.backtracking;
 
+import java.awt.Point;
 
 /**
 * Position represents a unit of space in a surface.
 * A position consists of 2 coordinates.
 */
 public class Position
+    extends Point
 {
-	public int x;
-	public int y;
-	
 	public Position (int x, int y) {
-		this->x = x;
-		this->y = y;
-	}
-	
-	public boolean isEqual(Position p) {
-		return x = p.x || y = p.y;
+            super(x, y);
 	}
 	
 	public boolean isSmaller(Position p) {
 		if (x == p.x) return y < p.y;
-		return x < p.y;
+		return x < p.x;
 	}
-	
-	public Position plus(Position p) {
-		return Position(x + p.x, y + p.y);
-	}
-	
-	public void incrementRow() {
-		this->x += 1;
-	}
-	
-	public void incrementColumn() {
-		this->y += 1;
-	}
-	
 }

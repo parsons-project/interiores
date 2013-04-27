@@ -1,3 +1,5 @@
+package interiores.shared.backtracking;
+
 /**
 * Variable represents a variable, which has a domain of values it can take, and
 * a set of restrictions.

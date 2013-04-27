@@ -1,3 +1,6 @@
+
+import interiores.shared.backtracking.Value;
+
 /**
 * FurnitureValue takes the role of value in the context of the Constraint
 * Satisfaction Problem for the room design. A value in this context involves

@@ -1,11 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- * 
+/* 
  * Bibliography
  * http://www.cepis.org/upgrade/files/full-2004-V.pdf
  * A Disquisition on The Performance Behaviour of Binary Search Tree Data Structures
- * 
  */
 package interiores.business.models.backtracking;
 
@@ -89,14 +85,19 @@ public class AATree {
      * Recursive method to insert a value into the tree.
      * Pre: there is no node in the implicit parameter with the same position as x.
      * @param r The root node of the subtree where the new node will be inserted.
-     * @param pos The value to be inserted.
+     * @param x The value to be inserted.
      * @return the new root
      */
-    private Node insert(Position pos, Node r) {
+    private Node insert(Position x, Node r) {
 
-        if (r == null) r = new Node(pos);
-        else if (x.info < r.info) r.left = insert(x, r.left);
-        else r.right = insert(x, r.right);
+        if (r == null)
+            r = new Node(x);
+        
+        else if (x.isSmaller(r.info))
+            r.left = insert(x, r.left);
+        
+        else
+            r.right = insert(x, r.right);
         
         //balancing
         r = skew(r);

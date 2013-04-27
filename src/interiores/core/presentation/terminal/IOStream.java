@@ -1,4 +1,4 @@
-package interiores.core.terminal;
+package interiores.core.presentation.terminal;
 
 import java.io.BufferedReader;
 import java.io.IOException;

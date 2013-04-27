@@ -2,9 +2,8 @@ package interiores.core.presentation;
 
 import interiores.core.Utils;
 import interiores.core.business.BusinessController;
-import interiores.core.presentation.PresentationController;
-import interiores.core.terminal.CommandGroup;
-import interiores.core.terminal.IOStream;
+import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.IOStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -66,11 +65,12 @@ public class TerminalController extends PresentationController
             Class comgroupClass = Class.forName(commandsPath + "." + Utils.capitalize(name) +
                     "Commands");
             
-            CommandGroup comgroup = (CommandGroup) comgroupClass.newInstance();
-            comgroup.setTerminal(this);
-            comgroup.setIOStream(iostream);
+            CommandGroup comgroup = (CommandGroup) comgroupClass.getConstructor(
+                    controller.getClass()).newInstance(controller);
             
+            comgroup.setIOStream(iostream);
             commands.put(name, comgroup);
+            
             super.addBusinessController(name, controller);
         }
         catch(Exception e)

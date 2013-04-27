@@ -1,6 +1,5 @@
 package interiores.core.presentation;
 
-import interiores.core.Initiable;
 import interiores.core.Observer;
 import interiores.core.business.BusinessController;
 import java.util.HashMap;
@@ -10,7 +9,7 @@ import java.util.Map;
  *
  * @author hector
  */
-abstract public class PresentationController implements Initiable, Observer
+abstract public class PresentationController implements Observer
 {
     private Map<String, BusinessController> controllers;
     
@@ -18,6 +17,8 @@ abstract public class PresentationController implements Initiable, Observer
     {
         controllers = new HashMap();
     }
+    
+    abstract public void init() throws Exception;
     
     public void addBusinessController(String name, BusinessController controller)
     {

@@ -1,28 +1,46 @@
+package interiores.business.models.backtracking;
 
 import interiores.shared.backtracking.Value;
+import interiores.business.models.FurnitureModel;
+import interiores.business.models.OrientedRectangle;
+import java.awt.Point;
 
 /**
-* FurnitureValue takes the role of value in the context of the Constraint
-* Satisfaction Problem for the room design. A value in this context involves
-* a certain furniture model, placed in a certain position with a given
-* orientation.
-*/
-public class FurnitureValue
-	extends Value
-{
-	/* Represents the position of the top left corner of the furniture piece */
-	private Position position;
-	
-	/* Represents the orientation of the furniture piece. It can be either 'n'
-	* for north, 'w' for west, 's' for south or 'e' for east.
-	*/
-	private char orientation;
-	
-	private Model model;
-	
-	public Value (Position p, char orientation, Model m) {
-		this->position = p;
-		this->orientation = orientation;
-		this->model = m;
-	}
+ * Represents a specific furniture model on a specific position and a determined orientation.
+ * @author larribas
+ */
+public class FurnitureValue extends Value {
+    
+    // Represents a positioned-and-oriented area
+    private OrientedRectangle area;
+    
+    // Represents a specific model
+    private FurnitureModel model;
+    
+    /**
+     * Creates a value from a Rectangle representing the area and orientation
+     * of the furniture, and the particular model applied.
+     * @param area
+     * @param model 
+     */
+    public FurnitureValue(OrientedRectangle area, FurnitureModel model) {
+        this.area = area;
+        this.model = model;
+    }
+    
+    
+    public OrientedRectangle getArea() {
+        return area;
+    }
+    
+    public Point getPosition() {
+        return area.getLocation();
+    }
+    
+    public FurnitureModel getModel() {
+        return model;
+    }
+    
+    
+    
 }

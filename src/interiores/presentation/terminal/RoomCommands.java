@@ -27,7 +27,7 @@ public class RoomCommands extends CommandGroup
         roomController.newRoom(type, width, height);
     }
     
-    public void save(RoomController roomController) throws IOException
+    public void save() throws IOException
     {
         String path = readString("Especifica la ruta donde guardar la habitación");
         

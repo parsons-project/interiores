@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class Walls implements Drawable {
     private static final int DEPTH = 5;
-    private static final String COLOR = "0x999999";
+    private static final Color COLOR = Color.decode("#999999");
     private int width;
     private int height;
     private Map<Point, WallElement> elements;
@@ -28,9 +28,13 @@ public class Walls implements Drawable {
         return DEPTH;
     }
     
+    public static Color getColor() {
+        return COLOR;
+    }
+    
     @Override
     public void draw(Graphics2D g) {
-        g.setColor(Color.decode(COLOR));
+        g.setColor(COLOR);
         
         drawHorizontalWall(g, 0, DEPTH);
         drawHorizontalWall(g, height, 0);

@@ -12,7 +12,7 @@ import java.awt.Graphics2D;
 public class RoomElement
     implements Drawable
 {
-    private static final Color DEFAULT_COLOR = Color.decode("#EEEEEE");
+    private static final Color DEFAULT_COLOR = Walls.getColor();
     
     protected OrientedRectangle rectangle;
     private Color color;
@@ -38,8 +38,5 @@ public class RoomElement
     {
         g.setColor(color);
         g.fill(rectangle);
-        
-        g.setColor(Color.black);
-        g.draw(rectangle);
     }
 }

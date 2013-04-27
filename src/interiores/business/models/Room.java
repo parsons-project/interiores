@@ -20,7 +20,7 @@ public class Room extends Model {
     
     @XmlAttribute
     private int height;
-    
+       
     public Room()
     {
         

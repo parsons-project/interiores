@@ -63,6 +63,7 @@ public class GridMap
         elements.add(walls);
         elements.add(sofa);
         elements.add(tv);
+        elements.add(new RoomElement(270, 270, 30, 30));
        
         isGridEnabled = false;
     }

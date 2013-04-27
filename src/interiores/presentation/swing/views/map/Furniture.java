@@ -1,7 +1,6 @@
 package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
-import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -12,24 +11,16 @@ import java.awt.geom.Rectangle2D;
  *
  * @author hector0193
  */
-public class Furniture implements Drawable
+public class Furniture
+    extends RoomElement
 {
     private String name;
-    private Color color;
-    private OrientedRectangle rectangle;
     
-    public Furniture(String name, int x, int y, int width, int height)
+    public Furniture(String name, int x, int y, int width, int depth)
     {
-        this.name = name;
-        color = Color.cyan;
+        super(x, y, width, depth, Color.cyan);
         
-        rectangle = new OrientedRectangle(x  + GridMap.getPadding(), y + GridMap.getPadding(), width, height,
-                Orientation.S);
-    }
-    
-    public void setColor(String c)
-    {
-        color = Color.decode(c);
+        this.name = name;
     }
     
     public void setOrientation(Orientation o)
@@ -40,11 +31,7 @@ public class Furniture implements Drawable
     @Override
     public void draw(Graphics2D g)
     {
-        g.setColor(color);
-        g.fill(rectangle);
-        
-        g.setColor(Color.black);
-        g.draw(rectangle);
+        super.draw(g);
         
         Rectangle2D l = getOrientationMark();
         g.setColor(Color.black);

@@ -10,7 +10,7 @@ import java.awt.Graphics2D;
  * @author hector0193
  */
 public class Door
-    extends FixedElement
+    extends WallElement
 {
     protected static final int DEPTH = Walls.getDepth();
     private static final Color COLOR = Color.decode("#EEEEEE");

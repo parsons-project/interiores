@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
  *
  * @author hector
  */
-public class Window extends FixedElement
+public class Window extends WallElement
 {
     private static final int DEPTH = Walls.getDepth();
     private static final Color COLOR = Color.decode("#006699");

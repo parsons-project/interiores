@@ -16,7 +16,7 @@ public class Walls implements Drawable {
     private static final String COLOR = "0x999999";
     private int width;
     private int height;
-    private Map<Point, FixedElement> elements;
+    private Map<Point, WallElement> elements;
     
     public Walls(int width, int height) {
         this.width = width;
@@ -38,7 +38,7 @@ public class Walls implements Drawable {
         drawVerticalWall(g, 0, DEPTH);
         drawVerticalWall(g, width, 0);
         
-        for(FixedElement element : elements.values())
+        for(WallElement element : elements.values())
             element.draw(g);
     }
     

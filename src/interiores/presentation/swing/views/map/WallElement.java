@@ -7,7 +7,7 @@ import interiores.business.models.OrientedRectangle;
  *
  * @author hector
  */
-abstract public class FixedElement
+abstract public class WallElement
     implements Drawable
 {
     protected int x;
@@ -15,7 +15,7 @@ abstract public class FixedElement
     protected int size;
     protected OrientedRectangle rectangle;
     
-    public FixedElement(int x, int y, int size, int depth) {
+    public WallElement(int x, int y, int size, int depth) {
         this.x = x;
         this.y = y;
         this.size = size;

@@ -122,6 +122,10 @@ public class AATree {
      * @return the new root.
      * @throws ItemNotFoundException if x is not found.
      */
+
+    //------------------------------------------------
+    //DONE BY NIL UP TO THIS POINT. REST IS COPY PASTE
+    //------------------------------------------------
     
     //this function needs work
     private Node remove(Position x, Node r) {

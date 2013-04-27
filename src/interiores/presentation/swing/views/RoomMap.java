@@ -1,8 +1,8 @@
 package interiores.presentation.swing.views;
 
+import interiores.core.presentation.annotation.Event;
 import interiores.presentation.swing.SwingFrame;
 import java.awt.BorderLayout;
-import java.util.Map;
 
 /**
  *
@@ -99,22 +99,15 @@ public class RoomMap extends SwingFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
     
-    @Override
-    public String[] getEvents()
-    {
-        return new String[]{
-            "roomCreated",
-            "roomLoaded"
-        };
-    }
-    
-    public void roomCreated(Map<String, Object> data)
+    @Event
+    public void roomCreated()
     {
         showView();
     }
     
-    public void roomLoaded(Map<String, Object> data)
+    @Event
+    public void roomLoaded()
     {
-        roomCreated(data);
+        roomCreated();
     }
 }

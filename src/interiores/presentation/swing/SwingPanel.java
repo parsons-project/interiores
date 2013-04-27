@@ -29,10 +29,4 @@ public class SwingPanel extends JPanel implements View {
     {
         
     }
-    
-    @Override
-    public String[] getEvents()
-    {
-        return new String[]{};
-    }
 }

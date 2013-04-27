@@ -1,4 +1,4 @@
-package interiores.data.objects;
+package interiores.shared.data.objects;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;

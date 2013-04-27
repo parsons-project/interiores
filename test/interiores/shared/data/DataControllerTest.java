@@ -1,7 +1,7 @@
-package interiores.data;
+package interiores.shared.data;
 
-import interiores.data.objects.Container;
-import interiores.data.objects.Simple;
+import interiores.shared.data.objects.Container;
+import interiores.shared.data.objects.Simple;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;

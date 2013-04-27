@@ -3,7 +3,7 @@ package interiores.business.controllers;
 import interiores.business.models.Room;
 import interiores.core.business.BusinessController;
 import interiores.core.business.Model;
-import interiores.data.DataController;
+import interiores.core.data.JAXBDataController;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -12,7 +12,7 @@ import javax.xml.bind.JAXBException;
  */
 public class RoomController extends BusinessController
 {
-    public RoomController(DataController data)
+    public RoomController(JAXBDataController data)
     {
         super(data);
     }

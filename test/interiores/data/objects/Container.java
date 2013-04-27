@@ -1,4 +1,4 @@
-package interiores.data.objects;
+package interiores.shared.data.objects;
 
 import java.util.ArrayList;
 import java.util.List;

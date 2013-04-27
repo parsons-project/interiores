@@ -2,7 +2,7 @@ package interiores.core.business;
 
 import interiores.core.Observable;
 import interiores.core.Observer;
-import interiores.data.DataController;
+import interiores.core.data.JAXBDataController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +13,10 @@ import java.util.Map;
  */
 abstract public class BusinessController implements Observable
 {
-    protected DataController data;
+    protected JAXBDataController data;
     private List<Observer> listeners;
     
-    public BusinessController(DataController data)
+    public BusinessController(JAXBDataController data)
     {
         this.data = data;
         listeners = new ArrayList();

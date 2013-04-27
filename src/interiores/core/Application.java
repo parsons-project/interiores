@@ -1,8 +1,8 @@
 package interiores.core;
 
 import interiores.core.business.BusinessController;
+import interiores.core.data.JAXBDataController;
 import interiores.core.presentation.PresentationController;
-import interiores.data.DataController;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBException;
@@ -14,13 +14,12 @@ import javax.xml.bind.JAXBException;
 public class Application
 {
     private String appPkg;
-    private DataController data;
+    private JAXBDataController data;
     private List<PresentationController> presentations;
     
     public Application(String appPkg) throws JAXBException
     {
         this.appPkg = appPkg;
-        data = new DataController();
         presentations = new ArrayList();
     }
     
@@ -28,6 +27,10 @@ public class Application
     {   
         for(PresentationController presentation : presentations)
             presentation.init();
+    }
+    
+    public void setDataController(JAXBDataController data) {
+        this.data = data;
     }
     
     public void addBusiness(String name)
@@ -38,7 +41,7 @@ public class Application
                     "Controller");
             
             addBusiness(name,
-                    (BusinessController) controllerClass.getConstructor(DataController.class).newInstance(data));
+                    (BusinessController) controllerClass.getConstructor(JAXBDataController.class).newInstance(data));
         }
         catch(Exception e)
         {

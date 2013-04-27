@@ -1,6 +1,5 @@
 package interiores.core.presentation.terminal;
 
-import interiores.core.presentation.TerminalController;
 import java.io.IOException;
 
 /**

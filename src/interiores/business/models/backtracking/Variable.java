@@ -6,7 +6,6 @@
 public interface Variable
 {
 
-
     /**
     * Given that the variable is the actual variable that the algorithm is
     * trying to assign and not all of its domain values have been checked,

@@ -4,4 +4,11 @@
 */
 public abstract class Value
 {
+    
+    /**
+     * Default constructor.
+     */
+    public Value() {
+        
+    }
 }

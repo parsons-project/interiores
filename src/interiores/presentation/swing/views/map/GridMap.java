@@ -16,23 +16,23 @@ import java.util.List;
 public class GridMap
     implements Drawable
 {
-    private static final int GRID_RES = 5;
-    private static final int GRID_PAD = 10;
     private static final String GRID_COLOR = "#EEEEEE";
+    private static final int RESOLUTION = 5;
+    private static final int PADDING = 10;
     private static final double SCALE = 2;
     
     private int width;
-    private int height;
+    private int depth;
     private List<Drawable> elements;
     private boolean isGridEnabled;
     
-    public GridMap(int roomWidth, int roomHeight) {
+    public GridMap(int roomWidth, int roomDepth) {
         width = roomWidth + getPadding() * 2;
-        height = roomHeight + getPadding() * 2;
+        depth = roomDepth + getPadding() * 2;
         
         elements = new ArrayList();
 
-        Walls walls = new Walls(roomWidth, roomHeight);
+        Walls walls = new Walls(roomWidth, roomDepth);
         
         Door door1 = new RightDoor(30);
         door1.openOutwards();
@@ -75,7 +75,7 @@ public class GridMap
         g.scale(SCALE, SCALE);
         
         g.setColor(Color.white);
-        g.fillRect(0, 0, width, height);
+        g.fillRect(0, 0, width, depth);
         
         if(isGridEnabled)
             drawGrid(g);
@@ -85,20 +85,19 @@ public class GridMap
     }
     
     private void drawGrid(Graphics2D g) {
-        int rows = width / GRID_RES;
-        int cols = height / GRID_RES;
+        int rows = width / RESOLUTION;
+        int cols = depth / RESOLUTION;
         
         g.setColor(Color.decode(GRID_COLOR));
         
-        for(int i = 0; i < rows; i++)
-        {
+        for(int i = 0; i < rows; i++) {
             for(int j = 0; j < cols; j++)
                 g.drawRect(i*5, j*5, 5, 5);
         }
     }
     
     public static int getPadding() {
-        return GRID_RES * GRID_PAD;
+        return RESOLUTION * PADDING;
     }
     
     public void enableGrid() {
@@ -110,6 +109,6 @@ public class GridMap
     }
     
     public int getHeight() {
-        return (int)(height * SCALE);
+        return (int)(depth * SCALE);
     }
 }

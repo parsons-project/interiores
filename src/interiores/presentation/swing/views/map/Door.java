@@ -1,7 +1,6 @@
 package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
-import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -11,15 +10,11 @@ import java.awt.Graphics2D;
  * @author hector0193
  */
 public class Door
-    implements Drawable
+    extends FixedElement
 {
     protected static final int DEPTH = Walls.getDepth();
     private static final Color COLOR = Color.decode("#EEEEEE");
     
-    protected int x;
-    protected int y;
-    protected OrientedRectangle r;
-    protected int size;
     private boolean hasToOpenOutwards;
 
     
@@ -28,13 +23,9 @@ public class Door
     }
         
     public Door(int x, int y, int size) {
-        this.x = x;
-        this.y = y;
-        this.size = size;
-        hasToOpenOutwards = false;
+        super(x, y, size, DEPTH);
         
-        r = new OrientedRectangle(x + GridMap.getPadding(), y + GridMap.getPadding(), DEPTH, size,
-                Orientation.S);
+        hasToOpenOutwards = false;
     }
     
     public void openOutwards() {
@@ -45,24 +36,20 @@ public class Door
         return hasToOpenOutwards;
     }
     
-    public int getSize() {
-        return size - DEPTH;
-    }
-    
     @Override
     public void draw(Graphics2D g) {
         g.setColor(COLOR);
-        g.fill(r);
+        g.fill(rectangle);
         
         g.setColor(Color.black);
-        g.draw(r);
-
-        Debug.println("Drawing door at (" + r.getX() + ", " + r.getY() + ") and size " + r.getHeight());
+        g.draw(rectangle);
+        
+        Debug.println("Drawing door at (" + rectangle.getX() + ", " + rectangle.getY() + ") and size " + size);
     }
     
+    @Override
     public void setPosition(int x, int y, Orientation orientation) {
-        this.x = x;
-        this.y = y;
+        super.setPosition(x, y, orientation);
         
         int renderX = x;
         int renderY = y;
@@ -85,7 +72,7 @@ public class Door
                 break;
         }
         
-        r.setLocation(renderX + GridMap.getPadding(), renderY + GridMap.getPadding());
-        r.setOrientation(orientation);
+        rectangle.setLocation(renderX + GridMap.getPadding(), renderY + GridMap.getPadding());
+        rectangle.setOrientation(orientation);
     }
 }

@@ -15,9 +15,9 @@ abstract public class DoorOpenOriented
     }
     
     protected void reposition(Orientation reposX, Orientation reposY) {
-        Orientation orientation = r.getOrientation();
-        int renderX = (int) r.getX();
-        int renderY = (int) r.getY();
+        Orientation orientation = rectangle.getOrientation();
+        int renderX = (int) rectangle.getX();
+        int renderY = (int) rectangle.getY();
         
         if(orientation == reposX)
             renderX += size - DEPTH;
@@ -25,6 +25,6 @@ abstract public class DoorOpenOriented
         else if(orientation == reposY)
             renderY += size - DEPTH;
             
-        r.setLocation(renderX, renderY);
+        rectangle.setLocation(renderX, renderY);
     }
 }

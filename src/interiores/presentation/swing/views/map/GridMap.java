@@ -46,6 +46,12 @@ public class GridMap
         walls.addDoor(door2, Orientation.S, 50);
         walls.addDoor(door3, Orientation.E, 80);
         
+        Window window1 = new Window(50);
+        Window window2 = new Window(80);
+        
+        walls.addWindow(window1, Orientation.W, 150);
+        walls.addWindow(window2, Orientation.N, 170);
+        
         Furniture sofa = new Furniture("Sofa", 0, 0, 100, 40);
         sofa.setOrientation(Orientation.E);
         sofa.setColor("#BDB76B");

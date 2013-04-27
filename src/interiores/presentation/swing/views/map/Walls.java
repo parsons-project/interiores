@@ -16,12 +16,12 @@ public class Walls implements Drawable {
     private static final String COLOR = "0x999999";
     private int width;
     private int height;
-    private Map<Point, Door> doors;
+    private Map<Point, FixedElement> elements;
     
     public Walls(int width, int height) {
         this.width = width;
         this.height = height;
-        doors = new HashMap();
+        elements = new HashMap();
     }
     
     public static int getDepth() {
@@ -38,8 +38,8 @@ public class Walls implements Drawable {
         drawVerticalWall(g, 0, DEPTH);
         drawVerticalWall(g, width, 0);
         
-        for(Door door : doors.values())
-            door.draw(g);
+        for(FixedElement element : elements.values())
+            element.draw(g);
     }
     
     public void drawHorizontalWall(Graphics2D g, int y, int valign) {
@@ -49,8 +49,8 @@ public class Walls implements Drawable {
         for(int i = 0 - DEPTH; i < drawableWidth; i += DEPTH) {
             Point p = new Point(i, y - valign);
         
-            if(doors.containsKey(p))
-                i += doors.get(p).getSize();
+            if(elements.containsKey(p))
+                i += elements.get(p).getSize() - DEPTH;
             else
                 g.fillRect(i + padding, y + padding - valign, DEPTH, DEPTH);
         }
@@ -62,38 +62,46 @@ public class Walls implements Drawable {
         for(int i = 0; i < width; i += DEPTH) {
             Point p = new Point(x - halign, i);
         
-            if(doors.containsKey(p))
-                i += doors.get(p).getSize();
+            if(elements.containsKey(p))
+                i += elements.get(p).getSize() - DEPTH;
             else
                 g.fillRect(x + padding - halign, i + padding, DEPTH, DEPTH);
         }
     }
     
-    public void addDoor(Door door, Orientation wall, int pos) {
-        int x, y;
-        Orientation o;
-        
-        x = y = -DEPTH;
+    private Point getPosition(Orientation wall, int displacement) {
+        Point p = new Point(-DEPTH, -DEPTH);
         
         switch(wall) {
             case E:
-                x = width;
+                p.x = width;
                 
             case W:
-                y = pos;
+                p.y = displacement;
                 break;
             
             case S:
-                y = height;
+                p.y = height;
                 
             case N:
-                x = pos;
+                p.x = displacement;
                 break;
         }
         
-        Point key = new Point(x, y);
-        door.setPosition(x, y, door.hasToOpenOutwards() ? wall : wall.complementary());
+        return p;
+    }
+    
+    public void addDoor(Door door, Orientation wall, int displacement) {        
+        Point key = getPosition(wall, displacement);
+        door.setPosition(key.x, key.y, door.hasToOpenOutwards() ? wall : wall.complementary());
         
-        doors.put(key, door);
+        elements.put(key, door);
+    }
+    
+    public void addWindow(Window window, Orientation wall, int displacement) {
+        Point key = getPosition(wall, displacement);
+        window.setPosition(key.x, key.y, wall.rotateRight());
+        
+        elements.put(key, window);
     }
 }

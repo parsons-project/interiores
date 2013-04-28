@@ -28,8 +28,10 @@ public class Interiores
         
         app.addPresentation(new SwingController("interiores.presentation.swing.views"));
         app.addPresentation(new TerminalController("interiores.presentation.terminal"));
-
+        
         app.addBusiness("room");
+        app.addBusiness("furnitureType");
+        app.addBusiness("furnitureTypesCatalog");
 
         app.init();
     }

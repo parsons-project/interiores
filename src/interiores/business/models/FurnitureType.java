@@ -1,18 +1,27 @@
-
 package interiores.business.models;
 
-import java.awt.Dimension;
+import horarios.shared.IdObject;
+import interiores.utils.Dimension;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * This class represents the type of a furniture model
  * @author alvaro
  */
-public class FurnitureType {
-    
-    private String name; // Name of the type
-    
+@XmlRootElement
+public class FurnitureType
+    extends IdObject
+{
+    @XmlElement
     private Dimension minimum; // Minimum width and "height"
+    
+    @XmlElement
     private Dimension maximum; // maximum width and "height"
+    
+    public FurnitureType() {
+        super();
+    }
     
     /**
      * Full constructor that specifies the properties of the furniture type 
@@ -21,9 +30,10 @@ public class FurnitureType {
      * @param max Maximum dimensions a model of this type should have
      */
     public FurnitureType(String name, Dimension min, Dimension max) {
-        this.name = name;
-        this.minimum = min;
-        this.maximum = max;
+        super(name);
+        
+        minimum = min;
+        maximum = max;
     }
     
     /**
@@ -31,7 +41,7 @@ public class FurnitureType {
      * @return The name of the type of furniture
      */
     public String getName() {
-        return name;
+        return identifier;
     }
     
     /**
@@ -60,6 +70,11 @@ public class FurnitureType {
     public Boolean checkDimension(Dimension dimension) {
         return (minimum.width <= dimension.width && dimension.width <= maximum.width) &&
                (minimum.height <= dimension.height && dimension.height <= maximum.height);
+    }
+    
+    @Override
+    public String toString() {
+        return getName() + " " + minimum.toString() + " " + maximum.toString();
     }
     
 }

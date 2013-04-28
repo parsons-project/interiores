@@ -28,4 +28,8 @@ abstract public class CommandGroup
         
         return iostream.readInt();
     }
+    
+    public void println(String line) {
+        iostream.println(line);
+    }
 }

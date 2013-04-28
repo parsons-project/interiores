@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -13,14 +12,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jaume
  */
 @XmlRootElement
-public class Catalog<IdType, X extends IdObject<IdType>> {
+public class Catalog<X extends IdObject> {
 
     /**
      * Hashmap with all the objects and identifiers in the Catalog
      */
-    @XmlElementWrapper
-    @XmlElement(name = "element")
-    protected HashMap<IdType, X> table;
+    @XmlElementWrapper(name = "table")
+    protected HashMap<String, X> table;
     
     
     /**
@@ -64,7 +62,7 @@ public class Catalog<IdType, X extends IdObject<IdType>> {
      * @params id Element identifier to find
      * @return True if it was found, else False
      */
-    public Boolean hasObject(IdType id) {
+    public Boolean hasObject(String id) {
         return table.containsKey(id);
     }
     
@@ -82,7 +80,7 @@ public class Catalog<IdType, X extends IdObject<IdType>> {
      * Delete an element of Catalog
      * @params id Code identifier of the element to delete
      */
-    public void delete(IdType id) {
+    public void delete(String id) {
         table.remove(id);
     }
     
@@ -102,7 +100,7 @@ public class Catalog<IdType, X extends IdObject<IdType>> {
      * @params id Code identifier of the element to delete
      * @return Element with the code identifier or NULL if it isn't on the Catalog
      */
-    public X getObject(IdType id)
+    public X getObject(String id)
         throws ElementNotFoundException {
         X o = table.get(id);
         if (o == null) throw new ElementNotFoundException(id);
@@ -136,7 +134,9 @@ public class Catalog<IdType, X extends IdObject<IdType>> {
      * Getter of a Set that contains all objects identifiers in the Catalog.
      * @return Set with all objects identifiers in Catalog
      */
-    public Set<IdType> getKeys() {
+    public Set<String> getKeys() {
         return table.keySet();
     }
 }
+
+

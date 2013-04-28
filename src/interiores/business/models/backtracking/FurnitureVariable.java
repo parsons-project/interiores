@@ -124,6 +124,10 @@ public class FurnitureVariable
         currentOrientation = null;
         currentModel = null;
         
+        positionIterator = domainPositions[0].iterator();
+        orientationIterator = orientations.iterator();
+        modelIterator = domainModels[0].iterator();
+
         this.unaryConstraints = unaryConstraints;
         
     }
@@ -134,17 +138,7 @@ public class FurnitureVariable
     public Value getNextDomainValue() {
         
         //1) iterate
-        if (currentPosition == null) {
-            //first iteration case
-            positionIterator = domainPositions[0].iterator();
-            orientationIterator = orientations.iterator();
-            modelIterator = domainModels[0].iterator();
-            
-            currentPosition = (Point) positionIterator.next();
-            currentModel = (FurnitureModel) modelIterator.next();
-            currentOrientation = (Orientation) orientationIterator.next();
-        }
-        else if (positionIterator.hasNext()) {
+        if (positionIterator.hasNext()) {
             currentPosition = (Point) positionIterator.next();
         }
         else if (orientationIterator.hasNext()) {
@@ -281,6 +275,9 @@ public class FurnitureVariable
     }
 
     
+    /**
+     * Initializes the orientations list with all available orientations.
+     */
     private void defaultOrientations() {
         orientations.add(Orientation.N);
         orientations.add(Orientation.E);
@@ -289,6 +286,21 @@ public class FurnitureVariable
     }	
 	
 
+    /**
+     * Resets the iterators so that they will iterate through all of the
+     * variables' domain, for the iteration "iteration" of the algorithm.
+     * @param iteration 
+     */
+    public void resetIterators(int iteration) {
+        positionIterator = domainPositions[iteration].iterator();
+        orientationIterator = orientations.iterator();
+        modelIterator = domainModels[iteration].iterator();
+        
+        currentPosition = (Point) positionIterator.next();
+        currentModel = (FurnitureModel) modelIterator.next();
+        currentOrientation = (Orientation) orientationIterator.next();    
+    }
+    
 //    /**
 //     * Adds a new constraint dinamically, so that it can be checked before the
 //     * algorithm starts.

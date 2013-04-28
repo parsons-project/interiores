@@ -29,7 +29,7 @@ public class OrientationConstraint
     }
     
     /**
-     * Determines whether an orientation satisfies the constraint.
+     * Eliminates all values that do not fulfil the constraint.
      * @param variable The variable to be checked.
      */
     @Override

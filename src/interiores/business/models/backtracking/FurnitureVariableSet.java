@@ -1,13 +1,21 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.FurnitureModel;
+import interiores.business.models.Room;
+import interiores.business.models.constraints.BinaryConstraintSet;
+import interiores.business.models.constraints.UnaryConstraint;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
+import java.util.Iterator;
+import java.util.List;
 
 public class FurnitureVariableSet
 	extends VariableSet
 {	
 
+    /**
+     * Represents the number of variables.
+     */
     private int variableCount;
     
     /**
@@ -36,43 +44,54 @@ public class FurnitureVariableSet
      * Indicates whether all variables have an assigned value.
      */
     boolean allAssigned;
-    
-    
 
-
-
+    /**
+     * Indicates restrictions amongst two variables.
+     */
+    BinaryConstraintSet binaryConstraints;
        
     /**
-     * Constructor. I don't know what parameters this has...
+     * Default Constructor.
+     * 
      */
-    public FurnitureVariableSet(...) {
-        variableCount = ...;
-        allAssigned = false;
-        variables = new FurnitureVariable[variableCount];
-    }
+    public FurnitureVariableSet(Room room,
+        List<List<FurnitureModel>> variablesModels, 
+        List<List<UnaryConstraint>> variablesUnaryConstraints,
+        BinaryConstraintSet binaryConstraints) {
+        
+        variableCount = variablesModels.size();
 
-    
-    
-    // Implementation from the abstract superclass
+        variables = new FurnitureVariable[variableCount];
+        for(int i = 0; i < variableCount; ++i)
+            variables[i] = new FurnitureVariable(variablesModels.get(i), room,
+                variablesUnaryConstraints.get(i), variableCount);
+
+       this.binaryConstraints = binaryConstraints;
+        
+       allAssigned = false;
+       actual = null;
+    }
+   
 
     @Override
     protected void setActualVariable() {
         actual = variables[depth];
+        actual.resetIterators(depth);
     }
 
     
    @Override
     protected void trimDomains() {
-        for (int i = depth; i < variableCount; ++i) {
-            variables[i].trimDomain(actual);
+        for (int i = depth + 1; i < variableCount; ++i) {
+            variables[i].trimDomain(actual, depth);
         }
     }
 
     
     @Override
     protected void undoTrimDomains(Value value) {
-        for (int i = depth; i < variableCount; ++i) {
-            variables[i].undoTrimDomain(actual, value);
+        for (int i = depth + 1; i < variableCount; ++i) {
+            variables[i].undoTrimDomain(actual, value, depth);
         }
     }
 
@@ -100,7 +119,11 @@ public class FurnitureVariableSet
     
     @Override
     protected boolean canAssignToActual(Value value) {
-
+        for (int i = 0; i < depth; ++i) {
+            if (!binaryConstraints.isSatisfied(actual, variables[i]))
+                    return false;
+        }
+        return true;
     }
 
     
@@ -118,7 +141,13 @@ public class FurnitureVariableSet
     
     @Override
     protected void preliminarTrimDomains() {
-        
+        for (int i = 0; i < variableCount; ++i) {
+            Iterator it = variables[i].unaryConstraints.iterator();
+            while (it.hasNext()) {
+                UnaryConstraint constraint = (UnaryConstraint) it.next();
+                constraint.eliminateInvalidValues(variables[i]);
+            }
+        }
     }
     
 }
@@ -134,4 +163,4 @@ public class FurnitureVariableSet
 //    * This attribute might be necessary to check that every place in the room is
 //    * accessible.
 //    */
-//    private Cell[][][] map;
+//    private Cell[][][] map;    

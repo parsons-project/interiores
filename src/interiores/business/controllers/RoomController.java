@@ -1,6 +1,7 @@
 package interiores.business.controllers;
 
 import interiores.business.models.Room;
+import interiores.business.models.RoomType;
 import interiores.core.business.BusinessController;
 import interiores.core.business.Model;
 import interiores.core.data.JAXBDataController;
@@ -17,12 +18,13 @@ public class RoomController extends BusinessController
         super(data);
     }
     
-    public void newRoom(String type, int width, int height)
+    public void newRoom(String typeName, int width, int height)
     {
-       Room room = new Room(type, width, height);
-       
-       data.set("room", room);
-       notify("roomCreated", room.toMap());
+        RoomType type = new RoomType(typeName);
+        Room room = new Room(type, width, height);
+
+        data.set("room", room);
+        notify("roomCreated", room.toMap());
     }
     
     public void saveRoom(String path)

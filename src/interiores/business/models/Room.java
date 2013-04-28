@@ -2,6 +2,8 @@ package interiores.business.models;
 
 import interiores.core.business.Model;
 import java.awt.Dimension;
+import java.util.HashMap;
+import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -45,5 +47,16 @@ public class Room extends Model {
     
     public int getHeight() {
         return size.height;
+    }
+    
+    @Override
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap();
+        
+        map.put("type", type.getName());
+        map.put("width", (int) size.getWidth());
+        map.put("height", (int) size.getHeight());
+        
+        return map;
     }
 }

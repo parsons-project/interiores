@@ -24,7 +24,7 @@ public class RoomController extends BusinessController
         Room room = new Room(type, width, height);
 
         data.set("room", room);
-        notify("roomCreated", room.toMap());
+        notify("roomCreated", room);
     }
     
     public void saveRoom(String path)

@@ -23,16 +23,20 @@ public class Interiores
         Debug.enable();
         
         Application app = new Application("interiores");
+        TerminalController terminal = new TerminalController("interiores.presentation.terminal");
         
         app.setDataController(new MappedDataController());
         
         app.addPresentation(new SwingController("interiores.presentation.swing.views"));
-        app.addPresentation(new TerminalController("interiores.presentation.terminal"));
+        app.addPresentation(terminal);
         
         app.addBusiness("room");
         app.addBusiness("furnitureType");
         app.addBusiness("furnitureTypesCatalog");
-
+        
+        terminal.addShortcut("furnitureType", "ft");
+        terminal.addShortcut("furnitureTypesCatalog", "ftc");
+        
         app.init();
     }
 }

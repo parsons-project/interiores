@@ -18,12 +18,14 @@ public class TerminalController extends PresentationController
     private String commandsPath;
     private IOStream iostream;
     private Map<String, CommandGroup> commands;
+    private Map<String, String> shortcuts;
     
     public TerminalController(String commandsPath)
     {
         this.commandsPath = commandsPath;
         iostream = new IOStream();
-        commands = new HashMap<String, CommandGroup>();
+        commands = new HashMap();
+        shortcuts = new HashMap();
     }
     
     @Override
@@ -79,6 +81,10 @@ public class TerminalController extends PresentationController
         }
     }
     
+    public void addShortcut(String subject, String shortcut) {
+        shortcuts.put(shortcut, subject);
+    }
+    
     public void exec(String line)
     {
         try
@@ -91,7 +97,8 @@ public class TerminalController extends PresentationController
             if(isReserved(action))
                 method = "_" + action;
             
-            String subject = iostream.readString();
+            String shortcut = iostream.readString();
+            String subject = getSubject(shortcut);
             
             System.out.println("Action is " + action + " on subject " + subject);
             
@@ -114,6 +121,13 @@ public class TerminalController extends PresentationController
         {
             e.printStackTrace(); // @TODO Improve exception handling
         }
+    }
+    
+    private String getSubject(String shortcut) {
+        if(! shortcuts.containsKey(shortcut))
+            return shortcut;
+        
+        return shortcuts.get(shortcut);
     }
     
     private boolean isReserved(String s)

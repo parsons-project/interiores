@@ -15,16 +15,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-/**
-* FurnitureVariable takes the role of variable in the context of the Constraint
-* Satisfaction Problem (CSP) for the room design. A variable in this context
-* has:
-*  - A domain of values it can take.
-*  - A set of constraints that affect the variable.
-* Furthermore, a variable can be in two states:
-*  - Assigned. When it has already been set to a certain value from the domain.
-*  - Unassigned. When it does not have a certain value.
-*/         
+      
 public class FurnitureVariable
 	implements Variable
 {
@@ -63,9 +54,10 @@ public class FurnitureVariable
     */
     public HashSet<Point>[] domainPositions;
     
-    
-    // The set of orientation is not included explicitly as it is a static set.
-
+    /**
+     * This list contains all four possible orientations.
+     */
+    List<Orientation> orientations;
     
     /**
      * This list contains the constraints regarding the model of the variable.
@@ -89,6 +81,7 @@ public class FurnitureVariable
     // The following variables are used to iterate ovre the domain.
     //Iteration is done in this order: 1) Position, 2) Orientation, 3) Models
     private Iterator positionIterator;
+    private Iterator orientationIterator;
     private Iterator modelIterator;
     
     private Point currentPosition;
@@ -99,50 +92,66 @@ public class FurnitureVariable
     
     
     /**
-    * Constructor.
+    * Default Constructor. The resulting variable has as domian the models in
+    * "models", every position in room and all orientations.
+    * The set of restrictions is "constraints".
     */
-    public FurnitureVariable(List<FurnitureModel> models, Room room, int variableCount) {
+    public FurnitureVariable(List<FurnitureModel> models, Room room,
+            List<ModelConstraint> constraints, int variableCount) {
+        
         isAssigned = false;
         iteration = 0;
 
-        domainModels = new List<Model>[variableCount];
+        domainModels = new List<FurnitureModel>[variableCount];
         domainPositions = new HashSet<Point>[variableCount];
 
-        positionIterator = domainPositions[0].iterator();
-        modelIterator = domainModels[0].iterator();
+        orientations = new ArrayList<Orientation>();
+        defaultOrientations();
+        
+        domainModels[0] = models;
 
+        //add all positions in the room
+        for (int i = 0; i < room.getHeight(); ++i) {
+            for (int j = 0; j < room.getWidth(); ++j)
+                domainPositions[0].add(new Point(i,j));
+        }
+        
         currentPosition = null;
-        currentOrientation = Orientation.N;
+        currentOrientation = null;
         currentModel = null;
         
-
+        this.constraints = constraints;
     }
 
-    // Implementation from the abstract superclass
 
-    @Override
     //Pre: we have not iterated through all domain values yet.
+    @Override
     public Value getNextDomainValue() {
         
         //1) iterate
         if (currentPosition == null) {
             //first iteration case
+            positionIterator = domainPositions[0].iterator();
+            orientationIterator = orientations.iterator();
+            modelIterator = domainModels[0].iterator();
+            
             currentPosition = (Point) positionIterator.next();
             currentModel = (FurnitureModel) modelIterator.next();
-            currentOrientation = Orientation.N;
+            currentOrientation = (Orientation) orientationIterator.next();
         }
         else if (positionIterator.hasNext()) {
             currentPosition = (Point) positionIterator.next();
         }
-        else if (currentOrientation != Orientation.W) {
+        else if (orientationIterator.hasNext()) {
             positionIterator = domainPositions[iteration].iterator();
             currentPosition = (Point) positionIterator.next();
-            currentOrientation.rotateRight();
+            currentOrientation = (Orientation) orientationIterator.next();
         }
         else if (modelIterator.hasNext()) {
             positionIterator = domainPositions[iteration].iterator();
             currentPosition = (Point) positionIterator.next();
-            currentOrientation = Orientation.N;
+            orientationIterator = orientations.iterator();
+            currentOrientation = (Orientation) orientationIterator.next();
             currentModel = (FurnitureModel) modelIterator.next();
         }
         else {
@@ -160,9 +169,8 @@ public class FurnitureVariable
     //Pre: the 3 iterators point to valid values
     @Override
     public boolean hasMoreValues() {
-        return modelIterator.hasNext();
-        //Note: this implementation is dependent of the order the sets are
-        //iterated (i.e., only works if models are iterated last)
+        return modelIterator.hasNext() || positionIterator.hasNext() ||
+               orientationIterator.hasNext();
     }
 
     
@@ -204,100 +212,51 @@ public class FurnitureVariable
         return assignedValue;
     }
 
-	
-	
-
-//IMPLEMENTACION DE LORENZO; TO BE MERGED BY NIL
-    
-    // DOMAIN
-    List<FurnitureModel> models;     // a list of FurnitureModels
-    List<Orientation> orientations;  // a list of allowed orientations
-    Boolean[][] positions;           // a boolean matrix of valid positions
-
-    public FurnitureVariable(List<FurnitureModel> models, Room room) {
-        
-        this.models = models;
-        
-        this.positions = new Boolean[room.getHeight()][room.getWidth()];
-        for (Boolean[] b : positions) Arrays.fill(b, Boolean.TRUE);
-        currentPosition = new Point(0,0);
-        
-        // Inclusion of every possible orientation (pending review)
-        orientations = new ArrayList<Orientation>();
-        defaultOrientations();
-        
-        constraints = new ArrayList<ModelConstraint>();
-    }
-
-    
-    // Do I have to implement this function with a Value parameter instead of a FurnitureValue one??
-    @Override
-    public void setAssignedValue(Value value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    public void applyConstraint(ModelConstraint newConstr) {
-        constraints.add(newConstr);
-        
-        int i = 0;
-        while ( i < models.size()) {
-            if ( newConstr.isSatisfied(models.get(i)) ) i++;
-            else models.remove(i);
-        }
-    }
-    
-    public void restrictOrientation(Orientation o) {
-        orientations.clear();
-        orientations.add(o);
-    }
-    
-    public void restrictArea(Boolean[][] intersect) {
-        int width = (positions[0].length == intersect[0].length) ? positions[0].length : 0;
-        int height = (positions.length == intersect.length) ? positions.length : 0;
-        
-        for (int i = 0; i < height; i++)
-            for (int j = 0; j < width; j++)
-                positions[i][j] = positions[i][j] && intersect[i][j];
-    }
-    
-    // Only for testing purposes
-    public int getConstraints() {
-        return models.size();
-    }
-
-//    public void removeConstraint(ModelConstraint oldConstr) {
-//        constraints.remove(oldConstr);
-//        // Here I've got to figure out how to restore the removed models
-//    }
-    
     
     private void defaultOrientations() {
         orientations.add(Orientation.N);
-        orientations.add(Orientation.W);
         orientations.add(Orientation.E);
         orientations.add(Orientation.S);
-    }
-    
-    private void iterateToNextValue() {
-        int roomWidth = positions[0].length;
-        int roomHeight = positions.length;
-        
-        do {
-            currentPosition.x++;
-            if (currentPosition.x >= roomWidth) {
-                currentPosition.x = 0;
-                currentPosition.y++;
-                if (currentPosition.y >= roomHeight) {
-                    currentPosition.y = 0;
-                    currentOrientation++;
-                    if (currentOrientation >= orientations.size()) {
-                        currentOrientation = 0;
-                        currentModel++;
-                    }
-                }
-            }
-        } while ( currentModel < models.size() && !positions[currentPosition.y][currentPosition.x] );
-    }
-    
-    
+        orientations.add(Orientation.W);
+    }	
+	
+
+//    /**
+//     * Adds a new constraint dinamically, so that it can be checked before the
+//     * algorithm starts.
+//     * @param newConstr the new constraint.
+//     */
+//    //pre: iteration = 0
+//    public void applyModelConstraint(ModelConstraint newConstr) {
+//        constraints.add(newConstr);
+//        
+//        Iterator startingModels = domainModels[0].iterator();
+//        
+//        while (startingModels.hasNext()) {
+//            if (!newConstr.isSatisfied(startingModels.next()))
+//                startingModels.remove();
+//        }
+//    }
+//
+//    public void removeModelConstraint(ModelConstraint oldConstr) {
+//        constraints.remove(oldConstr);
+//        // Here I've got to figure out how to restore the removed models
+//    }
+//    
+//
+//    public void restrictOrientation(Orientation o) {
+//        orientations.clear();
+//        orientations.add(o);
+//    }
+//    
+//    
+//    public void restrictArea(Boolean[][] intersect) {
+//        int width = (positions[0].length == intersect[0].length) ? positions[0].length : 0;
+//        int height = (positions.length == intersect.length) ? positions.length : 0;
+//        
+//        for (int i = 0; i < height; i++)
+//            for (int j = 0; j < width; j++)
+//                positions[i][j] = positions[i][j] && intersect[i][j];
+//    }
+      
 }

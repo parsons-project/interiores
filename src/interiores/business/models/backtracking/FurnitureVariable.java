@@ -9,8 +9,6 @@ import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Arrays;
-import interiores.core.business.Model;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -62,7 +60,9 @@ public class FurnitureVariable
     /**
      * This list contains the constraints regarding the model of the variable.
      */
-    public List<ModelConstraint> constraints;
+    public List<ModelConstraint> modelConstraints;
+    public List<PositionConstraint> positionConstraints;
+    public List<OrientationConstraint> orientationConstraints;
 
 
     /**
@@ -76,7 +76,7 @@ public class FurnitureVariable
     /**
     * Represents the iteration of the algorithm.
     */
-    public int iteration;
+    //public int iteration;
     
     // The following variables are used to iterate ovre the domain.
     //Iteration is done in this order: 1) Position, 2) Orientation, 3) Models
@@ -97,20 +97,27 @@ public class FurnitureVariable
     * The set of restrictions is "constraints".
     */
     public FurnitureVariable(List<FurnitureModel> models, Room room,
-            List<ModelConstraint> constraints, int variableCount) {
+            List<ModelConstraint> modelConstraints,
+            List<OrientationConstraint> orientationConstraints,
+            List<PositionConstraint> positionConstraints, int variableCount) {
         
         isAssigned = false;
-        iteration = 0;
-
-        domainModels = new List<FurnitureModel>[variableCount];
-        domainPositions = new HashSet<Point>[variableCount];
-
+    
+        domainModels = new ArrayList[variableCount];
+        for(int i = 0; i < variableCount; ++i)
+            domainModels[i] = null;
+        
+        domainPositions = new HashSet[variableCount];
+        for(int i = 0; i < variableCount; ++i)
+            domainPositions[i] = null;        
+        
         orientations = new ArrayList<Orientation>();
         defaultOrientations();
         
         domainModels[0] = models;
 
         //add all positions in the room
+        domainPositions[0] = new HashSet<Point>();
         for (int i = 0; i < room.getHeight(); ++i) {
             for (int j = 0; j < room.getWidth(); ++j)
                 domainPositions[0].add(new Point(i,j));
@@ -187,17 +194,73 @@ public class FurnitureVariable
         isAssigned = false;
         assignedValue = null;        
     }
-
-    
+  
+    /**
+     * Moves positions, models and orientations which are still valid to the
+     * next level.
+     * All positions from the HashSet at the position "iteration" which are
+     * still valid must be moved to the HashSet in the position "iteration"+1.
+     * To do this operation, we move all positions preliminarily, and then move
+     * back those that are not valid. We estimate this reduces the amount of
+     * HashSet operations.
+     * All models from the List at the position "iteration" which are still 
+     * valid must be moved to the List in the position "iteration"+1.
+     */
+    //pre: variable has an assigned value.
     @Override
-    public void trimDomain(Variable variable) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void trimDomain(Variable variable, int iteration) {
+        // 1) preliminar move of all positions
+        domainPositions[iteration+1] = domainPositions[iteration];
+        domainPositions[iteration] = new HashSet<Point>();
+        
+        // 2) send the affected positions back
+        FurnitureValue value = (FurnitureValue) variable.getAssignedValue();
+        OrientedRectangle area = value.getArea();
+        int x = area.x;
+        int y = area.y;
+        int x_max = x+area.width;
+        int y_max = y+area.height;
+        for (int i = x; i < x_max; ++i) {
+            for (int j = y; j < y_max; ++j) {
+                Point p = new Point(i,j);
+                if (domainPositions[iteration+1].contains(p)) {
+                    domainPositions[iteration].add(p);
+                    domainPositions[iteration+1].remove(p);
+                }
+            }
+        }
+        
+        // move all models
+        domainModels[iteration+1] = domainModels[iteration];
+        domainModels[iteration] = new ArrayList<FurnitureModel>();
     }
 
-    
+    /**
+     * Merges back values from step "iteration"+1 to "iteration" level.
+     * To do this operation, we swap the containers first if the destination
+     * level's container has less elements. 
+     */
     @Override
-    public void undoTrimDomain(Variable variable, Value value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void undoTrimDomain(Variable variable, Value value, int iteration) {
+        // 1) check if swap is beneficial
+        boolean shouldSwap = domainPositions[iteration].size() <
+                             domainPositions[iteration+1].size();
+        
+        // 2) swap
+        if (shouldSwap) {
+            HashSet<Point> aux = domainPositions[iteration];
+            domainPositions[iteration] = domainPositions[iteration+1];
+            domainPositions[iteration+1] = aux;
+        }
+        
+        // 3) merge
+        domainPositions[iteration].addAll(domainPositions[iteration+1]);
+        domainPositions[iteration+1] = null;
+        
+        //concatenate lists of models to merge them
+        domainModels[iteration].addAll(domainPositions[iteration+1]);
+        //Note: this operation should be a concatenation, which should take
+        //constant time, but it is O(n) instead!!
     }
 
     

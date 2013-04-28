@@ -71,6 +71,14 @@ public class IOStream
         }
     }
     
+    public boolean hasNext() {
+        return ibuffer.hasNext();
+    }
+    
+    public boolean hasNextInt() {
+        return ibuffer.hasNextInt();
+    }
+    
     public void println(String s)
     {
         ostream.println(s);

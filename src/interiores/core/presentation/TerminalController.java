@@ -1,5 +1,6 @@
 package interiores.core.presentation;
 
+import interiores.core.Debug;
 import interiores.core.Utils;
 import interiores.core.business.BusinessController;
 import interiores.core.presentation.terminal.CommandGroup;
@@ -100,7 +101,7 @@ public class TerminalController extends PresentationController
             String shortcut = iostream.readString();
             String subject = getSubject(shortcut);
             
-            System.out.println("Action is " + action + " on subject " + subject);
+            Debug.println("Action is " + action + " on subject " + subject);
             
             if(! commands.containsKey(subject))
                 throw new Exception("There is no subject known as " + subject);

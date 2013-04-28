@@ -18,14 +18,16 @@ abstract public class CommandGroup
     
     public String readString(String question) throws IOException
     {
-        iostream.println(question);
+        if(! iostream.hasNext())
+            iostream.println(question);
         
         return iostream.readString();
     }
     
     public int readInt(String question) throws IOException
     {
-        iostream.println(question);
+        if(! iostream.hasNextInt())
+            iostream.println(question);
         
         return iostream.readInt();
     }

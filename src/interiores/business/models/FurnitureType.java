@@ -69,7 +69,7 @@ public class FurnitureType
      */
     public Boolean checkDimension(Dimension dimension) {
         return (minimum.width <= dimension.width && dimension.width <= maximum.width) &&
-               (minimum.height <= dimension.height && dimension.height <= maximum.height);
+               (minimum.depth <= dimension.depth && dimension.depth <= maximum.depth);
     }
     
     @Override

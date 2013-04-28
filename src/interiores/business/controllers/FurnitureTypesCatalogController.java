@@ -4,6 +4,7 @@ import horarios.shared.Catalog;
 import interiores.business.models.FurnitureType;
 import interiores.core.business.BusinessController;
 import interiores.core.data.JAXBDataController;
+import java.util.Collection;
 import java.util.HashMap;
 import javax.xml.bind.JAXBException;
 
@@ -25,6 +26,14 @@ public class FurnitureTypesCatalogController
         loadedTypeCatalogs.put("default", typesCatalog);
         
         data.set("typesCatalog", typesCatalog);
+    }
+    
+    public Collection<String> getNamesLoadedTypeCatalogs() {
+        return loadedTypeCatalogs.keySet();
+    }
+    
+    public void checkout(String catalogName) {
+        data.set("typesCatalog", loadedTypeCatalogs.get(catalogName));
     }
     
     public void load(String catalogName, String path) throws JAXBException {

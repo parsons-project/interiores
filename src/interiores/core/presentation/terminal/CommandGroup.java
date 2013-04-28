@@ -1,6 +1,7 @@
 package interiores.core.presentation.terminal;
 
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  *
@@ -31,5 +32,10 @@ abstract public class CommandGroup
     
     public void println(String line) {
         iostream.println(line);
+    }
+    
+    public void print(Collection<String> collection) {
+        for(String s : collection)
+            println(s);
     }
 }

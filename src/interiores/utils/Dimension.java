@@ -1,21 +1,32 @@
 package interiores.utils;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  *
  * @author hector
  */
-public class Dimension extends java.awt.Dimension
+@XmlRootElement
+public class Dimension
 {
+    @XmlAttribute
+    public int width;
+    
+    @XmlAttribute
+    public int depth;
+    
     public Dimension() {
         this(0, 0);
     }
     
-    public Dimension(int width, int height) {
-        super(width, height);
+    public Dimension(int width, int depth) {
+        this.width = width;
+        this.depth = depth;
     }
     
     @Override
     public String toString() {
-        return "(" + width + ", " + height + ")";
+        return "(" + width + ", " + depth + ")";
     }
 }

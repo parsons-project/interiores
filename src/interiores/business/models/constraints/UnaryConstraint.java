@@ -6,7 +6,7 @@ import interiores.business.models.backtracking.FurnitureVariable;
 /**
  * Generic class for representing constraints over a furniture piece.
  */
-public class UnaryConstraint {
+public abstract class UnaryConstraint {
      /**
      * Eliminates all values from the variables' domain that do not fulfil the
      * restriction.

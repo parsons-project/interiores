@@ -1,8 +1,7 @@
 package interiores.business.models;
 
 import interiores.core.business.Model;
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.Dimension;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -13,38 +12,38 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Room extends Model {
     @XmlAttribute
-    private String type;
+    private RoomType type;
     
     @XmlAttribute
-    private int width;
+    private Dimension size;
     
-    @XmlAttribute
-    private int height;
-    
-    public Room()
-    {
+    public Room() {
         
     }
     
-    public Room(String type, int width, int height)
-    {
+    public Room(RoomType type, Dimension size) {
         this.type = type;
-        this.width = width;
-        this.height = height;
+        this.size = size;
     }
     
-    public String getType()
-    {
+    public Room(RoomType type, int width, int height) {
+        this.type = type;
+        this.size = new Dimension(width, height);
+    }
+    
+    public RoomType getType() {
         return type;
     }
     
-    public int getWidth()
-    {
-        return width;
+    public Dimension getDimension() {
+        return size;
     }
     
-    public int getHeight()
-    {
-        return height;
+    public int getWidth() {
+        return size.width;
+    }
+    
+    public int getHeight() {
+        return size.height;
     }
 }

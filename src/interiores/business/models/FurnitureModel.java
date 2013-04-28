@@ -13,6 +13,7 @@ import java.awt.Dimension;
  */
 public class FurnitureModel {
     
+    private FurnitureType ftype; // Furniture's type of this model
     private String name;        // Comercial name of the furniture model
     private Dimension size;     // Size of the furniture model
     private float price;          // Market price of the furniture model
@@ -28,18 +29,28 @@ public class FurnitureModel {
     
     /**
      * Full constructor that specifies all of the features of a furniture model.
+     * @param ftype Furniture's type of the furniture model
      * @param name Comercial name of the furniture model
      * @param size Size of the furniture model
      * @param price Market price of the furniture model
      * @param color Color of the furniture model
      * @param material Material the furniture model is made in
      */
-    public FurnitureModel(String name, Dimension size, float price, Color color, String material) {
+    public FurnitureModel(FurnitureType ftype, String name, Dimension size, float price, Color color, String material) {
+        this.ftype = ftype;
         this.name = name;
         this.size = size;
         this.price = price;
         this.color = color;
         this.material = material;
+    }
+    
+    /**
+     * Gets the type of the furniture
+     * @return The furniture type of the model
+     */
+    public FurnitureType getType() {
+        return ftype;
     }
     
     /**
@@ -81,9 +92,5 @@ public class FurnitureModel {
     public float getPrice() {
         return price;
     }
-    
-    
-    
-    
     
 }

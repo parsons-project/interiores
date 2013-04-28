@@ -13,14 +13,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Jaume
  */
 @XmlRootElement
-public class Catalog<X extends IdObject> {
+public class Catalog<IdType, X extends IdObject<IdType>> {
 
     /**
      * Hashmap with all the objects and identifiers in the Catalog
      */
     @XmlElementWrapper
     @XmlElement(name = "element")
-    protected HashMap<String, X> table;
+    protected HashMap<IdType, X> table;
     
     
     /**
@@ -64,7 +64,7 @@ public class Catalog<X extends IdObject> {
      * @params id Element identifier to find
      * @return True if it was found, else False
      */
-    public Boolean hasObject(String id) {
+    public Boolean hasObject(IdType id) {
         return table.containsKey(id);
     }
     
@@ -82,7 +82,7 @@ public class Catalog<X extends IdObject> {
      * Delete an element of Catalog
      * @params id Code identifier of the element to delete
      */
-    public void delete(String id) {
+    public void delete(IdType id) {
         table.remove(id);
     }
     
@@ -102,7 +102,7 @@ public class Catalog<X extends IdObject> {
      * @params id Code identifier of the element to delete
      * @return Element with the code identifier or NULL if it isn't on the Catalog
      */
-    public X getObject(String id)
+    public X getObject(IdType id)
         throws ElementNotFoundException {
         X o = table.get(id);
         if (o == null) throw new ElementNotFoundException(id);
@@ -136,7 +136,7 @@ public class Catalog<X extends IdObject> {
      * Getter of a Set that contains all objects identifiers in the Catalog.
      * @return Set with all objects identifiers in Catalog
      */
-    public Set<String> getKeys() {
+    public Set<IdType> getKeys() {
         return table.keySet();
     }
 }

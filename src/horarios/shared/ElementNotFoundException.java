@@ -11,7 +11,7 @@ public class ElementNotFoundException extends Exception{
      * Constructor only with the identifier
      * @param id Identifier
      */
-    public ElementNotFoundException(String id) {
+    public ElementNotFoundException(Object id) {
         super("The element: " + id + " is not into the Catalog");
     }
     
@@ -20,7 +20,7 @@ public class ElementNotFoundException extends Exception{
      * Constructor with the identifier and a cause
      * @param b_id Bad identifier
      */
-    public ElementNotFoundException(String id, Throwable cause) {
+    public ElementNotFoundException(Object id, Throwable cause) {
         super("The element: " + id + " is not into the Catalog", cause);
     }
 }

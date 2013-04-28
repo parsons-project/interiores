@@ -38,17 +38,7 @@ public class FurnitureVariableSet
     boolean allAssigned;
     
     
-    public enum Cell {
-		ACTIVE,PASSIVE,EMPTY,SUPPORT,WALKPATH;
-    }
-    
-    /**
-    * This map contains, for each iteration of the algorithm,
-    * the current state of all discrete positions of the room.
-    * This attribute might be necessary to check that every place in the room is
-    * accessible.
-    */
-    private Cell[][][] map;
+
 
 
        
@@ -132,3 +122,16 @@ public class FurnitureVariableSet
     }
     
 }
+
+
+//    public enum Cell {
+//		ACTIVE,PASSIVE,EMPTY,SUPPORT,WALKPATH;
+//    }
+//    
+//    /**
+//    * This map contains, for each iteration of the algorithm,
+//    * the current state of all discrete positions of the room.
+//    * This attribute might be necessary to check that every place in the room is
+//    * accessible.
+//    */
+//    private Cell[][][] map;

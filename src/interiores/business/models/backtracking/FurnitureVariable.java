@@ -5,6 +5,7 @@ import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
 import interiores.business.models.constraints.ModelConstraint;
+import interiores.business.models.constraints.UnaryConstraint;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import java.awt.Point;
@@ -55,15 +56,12 @@ public class FurnitureVariable
     /**
      * This list contains all four possible orientations.
      */
-    List<Orientation> orientations;
+    public List<Orientation> orientations;
     
     /**
-     * This list contains the constraints regarding the model of the variable.
+     * This list contains the constraints regarding the variable.
      */
-    public List<ModelConstraint> modelConstraints;
-    public List<PositionConstraint> positionConstraints;
-    public List<OrientationConstraint> orientationConstraints;
-
+    public List<UnaryConstraint> unaryConstraints;
 
     /**
     * Represents the value taken by the variable, in case it is assigned.
@@ -76,7 +74,7 @@ public class FurnitureVariable
     /**
     * Represents the iteration of the algorithm.
     */
-    //public int iteration;
+    public int iteration;
     
     // The following variables are used to iterate ovre the domain.
     //Iteration is done in this order: 1) Position, 2) Orientation, 3) Models
@@ -94,14 +92,13 @@ public class FurnitureVariable
     /**
     * Default Constructor. The resulting variable has as domian the models in
     * "models", every position in room and all orientations.
-    * The set of restrictions is "constraints".
+    * The set of restrictions is "unaryConstraints".
     */
     public FurnitureVariable(List<FurnitureModel> models, Room room,
-            List<ModelConstraint> modelConstraints,
-            List<OrientationConstraint> orientationConstraints,
-            List<PositionConstraint> positionConstraints, int variableCount) {
+            List<UnaryConstraint> unaryConstraints, int variableCount) {
         
         isAssigned = false;
+        iteration = 0;
     
         domainModels = new ArrayList[variableCount];
         for(int i = 0; i < variableCount; ++i)
@@ -127,7 +124,8 @@ public class FurnitureVariable
         currentOrientation = null;
         currentModel = null;
         
-        this.constraints = constraints;
+        this.unaryConstraints = unaryConstraints;
+        
     }
 
 
@@ -209,6 +207,9 @@ public class FurnitureVariable
     //pre: variable has an assigned value.
     @Override
     public void trimDomain(Variable variable, int iteration) {
+        // 0) update internal iteration
+        this.iteration = iteration;
+        
         // 1) preliminar move of all positions
         domainPositions[iteration+1] = domainPositions[iteration];
         domainPositions[iteration] = new HashSet<Point>();
@@ -235,6 +236,7 @@ public class FurnitureVariable
         domainModels[iteration] = new ArrayList<FurnitureModel>();
     }
 
+    
     /**
      * Merges back values from step "iteration"+1 to "iteration" level.
      * To do this operation, we swap the containers first if the destination
@@ -242,6 +244,9 @@ public class FurnitureVariable
      */
     @Override
     public void undoTrimDomain(Variable variable, Value value, int iteration) {
+        // 0) update internal iteration
+        this.iteration = iteration;
+
         // 1) check if swap is beneficial
         boolean shouldSwap = domainPositions[iteration].size() <
                              domainPositions[iteration+1].size();
@@ -258,7 +263,7 @@ public class FurnitureVariable
         domainPositions[iteration+1] = null;
         
         //concatenate lists of models to merge them
-        domainModels[iteration].addAll(domainPositions[iteration+1]);
+        domainModels[iteration].addAll(domainModels[iteration+1]);
         //Note: this operation should be a concatenation, which should take
         //constant time, but it is O(n) instead!!
     }
@@ -306,20 +311,5 @@ public class FurnitureVariable
 //        // Here I've got to figure out how to restore the removed models
 //    }
 //    
-//
-//    public void restrictOrientation(Orientation o) {
-//        orientations.clear();
-//        orientations.add(o);
-//    }
-//    
-//    
-//    public void restrictArea(Boolean[][] intersect) {
-//        int width = (positions[0].length == intersect[0].length) ? positions[0].length : 0;
-//        int height = (positions.length == intersect.length) ? positions.length : 0;
-//        
-//        for (int i = 0; i < height; i++)
-//            for (int j = 0; j < width; j++)
-//                positions[i][j] = positions[i][j] && intersect[i][j];
-//    }
       
 }

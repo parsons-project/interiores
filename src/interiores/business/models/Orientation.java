@@ -23,7 +23,7 @@ public enum Orientation {
      * @return The orientation of the left of the implicit parameter
      */
     public Orientation rotateLeft() {
-	// Java modulus doesn't work as maths defines it
+	// Java modulus doesn't work as math defines it
 	int newdir = (this.direction - 1 % 4);
 	if (newdir < 0) newdir += 4;
         return Orientation.values()[newdir];

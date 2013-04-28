@@ -11,7 +11,7 @@ import java.awt.Dimension;
  * SizeConstraint represents a constraint imposed over the size of a piece of furniture
  * @author larribas
  */
-public class SizeConstraint {
+public class SizeConstraint extends ModelConstraint {
     
     // minSize and maxSize determine the range within which the furniture's size should fall
     private Dimension minSize, maxSize;

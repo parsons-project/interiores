@@ -1,5 +1,6 @@
 package interiores.business.models.constraints;
 
+import interiores.business.models.FurnitureType;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.constraints.SizeConstraint;
 import java.awt.Color;
@@ -15,7 +16,9 @@ import static org.junit.Assert.*;
  */
 public class SizeConstraintTest {
     
-    FurnitureModel model = new FurnitureModel("Model",new Dimension(110,45), (float) 99.99,Color.BLACK,"wood");
+    FurnitureType type = new FurnitureType("Bed", new Dimension(100,100), new Dimension(200, 200));
+    
+    FurnitureModel model = new FurnitureModel(type, "Model",new Dimension(110,45), (float) 99.99,Color.BLACK,"wood");
     
     public SizeConstraintTest() {
     }

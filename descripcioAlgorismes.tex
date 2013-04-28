@@ -1,0 +1,69 @@
+\documentclass[a4paper,11pt]{article}
+\author{H.~Mamano}
+\title{Breu descripció de les estructures de dades i algorismes utilitzats per a
+implementar les funcionalitats principals}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Visió general}
+En un problema de satisfacció de restriccions (CSP), tenim un conjunt de variables, cadascuna amb un domini de valors, i un conjunt de restriccions que relacionen els valors d'aquestes variables.
+En el cas de diseny d'interiors, les variables son tipus de moble, mentre que els valors consten de 3 camps: posició, model de moble i orientació.
+L'algorisme utilitzat es basa en forward checking: cada cop que s'assigna un valor a una variable, es comprova el domini de les variables que encara no han estat assignades i s'elimina dels seus dominis aquells valors incompatibles amb el valor assignat. Tot i així, aquesta operació no serà exhaustiva, i per tant seguirà sent necessari cridar a un mètode que comprovi que un valor donat realment és vàlid.
+
+\section{Explicació i justificació de les estructures de dades usades a l'algorisme de generació d'habitacions}
+
+Sigui n el nombre de variables. És important veure que n és també el nombre màxim d'iteracions de l'algorisme, ja que a cada iteració s'assigna un valor.
+
+Per emmagatzemar les variables hem escollit un vector de mida n. Com que n és relativament petit (per una habitació normal, n < 30), aquesta decisió no és molt trascendent.
+
+El vector ens permet, a més, classificar les variables segons si encara no tenen valor o si ja han estat assignades, i en aquest cas, a quina iteració, en funció de la seva posició dins el vector. A l'iteració i, amb 0<=i<n, les variables sense valor assignat es troben a les posicions i..n-1, mentre que a les posicions 0..i-1 es troben les demés, col·locades segons l'ordre en que han estat assignades. Així, podem iterar només sobre les variables que encara no tenen un valor assignat. Per fer una assignació, haurem de fer un swap de la variable escollida i la variable a la posició i, i per fer un pas enrera no caldrà fer res.
+
+Una decisió més important és com emmagatzemar els dominis de cada variable. Els criteris que hem tingut en consideració són els següents:
+
+\begin{itemize}
+	\item L'espai de memòria necessari
+	\item L'eficiència de les següents operacions crítiques
+	\begin{enumerate}
+		\item Recòrrer tots els elements del domini
+		\item Borrar (i per tant, trobar) un conjunt de valors del domini (corresponent al mètode trimDomains)
+		\item Afegir un conjunt de valors al domini (corresponent al mètode undoTrimDomains)
+	\end{enumerate}
+\end{itemize}
+
+
+En primer lloc, hem optat per representar les 3 dades que formen els valors en conjunts separats. Així, el domini és en realitat el producte cartesià d'aquests 3 conjunts. Això té l'avantatge principal d'ocupar una fracció molt reduida de memòria. A més, ens permetrà eliminar múltiples valors eliminant un sol element d'un dels conjunts (donat que, amb cada element d'un conjunt pots formar moltes tuples). Per contra, això ens imposa que la funció trimDomains no podrà ser exhaustiva, ja que si un model, una posició i una orientació formen una tupla invàlida però els 3 es veuen involucrats en tuples vàlides, no podrem eliminar aquest valor invàlid del domini.
+
+Per cada conjunt, a més, s'ha de guardar la informacio relativa a cada iteració. Per cada element d'un d'aquests conjunts, en guardem la iteració fins la qual ha estat vàlid. Així, tenim la informació necessària per desfer les eliminacions (tornar enrera) i no hi ha cap element repetit. Per tant, l'ús de memòria per emmagatzemar els dominis és constant al llarg de l'execució del programa.
+
+Pels models utilitzem un vector de n llistes. Cada posició del vector es correspon a una iteració de l'algorisme. A l'iteració i, amb 0<=i<n, tots els models vàlids es troben a la llista de la posició i. Les llistes subsegüents estan buides, mentre que els models que ja han estat descartats es troben en llistes anteriors, segons la iteració en que han estat eliminats.
+
+Utilitzem llistes ja que la quantitat de models és petita, i a més, donat que les restriccions no van lligades a models concrets, estimem que les operacions de eliminació seran poques, i per tant els models s'aniràn movent de llista en llista fent concatenacions.
+
+\begin{enumerate}
+	\item Per recòrrer els models vàlids, iterem per la llista de la posició i.
+	\item Per tornar enrera, concatenem la llista de la posició i amb la llista de la posició i-1.
+	\item Per avançar un pas en l'algorisme, cal passar els models que segueixen sent vàlids a la llista i+1.
+\end{enumerate}
+
+Per les posicions, en canvi, esperem molta activitat; cada assignació implica eliminar desenes de posicions de 1..n conjunts de, potencialment, milers de posicions. Per a això utilitzem un vector de n arbres binaris balancejats, en concret, arbres AA.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

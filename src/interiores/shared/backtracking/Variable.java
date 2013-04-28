@@ -45,8 +45,10 @@ public interface Variable
     * the values that won't conform to this assignation.
     * This function is not exhaustive: it does not necessarily
     * eliminate every invalid value.
+    * @param iteration indicates how many steps the algoithm has completed
+    * (one step is equivalent to assigning one variable)
     */
-    public void trimDomain(Variable variable);
+    public void trimDomain(Variable variable, int iteration);
 
     
     /**
@@ -55,8 +57,10 @@ public interface Variable
     * restored to what they were before trimDomain().
     * @param variable the variable which was the parameter of trimDomain()
     * @param value the value that was assigned to the variable "variable".
+    * @param iteration indicates how many steps the algoithm has completed
+    * (one step is equivalent to assigning one variable)
     */
-    public void undoTrimDomain(Variable variable, Value value);
+    public void undoTrimDomain(Variable variable, Value value, int iteration);
 
     
     /**

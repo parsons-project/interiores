@@ -11,17 +11,24 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import interiores.core.business.Model;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 /**
 * FurnitureVariable takes the role of variable in the context of the Constraint
 * Satisfaction Problem (CSP) for the room design. A variable in this context
-* involves a domain of values and, optionally, an assigned value.
-*/
+* has:
+*  - A domain of values it can take.
+*  - A set of constraints that affect the variable.
+* Furthermore, a variable can be in two states:
+*  - Assigned. When it has already been set to a certain value from the domain.
+*  - Unassigned. When it does not have a certain value.
+*/         
 public class FurnitureVariable
 	implements Variable
 {
-    public Value assignedValue;
+ 
 
     /**
     * This vector of lists contains all models available for this variable.
@@ -30,160 +37,183 @@ public class FurnitureVariable
     * Moreover, it gives information about what models have been discarded and,
     * in such cases, in which iteration of the algorithm they were discarded:
     * At any given iteration i (depth = i) of the algorithm, all models which
-    * have not been discarded are in the list in the i position of the vector.
-    * Models which have been discarded are in the list in the position
+    * have not been discarded are in the list at the i position of the vector.
+    * Models which have been discarded are in the list at the position
     * correspondent to the iteration in which they were discarded.
     * Lists beyond the position i are empty.
     * 
     * The vector size never changes and is equal to the amount of iterations of
     * the algorithm.
     */
-    List<FurnitureModel>[] domainModels;
+    public List<FurnitureModel>[] domainModels;
 
     /**
-    * This vector of AA-Trees contains all positions available for this variable.
+    * This vector of hash sets contains all positions available for this variable.
     * 
     * Moreover, it gives information about what positions have been discarded and,
     * in such cases, in which iteration of the algorithm they were discarded:
     * At any given iteration i (depth = i) of the algorithm, all positions which
-    * have not been discarded are in the tree in the i position of the vector.
-    * Positions which have been discarded are in the tree in the position
+    * have not been discarded are in the set at the i position of the vector.
+    * Positions which have been discarded are in the set at the position
     * correspondent to the iteration in which they were discarded.
-    * Trees beyond the position i are empty.
+    * Sets beyond the position i are empty.
     * 
     * The vector size never changes and is equal to the amount of iterations of
     * the algorithm.
     */
-    HashSet<Point>[] domainPositions;
+    public HashSet<Point>[] domainPositions;
     
-    /**
-    * Orientation: not included as it is a static set
-    */
-
+    
+    // The set of orientation is not included explicitly as it is a static set.
 
     
     /**
-    * Constructor. I don't know what parameters this has...
+     * This list contains the constraints regarding the model of the variable.
+     */
+    public List<ModelConstraint> constraints;
+
+
+    /**
+    * Represents the value taken by the variable, in case it is assigned.
+    * Only valid when isAssigned is true.
     */
-    public FurnitureVariable(int variableCount) {
-        assignedValue = null;
+    public Value assignedValue;
+    boolean isAssigned;
+
+    
+    /**
+    * Represents the iteration of the algorithm.
+    */
+    public int iteration;
+    
+    // The following variables are used to iterate ovre the domain.
+    //Iteration is done in this order: 1) Position, 2) Orientation, 3) Models
+    private Iterator positionIterator;
+    private Iterator modelIterator;
+    
+    private Point currentPosition;
+    private Orientation currentOrientation;
+    private FurnitureModel currentModel;
+    
+ 
+    
+    
+    /**
+    * Constructor.
+    */
+    public FurnitureVariable(List<FurnitureModel> models, Room room, int variableCount) {
+        isAssigned = false;
+        iteration = 0;
+
         domainModels = new List<Model>[variableCount];
         domainPositions = new HashSet<Point>[variableCount];
+
+        positionIterator = domainPositions[0].iterator();
+        modelIterator = domainModels[0].iterator();
+
+        currentPosition = null;
+        currentOrientation = Orientation.N;
+        currentModel = null;
+        
+
     }
 
     // Implementation from the abstract superclass
 
-    /**
-    * Given that the variable is the actual variable that the algorithm is
-    * trying to assign and not all of its domain values have been checked,
-    * returns the next domain value to be checked.
-    * @return Value the next domain value
-    */
-    public Value getNextDomainValue();
+    @Override
+    //Pre: we have not iterated through all domain values yet.
+    public Value getNextDomainValue() {
+        
+        //1) iterate
+        if (currentPosition == null) {
+            //first iteration case
+            currentPosition = (Point) positionIterator.next();
+            currentModel = (FurnitureModel) modelIterator.next();
+            currentOrientation = Orientation.N;
+        }
+        else if (positionIterator.hasNext()) {
+            currentPosition = (Point) positionIterator.next();
+        }
+        else if (currentOrientation != Orientation.W) {
+            positionIterator = domainPositions[iteration].iterator();
+            currentPosition = (Point) positionIterator.next();
+            currentOrientation.rotateRight();
+        }
+        else if (modelIterator.hasNext()) {
+            positionIterator = domainPositions[iteration].iterator();
+            currentPosition = (Point) positionIterator.next();
+            currentOrientation = Orientation.N;
+            currentModel = (FurnitureModel) modelIterator.next();
+        }
+        else {
+            throw new UnsupportedOperationException("There are no more domain values");
+        }
+        
+        //2) return the new current value
+        OrientedRectangle area = new OrientedRectangle(currentPosition,
+            currentModel.getSize(), currentOrientation);
+        
+        return new FurnitureValue(area, currentModel);
+    }
 
     
-    /**
-    * Given that the variable is the actual variable that the algorithm is
-    * trying to assign, returns whether the variable has domain values which
-    * have not been checked yet.
-    * @return boolean indicating if there are more domain values
-    */
-    public boolean hasMoreValues();
+    //Pre: the 3 iterators point to valid values
+    @Override
+    public boolean hasMoreValues() {
+        return modelIterator.hasNext();
+        //Note: this implementation is dependent of the order the sets are
+        //iterated (i.e., only works if models are iterated last)
+    }
 
     
-    /**
-    * Assigns the value 'value' to the variable. Doing this changes the state of
-    * the variable to assigned.
-    */
-    public void assignValue(Value value);
+    @Override
+    public void assignValue(Value value) {
+        isAssigned = true;
+        assignedValue = value;
+        //Duda: no deberia crearse una copia de value?
+    }
 
     
-    /**
-    * Changes the state of the variable to unassigned.
-    */
-    public void undoAssignValue();
+    @Override
+    public void undoAssignValue() {
+        isAssigned = false;
+        assignedValue = null;        
+    }
 
     
-    /**
-    * Given that the variable 'variable' has been recently assigned to
-    * a valid value, restricts the domain of the current variable, discarding
-    * the values that won't conform to this assignation.
-    * This function is not exhaustive: it does not necessarily
-    * eliminate every invalid value.
-    */
-    public void trimDomain(Variable variable);
+    @Override
+    public void trimDomain(Variable variable) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
     
-    /**
-    * Reverse operation of trimDomain(). Given that this function is called with
-    * the parameter "variable" after trimDomain(variable), the domains are
-    * restored to what they were before trimDomain().
-    * @param variable the variable which was the parameter of trimDomain()
-    * @param value the value that was assigned to the variable "variable".
-    */
-    public void undoTrimDomain(Variable variable, Value value);
+    @Override
+    public void undoTrimDomain(Variable variable, Value value) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
     
-    /**
-    * Returns whether the variable is assigned.
-    * @return boolean indicating if the variable is assigned.
-    */
-    public boolean isAssigned ();
+    @Override
+    public boolean isAssigned() {
+        return isAssigned;
+    }
 
     
-    /**
-    * Returns the assigned value óf the variable, given it has one.
-    * @return Value the assigned value of the variable
-    */
-    public Value getAssignedValue ();
+    @Override
+    public Value getAssignedValue() {
+        return assignedValue;
+    }
 
 	
 	
-
-
-
-
-
-/**
- * Represents a furniture variable in the context of the algorithm.
- * A variable in such a context has:
- *  - A domain of possible values it can take.
- *  - A list of constraints that affect the variable
- * 
- * Furthermore, a variable can take two states:
- *  - Assigned. When it has already been set to a certain value.
- *    This means the algorithm has already taken this variable into account
- *  - Unassigned. When it does not have a certain value.
- * @author larribas
- */
-
 
 //IMPLEMENTACION DE LORENZO; TO BE MERGED BY NIL
     
     // DOMAIN
-    // The domain is represented by
     List<FurnitureModel> models;     // a list of FurnitureModels
     List<Orientation> orientations;  // a list of allowed orientations
     Boolean[][] positions;           // a boolean matrix of valid positions
 
-    // N.B. For now, the positions are represented as a boolean matrix.
-    // My intention is to use a shape in the future.
-    
-    // ITERATION OVER THE DOMAIN
-    // This section is a first approach to the iteration over all the possible
-    // values in the domain. Iteration is done in this order: 1) Models, 2) Orientation, 3) Position
-    int currentModel;
-    int currentOrientation;
-    Point currentPosition;
-    
-    // CONSTRAINTS
-    List<ModelConstraint> constraints;
-    
-    // ASSGINATION
-    boolean isAssigned = false;
-    FurnitureValue assignedValue;    
-    
-    
     public FurnitureVariable(List<FurnitureModel> models, Room room) {
         
         this.models = models;
@@ -198,56 +228,8 @@ public class FurnitureVariable
         
         constraints = new ArrayList<ModelConstraint>();
     }
+
     
-    @Override
-    public FurnitureValue getNextDomainValue() {
-        
-        // Supposedly, the iterator points to a valid domain value
-        OrientedRectangle area = new OrientedRectangle( currentPosition,
-                                                        models.get(currentModel).getSize(),
-                                                        orientations.get(currentOrientation) );
-        
-        return new FurnitureValue(area, models.get(currentModel));
-    }
-
-    @Override
-    public boolean hasMoreValues() {
-        if (currentModel < models.size()) iterateToNextValue();
-        return currentModel < models.size();
-    }
-
-
-    public void setAssignedValue(FurnitureValue value) {
-        isAssigned = true;
-        assignedValue = value;        
-    }
-
-    @Override
-    public void unsetValue() {
-        isAssigned = false;
-        assignedValue = null;
-    }
-
-    @Override
-    public void trimDomain(Variable variable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void undoTrimDomain(Variable variable, Value value) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isAssigned() {
-        return isAssigned;
-    }
-
-    @Override
-    public FurnitureValue getAssignedValue() {
-        return assignedValue;
-    }
-
     // Do I have to implement this function with a Value parameter instead of a FurnitureValue one??
     @Override
     public void setAssignedValue(Value value) {

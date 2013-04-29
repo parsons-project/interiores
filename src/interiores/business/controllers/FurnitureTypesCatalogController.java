@@ -1,5 +1,6 @@
 package interiores.business.controllers;
 
+import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessController;
@@ -41,7 +42,7 @@ public class FurnitureTypesCatalogController
     
     public void create(String catalogName) throws BusinessException {
         if(catalogName.equals(NamedCatalog.getDefaultName()))
-            throw new BusinessException("You are not able to overwrite the default catalog.");
+            throw new DefaultCatalogOverwriteException();
         
         loadedTypesCatalogs.put(catalogName, new NamedCatalog(catalogName));
     }
@@ -58,7 +59,7 @@ public class FurnitureTypesCatalogController
         NamedCatalog loadedCatalog = (NamedCatalog<FurnitureType>) data.load(NamedCatalog.class, path);
         
         if(loadedCatalog.getName().equals(NamedCatalog.getDefaultName()))
-            throw new BusinessException("You are not able to overwrite the default catalog.");
+            throw new DefaultCatalogOverwriteException();
             
         loadedTypesCatalogs.put(loadedCatalog.getName(), loadedCatalog);
     }

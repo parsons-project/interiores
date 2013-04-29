@@ -23,6 +23,8 @@ public class FurnitureTypesCatalogCommands
         Collection<String> catalogNames = ftCatalogController.getNamesLoadedTypesCatalogs();
         String activeCatalog = ftCatalogController.getNameActiveTypesCatalog();
         
+        println("Listing names of available furniture types catalogs:");
+        
         for(String name : catalogNames) {
             if(name.equals(activeCatalog)) name = "*" + name;
             

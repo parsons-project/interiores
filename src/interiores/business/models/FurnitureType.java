@@ -6,7 +6,9 @@ import interiores.business.models.constraints.UnaryConstraint;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -35,7 +37,7 @@ public class FurnitureType
     private List<UnaryConstraint> unaryConstraints;
     
     @XmlElementWrapper
-    private List<BinaryConstraint> binaryConstraints;
+    private Map<FurnitureType, List<BinaryConstraint>> binaryConstraints;
     
     public FurnitureType() {
         super();
@@ -54,14 +56,14 @@ public class FurnitureType
         this.depthRange = depthRange;
         
         unaryConstraints = new ArrayList();
-        binaryConstraints = new ArrayList();
+        binaryConstraints = new HashMap();
     }
     
     public List<UnaryConstraint> getUnaryConstraints() {
         return unaryConstraints;
     }
     
-    public List<BinaryConstraint> getBinaryConstraints() {
+    public Map<FurnitureType, List<BinaryConstraint>> getBinaryConstraints() {
         return binaryConstraints;
     }
     
@@ -69,8 +71,11 @@ public class FurnitureType
         unaryConstraints.add(unaryConstraint);
     }
     
-    public void addBinaryConstraint(BinaryConstraint binaryConstraint) {
-        binaryConstraints.add(binaryConstraint);
+    public void addBinaryConstraint(FurnitureType other, BinaryConstraint binaryConstraint) {
+        if(! binaryConstraints.containsKey(other))
+            binaryConstraints.put(other, new ArrayList());
+            
+        binaryConstraints.get(other).add(binaryConstraint);
     }
     
     /**

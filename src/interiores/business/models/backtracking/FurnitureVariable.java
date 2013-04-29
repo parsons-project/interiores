@@ -74,7 +74,7 @@ public class FurnitureVariable
     */
     public int iteration;
     
-    // The following variables are used to iterate ovre the domain.
+    // The following variables are used to iterate over the domain.
     //Iteration is done in this order: 1) Position, 2) Orientation, 3) Models
     private Iterator positionIterator;
     private Iterator orientationIterator;
@@ -88,7 +88,7 @@ public class FurnitureVariable
     
     
     /**
-    * Default Constructor. The resulting variable has as domian the models in
+    * Default Constructor. The resulting variable has as domain the models in
     * "models", every position in room and all orientations.
     * The set of restrictions is "unaryConstraints".
     */
@@ -176,7 +176,7 @@ public class FurnitureVariable
     public void assignValue(Value value) {
         isAssigned = true;
         assignedValue = value;
-        //Duda: no deberia crearse una copia de value?
+        //Duda: no deberia crearse una copia de value? -No veo por qué
     }
 
     

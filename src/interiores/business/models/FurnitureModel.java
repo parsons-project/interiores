@@ -29,7 +29,7 @@ public class FurnitureModel {
     
     /**
      * Full constructor that specifies all of the features of a furniture model.
-     * @param ftype Furniture's type of the furniture model
+     * @param ftype Furniture model's type
      * @param name Comercial name of the furniture model
      * @param size Size of the furniture model
      * @param price Market price of the furniture model

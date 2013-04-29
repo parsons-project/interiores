@@ -110,4 +110,10 @@ public class OrientedRectangle extends Rectangle {
     public Orientation getOrientation() {
         return this.orientation;
     }
+    
+    @Override
+    public String toString() {
+        return super.toString() + " " + this.orientation;
+        
+    }
 }

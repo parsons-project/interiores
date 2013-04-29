@@ -1,10 +1,12 @@
 package interiores.core.presentation.terminal;
 
+import interiores.core.Debug;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -16,57 +18,63 @@ public class IOStream
     private Scanner ibuffer;
     private BufferedReader istream;
     private PrintStream ostream;
+    private char prompt;
     
     
-    public IOStream()
+    public IOStream(InputStream istream, PrintStream ostream)
     {
-        
+        this.istream = new BufferedReader(new InputStreamReader(istream));
+        this.ostream = ostream;
+        ibuffer = new Scanner("");
+        prompt = '>';
     }
     
-    public void setInputStream(InputStream stream)
-    {
-        istream = new BufferedReader(new InputStreamReader(stream));
+    public void setPrompt(char prompt) {
+        this.prompt = prompt;
     }
     
-    public void setOutputStream(PrintStream stream)
-    {
-        ostream = stream;
-    }
-    
-    public void setInputBuffer(String buffer)
+    public void putIntoInputBuffer(String buffer)
     {
         this.ibuffer = new Scanner(buffer);
     }
     
-    public String readLine() throws IOException
+    public String readLine()
     {
-        return istream.readLine();
+        try {
+            // Print prompt when buffer empty
+            ostream.print(prompt + " ");
+            
+            return istream.readLine();
+        }
+        catch(IOException e) {
+            Debug.println("Error reading line.");
+            
+            return readLine();
+        }
     }
     
-    public String readString() throws IOException
+    public String readString()
     {
         try
         {
             return ibuffer.next();
         }
-        catch(Exception e)
+        catch(NoSuchElementException e)
         {
-            setInputBuffer(readLine());
-            
+            putIntoInputBuffer(readLine());
             return readString();
         }
     }
     
-    public int readInt() throws IOException
+    public int readInt()
     {
         try
         {
             return ibuffer.nextInt();   
         }
-        catch(Exception e)
+        catch(NoSuchElementException e)
         {
-            setInputBuffer(readLine());
-            
+            putIntoInputBuffer(readLine());
             return readInt();
         }
     }

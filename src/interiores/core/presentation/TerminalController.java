@@ -24,7 +24,7 @@ public class TerminalController extends PresentationController
     public TerminalController(String commandsPath)
     {
         this.commandsPath = commandsPath;
-        iostream = new IOStream();
+        iostream = new IOStream(System.in, System.out);
         commands = new HashMap();
         shortcuts = new HashMap();
     }
@@ -32,22 +32,16 @@ public class TerminalController extends PresentationController
     @Override
     public void init()
     {
-        iostream.setInputStream(System.in);
-        iostream.setOutputStream(System.out);
+        String line = iostream.readLine();
         
-        try
+        while(line != null && !line.startsWith("quit"))
         {
-            String line = iostream.readLine();
-
-            while(line != null && !line.startsWith("quit"))
-            {
-                exec(line);
-                line = iostream.readLine();
-            }
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
+            // Set subcommand prompt
+            iostream.setPrompt('#');
+            exec(line);
+            // Set command prompt
+            iostream.setPrompt('>');
+            line = iostream.readLine();
         }
     }
     
@@ -90,7 +84,7 @@ public class TerminalController extends PresentationController
     {
         try
         {
-            iostream.setInputBuffer(line);
+            iostream.putIntoInputBuffer(line);
             
             String action, method;
             action = method = iostream.readString();

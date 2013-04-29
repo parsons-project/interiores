@@ -17,18 +17,12 @@ abstract public class CommandGroup
     
     public String readString(String question)
     {
-        if(! iostream.hasNext())
-            iostream.println(question);
-        
-        return iostream.readString();
+        return iostream.readString(question);
     }
     
     public int readInt(String question)
-    {
-        if(! iostream.hasNextInt())
-            iostream.println(question);
-        
-        return iostream.readInt();
+    {       
+        return iostream.readInt(question);
     }
     
     public void println(String line) {

@@ -2,6 +2,7 @@ package interiores.presentation.terminal;
 
 import horarios.shared.ElementNotFoundException;
 import interiores.business.controllers.FurnitureTypeController;
+import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.FurnitureType;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
@@ -20,7 +21,7 @@ public class FurnitureTypeCommands
         this.fTypeController = fTypeController;
     }
     
-    public void add() {
+    public void add() throws DefaultCatalogOverwriteException {
         String name = readString("Enter the name of the furniture type you want to add");
         
         int minWidth = readInt("Enter the minimum width of the type");

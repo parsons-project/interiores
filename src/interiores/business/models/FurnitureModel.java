@@ -5,7 +5,7 @@
 package interiores.business.models;
 
 import java.awt.Color;
-import java.awt.Dimension;
+import interiores.utils.Dimension;
 
 /**
  *

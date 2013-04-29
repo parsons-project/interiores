@@ -4,6 +4,9 @@ import horarios.shared.Catalog;
 import horarios.shared.ElementNotFoundException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.Room;
+import interiores.business.exceptions.DefaultCatalogOverwriteException;
+import interiores.business.models.FurnitureType;
+import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
@@ -23,7 +26,12 @@ public class FurnitureTypeController
         super(data);
     }
     
-    public void add(String name, int minWidth, int minDepth, int maxWidth, int maxDepth) {
+    public void add(String name, int minWidth, int minDepth, int maxWidth, int maxDepth)
+            throws DefaultCatalogOverwriteException
+    {
+        if(getCatalogName().equals(NamedCatalog.getDefaultName()))
+            throw new DefaultCatalogOverwriteException();
+        
         Dimension min = new Dimension(minWidth, minDepth);
         Dimension max = new Dimension(maxWidth, maxDepth);
         

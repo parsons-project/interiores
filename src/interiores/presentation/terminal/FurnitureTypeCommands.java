@@ -1,7 +1,9 @@
 package interiores.presentation.terminal;
 
+import horarios.shared.ElementNotFoundException;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.models.FurnitureType;
+import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
 import java.util.Collection;
 
@@ -39,5 +41,19 @@ public class FurnitureTypeCommands
         
         if(types.isEmpty())
             println("The catalog is empty.");
+    }
+    
+    public void select() throws ElementNotFoundException {
+        String name = readString("Enter the name of the furniture type you want to select");
+        fTypeController.select(name);
+    }
+    
+    public void unselect() throws BusinessException, ElementNotFoundException {
+        println("These are the furniture types you want in your room: ");
+        Collection types = fTypeController.getRoomTypes();
+        print(types);
+        
+        String name = readString("Please, enter the name of the furniture type you want to select");
+        fTypeController.unselect(name);
     }
 }

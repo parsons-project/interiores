@@ -1,5 +1,6 @@
 package interiores.business.models;
 
+import interiores.core.business.BusinessException;
 import interiores.core.business.Model;
 import java.awt.Dimension;
 import java.util.HashMap;
@@ -38,10 +39,14 @@ public class Room extends Model {
         wishList.add(ft);
     }
     
-    public void removeFurnitureType(FurnitureType ft) {
+    public void removeFurnitureType(FurnitureType ft) throws BusinessException {
         boolean exists = wishList.remove(ft);
         if (!exists)
-            throw BusinessException("The furniture type you want to remove is not in the list");
+            throw new BusinessException("The furniture type you want to remove is not in the list");
+    }
+    
+    public List<FurnitureType> getWishList() {
+        return wishList;
     }
     
     public RoomType getType() {

@@ -23,6 +23,13 @@ public interface JAXBDataController {
     public void set(String name, Object o);
     
     /**
+     * Tells whether there is a stored object with the name given.
+     * @param name Name of the object
+     * @return True if an object with that name is stored, false otherwise
+     */
+    public boolean has(String name);
+    
+    /**
      * Saves the given object as XML in the given path.
      * @param o Object to save as XML
      * @param path Path where to save the file with the generated XML

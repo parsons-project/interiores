@@ -1,6 +1,5 @@
 package interiores.core.presentation.terminal;
 
-import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -16,7 +15,7 @@ abstract public class CommandGroup
         this.iostream = iostream;
     }
     
-    public String readString(String question) throws IOException
+    public String readString(String question)
     {
         if(! iostream.hasNext())
             iostream.println(question);
@@ -24,7 +23,7 @@ abstract public class CommandGroup
         return iostream.readString();
     }
     
-    public int readInt(String question) throws IOException
+    public int readInt(String question)
     {
         if(! iostream.hasNextInt())
             iostream.println(question);

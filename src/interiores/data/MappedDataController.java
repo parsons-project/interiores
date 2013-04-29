@@ -42,4 +42,9 @@ public class MappedDataController
     {
         data.put(name, o);
     }
+    
+    @Override
+    public boolean has(String name) {
+        return data.containsKey(name);
+    }
 }

@@ -22,9 +22,12 @@ public class Interiores
     {
         Debug.enable();
         
-        Application app = new Application("interiores");
         TerminalController terminal = new TerminalController("interiores.presentation.terminal");
+        terminal.addShortcut("furnitureType", "ft");
+        terminal.addShortcut("furnitureTypesCatalog", "ftc");
         
+        Application app = new Application("interiores");
+                
         app.setDataController(new MappedDataController());
         
         app.addPresentation(new SwingController("interiores.presentation.swing.views"));
@@ -33,9 +36,6 @@ public class Interiores
         app.addBusiness("room");
         app.addBusiness("furnitureType");
         app.addBusiness("furnitureTypesCatalog");
-        
-        terminal.addShortcut("furnitureType", "ft");
-        terminal.addShortcut("furnitureTypesCatalog", "ftc");
         
         app.init();
     }

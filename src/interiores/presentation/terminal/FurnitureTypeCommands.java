@@ -3,7 +3,6 @@ package interiores.presentation.terminal;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.models.FurnitureType;
 import interiores.core.presentation.terminal.CommandGroup;
-import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -19,7 +18,7 @@ public class FurnitureTypeCommands
         this.fTypeController = fTypeController;
     }
     
-    public void add() throws IOException {
+    public void add() {
         String name = readString("Enter the name of the furniture type you want to add");
         
         int minWidth = readInt("Enter the minimum width of the type");

@@ -3,12 +3,13 @@ package interiores.core.presentation;
 import interiores.core.Debug;
 import interiores.core.Utils;
 import interiores.core.business.BusinessController;
+import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
 import interiores.core.presentation.terminal.IOStream;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -72,7 +73,8 @@ public class TerminalController extends PresentationController
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            if(Debug.isEnabled())
+                e.printStackTrace();
         }
     }
     
@@ -103,18 +105,22 @@ public class TerminalController extends PresentationController
             CommandGroup comgroup = commands.get(subject);
             Class comgroupClass = comgroup.getClass();
             
-            try
-            {
+            try {
                 comgroupClass.getMethod(method).invoke(comgroup);
             }
-            catch(InvocationTargetException e)
-            {
+            catch(InvocationTargetException e) {
                 throw e.getCause();
             }
         }
-        catch(Throwable e)
-        {
-            e.printStackTrace(); // @TODO Improve exception handling
+        catch(BusinessException e) {
+            iostream.println("[Business error] " + e.getMessage());
+        }
+        catch(JAXBException e) {
+            iostream.println("[Storage error] " + e.getMessage());
+        }
+        catch(Throwable e) {
+            if(Debug.isEnabled())
+                e.printStackTrace();
         }
     }
     

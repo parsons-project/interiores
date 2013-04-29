@@ -1,8 +1,9 @@
 package interiores.presentation.terminal;
 
 import interiores.business.controllers.RoomController;
+import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
-import java.io.IOException;
+import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -18,7 +19,7 @@ public class RoomCommands extends CommandGroup
         this.roomController = roomController;
     }
     
-    public void _new() throws IOException
+    public void _new()
     {
         String type = readString("Especifica qué tipo de habitación quieres crear");
         int width = readInt("Introduce el ancho de la habitación en cm");
@@ -27,14 +28,14 @@ public class RoomCommands extends CommandGroup
         roomController.newRoom(type, width, height);
     }
     
-    public void save() throws IOException
+    public void save() throws BusinessException, JAXBException
     {
         String path = readString("Especifica la ruta donde guardar la habitación");
         
         roomController.saveRoom(path);
     }
     
-    public void load() throws IOException
+    public void load()
     {
         String path = readString("Especifica la ruta desde donde cargar");
         

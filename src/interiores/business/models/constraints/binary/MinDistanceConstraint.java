@@ -18,6 +18,10 @@ public class MinDistanceConstraint
     @XmlAttribute
     private int distance; // The minimum distance between the two variables
     
+    public MinDistanceConstraint() {
+        
+    }
+    
     public MinDistanceConstraint(int distance) {
         this.distance = distance;
     }

@@ -18,6 +18,10 @@ public class MaxDistanceConstraint
     @XmlAttribute
     private int distance; // The maximum distance between the two variables
     
+    public MaxDistanceConstraint() {
+        
+    }
+    
     public MaxDistanceConstraint(int distance) {
         this.distance = distance;
     }

@@ -23,6 +23,9 @@ public class PriceConstraint
     @XmlAttribute
     float maxPrice;
     
+    public PriceConstraint() {
+        
+    }
     
     /**
      * Creates a price constraint such that only those pieces of furniture which cost

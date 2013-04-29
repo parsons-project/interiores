@@ -2,11 +2,13 @@ package interiores.business.models.catalogs;
 
 import interiores.business.models.FurnitureType;
 import interiores.utils.Range;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author hector
  */
+@XmlRootElement
 public class DefaultFurnitureTypesCatalog
     extends NamedCatalog<FurnitureType>
 {

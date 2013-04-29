@@ -3,10 +3,12 @@ package interiores.business.models.constraints.unary;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.data.adapters.ColorAdapter;
 import java.awt.Color;
 import java.util.Iterator;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * ColorConstraint represents a constraint imposed over the color of a piece of furniture
@@ -20,9 +22,14 @@ public class ColorConstraint
      * 'color' represents the exact color a piece of furniture should be in
      * order to satisfy the constraint.
      */
-    @XmlElement
+    @XmlAttribute
+    @XmlJavaTypeAdapter(ColorAdapter.class)
     private Color color;
     
+    public ColorConstraint() {
+        
+    }
+        
     /**
      * Creates a color constraint such that only those pieces of furniture matching "color" will satisfy it
      * @param color The color that will define the constraint

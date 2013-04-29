@@ -22,6 +22,9 @@ public class MaterialConstraint
     @XmlAttribute
     private String material;
     
+    public MaterialConstraint() {
+        
+    }
     
     /**
      * Creates a material constraint such that only those pieces of furniture matching "material" will satisfy it

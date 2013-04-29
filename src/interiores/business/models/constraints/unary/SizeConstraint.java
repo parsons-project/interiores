@@ -29,7 +29,10 @@ public class SizeConstraint
     
     @XmlElement
     private Dimension maxSize;
+    
+    public SizeConstraint() {
         
+    }
     
     /**
      * Builds a SizeConstraint with specific minimum and maximum sizes

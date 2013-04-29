@@ -26,6 +26,10 @@ public class AreaConstraint
     @XmlElementWrapper
     private List<Point> validPositions;
     
+    public AreaConstraint() {
+        
+    }
+    
     /**
      * Creates a position constraint such that only those pieces of
      * furniture placed in one of the given positions will satisfy it

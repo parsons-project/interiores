@@ -34,10 +34,10 @@ public class FurnitureType
     private Range depthRange;
     
     @XmlElementWrapper
-    private List<UnaryConstraint> unaryConstraints;
+    private ArrayList<UnaryConstraint> unaryConstraints;
     
     @XmlElementWrapper
-    private Map<FurnitureType, List<BinaryConstraint>> binaryConstraints;
+    private HashMap<FurnitureType, ArrayList<BinaryConstraint>> binaryConstraints;
     
     public FurnitureType() {
         super();
@@ -63,7 +63,7 @@ public class FurnitureType
         return unaryConstraints;
     }
     
-    public Map<FurnitureType, List<BinaryConstraint>> getBinaryConstraints() {
+    public Map<FurnitureType, ArrayList<BinaryConstraint>> getBinaryConstraints() {
         return binaryConstraints;
     }
     

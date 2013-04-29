@@ -24,6 +24,10 @@ public class ModelConstraint
     @XmlAttribute
     private String modelName;
     
+    public ModelConstraint() {
+        
+    }
+    
     /**
      * Creates a model constraint such that only the model with that name
      * can pass it.

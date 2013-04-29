@@ -24,6 +24,11 @@ public class OrientationConstraint
     @XmlElementWrapper
     private List<Orientation> validOrientations;
     
+    
+    public OrientationConstraint() {
+        
+    }
+    
     /**
      * Creates an orientation constraint such that only those pieces of
      * furniture matching one of the given orientations will satisfy it

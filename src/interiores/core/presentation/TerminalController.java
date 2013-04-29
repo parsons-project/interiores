@@ -117,6 +117,9 @@ public class TerminalController extends PresentationController
         }
         catch(JAXBException e) {
             iostream.println("[Storage error] " + e.getMessage());
+            
+            if(Debug.isEnabled())
+                e.printStackTrace();
         }
         catch(Throwable e) {
             if(Debug.isEnabled())

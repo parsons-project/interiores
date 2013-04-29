@@ -2,13 +2,15 @@ package interiores.business.models.constraints;
 
 import interiores.business.models.backtracking.FurnitureVariable;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
 
 
 // FurnitureVariable hashCode and equals should be indepenedent of the value it has
 // and only consider part of it???
 
 /**
- * This class mantains a set of binary constraints that can be accessed by giving two FurnitureVariables
+ * This class maintains a set of binary constraints that can be accessed by giving two FurnitureVariables
  * @author alvaro
  */
 public class BinaryConstraintSet {
@@ -16,7 +18,7 @@ public class BinaryConstraintSet {
     /**
      * This class is an unordered pair of FurnitureVariables. It's unordered because
      * <f1,f2> equals <f2,f1> and also has the same hashCode. It's useful to not duplicate restrictions
-     * and being able to acces it from <f1,f2> and also <f2,f1>
+     * and being able to access it from <f1,f2> and also <f2,f1>
      */
     public class UnorderedFurnitureVariablePair {
         
@@ -55,8 +57,8 @@ public class BinaryConstraintSet {
 
     }
     
-    // The set itself
-    private HashMap<UnorderedFurnitureVariablePair, BinaryConstraint >binConstraintsSet;
+    // The set itself. A pair of variable can have multilple restrictions
+    private HashMap<UnorderedFurnitureVariablePair, List<BinaryConstraint>>binConstraintsSet;
     
     /**
      * Void constructor
@@ -75,26 +77,33 @@ public class BinaryConstraintSet {
     
     /**
      * Adds a constraint to the set
-     * @param fv1 A furniture variable
-     * @param fv2 Another furniture variable
-     * @param bc The binary constraint that associates fv1 with fv2
+     * @param fvariable1 A furniture variable
+     * @param fvariable2 Another furniture variable
+     * @param bc The binary constraint that associates fvariable1 with fvariable2
      * @return True if everything went correctly
      */
-    public boolean addConstraint(FurnitureVariable fv1, FurnitureVariable fv2, BinaryConstraint bc) {
-        binConstraintsSet.put(new UnorderedFurnitureVariablePair(fv1,fv2), bc);
+    public boolean addConstraint(FurnitureVariable fvariable1, FurnitureVariable fvariable2, BinaryConstraint bc) {
+        binConstraintsSet.get(new UnorderedFurnitureVariablePair(fvariable1,fvariable2)).add(bc);
         return true;
     }
     
     /**
-     * Checks if the constraint between fv1 and fv2 
-     * @param fv1
-     * @param fv2
-     * @return 
+     * Checks if all the constraints between fvariable1 and fvariable2. If they have no common constraint returns true.
+     * @param fvariable1 A furniture variable
+     * @param fvariable2 Another furniture variable
+     * @return True if no constraint is violated, false otherwise
      */
-    public boolean isSatisfied(FurnitureVariable fv1, FurnitureVariable fv2) {
+    public boolean isSatisfied(FurnitureVariable fvariable1, FurnitureVariable fvariable2) {
         
-        UnorderedFurnitureVariablePair pair = new UnorderedFurnitureVariablePair(fv1, fv2);
+        UnorderedFurnitureVariablePair pair = new UnorderedFurnitureVariablePair(fvariable1, fvariable2);
         
-        return binConstraintsSet.containsKey(pair) && binConstraintsSet.get(pair).isSatisfied();
+        // If the list is void we should return true
+        if (binConstraintsSet.containsKey(pair)) {
+            List<BinaryConstraint> binConsL = binConstraintsSet.get(pair);
+            for (BinaryConstraint bc : binConsL) {
+                if (! bc.isSatisfied(fvariable1, fvariable2)) return false;
+            }
+        }
+        return true;                       
     }
 }

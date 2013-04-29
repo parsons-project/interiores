@@ -5,17 +5,24 @@
 package interiores.business.models.constraints;
 
 import interiores.business.models.FurnitureModel;
+import interiores.business.models.backtracking.FurnitureVariable;
 import java.awt.Dimension;
+import java.util.Iterator;
 
 /**
  * SizeConstraint represents a constraint imposed over the size of a piece of furniture
  * @author larribas
  */
-public class SizeConstraint extends ModelConstraint {
+public class SizeConstraint
+    extends UnaryConstraint {
     
-    // minSize and maxSize determine the range within which the furniture's size should fall
+    /** 
+     * minSize and maxSize determine the range within which the furniture's size
+     * should fall.
+     */
     private Dimension minSize, maxSize;
         
+    
     /**
      * Builds a SizeConstraint with specific minimum and maximum sizes
      * @param min The smallest size a piece of furniture should have so as to satisfy the constraint
@@ -25,6 +32,7 @@ public class SizeConstraint extends ModelConstraint {
         minSize = min;
         maxSize = max;
     }
+    
     
     /**
      * Determines whether a piece of furniture (a model) satisfies the constraint.
@@ -48,5 +56,41 @@ public class SizeConstraint extends ModelConstraint {
         return heightConstraint && widthConstraint;        
     }
     
+    
+    /**
+     * Eliminates models which do not satisfy the constraint.
+     * @param variable The variable whose values have to be checked.
+     */
+    @Override
+    public void eliminateInvalidValues(FurnitureVariable variable) {
+        Iterator it = variable.domainModels[0].iterator();
+        while (it.hasNext()) {
+            FurnitureModel model = (FurnitureModel) it.next();
+            
+            Dimension modelSize = model.getSize();
+        
+            // In order to check whether the model satisfies the constraint, height and width components
+            // are verified separately. If the maximum of a component is 0, it is considered not to
+            // represent a constraint, and thus any value of that component will validate the constraint.
+            boolean heightConstraint = maxSize.height == 0 ||
+                                       minSize.height <= modelSize.height && modelSize.height <= maxSize.height;
+
+            boolean widthConstraint = maxSize.width == 0 ||
+                                       minSize.width <= modelSize.width && modelSize.width <= maxSize.width;
+
+            if (!heightConstraint || !widthConstraint) it.remove();
+        }
+    }
+    
+    
+     /**
+     * Modifies the maximum price defined for the constraint
+     * @param newMin The new minimum size
+     * @param newMax The new maximum size
+     */
+    public void changeSizeLimits(Dimension newMin, Dimension newMax) {
+        minSize = newMin;
+        maxSize = newMax;
+    }
         
 }

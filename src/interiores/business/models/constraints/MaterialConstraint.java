@@ -1,20 +1,24 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package interiores.business.models.constraints;
 
 import interiores.business.models.FurnitureModel;
+import interiores.business.models.backtracking.FurnitureVariable;
+import java.util.Iterator;
 
 /**
  * MaterialConstraint represents a constraint imposed over the material a piece of furniture is made from
  * @author larribas
  */
-public class MaterialConstraint extends ModelConstraint {
+public class MaterialConstraint
+    extends UnaryConstraint {
     
-    // 'material' represents the exact material a piece of furniture
-    // should be made from in order to satisfy the constraint
+    
+    /**
+     * 'material' represents the exact material a piece of furniture
+     * should be made from in order to satisfy the constraint
+     */
     private String material;
+    
     
     /**
      * Creates a material constraint such that only those pieces of furniture matching "material" will satisfy it
@@ -23,15 +27,22 @@ public class MaterialConstraint extends ModelConstraint {
     public MaterialConstraint(String material) {
         this.material = material;
     }
+   
     
     /**
-     * Determines whether a piece of furniture satisfies the constraint
-     * @param model The specific piece of furniture whose material is to be checked.
-     * @return 'true' if the material of the model matches the constraint's
+     * Eliminates models which do not satisfy the constraint.
+     * @param variable The variable whose values have to be checked.
      */
-    public boolean isSatisfied(FurnitureModel model) {        
-        return model.getMaterial().equals(material);
+    @Override
+    public void eliminateInvalidValues(FurnitureVariable variable) {
+        Iterator it = variable.domainModels[0].iterator();
+        while (it.hasNext()) {
+            FurnitureModel model = (FurnitureModel) it.next();
+            if (!model.getMaterial().equals(material))
+                it.remove();
+        }
     }
+    
     
     /**
      * Modifies material defined for the constraint

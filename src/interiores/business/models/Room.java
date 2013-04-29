@@ -18,19 +18,14 @@ public class Room extends Model {
     
     @XmlAttribute
     private Dimension size;
-    
-    public Room() {
         
-    }
-    
     public Room(RoomType type, Dimension size) {
         this.type = type;
         this.size = size;
     }
     
     public Room(RoomType type, int width, int height) {
-        this.type = type;
-        this.size = new Dimension(width, height);
+        this(type,new Dimension(width, height) );
     }
     
     public RoomType getType() {

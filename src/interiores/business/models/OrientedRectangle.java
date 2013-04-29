@@ -37,6 +37,56 @@ public class OrientedRectangle extends Rectangle {
     }
     
     /**
+     * Returns a rectangle expanded for all its sides by size
+     * @param size The distance of the expansion
+     * @return A new rectangle expanded
+     */
+    public OrientedRectangle enlarge(int size) {
+        int newX = x - size;
+        int newY = y - size;
+        int newW = width + size;
+        int newH = height + size;
+        return new OrientedRectangle(newX, newY, newW, newH, this.orientation);
+    }
+    
+    /**
+     * Returns a rectangle with its width and height expanded independently
+     * @param dimension The width and the height it should expand
+     * @return A new rectangle expanded
+     */
+    public OrientedRectangle enlarge(Dimension dimension) {
+        int newX = x - dimension.width;
+        int newY = y - dimension.height;
+        int newW = width + dimension.width;
+        int newH = height + dimension.height;
+        return new OrientedRectangle(newX, newY, newW, newH, this.orientation);
+    }
+    
+    /**
+     * Returns a rectangle with the side corresponding to <orientation> expanded
+     * @param size The size of the expansion
+     * @param orientation The orientation to expand
+     * @return A new rectangle expanded
+     */
+    public OrientedRectangle enlarge(int size, Orientation orientation) {
+        int newX = x;
+        int newY = y;
+        int newW = width;
+        int newH = height;
+        switch(orientation) {
+            case W:
+                newX -= size;
+            case N:
+                newY -= size;
+            case E:
+                newW += size;
+            case S:
+                newH += size;
+        }
+        return new OrientedRectangle(newX, newY, newW, newH, this.orientation);
+    }
+    
+    /**
      * Rotates the rectangle to an arbritrary orientation.
      * @param orientation The orientation the rectangle will be facing
      */

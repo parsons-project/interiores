@@ -1,7 +1,7 @@
 package interiores.presentation.terminal;
 
 import interiores.business.controllers.FurnitureTypesCatalogController;
-import interiores.core.Debug;
+import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
 import java.util.Collection;
 import javax.xml.bind.JAXBException;
@@ -20,12 +20,17 @@ public class FurnitureTypesCatalogCommands
     }
     
     public void list() {
-        Collection<String> catalogNames = ftCatalogController.getNamesLoadedTypeCatalogs();
+        Collection<String> catalogNames = ftCatalogController.getNamesLoadedTypesCatalogs();
+        String activeCatalog = ftCatalogController.getNameActiveTypesCatalog();
         
-        print(catalogNames);
+        for(String name : catalogNames) {
+            if(name.equals(activeCatalog)) name = "*" + name;
+            
+            println(name);
+        }
     }
     
-    public void checkout() {
+    public void checkout() throws BusinessException {
         String catalogName = readString("Enter the name of the catalog you want to set as active");
         
         ftCatalogController.checkout(catalogName);

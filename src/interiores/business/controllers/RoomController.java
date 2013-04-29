@@ -1,9 +1,9 @@
 package interiores.business.controllers;
 
+import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Room;
 import interiores.business.models.RoomType;
 import interiores.core.business.BusinessController;
-import interiores.core.business.BusinessException;
 import interiores.core.business.Model;
 import interiores.core.data.JAXBDataController;
 import javax.xml.bind.JAXBException;
@@ -28,10 +28,10 @@ public class RoomController extends BusinessController
         notify("roomCreated", room);
     }
     
-    public void saveRoom(String path) throws JAXBException, BusinessException
+    public void saveRoom(String path) throws JAXBException, NoRoomCreatedException
     {
         if(! data.has("room"))
-            throw new BusinessException("There is no room created. Use 'new room' to create a new one.");
+            throw new NoRoomCreatedException();
         
         data.save(data.get("room"), path);
         

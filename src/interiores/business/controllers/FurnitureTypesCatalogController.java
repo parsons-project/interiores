@@ -61,6 +61,21 @@ public class FurnitureTypesCatalogController
         data.save(loadedTypesCatalogs.get(catalogName), path);
     }
     
+    public void merge(String catalogName) throws BusinessException {
+        if (! loadedTypesCatalogs.containsKey(catalogName))
+            throw new BusinessException("There is no catalog known as: " + catalogName);
+        
+        NamedCatalog<FurnitureType> currentCatalog = getActiveCatalog();
+        
+        Collection<FurnitureType> toMerge = loadedTypesCatalogs.get(catalogName).getObjects();
+        
+        for (FurnitureType fType : toMerge) {
+            if (! currentCatalog.hasObject(fType)) {
+                currentCatalog.add(fType);
+            }
+        }
+    }
+    
     public String getNameActiveTypesCatalog() {
         return (String) data.get("typesCatalogName");
     }

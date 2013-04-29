@@ -43,6 +43,22 @@ public class OrientationConstraint
      */
     public void changeOrientation(List<Orientation> newOrientations) {
         validOrientations = newOrientations;
-    }    
+    }
+    
+    
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+        
+        result.append(this.getClass().getName() + NEW_LINE);
+        
+        result.append("Valid orientations: ");
+        for (Orientation orientation : validOrientations) {
+            result.append(orientation.toString() + " ");
+        }
+        result.append(NEW_LINE);
+        return result.toString();
+    }
 }
 

@@ -49,4 +49,15 @@ public class ColorConstraint
         color = newColor;
     }
     
+    
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+
+        result.append(this.getClass().getName() + NEW_LINE);
+
+        result.append("Color: " + color + NEW_LINE);
+        return result.toString();
+    }
 }

@@ -92,5 +92,18 @@ public class SizeConstraint
         minSize = newMin;
         maxSize = newMax;
     }
-        
+     
+    
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+
+        result.append(this.getClass().getName() + NEW_LINE);
+
+        result.append("Minimum: " + minSize.toString() + NEW_LINE);
+        result.append("Maximum: " + maxSize.toString() + NEW_LINE);
+        return result.toString();
+    }
+    
 }

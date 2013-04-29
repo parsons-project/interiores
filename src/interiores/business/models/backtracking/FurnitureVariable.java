@@ -92,6 +92,7 @@ public class FurnitureVariable
     * "models", every position in room and all orientations.
     * The set of restrictions is "unaryConstraints".
     */
+    //pre: the iteration of the variableSet is 0
     public FurnitureVariable(List<FurnitureModel> models, Room room,
             List<UnaryConstraint> unaryConstraints, int variableCount) {
         
@@ -197,6 +198,11 @@ public class FurnitureVariable
      * valid must be moved to the List in the position "iteration"+1.
      */
     //pre: variable has an assigned value.
+    //pre: if trimDomain or undoTrimDomain has already been called once,
+    //     "iteration" value must be equal to the value of "iteration" of the
+    //     previous call (+1 if it was a trimDomain or -1 if it was a
+    //     undoTrimDomain).
+    //
     @Override
     public void trimDomain(Variable variable, int iteration) {
         // 0) update internal iteration
@@ -312,7 +318,7 @@ public class FurnitureVariable
         
         result.append(" Models available by iteration" + NEW_LINE);
         result.append("iteration    model names" + NEW_LINE);
-        for (int i = 0; i < domainModels.size(); ++i) {
+        for (int i = 0; i < domainModels.length; ++i) {
             result.append(i + "             [ ");
             for (FurnitureModel model : domainModels[i])
                 result.append(model.getName() + " ");
@@ -321,7 +327,7 @@ public class FurnitureVariable
         
         result.append(" Positions available by iteration" + NEW_LINE);
         result.append("iteration    positions" + NEW_LINE);
-        for (int i = 0; i < domainPositions.size(); ++i) {
+        for (int i = 0; i < domainPositions.length; ++i) {
             result.append(i + "             [ ");
             for (Point point : domainPositions[i]) {
                 result.append("(" + point.x + "," + point.y + ") ");

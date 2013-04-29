@@ -55,4 +55,17 @@ public class PriceConstraint
     public void changePrice(float newMaxPrice) {
         maxPrice = newMaxPrice;
     }
+    
+    
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+
+        result.append(this.getClass().getName() + NEW_LINE);
+
+        result.append("Price: " + maxPrice + NEW_LINE);
+        return result.toString();
+    }
+        
 }

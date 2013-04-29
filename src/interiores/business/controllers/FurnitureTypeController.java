@@ -5,12 +5,14 @@ import horarios.shared.ElementNotFoundException;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.Room;
+import interiores.business.models.WantedFurniture;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Range;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -48,20 +50,20 @@ public class FurnitureTypeController
     }
     
     public void select(String name) throws ElementNotFoundException {
-        if (getTypesCatalog().hasObject(name))
-            getRoom().addFurnitureType(getTypesCatalog().getObject(name));
+        List<WantedFurniture> l = getRoom().getWishList();
+        WantedFurniture wf = new WantedFurniture(getTypesCatalog().getObject(name),l.size());
+        l.add(wf);
     }
     
     public void unselect(String name) throws BusinessException, ElementNotFoundException {
-        if (getTypesCatalog().hasObject(name))
-            getRoom().removeFurnitureType(getTypesCatalog().getObject(name));
+        getRoom().removeWantedFurniture(name);
     }
     
     private Room getRoom() {
         return (Room) data.get("room");
     }
 
-    public Collection<FurnitureType> getRoomTypes() {
+    public List<WantedFurniture> getRoomFurniture() {
         return getRoom().getWishList();
     }
     

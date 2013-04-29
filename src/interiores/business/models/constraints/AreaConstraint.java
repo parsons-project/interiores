@@ -48,5 +48,20 @@ public class AreaConstraint
      */
     public void changePositions(List<Point> newPositions) {
         validPositions = newPositions;
-    }    
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+        
+        result.append(this.getClass().getName() + NEW_LINE);
+        
+        result.append("Valid positions: ");
+        for (Point point : validPositions) {
+            result.append("(" + point.x + "," + point.y + ") ");
+        }
+        result.append(NEW_LINE);
+        return result.toString();
+    }
 }

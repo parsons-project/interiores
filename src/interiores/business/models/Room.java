@@ -4,6 +4,8 @@ import interiores.core.business.Model;
 import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,14 +20,28 @@ public class Room extends Model {
     
     @XmlAttribute
     private Dimension size;
+    
+    private List<FurnitureType> wishList;
+    
         
     public Room(RoomType type, Dimension size) {
         this.type = type;
         this.size = size;
+        wishList = new ArrayList();
     }
     
     public Room(RoomType type, int width, int height) {
         this(type,new Dimension(width, height) );
+    }
+    
+    public void addFurnitureType(FurnitureType ft) {
+        wishList.add(ft);
+    }
+    
+    public void removeFurnitureType(FurnitureType ft) {
+        boolean exists = wishList.remove(ft);
+        if (!exists)
+            throw BusinessException("The furniture type you want to remove is not in the list");
     }
     
     public RoomType getType() {

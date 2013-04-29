@@ -4,7 +4,6 @@ import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
-import interiores.business.models.constraints.ModelConstraint;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
@@ -69,7 +68,6 @@ public class FurnitureVariable
     */
     public Value assignedValue;
     boolean isAssigned;
-
     
     /**
     * Represents the iteration of the algorithm.
@@ -299,6 +297,45 @@ public class FurnitureVariable
         currentPosition = (Point) positionIterator.next();
         currentModel = (FurnitureModel) modelIterator.next();
         currentOrientation = (Orientation) orientationIterator.next();    
+    }
+    
+    
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+
+        result.append(this.getClass().getName() + " Object {" + NEW_LINE);
+        result.append("Assigned value: ");
+        if (isAssigned) result.append(assignedValue.toString() + NEW_LINE);
+        else result.append("none" + NEW_LINE);
+        
+        result.append(" Models available by iteration" + NEW_LINE);
+        result.append("iteration    model names" + NEW_LINE);
+        for (int i = 0; i < domainModels.size(); ++i) {
+            result.append(i + "             [ ");
+            for (FurnitureModel model : domainModels[i])
+                result.append(model.getName() + " ");
+            result.append("]" + NEW_LINE);    
+        }
+        
+        result.append(" Positions available by iteration" + NEW_LINE);
+        result.append("iteration    positions" + NEW_LINE);
+        for (int i = 0; i < domainPositions.size(); ++i) {
+            result.append(i + "             [ ");
+            for (Point point : domainPositions[i]) {
+                result.append("(" + point.x + "," + point.y + ") ");
+            }
+             result.append("]" + NEW_LINE);    
+        }        
+        
+        result.append(" Constraints:" + NEW_LINE);
+        for (UnaryConstraint constraint : unaryConstraints) {
+            result.append(constraint.toString());
+        }
+        result.append("}");
+
+        return result.toString();
     }
     
 //    /**

@@ -1,8 +1,8 @@
 package interiores.business.models.backtracking;
 
-import interiores.shared.backtracking.Value;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.OrientedRectangle;
+import interiores.shared.backtracking.Value;
 import java.awt.Point;
 
 /**
@@ -42,5 +42,17 @@ public class FurnitureValue extends Value {
     }
     
     
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+
+        result.append("Model Name: " + model.getName());
+        result.append(" Location: (" + area.x + "," + area.y + ")");
+        result.append(" Orientation: " + area.getOrientation() + ";");
+
+        return result.toString();
+    }
+
     
 }

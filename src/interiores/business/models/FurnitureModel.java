@@ -93,4 +93,5 @@ public class FurnitureModel {
         return price;
     }
     
+
 }

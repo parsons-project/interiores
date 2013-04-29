@@ -38,18 +38,11 @@ public class RoomController extends BusinessController
         notify("roomSaved", (Model) data.get("room"));
     }
     
-    public void loadRoom(String path)
+    public void loadRoom(String path) throws JAXBException
     {
-        try
-        {
-            Room room = (Room) data.load(Room.class, path);
-            data.set("room", room);
-            
-            notify("roomLoaded", room.toMap());
-        }
-        catch(JAXBException e)
-        {
-            e.printStackTrace();
-        }
+        Room room = (Room) data.load(Room.class, path);
+        data.set("room", room);
+        
+        notify("roomLoaded", room.toMap());
     }
 }

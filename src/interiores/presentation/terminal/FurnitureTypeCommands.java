@@ -31,11 +31,13 @@ public class FurnitureTypeCommands
     }
     
     public void list() {
-        Collection<FurnitureType> types = fTypeController.getCatalogObjects();
+        Collection types = fTypeController.getCatalogObjects();
         
-        println("Listing furniture types in the actual catalog:");
+        println("Listing furniture types of the catalog: " + fTypeController.getCatalogName());
         
-        for(FurnitureType type : types)
-            println(type.toString());
+        print(types);
+        
+        if(types.isEmpty())
+            println("The catalog is empty.");
     }
 }

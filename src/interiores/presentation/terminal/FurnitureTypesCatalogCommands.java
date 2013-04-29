@@ -30,17 +30,22 @@ public class FurnitureTypesCatalogCommands
         }
     }
     
+    public void _new() throws BusinessException {
+        String catalogName = readString("Enter the name of the catalog you want to create");
+        
+        ftCatalogController.create(catalogName);
+    }
+    
     public void checkout() throws BusinessException {
         String catalogName = readString("Enter the name of the catalog you want to set as active");
         
         ftCatalogController.checkout(catalogName);
     }
     
-    public void load() throws JAXBException {
-        String catalogName = readString("Enter the name of the catalog you want to load");
-        String path = readString("Enter the path where to load the " + catalogName + " catalog");
+    public void load() throws JAXBException, BusinessException {
+        String path = readString("Enter the path where to load a catalog");
         
-        ftCatalogController.load(catalogName, path);
+        ftCatalogController.load(path);
     }
     
     public void save() throws JAXBException {

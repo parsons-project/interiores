@@ -13,7 +13,7 @@ public class Debug {
     
     public static void println(String s) {
         if(enabled)
-            System.out.println("[DEBUG] " + s);
+            System.err.println("[DEBUG] " + s);
     }
     
     public static boolean isEnabled() {

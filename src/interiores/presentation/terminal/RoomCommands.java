@@ -35,7 +35,7 @@ public class RoomCommands extends CommandGroup
         roomController.saveRoom(path);
     }
     
-    public void load()
+    public void load() throws JAXBException
     {
         String path = readString("Especifica la ruta desde donde cargar");
         

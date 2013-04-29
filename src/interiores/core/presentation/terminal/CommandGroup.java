@@ -35,8 +35,8 @@ abstract public class CommandGroup
         iostream.println(line);
     }
     
-    public void print(Collection<String> collection) {
-        for(String s : collection)
-            println(s);
+    public void print(Collection collection) {
+        for(Object s : collection)
+            println(s.toString());
     }
 }

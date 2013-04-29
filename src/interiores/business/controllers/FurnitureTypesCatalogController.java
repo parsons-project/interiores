@@ -1,7 +1,7 @@
 package interiores.business.controllers;
 
-import horarios.shared.Catalog;
 import interiores.business.models.FurnitureType;
+import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
@@ -16,17 +16,18 @@ import javax.xml.bind.JAXBException;
 public class FurnitureTypesCatalogController
     extends BusinessController
 {
-    private HashMap<String, Catalog<FurnitureType>> loadedTypesCatalogs;
+    
+    private HashMap<String, NamedCatalog<FurnitureType>> loadedTypesCatalogs;
     
     public FurnitureTypesCatalogController(JAXBDataController data) {
         super(data);
         
-        Catalog<FurnitureType> typesCatalog = new Catalog<FurnitureType>();
+        NamedCatalog<FurnitureType> typesCatalog = new NamedCatalog<FurnitureType>();
         
         loadedTypesCatalogs = new HashMap();
-        loadedTypesCatalogs.put("default", typesCatalog);
+        loadedTypesCatalogs.put(typesCatalog.getName(), typesCatalog);
         
-        data.set("typesCatalogName", "default");
+        data.set("typesCatalogName", typesCatalog.getName());
         data.set("typesCatalog", typesCatalog);
     }
     
@@ -38,15 +39,28 @@ public class FurnitureTypesCatalogController
         return loadedTypesCatalogs.keySet();
     }
     
+    public void create(String catalogName) throws BusinessException {
+        if(catalogName.equals(NamedCatalog.getDefaultName()))
+            throw new BusinessException("You are not able to overwrite the default catalog.");
+        
+        loadedTypesCatalogs.put(catalogName, new NamedCatalog(catalogName));
+    }
+    
     public void checkout(String catalogName) throws BusinessException {
         if(! loadedTypesCatalogs.containsKey(catalogName))
             throw new BusinessException("There is no catalog known as: " + catalogName);
         
+        data.set("typesCatalogName", catalogName);
         data.set("typesCatalog", loadedTypesCatalogs.get(catalogName));
     }
     
-    public void load(String catalogName, String path) throws JAXBException {
-        loadedTypesCatalogs.put(catalogName, (Catalog<FurnitureType>) data.load(Catalog.class, path));
+    public void load(String path) throws JAXBException, BusinessException {
+        NamedCatalog loadedCatalog = (NamedCatalog<FurnitureType>) data.load(NamedCatalog.class, path);
+        
+        if(loadedCatalog.getName().equals(NamedCatalog.getDefaultName()))
+            throw new BusinessException("You are not able to overwrite the default catalog.");
+            
+        loadedTypesCatalogs.put(loadedCatalog.getName(), loadedCatalog);
     }
     
     public void save(String catalogName, String path) throws JAXBException {

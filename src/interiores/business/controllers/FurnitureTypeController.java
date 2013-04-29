@@ -29,6 +29,10 @@ public class FurnitureTypeController
         return getTypesCatalog().getObjects();
     }
     
+    public String getCatalogName() {
+        return (String) data.get("typesCatalogName");
+    }
+    
     private Catalog<FurnitureType> getTypesCatalog() {
         return (Catalog<FurnitureType>) data.get("typesCatalog");
     }

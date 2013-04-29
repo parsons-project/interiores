@@ -25,6 +25,14 @@ public class Dimension
         this.depth = depth;
     }
     
+    public boolean isWidthBetween(Range widthRange) {
+        return (widthRange.min <= width && widthRange.max >= width);
+    }
+    
+    public boolean isDepthBetween(Range depthRange) {
+        return (depthRange.min <= depth && depthRange.max >= depth);
+    }
+    
     @Override
     public String toString() {
         return "(" + width + ", " + depth + ")";

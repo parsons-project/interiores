@@ -2,8 +2,8 @@ package horarios.shared;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Set;
+import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,14 +18,14 @@ public class Catalog<X extends IdObject> {
      * Hashmap with all the objects and identifiers in the Catalog
      */
     @XmlElementWrapper(name = "table")
-    protected HashMap<String, X> table;
+    protected TreeMap<String, X> table;
     
     
     /**
      * Empty constructor
      */
     public Catalog() {
-        table = new HashMap();
+        table = new TreeMap();
     }
     
     

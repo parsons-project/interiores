@@ -4,6 +4,7 @@ import horarios.shared.IdObject;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.utils.Dimension;
+import interiores.utils.Range;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
@@ -19,16 +20,16 @@ public class FurnitureType
     extends IdObject
 {
     /**
-     * Minimum width and depth
+     * Width range
      */
     @XmlElement
-    private Dimension minimum;
+    private Range widthRange;
     
     /**
-     * maximum width and depth
+     * Depth range
      */
     @XmlElement
-    private Dimension maximum;
+    private Range depthRange;
     
     @XmlElementWrapper
     private List<UnaryConstraint> unaryConstraints;
@@ -46,11 +47,11 @@ public class FurnitureType
      * @param min Minimum dimensions a model of this type should have
      * @param max Maximum dimensions a model of this type should have
      */
-    public FurnitureType(String name, Dimension min, Dimension max) {
+    public FurnitureType(String name, Range widthRange, Range depthRange) {
         super(name);
         
-        minimum = min;
-        maximum = max;
+        this.widthRange = widthRange;
+        this.depthRange = depthRange;
         
         unaryConstraints = new ArrayList();
         binaryConstraints = new ArrayList();
@@ -81,19 +82,19 @@ public class FurnitureType
     }
     
     /**
-     * Gets the minimum dimensions a furniture model of this type should have
+     * Gets the width range a furniture model of this type should have
      * @return The minimum dimensions a furniture model of this type should have
      */
-    public Dimension getMinDimension() {
-        return minimum;
+    public Range getWidthRange() {
+        return widthRange;
     }
     
     /**
-     * Gets the maximum dimensions a furniture model of this type should have
+     * Gets the depth range a furniture model of this type should have
      * @return The maximum dimensions a furniture model of this type should have
      */
-    public Dimension getMaxDimension() {
-        return maximum;
+    public Range getDepthRange() {
+        return depthRange;
     }
     
     
@@ -103,13 +104,12 @@ public class FurnitureType
      * @return True if the dimension is between the min and the max dimensions of the type, false otherwise
      */
     public Boolean checkDimension(Dimension dimension) {
-        return (minimum.width <= dimension.width && dimension.width <= maximum.width) &&
-               (minimum.depth <= dimension.depth && dimension.depth <= maximum.depth);
+        return dimension.isWidthBetween(widthRange) && dimension.isDepthBetween(depthRange);
     }
     
     @Override
     public String toString() {
-        return getName() + " " + minimum.toString() + " " + maximum.toString();
+        return getName() + " " + widthRange.toString() + " " + depthRange.toString();
     }
     
 }

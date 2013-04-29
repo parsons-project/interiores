@@ -9,7 +9,7 @@ import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
-import interiores.utils.Dimension;
+import interiores.utils.Range;
 import java.util.Collection;
 
 /**
@@ -23,16 +23,16 @@ public class FurnitureTypeController
         super(data);
     }
     
-    public void add(String name, int minWidth, int minDepth, int maxWidth, int maxDepth)
+    public void add(String name, int minWidth, int maxWidth, int minDepth, int maxDepth)
             throws DefaultCatalogOverwriteException
     {
         if(getCatalogName().equals(NamedCatalog.getDefaultName()))
             throw new DefaultCatalogOverwriteException();
         
-        Dimension min = new Dimension(minWidth, minDepth);
-        Dimension max = new Dimension(maxWidth, maxDepth);
+        Range widthRange = new Range(minWidth, maxWidth);
+        Range depthRange = new Range(minDepth, maxDepth);
         
-        getTypesCatalog().add(new FurnitureType(name, min, max));
+        getTypesCatalog().add(new FurnitureType(name, widthRange, depthRange));
     }
     
     public Collection<FurnitureType> getCatalogObjects() {

@@ -2,6 +2,7 @@ package interiores.business.models.catalogs;
 
 import horarios.shared.Catalog;
 import horarios.shared.IdObject;
+import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,6 +27,15 @@ public class NamedCatalog<X extends IdObject>
         super();
         
         this.name = name;
+    }
+    
+    public NamedCatalog(String name, NamedCatalog catalog) {
+        this(name);
+        
+        ArrayList<X> objects = catalog.getCopyObjects();
+        
+        for(X object : objects)
+            add(object);
     }
     
     public static String getDefaultName() {

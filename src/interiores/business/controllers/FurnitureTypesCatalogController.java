@@ -2,6 +2,7 @@ package interiores.business.controllers;
 
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.FurnitureType;
+import interiores.business.models.catalogs.DefaultFurnitureTypesCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
@@ -23,7 +24,7 @@ public class FurnitureTypesCatalogController
     public FurnitureTypesCatalogController(JAXBDataController data) {
         super(data);
         
-        NamedCatalog<FurnitureType> typesCatalog = new NamedCatalog<FurnitureType>();
+        NamedCatalog<FurnitureType> typesCatalog = new DefaultFurnitureTypesCatalog();
         
         loadedTypesCatalogs = new HashMap();
         loadedTypesCatalogs.put(typesCatalog.getName(), typesCatalog);
@@ -32,19 +33,11 @@ public class FurnitureTypesCatalogController
         data.set("typesCatalog", typesCatalog);
     }
     
-    public String getNameActiveTypesCatalog() {
-        return (String) data.get("typesCatalogName");
-    }
-    
-    public Collection<String> getNamesLoadedTypesCatalogs() {
-        return loadedTypesCatalogs.keySet();
-    }
-    
     public void create(String catalogName) throws BusinessException {
         if(catalogName.equals(NamedCatalog.getDefaultName()))
             throw new DefaultCatalogOverwriteException();
         
-        loadedTypesCatalogs.put(catalogName, new NamedCatalog(catalogName));
+        loadedTypesCatalogs.put(catalogName, new NamedCatalog(catalogName, getActiveCatalog()));
     }
     
     public void checkout(String catalogName) throws BusinessException {
@@ -66,5 +59,17 @@ public class FurnitureTypesCatalogController
     
     public void save(String catalogName, String path) throws JAXBException {
         data.save(loadedTypesCatalogs.get(catalogName), path);
+    }
+    
+    public String getNameActiveTypesCatalog() {
+        return (String) data.get("typesCatalogName");
+    }
+    
+    public Collection<String> getNamesLoadedTypesCatalogs() {
+        return loadedTypesCatalogs.keySet();
+    }
+    
+    private NamedCatalog<FurnitureType> getActiveCatalog() {
+        return (NamedCatalog) data.get("typesCatalog");
     }
 }

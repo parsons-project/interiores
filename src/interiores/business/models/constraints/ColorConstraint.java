@@ -1,19 +1,22 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package interiores.business.models.constraints;
 
 import interiores.business.models.FurnitureModel;
+import interiores.business.models.backtracking.FurnitureVariable;
 import java.awt.Color;
+import java.util.Iterator;
 
 /**
  * ColorConstraint represents a constraint imposed over the color of a piece of furniture
  * @author larribas
  */
-public class ColorConstraint extends ModelConstraint {
+public class ColorConstraint
+    extends UnaryConstraint {
     
-    // 'color' represents the exact color a piece of furniture should be in order to satisfy the constraint
+    /** 
+     * 'color' represents the exact color a piece of furniture should be in
+     * order to satisfy the constraint.
+     */
     private Color color;
     
     /**
@@ -25,12 +28,17 @@ public class ColorConstraint extends ModelConstraint {
     }
     
     /**
-     * Determines whether a piece of furniture satisfies the constraint.
-     * @param model The specific piece of furniture whose color is to be checked.
-     * @return 'true' if the color of the model matches the constraint's. 'false' otherwise
+     * Eliminates models which do not satisfy the constraint.
+     * @param variable The variable whose values have to be checked.
      */
-    public boolean isSatisfied(FurnitureModel model) {        
-        return model.getColor().equals(color);
+    @Override
+    public void eliminateInvalidValues(FurnitureVariable variable) {
+        Iterator it = variable.domainModels[0].iterator();
+        while (it.hasNext()) {
+            FurnitureModel model = (FurnitureModel) it.next();
+            if (!model.getColor().equals(color))
+                it.remove();
+        }
     }
     
     /**

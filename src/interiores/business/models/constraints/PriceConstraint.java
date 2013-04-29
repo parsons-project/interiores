@@ -5,15 +5,23 @@
 package interiores.business.models.constraints;
 
 import interiores.business.models.FurnitureModel;
+import interiores.business.models.backtracking.FurnitureVariable;
+import java.util.Iterator;
 
 /**
- * PriceConstraint represents a constraint imposed over the highest price a piece of furniture can cost
+ * PriceConstraint represents a constraint imposed over the highest price a
+ * piece of furniture can cost
  * @author larribas
  */
-public class PriceConstraint extends ModelConstraint {
+public class PriceConstraint
+    extends UnaryConstraint {
     
-    // 'maxPrice' represents the topmost price a furniture model should cost in order to satisfy the constraint
+    /**
+     * 'maxPrice' represents the topmost price a furniture model should cost
+     * inorder to satisfy the constraint
+     */
     float maxPrice;
+    
     
     /**
      * Creates a price constraint such that only those pieces of furniture which cost
@@ -26,13 +34,19 @@ public class PriceConstraint extends ModelConstraint {
    
     
     /**
-     * Determines whether a piece of furniture satisfies the constraint.
-     * @param model The specific piece of furniture whose price is to be checked.
-     * @return 'true' if the model costs <= than the price defined for the constraint. 'false' otherwise
+     * Eliminates models which do not satisfy the constraint.
+     * @param variable The variable whose values have to be checked.
      */
-    public boolean isSatisfied(FurnitureModel model) {        
-        return model.getPrice() <= maxPrice;
+    @Override
+    public void eliminateInvalidValues(FurnitureVariable variable) {
+        Iterator it = variable.domainModels[0].iterator();
+        while (it.hasNext()) {
+            FurnitureModel model = (FurnitureModel) it.next();
+            if (model.getPrice() > maxPrice)
+                it.remove();
+        }
     }
+    
     
     /**
      * Modifies the maximum price defined for the constraint

@@ -66,6 +66,14 @@ public class IOStream
         }
     }
     
+    public String readString(String question)
+    {
+        if(! ibuffer.hasNext())
+            println(question);
+        
+        return readString();
+    }
+    
     public int readInt()
     {
         try
@@ -77,6 +85,14 @@ public class IOStream
             putIntoInputBuffer(readLine());
             return readInt();
         }
+    }
+    
+    public int readInt(String question)
+    {
+        if(! ibuffer.hasNextInt())
+            println(question);
+        
+        return readInt();
     }
     
     public boolean hasNext() {

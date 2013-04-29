@@ -4,6 +4,7 @@
  */
 package interiores.business.models.constraints;
 
+import interiores.business.models.constraints.unary.PriceConstraint;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.FurnitureModel;
 import java.awt.Color;

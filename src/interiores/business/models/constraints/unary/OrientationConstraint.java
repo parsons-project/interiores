@@ -1,8 +1,11 @@
-package interiores.business.models.constraints;
+package interiores.business.models.constraints.unary;
 
 import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.constraints.UnaryConstraint;
 import java.util.List;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * OrientationConstraint represents a constraint imposed over the orientation of
@@ -10,6 +13,7 @@ import java.util.List;
  * The furniture piece will only be able to take an orientation from the list
  * of the constraint.
  */
+@XmlRootElement
 public class OrientationConstraint
     extends UnaryConstraint {
     
@@ -17,6 +21,7 @@ public class OrientationConstraint
      * validOrientations contains the orientations a piece of furniture can have
      * in order to satisfy the constraint.
      */
+    @XmlElementWrapper
     private List<Orientation> validOrientations;
     
     /**

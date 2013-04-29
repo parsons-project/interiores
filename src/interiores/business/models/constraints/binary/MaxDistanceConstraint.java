@@ -1,16 +1,21 @@
-package interiores.business.models.constraints;
+package interiores.business.models.constraints.binary;
 
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.constraints.BinaryConstraint;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * 
  * @author alvaro
  */
+@XmlRootElement
 public class MaxDistanceConstraint 
                 extends BinaryConstraint {
     
+    @XmlAttribute
     private int distance; // The maximum distance between the two variables
     
     public MaxDistanceConstraint(int distance) {

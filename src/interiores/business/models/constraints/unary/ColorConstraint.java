@@ -1,15 +1,18 @@
-
-package interiores.business.models.constraints;
+package interiores.business.models.constraints.unary;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.constraints.UnaryConstraint;
 import java.awt.Color;
 import java.util.Iterator;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * ColorConstraint represents a constraint imposed over the color of a piece of furniture
  * @author larribas
  */
+@XmlRootElement
 public class ColorConstraint
     extends UnaryConstraint {
     
@@ -17,6 +20,7 @@ public class ColorConstraint
      * 'color' represents the exact color a piece of furniture should be in
      * order to satisfy the constraint.
      */
+    @XmlElement
     private Color color;
     
     /**

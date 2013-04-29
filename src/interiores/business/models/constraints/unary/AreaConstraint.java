@@ -1,16 +1,19 @@
-
-package interiores.business.models.constraints;
+package interiores.business.models.constraints.unary;
 
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.constraints.UnaryConstraint;
 import java.awt.Point;
 import java.util.Iterator;
 import java.util.List;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * 
  * AreaConstraint represents a constraint imposed over the position of
  * a piece of furniture.
  */
+@XmlRootElement
 public class AreaConstraint
     extends UnaryConstraint {
     
@@ -20,6 +23,7 @@ public class AreaConstraint
      * More precisely, by position of a furniture piece, we are talking about
      * his top left coordinate.
      */
+    @XmlElementWrapper
     private List<Point> validPositions;
     
     /**

@@ -1,9 +1,11 @@
-
-package interiores.business.models.constraints;
+package interiores.business.models.constraints.unary;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.constraints.UnaryConstraint;
 import java.util.Iterator;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * ModelConstraint represents a constraint imposed over the model of a piece of
@@ -11,6 +13,7 @@ import java.util.Iterator;
  * Since there are no repeted models, this restriction leaves only one model
  * as valid.
  */
+@XmlRootElement
 public class ModelConstraint
     extends UnaryConstraint {
     
@@ -18,6 +21,7 @@ public class ModelConstraint
     /** 
      * 'modelName' represents the exact name of the wanted model.
      */
+    @XmlAttribute
     private String modelName;
     
     /**

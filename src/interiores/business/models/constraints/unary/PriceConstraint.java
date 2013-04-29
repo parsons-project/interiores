@@ -1,18 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package interiores.business.models.constraints;
+package interiores.business.models.constraints.unary;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.constraints.UnaryConstraint;
 import java.util.Iterator;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * PriceConstraint represents a constraint imposed over the highest price a
  * piece of furniture can cost
  * @author larribas
  */
+@XmlRootElement
 public class PriceConstraint
     extends UnaryConstraint {
     
@@ -20,6 +20,7 @@ public class PriceConstraint
      * 'maxPrice' represents the topmost price a furniture model should cost
      * inorder to satisfy the constraint
      */
+    @XmlAttribute
     float maxPrice;
     
     

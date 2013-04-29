@@ -1,8 +1,13 @@
 package interiores.business.models;
 
 import horarios.shared.IdObject;
+import interiores.business.models.constraints.BinaryConstraint;
+import interiores.business.models.constraints.UnaryConstraint;
 import interiores.utils.Dimension;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -13,11 +18,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class FurnitureType
     extends IdObject
 {
+    /**
+     * Minimum width and depth
+     */
     @XmlElement
-    private Dimension minimum; // Minimum width and "height"
+    private Dimension minimum;
     
+    /**
+     * maximum width and depth
+     */
     @XmlElement
-    private Dimension maximum; // maximum width and "height"
+    private Dimension maximum;
+    
+    @XmlElementWrapper
+    private List<UnaryConstraint> unaryConstraints;
+    
+    @XmlElementWrapper
+    private List<BinaryConstraint> binaryConstraints;
     
     public FurnitureType() {
         super();
@@ -34,6 +51,25 @@ public class FurnitureType
         
         minimum = min;
         maximum = max;
+        
+        unaryConstraints = new ArrayList();
+        binaryConstraints = new ArrayList();
+    }
+    
+    public List<UnaryConstraint> getUnaryConstraints() {
+        return unaryConstraints;
+    }
+    
+    public List<BinaryConstraint> getBinaryConstraints() {
+        return binaryConstraints;
+    }
+    
+    public void addUnaryConstraint(UnaryConstraint unaryConstraint) {
+        unaryConstraints.add(unaryConstraint);
+    }
+    
+    public void addBinaryConstraint(BinaryConstraint binaryConstraint) {
+        binaryConstraints.add(binaryConstraint);
     }
     
     /**
@@ -61,11 +97,10 @@ public class FurnitureType
     }
     
     
-    // should this go here or maybe in the controller?
     /**
      * Checks if dimension is between the minimum and the maximum dimensions of the type
      * @param dimension The dimension to be checked
-     * @return True if the dimension is between the minimum and the maximum dimensions of the type, False otherwise
+     * @return True if the dimension is between the min and the max dimensions of the type, false otherwise
      */
     public Boolean checkDimension(Dimension dimension) {
         return (minimum.width <= dimension.width && dimension.width <= maximum.width) &&

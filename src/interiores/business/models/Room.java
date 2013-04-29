@@ -3,10 +3,10 @@ package interiores.business.models;
 import interiores.core.business.BusinessException;
 import interiores.core.business.Model;
 import java.awt.Dimension;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 

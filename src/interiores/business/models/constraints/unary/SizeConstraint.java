@@ -2,17 +2,21 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interiores.business.models.constraints;
+package interiores.business.models.constraints.unary;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.constraints.UnaryConstraint;
 import interiores.utils.Dimension;
 import java.util.Iterator;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * SizeConstraint represents a constraint imposed over the size of a piece of furniture
  * @author larribas
  */
+@XmlRootElement
 public class SizeConstraint
     extends UnaryConstraint {
     
@@ -20,7 +24,11 @@ public class SizeConstraint
      * minSize and maxSize determine the range within which the furniture's size
      * should fall.
      */
-    private Dimension minSize, maxSize;
+    @XmlElement
+    private Dimension minSize;
+    
+    @XmlElement
+    private Dimension maxSize;
         
     
     /**

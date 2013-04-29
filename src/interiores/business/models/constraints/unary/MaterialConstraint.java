@@ -1,22 +1,25 @@
-
-package interiores.business.models.constraints;
+package interiores.business.models.constraints.unary;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.constraints.UnaryConstraint;
 import java.util.Iterator;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * MaterialConstraint represents a constraint imposed over the material a piece of furniture is made from
  * @author larribas
  */
+@XmlRootElement
 public class MaterialConstraint
     extends UnaryConstraint {
-    
     
     /**
      * 'material' represents the exact material a piece of furniture
      * should be made from in order to satisfy the constraint
      */
+    @XmlAttribute
     private String material;
     
     

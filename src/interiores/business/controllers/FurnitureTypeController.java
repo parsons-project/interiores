@@ -2,18 +2,15 @@ package interiores.business.controllers;
 
 import horarios.shared.Catalog;
 import horarios.shared.ElementNotFoundException;
-import interiores.business.models.FurnitureType;
-import interiores.business.models.Room;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.FurnitureType;
+import interiores.business.models.Room;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Dimension;
 import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

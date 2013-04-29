@@ -5,7 +5,7 @@
 package interiores.business.models.constraints;
 
 import interiores.business.models.FurnitureModel;
-import java.awt.Dimension;
+import interiores.utils.Dimension;
 
 /**
  * SizeConstraint represents a constraint imposed over the size of a piece of furniture
@@ -39,8 +39,8 @@ public class SizeConstraint extends ModelConstraint {
         // In order to check whether the model satisfies the constraint, height and width components
         // are verified separately. If the maximum of a component is 0, it is considered not to
         // represent a constraint, and thus any value of that component will validate the constraint.
-        boolean heightConstraint = maxSize.height == 0 ||
-                                   minSize.height <= modelSize.height && modelSize.height <= maxSize.height;
+        boolean heightConstraint = maxSize.depth == 0 ||
+                                   minSize.depth <= modelSize.depth && modelSize.depth <= maxSize.depth;
         
         boolean widthConstraint = maxSize.width == 0 ||
                                    minSize.width <= modelSize.width && modelSize.width <= maxSize.width;

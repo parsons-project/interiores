@@ -33,6 +33,7 @@ public class SizeConstraint extends ModelConstraint {
      * @param model The specific piece of furniture whose size will be checked.
      * @return 'true' if the model satisfies the size constraint; 'false' otherwise
      */
+    @Override
     public boolean isSatisfied(FurnitureModel model) {
         Dimension modelSize = model.getSize();
         

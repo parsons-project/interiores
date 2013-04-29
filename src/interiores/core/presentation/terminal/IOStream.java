@@ -95,6 +95,28 @@ public class IOStream
         return readInt();
     }
     
+    public float readFloat()
+    {
+        try
+        {
+            return ibuffer.nextFloat();   
+        }
+        catch(NoSuchElementException e)
+        {
+            putIntoInputBuffer(readLine());
+            return readFloat();
+        }
+    }
+    
+    public float readFloat(String question)
+    {
+        if(! ibuffer.hasNextFloat())
+            println(question);
+        
+        return readFloat();
+    }
+    
+    
     public boolean hasNext() {
         return ibuffer.hasNext();
     }

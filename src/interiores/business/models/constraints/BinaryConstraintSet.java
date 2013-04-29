@@ -10,7 +10,7 @@ import java.util.ListIterator;
 // and only consider part of it???
 
 /**
- * This class mantains a set of binary constraints that can be accessed by giving two FurnitureVariables
+ * This class maintains a set of binary constraints that can be accessed by giving two FurnitureVariables
  * @author alvaro
  */
 public class BinaryConstraintSet {
@@ -18,7 +18,7 @@ public class BinaryConstraintSet {
     /**
      * This class is an unordered pair of FurnitureVariables. It's unordered because
      * <f1,f2> equals <f2,f1> and also has the same hashCode. It's useful to not duplicate restrictions
-     * and being able to acces it from <f1,f2> and also <f2,f1>
+     * and being able to access it from <f1,f2> and also <f2,f1>
      */
     public class UnorderedFurnitureVariablePair {
         

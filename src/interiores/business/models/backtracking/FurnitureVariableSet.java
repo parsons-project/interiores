@@ -76,7 +76,7 @@ public class FurnitureVariableSet
     @Override
     protected void setActualVariable() {
         actual = variables[depth];
-        actual.resetIterators(depth);
+        actual.resetIterators();
     }
 
     

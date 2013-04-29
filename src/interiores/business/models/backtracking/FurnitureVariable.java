@@ -199,15 +199,16 @@ public class FurnitureVariable
      */
     //pre: variable has an assigned value.
     //pre: if trimDomain or undoTrimDomain has already been called once,
-    //     "iteration" value must be equal to the value of "iteration" of the
-    //     previous call (+1 if it was a trimDomain or -1 if it was a
+    //     "iteration" value must be related to the value of "iteration" of the
+    //     previous call (+1 if it was a trimDomain or equal if it was a
     //     undoTrimDomain).
+    //     otherwise, it must be 0.
     //
     @Override
     public void trimDomain(Variable variable, int iteration) {
         // 0) update internal iteration
         this.iteration = iteration;
-        
+       
         // 1) preliminar move of all positions
         domainPositions[iteration+1] = domainPositions[iteration];
         domainPositions[iteration] = new HashSet<Point>();
@@ -229,9 +230,11 @@ public class FurnitureVariable
             }
         }
         
-        // move all models
+        // move all models (unoptimized for now)
         domainModels[iteration+1] = domainModels[iteration];
         domainModels[iteration] = new ArrayList<FurnitureModel>();
+       
+        
     }
 
     
@@ -293,9 +296,8 @@ public class FurnitureVariable
     /**
      * Resets the iterators so that they will iterate through all of the
      * variables' domain, for the iteration "iteration" of the algorithm.
-     * @param iteration 
      */
-    public void resetIterators(int iteration) {
+    public void resetIterators() {
         positionIterator = domainPositions[iteration].iterator();
         orientationIterator = orientations.iterator();
         modelIterator = domainModels[iteration].iterator();

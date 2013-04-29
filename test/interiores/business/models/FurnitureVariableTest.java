@@ -13,12 +13,17 @@ public class FurnitureVariableTest {
 
     FurnitureVariable variable;
     
-    void main() {
-        menu();            
+    void main() {  
+        boolean final = false;
+        introduction();
+        variable = readFurnitureVariable();
         int i;
-        while (true) {
+        while (!final) {
+            menu();
             cin >> i;
             switch (i) {
+                case 0:  cout << variable.toString();
+                
                 case 1:  variable = readFurnitureVariable();
                          break;
                 case 2:  getNextDomainValueTester();
@@ -29,46 +34,47 @@ public class FurnitureVariableTest {
                          break;
                 case 5:  trimDomainTester();
                          break;
-                case 6:  monthString = "June";
+                case 6:  undoTrimDomainTester();
                          break;
-                case 7:  monthString = "July";
+                case 7:  cout << "It's just a getter, doesn't need testing" << endl;
                          break;
-                case 8:  monthString = "August";
+                case 8:  cout << "It's just a getter, doesn't need testing" << endl;
                          break;
-                case 9:  monthString = "September";
+                case 9: final = true;
                          break;
-                case 10: monthString = "October";
-                         break;
-                case 11: monthString = "November";
-                         break;
-                case 12: monthString = "December";
-                         break;
-                default: monthString = "Invalid month";
+                default: cout << "Invalid option";
                          break;
             }
         }
     }
 
-    private void menu() {
+    
+    private void introduction() {
         cout << "FurnitureVariableDriver" << endl;
+        cout << "Thorough the execution of this driver, we will have an object of the type FurnitureVariable which will be the target of all test funcition calls, and will evolve along with them. This is required to be able to test every possible state of a FurnitureVariable object, as some states can only be reached through a sequence of calls to their methods. There are options in the menu to display or set the state of this object" << endl;
+    }
+    
+    private void menu() {
         cout << "Options:" << endl;
-        cout << "1) Define the variable that will be used in tests" << endl;
-        cout << "2) getNextDomainValue() and hasMoreValues()" << endl;
+        cout << "0) See the state of the variable used in all tests"
+        cout << "1) Define the variable that will be used in all tests" << endl;
+        cout << "2) getNextDomainValue() and hasMoreValues() and resetIterators()" << endl;
         cout << "3) assignValue(Value value)" << endl;
         cout << "4) undoAssignValue()" << endl;
         cout << "5) trimDomain(Variable variable, int iteration)" << endl;    
         cout << "6) undoTrimDomain(Variable variable, Value value, int iteration)" << endl;    
         cout << "7) isAssigned()" << endl;
         cout << "8) getAssignedValue()" << endl;
-        cout << "9) resetIterators(int iteration)" << endl;
-        cout << "10) exit" << endl;
+        cout << "9) exit" << endl;
     }
     
     private void getNextDomainValueTester() {
+        cout << "These 3 functions serve the same purpose: iterating through the domain values of the variable for the current iteration. Thus, they are tested together." << endl;
         cout << "The initial state of the variable is this: " << endl;
-        variable.toString();
-        cout << "We will check that hasMoreValues() and getNextDomainValue work properly by iterating through the domain with them and displaying all the values" << endl;
+        cout << variable.toString();
+        cout << "We will check that the functions work properly by iterating through the domain with them and displaying all the values" << endl;
         
+        variable.resetIterators();
         while (variable.hasMoreValues()) {
             Value value = variable.getNextDomainValue();
             cout << value.toString();
@@ -96,20 +102,25 @@ public class FurnitureVariableTest {
     }
     
     private void trimDomainTester() {
-        
+        cout << "Introduce the FurnitureVariable that will be passed as parameter to the trimDomain call" << endl;
+        FurnitureVariable parameterVariable = readFurnitureVariable();
+        cout << "Now introduce the value that this variable should have assigned" << endl;
+        FurnitureValue value = readFurnitureValue();
+        cout << "Now introduce the \"iteration\" parameter. Remember that the iteration parameter has to fulfill the following precondition: \"if trimDomain or undoTrimDomain has already been called once, \"iteration\" value must be related to the value of \"iteration\" of the previous call (+1 if it was a trimDomain or equal if it was a undoTrimDomain). Otherwise, it must be 0." << endl;
+        int iteration;
+        cin >> iteration;
+        cout << "The initial state of the variable is this: " << endl;
+        variable.toString();
+        cout << "Now we make the trimDomain(furnitureVariable, iteration) call" << endl;
+        variable.trimDomain(parameterVariable, iteration);
+        cout << "The final state of the variable is this: " << endl;
+        variable.toString();
     }
     
-    
-    
-    
-    public class ModelStub extends FurnitureModel {
-        public String name;
-    }
-    
-    public class PointStub extends Point {
-        public int x;
-        public int y;
-    }}
+    private void undoTrimDomainTester() {
+        //TO DO
+    }    
+  
 }
 
 

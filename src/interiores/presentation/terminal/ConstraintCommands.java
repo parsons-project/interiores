@@ -38,13 +38,13 @@ public class ConstraintCommands extends CommandGroup {
                     + " Enter <range> followed by four coordinates to indicate a range of positions."
                     + " Enter <walls> followed by <all> or a cardinal point to cling this furniture to any wall"
                     + " or to a specific one.");
-            
+            parameters.add(specific);
             if (specific.equals("at")) { parameters.add(readInt("")); parameters.add(readInt("")); }
             else if (specific.equals("range")) {
                 parameters.add(readInt("")); parameters.add(readInt(""));
                 parameters.add(readInt("")); parameters.add(readInt(""));
             }
-            else if (specific.equals("wall")) parameters.add(readString(""));
+            else if (specific.equals("walls")) parameters.add(readString(""));
         }
         
         String furnitureID = readString("Select the furniture to which you want to apply the constraint");

@@ -1,16 +1,17 @@
 package interiores.business.models;
 
+import interiores.business.models.catalogs.PersistentIdObject;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.UnaryConstraint;
-import interiores.business.models.catalogs.PersistentIdObject;
+import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -39,10 +40,10 @@ public class FurnitureType
     private ArrayList<UnaryConstraint> unaryConstraints;
     
     @XmlElementWrapper
-    private HashMap<FurnitureType, ArrayList<BinaryConstraint>> binaryConstraints;
+    private HashMap<String, ArrayList<BinaryConstraint>> binaryConstraints;
     
     @XmlElementWrapper
-    private ArrayList<FurnitureModel> models;
+    private TreeMap<String, FurnitureModel> models;
     
     public FurnitureType() {
         super();
@@ -63,7 +64,7 @@ public class FurnitureType
         unaryConstraints = new ArrayList();
         binaryConstraints = new HashMap();
         
-        models = new ArrayList();
+        models = new TreeMap();
         
     }
     
@@ -71,12 +72,12 @@ public class FurnitureType
         return unaryConstraints;
     }
     
-    public Map<FurnitureType, ArrayList<BinaryConstraint>> getBinaryConstraints() {
+    public Map<String, ArrayList<BinaryConstraint>> getBinaryConstraints() {
         return binaryConstraints;
     }
     
     public List<FurnitureModel> getFurnitureModels() {
-        return models;
+        return new ArrayList(models.values());
     }
     
     public void addUnaryConstraint(UnaryConstraint unaryConstraint) {
@@ -84,20 +85,30 @@ public class FurnitureType
     }
     
     public void addBinaryConstraint(FurnitureType other, BinaryConstraint binaryConstraint) {
-        if(! binaryConstraints.containsKey(other))
-            binaryConstraints.put(other, new ArrayList());
+        if(! binaryConstraints.containsKey(other.getId()))
+            binaryConstraints.put(other.getId(), new ArrayList());
             
-        binaryConstraints.get(other).add(binaryConstraint);
+        binaryConstraints.get(other.getId()).add(binaryConstraint);
     }
     
-    public boolean addFurnitureModel(FurnitureModel furnitureModel) {
-        if (isDimensionOK(furnitureModel.getSize())) {
-            models.add(furnitureModel);
-            return true;
-        }
-        return false;
+    public void addFurnitureModel(FurnitureModel furnitureModel)
+            throws BusinessException
+    {
+        if (! isDimensionOK(furnitureModel.getSize()))
+            throw new BusinessException("The furniture model is not inside the range of the type "
+                    + "dimensions. Width range: " + widthRange + " Depth range: " + depthRange);
+        
+        furnitureModel.setType(identifier);
+        models.put(furnitureModel.getName(), furnitureModel);
     }
     
+    public void removeFurnitureModel(String modelName)
+            throws BusinessException
+    {
+        if(! models.containsKey(modelName))
+            throw new BusinessException("There is no furniture model named " + modelName + " in the "
+                    + "furniture type: " + identifier);
+    }
     
     /**
      * Gets the name of the type

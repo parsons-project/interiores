@@ -10,6 +10,7 @@ import interiores.core.business.BusinessController;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -34,8 +35,8 @@ public class DesignController extends BusinessController
         
         List<WantedFurniture> wishList = room.getWishList();
         
-        List<List<FurnitureModel>> variableModels = new ArrayList<List<FurnitureModel>>();
-        List<List<UnaryConstraint>> variableConstraints = new ArrayList<List<UnaryConstraint>>();
+        List<List<FurnitureModel>> variableModels = new ArrayList();
+        List<List<UnaryConstraint>> variableConstraints = new ArrayList();
         
         for (WantedFurniture wf : wishList) {
             variableModels.add(wf.getType().getFurnitureModels());

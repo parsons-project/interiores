@@ -4,21 +4,38 @@
  */
 package interiores.business.models;
 
-import java.awt.Color;
+import interiores.data.adapters.ColorAdapter;
 import interiores.utils.Dimension;
+import java.awt.Color;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  *
  * @author larribas
  */
+@XmlRootElement
 public class FurnitureModel {
-    
-    private FurnitureType ftype; // Furniture's type of this model
+    @XmlAttribute
     private String name;        // Comercial name of the furniture model
+    
+    @XmlElement
     private Dimension size;     // Size of the furniture model
+    
+    @XmlAttribute
     private float price;          // Market price of the furniture model
+    
+    @XmlAttribute
+    @XmlJavaTypeAdapter(ColorAdapter.class)
     private Color color;        // Color of the furniture model
+    
+    @XmlAttribute
     private String material;    // Material the furniture model is made in
+    
+    @XmlAttribute
+    private String ftype; // Furniture's type of this model
     
     /**
      * Default constructor.
@@ -36,8 +53,9 @@ public class FurnitureModel {
      * @param color Color of the furniture model
      * @param material Material the furniture model is made in
      */
-    public FurnitureModel(FurnitureType ftype, String name, Dimension size, float price, Color color, String material) {
-        this.ftype = ftype;
+    public FurnitureModel(String name, Dimension size, float price, Color color,
+            String material)
+    {
         this.name = name;
         this.size = size;
         this.price = price;
@@ -49,8 +67,12 @@ public class FurnitureModel {
      * Gets the type of the furniture
      * @return The furniture type of the model
      */
-    public FurnitureType getType() {
+    public String getType() {
         return ftype;
+    }
+    
+    public void setType(String ftype) {
+        this.ftype = ftype;
     }
     
     /**

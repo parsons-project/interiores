@@ -1,11 +1,9 @@
 package interiores.presentation.terminal;
 
-import horarios.shared.ElementNotFoundException;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
-import interiores.core.business.BusinessException;
-import interiores.core.presentation.terminal.CommandGroup;
+import interiores.business.exceptions.NoRoomCreatedException;
 import java.util.Collection;
 
 /**
@@ -35,20 +33,25 @@ public class FurnitureTypeCommands
         fTypeController.add(name, minWidth, maxWidth, minDepth, maxDepth);
     }
     
-    public void select() throws ElementNotFoundBusinessException {
+    public void select() throws ElementNotFoundBusinessException, NoRoomCreatedException {
         String name = readString("Enter the name of the furniture type you want to select");
         fTypeController.select(name);
     }
     
-    public void unselect() {
+    public void unselect()
+            throws NoRoomCreatedException
+    {
         selected();
         
         String name = readString("Please, enter the name of the furniture type you want to unselect");
         fTypeController.unselect(name);
     }
     
-    public void selected() {
+    public void selected()
+            throws NoRoomCreatedException
+    {
         Collection types = fTypeController.getRoomFurniture();
+        
         if(types.isEmpty())
             println("You have not selected any furniture yet");
         else {

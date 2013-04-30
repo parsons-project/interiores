@@ -35,13 +35,10 @@ public class Interiores
         app.addPresentation(terminal);
         
         app.addBusiness("room");
+        app.addBusiness("constraint");
         app.addBusiness("furnitureType");
         app.addBusiness("furnitureTypesCatalog");
-<<<<<<< HEAD
         app.addBusiness("roomTypesCatalog");
-=======
-        app.addBusiness("constraint");
->>>>>>> Some fixes upon Constraint Commands and Controllers
         
         app.init();
     }

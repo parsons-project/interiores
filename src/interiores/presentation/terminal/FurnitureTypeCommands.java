@@ -32,7 +32,7 @@ public class FurnitureTypeCommands
         fTypeController.add(name, minWidth, maxWidth, minDepth, maxDepth);
     }
     
-    public void rm() throws DefaultCatalogOverwriteException {
+    public void rm() throws BusinessException {
         String name = readString("Enter the name of the furniture type you want to remove:");
         
         fTypeController.rm(name);

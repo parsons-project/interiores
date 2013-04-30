@@ -1,6 +1,5 @@
 package interiores.business.controllers;
 
-import horarios.shared.Catalog;
 import horarios.shared.ElementNotFoundException;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.FurnitureType;
@@ -28,30 +27,39 @@ public class FurnitureTypeController
     public void add(String name, int minWidth, int maxWidth, int minDepth, int maxDepth)
             throws DefaultCatalogOverwriteException
     {
-        if(getCatalogName().equals(NamedCatalog.getDefaultName()))
+        NamedCatalog<FurnitureType> activeCatalog = getActiveCatalog();
+        
+        if(activeCatalog.isDefault())
             throw new DefaultCatalogOverwriteException();
         
         Range widthRange = new Range(minWidth, maxWidth);
         Range depthRange = new Range(minDepth, maxDepth);
         
-        getTypesCatalog().add(new FurnitureType(name, widthRange, depthRange));
+        getActiveCatalog().add(new FurnitureType(name, widthRange, depthRange));
+    }
+    
+    public void rm(String name)
+            throws BusinessException
+    {
+        NamedCatalog<FurnitureType> activeCatalog = getActiveCatalog();
+        
+        if(activeCatalog.isDefault())
+            throw new DefaultCatalogOverwriteException();
+        
+        if(!activeCatalog.hasObject(name))
+            throw new BusinessException("The " + activeCatalog.getName() + " catalog has no furniture type "
+                    + "named: " + name);
+        
+        activeCatalog.delete(name);
     }
     
     public Collection<FurnitureType> getCatalogObjects() {
-        return getTypesCatalog().getObjects();
-    }
-    
-    public String getCatalogName() {
-        return (String) data.get("typesCatalogName");
-    }
-    
-    private Catalog<FurnitureType> getTypesCatalog() {
-        return (Catalog<FurnitureType>) data.get("typesCatalog");
+        return getActiveCatalog().getObjects();
     }
     
     public void select(String name) throws ElementNotFoundException {
         List<WantedFurniture> l = getRoom().getWishList();
-        WantedFurniture wf = new WantedFurniture(getTypesCatalog().getObject(name),l.size());
+        WantedFurniture wf = new WantedFurniture(getActiveCatalog().getObject(name), l.size());
         l.add(wf);
     }
     
@@ -59,12 +67,19 @@ public class FurnitureTypeController
         getRoom().removeWantedFurniture(name);
     }
     
-    private Room getRoom() {
-        return (Room) data.get("room");
+    public String getNameActiveCatalog() {
+        return getActiveCatalog().getName();
     }
-
+    
     public List<WantedFurniture> getRoomFurniture() {
         return getRoom().getWishList();
     }
     
+    private Room getRoom() {
+        return (Room) data.get("room");
+    }
+    
+    private NamedCatalog<FurnitureType> getActiveCatalog() {
+        return (NamedCatalog<FurnitureType>) data.get("typesCatalog");
+    }
 }

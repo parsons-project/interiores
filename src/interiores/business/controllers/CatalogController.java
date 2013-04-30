@@ -32,7 +32,6 @@ abstract public class CatalogController<I extends PersistentIdObject>
         
         loadedCatalogs.put(defaultCatalog.getName(), defaultCatalog);
         
-        data.set(name + "CatalogName", defaultCatalog.getName());
         data.set(name + "Catalog", defaultCatalog);
     }
     
@@ -47,7 +46,6 @@ abstract public class CatalogController<I extends PersistentIdObject>
         if(! loadedCatalogs.containsKey(catalogName))
             throw new CatalogNotFoundException(catalogName);
         
-        data.set(name + "CatalogName", catalogName);
         data.set(name + "Catalog", loadedCatalogs.get(catalogName));
     }
     
@@ -91,7 +89,7 @@ abstract public class CatalogController<I extends PersistentIdObject>
     }
     
     public String getNameActiveCatalog() {
-        return (String) data.get(name + "CatalogName");
+        return getActiveCatalog().getName();
     }
     
     public Collection<String> getNamesLoadedCatalogs() {

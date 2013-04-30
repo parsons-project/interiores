@@ -32,10 +32,16 @@ public class FurnitureTypeCommands
         fTypeController.add(name, minWidth, maxWidth, minDepth, maxDepth);
     }
     
+    public void rm() throws DefaultCatalogOverwriteException {
+        String name = readString("Enter the name of the furniture type you want to remove:");
+        
+        fTypeController.rm(name);
+    }
+    
     public void list() {
         Collection types = fTypeController.getCatalogObjects();
         
-        println("Listing furniture types of the catalog: " + fTypeController.getCatalogName());
+        println("Listing furniture types of the catalog: " + fTypeController.getNameActiveCatalog());
         
         print(types);
         

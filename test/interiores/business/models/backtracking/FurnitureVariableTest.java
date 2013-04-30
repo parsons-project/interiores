@@ -1,3 +1,6 @@
+//NIL: I think this driver is obsolete because the tested class has changed much.
+
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.

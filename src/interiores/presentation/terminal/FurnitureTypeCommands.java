@@ -33,9 +33,9 @@ public class FurnitureTypeCommands
     }
     
     public void rm() throws BusinessException {
-        String name = readString("Enter the name of the furniture type you want to remove:");
+        Collection<String> names = readStrings("Enter the names of the furniture types you want to remove:");
         
-        fTypeController.rm(name);
+        fTypeController.rm(names);
     }
     
     public void list() {

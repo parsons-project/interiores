@@ -20,6 +20,10 @@ abstract public class CommandGroup
         return iostream.readString(question);
     }
     
+    public Collection<String> readStrings(String question) {
+        return iostream.readStrings(question);
+    }
+    
     public int readInt(String question)
     {       
         return iostream.readInt(question);
@@ -29,8 +33,8 @@ abstract public class CommandGroup
         iostream.println(line);
     }
     
-    public void print(Collection collection) {
-        for(Object s : collection)
-            println(s.toString());
+    public void print(Collection<?> collection) {
+        for(Object o : collection)
+            println(o.toString());
     }
 }

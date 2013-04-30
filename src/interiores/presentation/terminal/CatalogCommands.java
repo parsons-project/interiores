@@ -45,9 +45,9 @@ public class CatalogCommands
     
     public void _new() throws BusinessException {
         String question = String.format(NEW_MSG, catalogTypeName);
-        String catalogName = readString(question);
+        Collection catalogNames = readStrings(question);
         
-        catalogController.create(catalogName);
+        catalogController.create(catalogNames);
     }
     
     public void checkout() throws BusinessException {
@@ -74,8 +74,8 @@ public class CatalogCommands
     
     public void merge() throws BusinessException {
         String question = String.format(MERGE_MSG, catalogTypeName);
-        String catalogName = readString(question);
+        Collection catalogNames = readStrings(question);
         
-        catalogController.merge(catalogName);
+        catalogController.merge(catalogNames);
     }
 }

@@ -8,8 +8,8 @@ import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -26,7 +26,7 @@ abstract public class CatalogController<I extends PersistentIdObject>
         super(data);
         
         this.name = name;
-        loadedCatalogs = new HashMap();
+        loadedCatalogs = new TreeMap();
         
         NamedCatalog<I> defaultCatalog = new NamedCatalog();
         
@@ -35,11 +35,13 @@ abstract public class CatalogController<I extends PersistentIdObject>
         data.set(name + "Catalog", defaultCatalog);
     }
     
-    public void create(String catalogName) throws BusinessException {
-        if(catalogName.equals(NamedCatalog.getDefaultName()))
-            throw new DefaultCatalogOverwriteException();
-        
-        loadedCatalogs.put(catalogName, new NamedCatalog(catalogName, getActiveCatalog()));
+    public void create(Collection<String> catalogNames) throws BusinessException {
+        for(String catalogName : catalogNames) {
+            if(catalogName.equals(NamedCatalog.getDefaultName()))
+                throw new DefaultCatalogOverwriteException();
+
+            loadedCatalogs.put(catalogName, new NamedCatalog(catalogName, getActiveCatalog()));
+        }
     }
     
     public void checkout(String catalogName) throws BusinessException {
@@ -49,20 +51,22 @@ abstract public class CatalogController<I extends PersistentIdObject>
         data.set(name + "Catalog", loadedCatalogs.get(catalogName));
     }
     
-    public void merge(String catalogName) throws BusinessException {
-        if (! loadedCatalogs.containsKey(catalogName))
-            throw new CatalogNotFoundException(catalogName);
-        
+    public void merge(Collection<String> catalogNames) throws BusinessException {
         NamedCatalog<I> currentCatalog = getActiveCatalog();
         
         if(currentCatalog.isDefault())
             throw new DefaultCatalogOverwriteException();
         
-        Collection<I> toMerge = loadedCatalogs.get(catalogName).getCopyObjects();
-        
-        for (I fType : toMerge) {
-            if (! currentCatalog.hasObject(fType)) {
-                currentCatalog.add(fType);
+        for(String catalogName : catalogNames) {
+            if (! loadedCatalogs.containsKey(catalogName))
+                throw new CatalogNotFoundException(catalogName);
+
+            Collection<I> toMerge = loadedCatalogs.get(catalogName).getCopyObjects();
+
+            for (I fType : toMerge) {
+                if (! currentCatalog.hasObject(fType)) {
+                    currentCatalog.add(fType);
+                }
             }
         }
     }

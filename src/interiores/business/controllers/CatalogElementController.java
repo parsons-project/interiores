@@ -34,7 +34,7 @@ abstract public class CatalogElementController<I extends PersistentIdObject>
         activeCatalog.add(element);
     }
     
-    public void rm(String name)
+    public void rm(Collection<String> elementNames)
             throws BusinessException
     {
         NamedCatalog<I> activeCatalog = getActiveCatalog();
@@ -42,11 +42,13 @@ abstract public class CatalogElementController<I extends PersistentIdObject>
         if(activeCatalog.isDefault())
             throw new DefaultCatalogOverwriteException();
         
-        if(!activeCatalog.hasObject(name))
-            throw new BusinessException("The " + activeCatalog.getName() + " catalog has no element "
-                    + "named: " + name);
-        
-        activeCatalog.delete(name);
+        for(String elementName : elementNames) {
+            if(!activeCatalog.hasObject(elementName))
+                throw new BusinessException("The " + activeCatalog.getName() + " catalog has no element "
+                        + "named: " + elementName);
+
+            activeCatalog.delete(elementName);
+        }
     }
         
     public Collection<I> getCatalogObjects() {

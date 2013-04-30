@@ -241,8 +241,12 @@ public class FurnitureVariable
     /**
      * Merges back values from step "iteration"+1 to "iteration" level.
      * To do this operation, we swap the containers first if the destination
-     * level's container has less elements. 
+     * level's container has less elements.
      */
+    //pre: trimDomain has already been called once.
+    //     "iteration" value must be related to the value of "iteration" of the
+    //     previous call to trimDomain or undoTrimDomain (equal if it was
+    //     trimDomain or -1 if it was undoTrimDomain).
     @Override
     public void undoTrimDomain(Variable variable, Value value, int iteration) {
         // 0) update internal iteration

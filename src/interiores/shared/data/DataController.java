@@ -40,13 +40,15 @@ public class DataController {
      * @param path Path where to save the file with the generated XML
      * @throws JAXBException 
      */
-    public void save(Object o, String path) throws JAXBException {
+    public void save(Object o, String path)
+            throws JAXBException {
         Class[] classes = { o.getClass() };
         
         save(o, path, classes);
     }
     
-    public void save(Object o, String path, Class[] boundClasses) throws JAXBException {
+    public void save(Object o, String path, Class[] boundClasses)
+            throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(boundClasses);
         Marshaller m = jc.createMarshaller();
         m.setProperty("jaxb.formatted.output", true);
@@ -61,11 +63,15 @@ public class DataController {
      * @return The loaded object
      * @throws JAXBException 
      */
-    public Object load(Class c, String path) throws JAXBException {
-        return load(c, path);
+    public Object load(Class c, String path)
+            throws JAXBException {
+        Class[] boundClasses = { c };
+        
+        return load(boundClasses, path);
     }
     
-    public Object load(Class[] boundClasses, String path) throws JAXBException {
+    public Object load(Class[] boundClasses, String path)
+            throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(boundClasses);
         Unmarshaller u = jc.createUnmarshaller();
         

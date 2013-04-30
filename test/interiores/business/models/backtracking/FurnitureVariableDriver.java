@@ -2,21 +2,23 @@
 
 package interiores.business.models.backtracking;
 
-import interiores.core.terminal.IOStream;
+import drivers.AbstractDriver;
+import interiores.core.presentation.terminal.IOStream;
 import interiores.shared.backtracking.Value;
 
 /**
  *
  * @author nil.mamano
  */
-public class FurnitureVariableDriver {
-
+public class FurnitureVariableDriver
+    extends AbstractDriver
+{
+    private static final String NEW_LINE = System.getProperty("line.separator");
+    
     private static IOStream iostream = new IOStream(System.in, System.out);
-    String NEW_LINE = System.getProperty("line.separator");
+    private static FurnitureVariable variable;
     
-    FurnitureVariable variable;
-    
-    public void main() {  
+    public static void main() {  
         introduction();
         variable = readFurnitureVariable();
         boolean exit = false;
@@ -47,7 +49,7 @@ public class FurnitureVariableDriver {
     }
 
     
-    private void introduction() {
+    private static void introduction() {
         System.out.println("FurnitureVariable Driver" + NEW_LINE + NEW_LINE);
         System.out.println("Thorough the execution of this driver, we will have");
         System.out.println(" an object of the type FurnitureVariable which will");
@@ -62,7 +64,7 @@ public class FurnitureVariableDriver {
         System.out.println(" result is unspecified." + NEW_LINE);
     }
     
-    private void menu() {
+    private static void menu() {
         System.out.println("Options:" + NEW_LINE);
         System.out.println("0) See the state of the variable used in all tests" + NEW_LINE);
         System.out.println("1) Define the variable that will be used in all tests" + NEW_LINE);
@@ -74,11 +76,13 @@ public class FurnitureVariableDriver {
         System.out.println("7) exit" + NEW_LINE);
     }
     
-    private void getNextDomainValueTester() {
-        System.out.println("These 3 functions serve the same purpose: iterating through the domain values of the variable for the current iteration. Thus, they are tested together." + NEW_LINE);
+    private static void getNextDomainValueTester() {
+        System.out.println("These 3 functions serve the same purpose: iterating through the domain values of "
+                + "the variable for the current iteration. Thus, they are tested together." + NEW_LINE);
         System.out.println("The initial state of the variable is this: " + NEW_LINE);
         System.out.println(variable.toString());
-        System.out.println("We will check that the functions work properly by iterating through the domain with them and displaying all the values" + NEW_LINE);
+        System.out.println("We will check that the functions work properly by iterating through the domain "
+                + "with them and displaying all the values" + NEW_LINE);
         
         variable.resetIterators();
         while (variable.hasMoreValues()) {
@@ -87,7 +91,7 @@ public class FurnitureVariableDriver {
         }
     }
                 
-    private void assignValueTester() {
+    private static void assignValueTester() {
         System.out.println("The initial state of the variable is this: " + NEW_LINE);
         System.out.println(variable.toString());
         System.out.println("Introduce the value to be assigned to the variable" + NEW_LINE);
@@ -98,7 +102,7 @@ public class FurnitureVariableDriver {
         System.out.println(variable.toString());
     }
         
-    private void undoAssignValueTester() {
+    private static void undoAssignValueTester() {
         System.out.println("The initial state of the variable is this: " + NEW_LINE);
         System.out.println(variable.toString());
         System.out.println("Calling method undoAssignValue()" + NEW_LINE);
@@ -107,12 +111,17 @@ public class FurnitureVariableDriver {
         System.out.println(variable.toString());
     }
     
-    private void trimDomainTester() {
-        System.out.println("Introduce the FurnitureVariable that will be passed as parameter to the trimDomain call" + NEW_LINE);
+    private static void trimDomainTester() {
+        System.out.println("Introduce the FurnitureVariable that will be passed as parameter to the "
+                + "trimDomain call" + NEW_LINE);
         FurnitureVariable parameterVariable = readFurnitureVariable();
         System.out.println("Now introduce the value that this variable should have assigned" + NEW_LINE);
         FurnitureValue value = readFurnitureValue();
-        System.out.println("Now introduce the \"iteration\" parameter. Remember that the iteration parameter has to fulfill the following precondition: \"if trimDomain or undoTrimDomain has already been called once, \"iteration\" value must be related to the value of \"iteration\" of the previous call (+1 if it was a trimDomain or equal if it was a undoTrimDomain). Otherwise, it must be 0.\"" + NEW_LINE);
+        System.out.println("Now introduce the \"iteration\" parameter. Remember that the iteration parameter "
+                + "has to fulfill the following precondition: \"if trimDomain or undoTrimDomain has already "
+                + "been called once, \"iteration\" value must be related to the value of \"iteration\" of "
+                + "the previous call (+1 if it was a trimDomain or equal if it was a undoTrimDomain). "
+                + "Otherwise, it must be 0.\"" + NEW_LINE);
         int iteration = iostream.readInt();
         System.out.println("The initial state of the variable is this: " + NEW_LINE);
         System.out.println(variable.toString());
@@ -122,12 +131,17 @@ public class FurnitureVariableDriver {
         System.out.println(variable.toString());
     }
     
-    private void undoTrimDomainTester() {
-        System.out.println("Introduce the FurnitureVariable that will be passed as parameter to the undoTrimDomain call" + NEW_LINE);
+    private static void undoTrimDomainTester() {
+        System.out.println("Introduce the FurnitureVariable that will be passed as parameter to the "
+                + "undoTrimDomain call" + NEW_LINE);
         FurnitureVariable parameterVariable = readFurnitureVariable();
         System.out.println("Now introduce the value parameter" + NEW_LINE);
         FurnitureValue value = readFurnitureValue();
-        System.out.println("Now introduce the \"iteration\" parameter. Remember that the iteration parameter has to fulfill the following precondition: \"trimDomain has already been called once. \"iteration\" value must be related to the value of \"iteration\" of the previous call to trimDomain or undoTrimDomain (equal if it was trimDomain or -1 if it was undoTrimDomain).\"" + NEW_LINE);
+        System.out.println("Now introduce the \"iteration\" parameter. Remember that the iteration parameter "
+                + "has to fulfill the following precondition: \"trimDomain has already been called once. "
+                + "\"iteration\" value must be related to the value of \"iteration\" of the previous call "
+                + "to trimDomain or undoTrimDomain (equal if it was trimDomain or -1 if it was "
+                + "undoTrimDomain).\"" + NEW_LINE);
         int iteration = iostream.readInt();
         System.out.println("The initial state of the variable is this: " + NEW_LINE);
         System.out.println(variable.toString());
@@ -138,5 +152,3 @@ public class FurnitureVariableDriver {
     }    
   
 }
-
-

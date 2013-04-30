@@ -108,6 +108,8 @@ public class FurnitureType
         if(! models.containsKey(modelName))
             throw new BusinessException("There is no furniture model named " + modelName + " in the "
                     + "furniture type: " + identifier);
+        
+        models.remove(modelName);
     }
     
     /**

@@ -10,6 +10,7 @@ import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Dimension;
 import java.awt.Color;
+import java.util.Collection;
 
 /**
  *
@@ -26,7 +27,7 @@ public class FurnitureModelController
             String color, String material)
             throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException, BusinessException
     {
-        FurnitureType furnitureType = getFurnitureType(furnitureTypeName);
+        FurnitureType furnitureType = getFurnitureTypeCatalog().getForWrite(furnitureTypeName);
         
         Dimension size = new Dimension(width, depth);
         Color modelColor = Color.decode(color);
@@ -40,17 +41,23 @@ public class FurnitureModelController
     public void rm(String furnitureTypeName, String name)
             throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException, BusinessException
     {
-        FurnitureType furnitureType = getFurnitureType(furnitureTypeName);
+        FurnitureType furnitureType = getFurnitureTypeCatalog().getForWrite(furnitureTypeName);
         
         furnitureType.removeFurnitureModel(name);
     }
     
-    private FurnitureType getFurnitureType(String furnitureTypeName)
-            throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException
+    public Collection<FurnitureModel> getFurnitureModels(String furnitureTypeName)
+            throws ElementNotFoundBusinessException
     {
+        FurnitureType furnitureType = getFurnitureTypeCatalog().get(furnitureTypeName);
+        
+        return furnitureType.getFurnitureModels();
+    }
+    
+    private NamedCatalog<FurnitureType> getFurnitureTypeCatalog() {
         String ftCatalogTypeName = FurnitureTypesCatalogController.getCatalogTypeName();
         NamedCatalog<FurnitureType> ftCatalog = (NamedCatalog) data.get(ftCatalogTypeName);
         
-        return ftCatalog.getForWrite(furnitureTypeName);
+        return ftCatalog;
     }
 }

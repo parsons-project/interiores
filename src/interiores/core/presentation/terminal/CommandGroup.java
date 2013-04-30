@@ -29,6 +29,10 @@ abstract public class CommandGroup
         return iostream.readInt(question);
     }
     
+    public float readFloat(String question) {
+        return iostream.readFloat(question);
+    }
+    
     public void println(String line) {
         iostream.println(line);
     }

@@ -115,5 +115,11 @@ public class FurnitureModel {
         return price;
     }
     
-
+    @Override
+    public String toString() {
+        String colorString = "r=" + color.getRed() + ",g=" + color.getGreen() + ",b=" + color.getBlue();
+        
+        return name + " Size[" + size + "], Price[" + price + "], Color[" + colorString + "], "
+        + "[Material: " + material + "]";
+    }
 }

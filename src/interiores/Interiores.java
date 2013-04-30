@@ -4,6 +4,7 @@ package interiores;
 
 import interiores.core.Application;
 import interiores.core.Debug;
+import interiores.core.data.JAXBDataController;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.TerminalController;
 import interiores.data.MappedDataController;
@@ -20,29 +21,42 @@ public class Interiores
      */
     public static void main(String[] args) throws Exception
     {
+        // Gimme info of the errors, yo!
         Debug.enable();
         
-        TerminalController terminal = new TerminalController("interiores.presentation.terminal");
-        terminal.addShortcut("furnitureType", "ft");
-        terminal.addShortcut("roomType", "rt");
-        terminal.addShortcut("furnitureTypesCatalog", "ftc");
-        terminal.addShortcut("roomTypesCatalog", "rtc");
-        
+        // Application for wiring
         Application app = new Application("interiores");
-                
-        app.setDataController(new MappedDataController());
         
-        app.addPresentation(new SwingController("interiores.presentation.swing.views"));
-        app.addPresentation(terminal);
+        // Application dependencies
+        JAXBDataController dataController = new MappedDataController();
+        TerminalController terminalController = new TerminalController("interiores.presentation.terminal");
+        SwingController swingController = new SwingController("interiores.presentation.swing.views");
         
+        // Persistance layer
+        app.setDataController(dataController);
+        
+        // Presentation layer
+        app.addPresentation(swingController);
+        app.addPresentation(terminalController);
+        
+        // Business layer
         app.addBusiness("room");
         app.addBusiness("constraint");
         app.addBusiness("design");
+        app.addBusiness("furnitureModel");
         app.addBusiness("furnitureType");
         app.addBusiness("roomType");
         app.addBusiness("furnitureTypesCatalog");
         app.addBusiness("roomTypesCatalog");
         
+        // Some terminal shortcuts!
+        terminalController.addShortcut("furnitureModel", "fm");
+        terminalController.addShortcut("furnitureType", "ft");
+        terminalController.addShortcut("roomType", "rt");
+        terminalController.addShortcut("furnitureTypesCatalog", "ftc");
+        terminalController.addShortcut("roomTypesCatalog", "rtc");
+        
+        // Run, run, run!!!
         app.init();
     }
 }

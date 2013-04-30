@@ -55,11 +55,21 @@ public class FurnitureTypeCommands
     }
     
     public void unselect() throws BusinessException, ElementNotFoundException {
-        println("These are the furniture types you want in your room: ");
-        Collection types = fTypeController.getRoomFurniture();
-        print(types);
+        selected();
         
-        String name = readString("Please, enter the name of the furniture type you want to select");
+        String name = readString("Please, enter the name of the furniture type you want to unselect");
         fTypeController.unselect(name);
     }
+    
+    public void selected() {
+        Collection types = fTypeController.getRoomFurniture();
+        if(types.isEmpty())
+            println("You have not selected any furniture yet");
+        else {
+            println("These are the furniture types you want in your room: ");
+            print(types);
+        }
+    }
+    
+    
 }

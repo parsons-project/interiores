@@ -16,6 +16,7 @@ import interiores.business.models.constraints.unary.PriceConstraint;
 import interiores.business.models.constraints.unary.SizeConstraint;
 import interiores.core.business.BusinessController;
 import interiores.core.data.JAXBDataController;
+import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +40,10 @@ public class ConstraintController extends BusinessController {
     public void add(String type, List<Object> parameters, String furnitureID) throws ClassNotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         
         if (type.equals("width") || type.equals("depth")) {
+            // We get the SizeConstraint of that furniture. If there isn't one, we create it
+            if (getWantedFurniture(furnitureID).getConstraint("size")==null)
+                getWantedFurniture(furnitureID).addConstraint("size", new SizeConstraint());
+            
             SizeConstraint sc = (SizeConstraint) getWantedFurniture(furnitureID).getConstraint("size");
             int min = (Integer) parameters.get(0);
             int max = (Integer) parameters.get(1);
@@ -68,11 +73,11 @@ public class ConstraintController extends BusinessController {
                     int roomDepth = getRoom().getHeight();
                     if (whichWalls.equals("N") || whichWalls.equals("all"))
                         for (int i = 0; i < roomWidth; i++) validPositions.add(new Point(0,i));
-                    else if (whichWalls.equals("S") || whichWalls.equals("all"))
+                    if (whichWalls.equals("S") || whichWalls.equals("all"))
                         for (int i = 0; i < roomWidth; i++) validPositions.add(new Point(roomDepth-1,i));
-                    else if (whichWalls.equals("W") || whichWalls.equals("all"))
+                    if (whichWalls.equals("W") || whichWalls.equals("all"))
                         for (int i = 0; i < roomDepth; i++) validPositions.add(new Point(i,0));
-                    else if (whichWalls.equals("E") || whichWalls.equals("all"))
+                    if (whichWalls.equals("E") || whichWalls.equals("all"))
                         for (int i = 0; i < roomDepth; i++) validPositions.add(new Point(i,roomWidth-1));
                 }
                 

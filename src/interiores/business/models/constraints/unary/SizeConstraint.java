@@ -31,7 +31,8 @@ public class SizeConstraint
     private Dimension maxSize;
     
     public SizeConstraint() {
-        
+        minSize = new Dimension();
+        maxSize = new Dimension();
     }
     
     /**

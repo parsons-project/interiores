@@ -12,8 +12,14 @@ import interiores.core.data.JAXBDataController;
 public class FurnitureTypesCatalogController
     extends CatalogController<FurnitureType>
 {
+    private static final String CATALOG_TYPE_NAME = "types";
+    
+    public static String getCatalogTypeName() {
+        return CATALOG_TYPE_NAME;
+    }
+    
     public FurnitureTypesCatalogController(JAXBDataController data) {
-        super("types", data);
+        super(data, CATALOG_TYPE_NAME);
         
         // Temporary default catalog overwrite
         NamedCatalog defaultCatalog = new DefaultFurnitureTypesCatalog();

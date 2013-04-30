@@ -22,7 +22,7 @@ abstract public class CatalogController<I extends PersistentIdObject>
     private String name;
     protected Map<String, NamedCatalog<I>> loadedCatalogs;
     
-    public CatalogController(String name, JAXBDataController data) {
+    public CatalogController(JAXBDataController data, String name) {
         super(data);
         
         this.name = name;

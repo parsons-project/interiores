@@ -1,16 +1,13 @@
 package horarios.shared;
 
-import interiores.business.models.FurnitureType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  * IdObject represents a object with a identifier
  * @author Jaume
  */
 @XmlRootElement
-@XmlSeeAlso({FurnitureType.class})
 public class IdObject implements Comparable<IdObject> {
     
     /**

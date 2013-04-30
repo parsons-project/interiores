@@ -21,9 +21,9 @@ public class ConstraintController extends BusinessController {
         super(data);
     }
 
-    public Collection getConstraints(String variable) {
-        return getVariableSet().getVariable(variable).getUnaryConstraints();
-    }
+    //public Collection getConstraints(String variable) {
+    //    return getVariableSet().getVariable(variable).getUnaryConstraints();
+    //}
 
     public void add(String type, List<Object> parameters, String variable) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

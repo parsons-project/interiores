@@ -20,8 +20,8 @@ public class FurnitureTypesCatalogCommands
     }
     
     public void list() {
-        Collection<String> catalogNames = ftCatalogController.getNamesLoadedTypesCatalogs();
-        String activeCatalog = ftCatalogController.getNameActiveTypesCatalog();
+        Collection<String> catalogNames = ftCatalogController.getNamesLoadedCatalogs();
+        String activeCatalog = ftCatalogController.getNameActiveCatalog();
         
         println("Listing names of available furniture types catalogs:");
         
@@ -51,9 +51,9 @@ public class FurnitureTypesCatalogCommands
     }
     
     public void save() throws JAXBException {
-        String catalogName = readString("Enter the name of the catalog you want to save");
-        String path = readString("Enter the path where to save the " + catalogName + " catalog");
+        String activeCatalog = ftCatalogController.getNameActiveCatalog();
+        String path = readString("Enter the path where to save the " + activeCatalog + " catalog");
         
-        ftCatalogController.save(catalogName, path);
+        ftCatalogController.save(path);
     }
 }

@@ -1,7 +1,6 @@
 package interiores.business.models.catalogs;
 
 import horarios.shared.Catalog;
-import horarios.shared.IdObject;
 import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -11,13 +10,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author hector
  */
 @XmlRootElement
-public class NamedCatalog<X extends IdObject>
+public class NamedCatalog<X extends PersistentIdObject>
     extends Catalog<X>
 {
     private static final String DEFAULT_NAME = "default";
     
     @XmlAttribute
     private String name;
+    
+    public static String getDefaultName() {
+        return DEFAULT_NAME;
+    }
     
     public NamedCatalog() {
         this(DEFAULT_NAME);
@@ -38,8 +41,8 @@ public class NamedCatalog<X extends IdObject>
             add(object);
     }
     
-    public static String getDefaultName() {
-        return DEFAULT_NAME;
+    public boolean isDefault() {
+        return name.equals(DEFAULT_NAME);
     }
     
     public String getName() {

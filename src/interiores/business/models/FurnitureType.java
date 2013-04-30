@@ -1,8 +1,8 @@
 package interiores.business.models;
 
-import horarios.shared.IdObject;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.models.catalogs.PersistentIdObject;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class FurnitureType
-    extends IdObject
+    extends PersistentIdObject
 {
     /**
      * Width range

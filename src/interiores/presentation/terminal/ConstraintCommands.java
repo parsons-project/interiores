@@ -54,7 +54,7 @@ public class ConstraintCommands extends CommandGroup {
         constraintController.add(type,parameters,variable);
         
     }
-    
+    /*
     public void list() {
         String variable = readString("Select the variable whose constraints you want to show");
         Collection constraints = constraintController.getConstraints(variable);
@@ -63,6 +63,6 @@ public class ConstraintCommands extends CommandGroup {
         print(constraints);
         if(constraints.isEmpty())
             println("There are no constraints defined for that variable");
-    }
+    }*/
 
 }

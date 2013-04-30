@@ -12,11 +12,10 @@ import interiores.shared.backtracking.NoSolutionException;
 public class FurnitureVariableSetDriver extends AbstractDriver {
 
     private static IOStream iostream = new IOStream(System.in, System.out);
-    String NEW_LINE = System.getProperty("line.separator");
     
-    FurnitureVariableSet variableSet;
+    private static FurnitureVariableSet variableSet;
     
-    public void main() {  
+    public static void main(String[] args) {  
         introduction();
         boolean exit = false;
         while (!exit) {
@@ -32,38 +31,40 @@ public class FurnitureVariableSetDriver extends AbstractDriver {
                         solveTester();
                     }
                     catch (NoSolutionException nse) {
-                        System.out.println("No solution Found");
+                        iostream.println("No solution Found");
                     }
                     break;
                 case 3: exit = true;
                          break;
-                default: System.out.println("Invalid option");
+                default: iostream.println("Invalid option");
                          break;
             }
         }
     }
 
     
-    private void introduction() {
-        System.out.println("FurnitureVariableSet Driver" + NEW_LINE + NEW_LINE);
-        System.out.println("Define the VariableSet object:" + NEW_LINE);
+    private static void introduction() {
+        iostream.println("FurnitureVariableSet Driver");
+        iostream.println("");
+        iostream.println("Define the VariableSet object:");
         variableSet = readFurnitureVariableSet();
     }
     
-    private void menu() {
-        System.out.println("Options:" + NEW_LINE);
-        System.out.println("0) See the VariableSet" + NEW_LINE);
-        System.out.println("1) Define a new VariableSet" + NEW_LINE);
-        System.out.println("2) solve()" + NEW_LINE);
-        System.out.println("3) exit" + NEW_LINE);
-        System.out.println(">> ");
+    private static void menu() {
+        iostream.println("Options:");
+        iostream.println("");
+        iostream.println("0) See the VariableSet");
+        iostream.println("1) Define a new VariableSet");
+        iostream.println("2) solve()");
+        iostream.println("3) exit");
+        iostream.println(">> ");
     }
     
-    private void solveTester() throws NoSolutionException {
-        System.out.println("Calling solve() method..." + NEW_LINE);
+    private static void solveTester() throws NoSolutionException {
+        iostream.println("Calling solve() method...");
         variableSet.solve();
-        System.out.println("Done. You can check if a solution was found, and ");
-        System.out.println("which, with the appropiate menu option (0)" + NEW_LINE);
+        iostream.println("Done. You can check if a solution was found, and ");
+        iostream.println("which, with the appropiate menu option (0)");
     }
 
 }

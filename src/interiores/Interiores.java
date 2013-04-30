@@ -25,6 +25,7 @@ public class Interiores
         TerminalController terminal = new TerminalController("interiores.presentation.terminal");
         terminal.addShortcut("furnitureType", "ft");
         terminal.addShortcut("furnitureTypesCatalog", "ftc");
+        terminal.addShortcut("roomTypesCatalog", "rtc");
         
         Application app = new Application("interiores");
                 
@@ -36,6 +37,7 @@ public class Interiores
         app.addBusiness("room");
         app.addBusiness("furnitureType");
         app.addBusiness("furnitureTypesCatalog");
+        app.addBusiness("roomTypesCatalog");
         
         app.init();
     }

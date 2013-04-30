@@ -141,5 +141,4 @@ public abstract class AbstractDriver {
         return new FurnitureValue(or, fm);
     }
     
-    public abstract boolean test();
 }

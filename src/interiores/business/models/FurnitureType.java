@@ -6,7 +6,9 @@ import interiores.business.models.catalogs.PersistentIdObject;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
@@ -39,6 +41,9 @@ public class FurnitureType
     @XmlElementWrapper
     private HashMap<FurnitureType, ArrayList<BinaryConstraint>> binaryConstraints;
     
+    @XmlElementWrapper
+    private ArrayList<FurnitureModel> models;
+    
     public FurnitureType() {
         super();
     }
@@ -57,6 +62,9 @@ public class FurnitureType
         
         unaryConstraints = new ArrayList();
         binaryConstraints = new HashMap();
+        
+        models = new ArrayList();
+        
     }
     
     public List<UnaryConstraint> getUnaryConstraints() {
@@ -65,6 +73,10 @@ public class FurnitureType
     
     public Map<FurnitureType, ArrayList<BinaryConstraint>> getBinaryConstraints() {
         return binaryConstraints;
+    }
+    
+    public List<FurnitureModel> getFurnitureModels() {
+        return models;
     }
     
     public void addUnaryConstraint(UnaryConstraint unaryConstraint) {
@@ -77,6 +89,15 @@ public class FurnitureType
             
         binaryConstraints.get(other).add(binaryConstraint);
     }
+    
+    public boolean addFurnitureModel(FurnitureModel furnitureModel) {
+        if (isDimensionOK(furnitureModel.getSize())) {
+            models.add(furnitureModel);
+            return true;
+        }
+        return false;
+    }
+    
     
     /**
      * Gets the name of the type
@@ -108,7 +129,7 @@ public class FurnitureType
      * @param dimension The dimension to be checked
      * @return True if the dimension is between the min and the max dimensions of the type, false otherwise
      */
-    public Boolean checkDimension(Dimension dimension) {
+    private boolean isDimensionOK(Dimension dimension) {
         return dimension.isWidthBetween(widthRange) && dimension.isDepthBetween(depthRange);
     }
     

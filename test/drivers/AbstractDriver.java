@@ -9,6 +9,8 @@ import interiores.business.models.Room;
 import interiores.business.models.RoomType;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.FurnitureVariableSet;
+import interiores.business.models.constraints.BinaryConstraintSet;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.business.models.constraints.unary.AreaConstraint;
 import interiores.business.models.constraints.unary.ColorConstraint;
@@ -267,5 +269,31 @@ public abstract class AbstractDriver {
         int varCount = iostream.readInt("Enter the variable count: ");
         
         return new FurnitureVariable(models, room, ucs, varCount);
+    }
+    
+    public static FurnitureVariableSet readFurnitureVariableSet() {
+        
+        iostream.println("Enter the room of the variable set: ");
+        Room room = readRoom();
+        
+        iostream.println("Enter the list of lists of furniture models: ");
+        int n = iostream.readInt("How many lists of furniture models?:");
+        List<List<FurnitureModel>> metaModels = new ArrayList<List<FurnitureModel>>(n);
+                
+        for (List<FurnitureModel> lm : metaModels) {
+            lm = (List) readFurnitureModelCollection();
+        }
+        
+        iostream.println("Enter the list of lists of unary constraints: ");
+        n = iostream.readInt("How many lists of unary constraints?: ");
+        List<List<UnaryConstraint>> metaUC = new ArrayList<List<UnaryConstraint>>(n);
+                
+        for (List<UnaryConstraint> luc : metaUC) {
+            luc = (List) readUnaryConstraintCollection();
+        }
+       
+        
+        return new FurnitureVariableSet(room, metaModels, metaUC, new BinaryConstraintSet());
+        
     }
 }

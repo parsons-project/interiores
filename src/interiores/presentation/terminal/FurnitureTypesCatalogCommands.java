@@ -1,66 +1,19 @@
 package interiores.presentation.terminal;
 
 import interiores.business.controllers.FurnitureTypesCatalogController;
-import interiores.core.business.BusinessException;
-import interiores.core.presentation.terminal.CommandGroup;
-import java.util.Collection;
-import javax.xml.bind.JAXBException;
+
 
 /**
  *
  * @author hector
  */
 public class FurnitureTypesCatalogCommands
-    extends CommandGroup
+    extends CatalogCommands
+    
 {
-    private FurnitureTypesCatalogController ftCatalogController;
     
     public FurnitureTypesCatalogCommands(FurnitureTypesCatalogController ftCatalogController) {
-        this.ftCatalogController = ftCatalogController;
+        super(ftCatalogController);
     }
     
-    public void list() {
-        Collection<String> catalogNames = ftCatalogController.getNamesLoadedCatalogs();
-        String activeCatalog = ftCatalogController.getNameActiveCatalog();
-        
-        println("Listing names of available furniture types catalogs:");
-        
-        for(String name : catalogNames) {
-            if(name.equals(activeCatalog)) name = "*" + name;
-            
-            println(name);
-        }
-    }
-    
-    public void _new() throws BusinessException {
-        String catalogName = readString("Enter the name of the catalog you want to create");
-        
-        ftCatalogController.create(catalogName);
-    }
-    
-    public void checkout() throws BusinessException {
-        String catalogName = readString("Enter the name of the catalog you want to set as active");
-        
-        ftCatalogController.checkout(catalogName);
-    }
-    
-    public void load() throws JAXBException, BusinessException {
-        String path = readString("Enter the path where to load a catalog");
-        
-        ftCatalogController.load(path);
-    }
-    
-    public void save() throws JAXBException {
-        String activeCatalog = ftCatalogController.getNameActiveCatalog();
-        String path = readString("Enter the path where to save the " + activeCatalog + " catalog");
-        
-        ftCatalogController.save(path);
-    }
-    
-    public void merge() throws BusinessException {
-        String catalogName = readString("Enter the name of the loaded catalog you want to merge with the " +
-                                        "current catalog");
-        
-        ftCatalogController.merge(catalogName);
-    }
 }

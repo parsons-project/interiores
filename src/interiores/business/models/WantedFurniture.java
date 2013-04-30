@@ -42,6 +42,10 @@ public class WantedFurniture {
         return constraints.values();
     }
     
+    public FurnitureType getType() {
+        return type;
+    }
+    
     @Override
     public String toString() {
         return identifier;

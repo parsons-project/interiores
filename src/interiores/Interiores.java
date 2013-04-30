@@ -36,6 +36,7 @@ public class Interiores
         
         app.addBusiness("room");
         app.addBusiness("constraint");
+        app.addBusiness("design");
         app.addBusiness("furnitureType");
         app.addBusiness("furnitureTypesCatalog");
         app.addBusiness("roomTypesCatalog");

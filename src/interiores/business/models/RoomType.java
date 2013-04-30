@@ -1,5 +1,6 @@
 package interiores.business.models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -12,8 +13,19 @@ public class RoomType {
     
     private String name; // name of the type
     
-    private HashSet<FurnitureType> mustHave; // Set containing all the FurnitureTypes that must be in this type of room
-    private HashSet<FurnitureType> cantHave; // Set containing all the FurnitureTypes that can't be in this type
+    /**
+     * Set containing all the FurnitureTypes that must be in this type of room
+     */
+    private HashSet<FurnitureType> mustHave;
+    
+    /**
+     * Set containing all the FurnitureTypes that can't be in this type
+     */
+    private HashSet<FurnitureType> cantHave;
+    
+    public RoomType(String name) {
+        this(name, new ArrayList(), new ArrayList());
+    }
     
     public RoomType(String name, Collection<FurnitureType> mustHave, Collection<FurnitureType> cantHave) {
         this.name = name;

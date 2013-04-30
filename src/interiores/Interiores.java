@@ -6,6 +6,7 @@ import interiores.core.Application;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.TerminalController;
+import interiores.data.MappedDataController;
 
 /**
  *
@@ -21,13 +22,21 @@ public class Interiores
     {
         Debug.enable();
         
+        TerminalController terminal = new TerminalController("interiores.presentation.terminal");
+        terminal.addShortcut("furnitureType", "ft");
+        terminal.addShortcut("furnitureTypesCatalog", "ftc");
+        
         Application app = new Application("interiores");
-
+                
+        app.setDataController(new MappedDataController());
+        
         app.addPresentation(new SwingController("interiores.presentation.swing.views"));
-        app.addPresentation(new TerminalController("interiores.presentation.terminal"));
-
+        app.addPresentation(terminal);
+        
         app.addBusiness("room");
-
+        app.addBusiness("furnitureType");
+        app.addBusiness("furnitureTypesCatalog");
+        
         app.init();
     }
 }

@@ -3,8 +3,9 @@ package interiores.presentation.swing.views.map;
 import interiores.business.models.Orientation;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -12,51 +13,99 @@ import java.util.List;
  */
 public class Walls implements Drawable {
     private static final int DEPTH = 5;
-    private static final String COLOR = "0x999999";
+    private static final Color COLOR = Color.decode("#999999");
     private int width;
     private int height;
-    private List<Door> doors;
+    private Map<Point, WallElement> elements;
     
     public Walls(int width, int height) {
         this.width = width;
         this.height = height;
-        doors = new ArrayList();
+        elements = new HashMap();
+    }
+    
+    public static int getDepth() {
+        return DEPTH;
+    }
+    
+    public static Color getColor() {
+        return COLOR;
     }
     
     @Override
     public void draw(Graphics2D g) {
-        g.setColor(Color.decode(COLOR));
+        g.setColor(COLOR);
         
-        int padding = GridMap.getPadding();
+        drawHorizontalWall(g, 0, DEPTH);
+        drawHorizontalWall(g, height, 0);
         
-        g.fillRect(padding - DEPTH, padding - DEPTH, width + DEPTH * 2, DEPTH);
-        g.fillRect(padding - DEPTH, padding + height, width + DEPTH * 2, DEPTH);
-        g.fillRect(padding - DEPTH, padding, DEPTH, height);
-        g.fillRect(padding + width, padding, DEPTH, height);
+        drawVerticalWall(g, 0, DEPTH);
+        drawVerticalWall(g, width, 0);
         
-        for(Door door : doors)
-            door.draw(g);
+        for(WallElement element : elements.values())
+            element.draw(g);
     }
     
-    public void addDoor(Orientation where, int pos, int size, Orientation o) {
-        int x = 0, y = 0;
+    public void drawHorizontalWall(Graphics2D g, int y, int valign) {
+        int padding = GridMap.getPadding();
+        int drawableWidth = width + DEPTH;
         
-        switch(where) {
+        for(int i = 0 - DEPTH; i < drawableWidth; i += DEPTH) {
+            Point p = new Point(i, y - valign);
+        
+            if(elements.containsKey(p))
+                i += elements.get(p).getSize() - DEPTH;
+            else
+                g.fillRect(i + padding, y + padding - valign, DEPTH, DEPTH);
+        }
+    }
+    
+    public void drawVerticalWall(Graphics2D g, int x, int halign) {
+        int padding = GridMap.getPadding();
+        
+        for(int i = 0; i < width; i += DEPTH) {
+            Point p = new Point(x - halign, i);
+        
+            if(elements.containsKey(p))
+                i += elements.get(p).getSize() - DEPTH;
+            else
+                g.fillRect(x + padding - halign, i + padding, DEPTH, DEPTH);
+        }
+    }
+    
+    private Point getPosition(Orientation wall, int displacement) {
+        Point p = new Point(-DEPTH, -DEPTH);
+        
+        switch(wall) {
             case E:
-                x = width;
+                p.x = width;
                 
             case W:
-                y = pos;
+                p.y = displacement;
                 break;
             
             case S:
-                y = height;
+                p.y = height;
                 
             case N:
-                x = pos;
+                p.x = displacement;
                 break;
         }
         
-        doors.add(new Door(x, y, size, o));
+        return p;
+    }
+    
+    public void addDoor(Door door, Orientation wall, int displacement) {        
+        Point key = getPosition(wall, displacement);
+        door.setPosition(key.x, key.y, door.hasToOpenOutwards() ? wall : wall.complementary());
+        
+        elements.put(key, door);
+    }
+    
+    public void addWindow(Window window, Orientation wall, int displacement) {
+        Point key = getPosition(wall, displacement);
+        window.setPosition(key.x, key.y, wall.rotateRight());
+        
+        elements.put(key, window);
     }
 }

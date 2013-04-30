@@ -34,10 +34,4 @@ abstract public class SwingFrame extends JFrame implements View
     {
         
     }
-    
-    @Override
-    public String[] getEvents()
-    {
-        return new String[]{};
-    }
 }

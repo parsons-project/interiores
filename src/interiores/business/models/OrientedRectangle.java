@@ -1,6 +1,6 @@
 package interiores.business.models;
 
-import java.awt.Dimension;
+import interiores.utils.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -18,7 +18,9 @@ public class OrientedRectangle extends Rectangle {
     }
     
     public OrientedRectangle(Point point, Dimension dimension, Orientation orientation) {
-        super(point, dimension);
+        super(point);
+        
+        this.setSize(dimension.width, dimension.depth);
         this.orientation = orientation; 
     }
     
@@ -56,9 +58,9 @@ public class OrientedRectangle extends Rectangle {
      */
     public OrientedRectangle enlarge(Dimension dimension) {
         int newX = x - dimension.width;
-        int newY = y - dimension.height;
+        int newY = y - dimension.depth;
         int newW = width + dimension.width;
-        int newH = height + dimension.height;
+        int newH = height + dimension.depth;
         return new OrientedRectangle(newX, newY, newW, newH, this.orientation);
     }
     

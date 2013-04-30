@@ -1,14 +1,15 @@
 package interiores.core.presentation;
 
+import interiores.core.Debug;
 import interiores.core.Utils;
 import interiores.core.business.BusinessController;
-import interiores.core.presentation.PresentationController;
-import interiores.core.terminal.CommandGroup;
-import interiores.core.terminal.IOStream;
-import java.io.IOException;
+import interiores.core.business.BusinessException;
+import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.IOStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -19,33 +20,29 @@ public class TerminalController extends PresentationController
     private String commandsPath;
     private IOStream iostream;
     private Map<String, CommandGroup> commands;
+    private Map<String, String> shortcuts;
     
     public TerminalController(String commandsPath)
     {
         this.commandsPath = commandsPath;
-        iostream = new IOStream();
-        commands = new HashMap<String, CommandGroup>();
+        iostream = new IOStream(System.in, System.out);
+        commands = new HashMap();
+        shortcuts = new HashMap();
     }
     
     @Override
     public void init()
     {
-        iostream.setInputStream(System.in);
-        iostream.setOutputStream(System.out);
+        String line = iostream.readLine();
         
-        try
+        while(line != null && !line.startsWith("quit"))
         {
-            String line = iostream.readLine();
-
-            while(line != null && !line.startsWith("quit"))
-            {
-                exec(line);
-                line = iostream.readLine();
-            }
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
+            // Set subcommand prompt
+            iostream.setPrompt('#');
+            exec(line);
+            // Set command prompt
+            iostream.setPrompt('>');
+            line = iostream.readLine();
         }
     }
     
@@ -66,24 +63,30 @@ public class TerminalController extends PresentationController
             Class comgroupClass = Class.forName(commandsPath + "." + Utils.capitalize(name) +
                     "Commands");
             
-            CommandGroup comgroup = (CommandGroup) comgroupClass.newInstance();
-            comgroup.setTerminal(this);
-            comgroup.setIOStream(iostream);
+            CommandGroup comgroup = (CommandGroup) comgroupClass.getConstructor(
+                    controller.getClass()).newInstance(controller);
             
+            comgroup.setIOStream(iostream);
             commands.put(name, comgroup);
+            
             super.addBusinessController(name, controller);
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            if(Debug.isEnabled())
+                e.printStackTrace();
         }
+    }
+    
+    public void addShortcut(String subject, String shortcut) {
+        shortcuts.put(shortcut, subject);
     }
     
     public void exec(String line)
     {
         try
         {
-            iostream.setInputBuffer(line);
+            iostream.putIntoInputBuffer(line);
             
             String action, method;
             action = method = iostream.readString();
@@ -91,9 +94,10 @@ public class TerminalController extends PresentationController
             if(isReserved(action))
                 method = "_" + action;
             
-            String subject = iostream.readString();
+            String shortcut = iostream.readString();
+            String subject = getSubject(shortcut);
             
-            System.out.println("Action is " + action + " on subject " + subject);
+            Debug.println("Action is " + action + " on subject " + subject);
             
             if(! commands.containsKey(subject))
                 throw new Exception("There is no subject known as " + subject);
@@ -101,19 +105,33 @@ public class TerminalController extends PresentationController
             CommandGroup comgroup = commands.get(subject);
             Class comgroupClass = comgroup.getClass();
             
-            try
-            {
+            try {
                 comgroupClass.getMethod(method).invoke(comgroup);
             }
-            catch(InvocationTargetException e)
-            {
+            catch(InvocationTargetException e) {
                 throw e.getCause();
             }
         }
-        catch(Throwable e)
-        {
-            e.printStackTrace(); // @TODO Improve exception handling
+        catch(BusinessException e) {
+            iostream.println("[Business error] " + e.getMessage());
         }
+        catch(JAXBException e) {
+            iostream.println("[Storage error] " + e.getMessage());
+            
+            if(Debug.isEnabled())
+                e.printStackTrace();
+        }
+        catch(Throwable e) {
+            if(Debug.isEnabled())
+                e.printStackTrace();
+        }
+    }
+    
+    private String getSubject(String shortcut) {
+        if(! shortcuts.containsKey(shortcut))
+            return shortcut;
+        
+        return shortcuts.get(shortcut);
     }
     
     private boolean isReserved(String s)

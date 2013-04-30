@@ -2,7 +2,7 @@ package interiores.business.models.constraints;
 
 import interiores.business.models.FurnitureType;
 import interiores.business.models.FurnitureModel;
-import interiores.business.models.constraints.SizeConstraint;
+import interiores.business.models.constraints.unary.SizeConstraint;
 import java.awt.Color;
 import java.awt.Dimension;
 import org.junit.AfterClass;

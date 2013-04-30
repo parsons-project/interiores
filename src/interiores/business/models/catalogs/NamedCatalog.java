@@ -73,6 +73,7 @@ public class NamedCatalog<X extends PersistentIdObject>
     }
     
     @Override
+    @Deprecated
     public X getObject(String id) {
         throw new UnsupportedOperationException("getObject method in NamedCatalog is deprecated.");
     }

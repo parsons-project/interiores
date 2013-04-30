@@ -74,7 +74,7 @@ abstract public class CatalogController<I extends PersistentIdObject>
     
     public void load(String path) throws JAXBException, BusinessException {
         // Bound PersistentIdObject to load all data
-        Class[] classes = { DefaultFurnitureTypesCatalog.class, PersistentIdObject.class };
+        Class[] classes = { NamedCatalog.class, PersistentIdObject.class };
         
         NamedCatalog loadedCatalog = (NamedCatalog<I>) data.load(classes, path);
         

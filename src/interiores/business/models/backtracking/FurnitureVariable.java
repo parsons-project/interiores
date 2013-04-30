@@ -317,7 +317,7 @@ public class FurnitureVariable
         StringBuilder result = new StringBuilder();
         String NEW_LINE = System.getProperty("line.separator");
 
-        result.append(this.getClass().getName() + " Object {" + NEW_LINE);
+        result.append(this.getClass().getName() + ":" + NEW_LINE);
         result.append("Assigned value: ");
         if (isAssigned) result.append(assignedValue.toString() + NEW_LINE);
         else result.append("none" + NEW_LINE);
@@ -345,7 +345,6 @@ public class FurnitureVariable
         for (UnaryConstraint constraint : unaryConstraints) {
             result.append(constraint.toString());
         }
-        result.append("}");
 
         return result.toString();
     }

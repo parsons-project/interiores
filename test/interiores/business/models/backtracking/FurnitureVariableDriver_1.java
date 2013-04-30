@@ -48,16 +48,18 @@ public class FurnitureVariableDriver {
 
     
     private void introduction() {
-        System.out.println("Furniture Variable Driver" + NEW_LINE + NEW_LINE);
+        System.out.println("FurnitureVariable Driver" + NEW_LINE + NEW_LINE);
         System.out.println("Thorough the execution of this driver, we will have");
         System.out.println(" an object of the type FurnitureVariable which will");
         System.out.println(" be the target of all test funcition calls, and");
         System.out.println(" will evolve along with them. This is required to");
         System.out.println(" be able to test every possible state of a");
         System.out.println(" FurnitureVariable object, as some states can only");
-        System.out.println(" be reached through a sequence of calls to their");
+        System.out.println(" be reached through a sequence of calls to private");
         System.out.println(" methods. There are options in the menu to display");
-        System.out.println(" or set the state of this object" + NEW_LINE);
+        System.out.println(" or set the state of this object." + NEW_LINE);
+        System.out.println("If the preconditions of a method are not met, the");
+        System.out.println(" result is unspecified." + NEW_LINE);
     }
     
     private void menu() {

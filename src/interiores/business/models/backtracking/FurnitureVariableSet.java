@@ -150,6 +150,35 @@ public class FurnitureVariableSet
         }
     }
     
+    
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String NEW_LINE = System.getProperty("line.separator");
+
+        result.append(this.getClass().getName() + ":" + NEW_LINE);
+        result.append("Iteration: " + depth + NEW_LINE);
+        result.append("Number of variables: " + variableCount + NEW_LINE);
+        result.append("Variables with an assigned value (by iteration): " + NEW_LINE);
+        for (int i = 0; i < depth; ++i) {
+            result.append(i + ")" + NEW_LINE + variables[i].toString());
+        }
+        result.append("Variables without assigned value: " + NEW_LINE);
+        for (int i = depth; i < variableCount; ++i) {
+            result.append(variables[i].toString());
+        }
+        result.append("Actual variable:" + NEW_LINE);
+        if (actual == null) result.append("none" + NEW_LINE);
+        else result.append(actual.toString());
+        result.append("Are all variables assigned? " + NEW_LINE);
+        if (allAssigned) result.append("Yes" + NEW_LINE);
+        else result.append("No" + NEW_LINE);
+        result.append("Binary restrictions:" + NEW_LINE);
+        result.append(binaryConstraints.toString());
+
+        return result.toString();
+    }
+    
 }
 
 

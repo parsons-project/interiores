@@ -1,6 +1,6 @@
 package interiores.business.controllers;
 
-import interiores.core.business.BusinessController;
+import interiores.business.models.RoomType;
 import interiores.core.data.JAXBDataController;
 
 /**
@@ -8,10 +8,10 @@ import interiores.core.data.JAXBDataController;
  * @author hector
  */
 public class RoomTypesCatalogController
-    extends BusinessController
+    extends CatalogController<RoomType>
 {
     public RoomTypesCatalogController(JAXBDataController data) {
-        super(data);
+        super("roomTypes", data);
     }
     
 }

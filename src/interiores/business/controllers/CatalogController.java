@@ -51,6 +51,24 @@ abstract public class CatalogController<I extends PersistentIdObject>
         data.set(name + "Catalog", loadedCatalogs.get(catalogName));
     }
     
+    public void merge(String catalogName) throws BusinessException {
+        if (! loadedCatalogs.containsKey(catalogName))
+            throw new CatalogNotFoundException(catalogName);
+        
+        NamedCatalog<I> currentCatalog = getActiveCatalog();
+        
+        if(currentCatalog.isDefault())
+            throw new DefaultCatalogOverwriteException();
+        
+        Collection<I> toMerge = loadedCatalogs.get(catalogName).getCopyObjects();
+        
+        for (I fType : toMerge) {
+            if (! currentCatalog.hasObject(fType)) {
+                currentCatalog.add(fType);
+            }
+        }
+    }
+    
     public void load(String path) throws JAXBException, BusinessException {
         NamedCatalog loadedCatalog = (NamedCatalog<I>) data.load(NamedCatalog.class, path);
         

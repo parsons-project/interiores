@@ -56,4 +56,11 @@ public class FurnitureTypesCatalogCommands
         
         ftCatalogController.save(path);
     }
+    
+    public void merge() throws BusinessException {
+        String catalogName = readString("Enter the name of the loaded catalog you want to merge with the " +
+                                        "current catalog");
+        
+        ftCatalogController.merge(catalogName);
+    }
 }

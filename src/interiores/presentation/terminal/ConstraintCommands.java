@@ -49,9 +49,9 @@ public class ConstraintCommands extends CommandGroup {
             else if (specific.equals("wall")) parameters.add(readString(""));
         }
         
-        String variable = readString("Select the variable to which you want to apply the constraint");
+        String variableID = readString("Select the variable to which you want to apply the constraint");
         
-        constraintController.add(type,parameters,variable);
+        constraintController.add(type,parameters,variableID);
         
     }
     /*

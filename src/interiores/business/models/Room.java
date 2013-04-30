@@ -22,7 +22,7 @@ public class Room extends Model {
     @XmlAttribute
     private Dimension size;
     
-    private List<FurnitureType> wishList;
+    private List<WantedFurniture> wishList;
     
         
     public Room(RoomType type, Dimension size) {
@@ -35,19 +35,19 @@ public class Room extends Model {
         this(type,new Dimension(width, height) );
     }
     
-    public void addFurnitureType(FurnitureType ft) {
-        wishList.add(ft);
+    public void addWantedFurniture(WantedFurniture f) {
+        wishList.add(f);
     }
     
-    public void removeFurnitureType(FurnitureType ft) throws BusinessException {
-        boolean exists = wishList.remove(ft);
-        if (!exists)
-            throw new BusinessException("The furniture type you want to remove is not in the list");
+    public void removeWantedFurniture(String id) throws BusinessException {
+        for (int i = 0; i < wishList.size(); i++)
+            if (wishList.get(i).getID().equals(id)) wishList.remove(i);
     }
     
-    public List<FurnitureType> getWishList() {
+    public List<WantedFurniture> getWishList() {
         return wishList;
     }
+    
     
     public RoomType getType() {
         return type;

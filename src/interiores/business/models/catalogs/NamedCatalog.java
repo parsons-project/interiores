@@ -1,7 +1,7 @@
 package interiores.business.models.catalogs;
 
 import horarios.shared.Catalog;
-import java.util.ArrayList;
+import java.util.Collection;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -35,7 +35,7 @@ public class NamedCatalog<X extends PersistentIdObject>
     public NamedCatalog(String name, NamedCatalog catalog) {
         this(name);
         
-        ArrayList<X> objects = catalog.getCopyObjects();
+        Collection<X> objects = catalog.getCopyObjects();
         
         for(X object : objects)
             add(object);

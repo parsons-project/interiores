@@ -2,13 +2,16 @@ package interiores.business.controllers;
 
 import interiores.business.exceptions.CatalogNotFoundException;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
+import interiores.business.models.catalogs.DefaultFurnitureTypesCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.PersistentIdObject;
 import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.bind.JAXBException;
 
@@ -70,7 +73,10 @@ abstract public class CatalogController<I extends PersistentIdObject>
     }
     
     public void load(String path) throws JAXBException, BusinessException {
-        NamedCatalog loadedCatalog = (NamedCatalog<I>) data.load(NamedCatalog.class, path);
+        // Bound PersistentIdObject to load all data
+        Class[] classes = { DefaultFurnitureTypesCatalog.class, PersistentIdObject.class };
+        
+        NamedCatalog loadedCatalog = (NamedCatalog<I>) data.load(classes, path);
         
         if(loadedCatalog.isDefault())
             throw new DefaultCatalogOverwriteException();
@@ -79,7 +85,12 @@ abstract public class CatalogController<I extends PersistentIdObject>
     }
     
     public void save(String path) throws JAXBException {
-        data.save(getActiveCatalog(), path);
+        NamedCatalog activeCatalog = getActiveCatalog();
+        
+        // Bound PersistentIdObject to save all data
+        Class[] classes = { activeCatalog.getClass(), PersistentIdObject.class };
+        
+        data.save(getActiveCatalog(), path, classes);
     }
     
     public String getNameActiveCatalog() {

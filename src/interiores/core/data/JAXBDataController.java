@@ -1,5 +1,6 @@
 package interiores.core.data;
 
+import java.util.List;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -36,6 +37,7 @@ public interface JAXBDataController {
      * @throws JAXBException 
      */
     public void save(Object o, String path) throws JAXBException;
+    public void save(Object o, String path, Class[] boundclasses) throws JAXBException;
     
     /**
      * Load an instance of the given class from the XML found in path
@@ -45,4 +47,5 @@ public interface JAXBDataController {
      * @throws JAXBException 
      */
     public Object load(Class c, String path) throws JAXBException;
+    public Object load(Class[] boundClasses, String path) throws JAXBException;
 }

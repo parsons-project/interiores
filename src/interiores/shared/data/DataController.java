@@ -41,7 +41,13 @@ public class DataController {
      * @throws JAXBException 
      */
     public void save(Object o, String path) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance(o.getClass());
+        Class[] classes = { o.getClass() };
+        
+        save(o, path, classes);
+    }
+    
+    public void save(Object o, String path, Class[] boundClasses) throws JAXBException {
+        JAXBContext jc = JAXBContext.newInstance(boundClasses);
         Marshaller m = jc.createMarshaller();
         m.setProperty("jaxb.formatted.output", true);
         
@@ -56,7 +62,11 @@ public class DataController {
      * @throws JAXBException 
      */
     public Object load(Class c, String path) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance(c);
+        return load(c, path);
+    }
+    
+    public Object load(Class[] boundClasses, String path) throws JAXBException {
+        JAXBContext jc = JAXBContext.newInstance(boundClasses);
         Unmarshaller u = jc.createUnmarshaller();
         
         return u.unmarshal(new File(path));

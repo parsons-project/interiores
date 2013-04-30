@@ -3,6 +3,7 @@ package interiores.presentation.terminal;
 import horarios.shared.ElementNotFoundException;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
+import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
 import java.util.Collection;
@@ -12,11 +13,13 @@ import java.util.Collection;
  * @author hector
  */
 public class FurnitureTypeCommands
-    extends CommandGroup
+    extends CatalogElementCommands
 {
     private FurnitureTypeController fTypeController;
     
     public FurnitureTypeCommands(FurnitureTypeController fTypeController) {
+        super(fTypeController, "furniture types");
+        
         this.fTypeController = fTypeController;
     }
     
@@ -32,29 +35,12 @@ public class FurnitureTypeCommands
         fTypeController.add(name, minWidth, maxWidth, minDepth, maxDepth);
     }
     
-    public void rm() throws BusinessException {
-        Collection<String> names = readStrings("Enter the names of the furniture types you want to remove:");
-        
-        fTypeController.rm(names);
-    }
-    
-    public void list() {
-        Collection types = fTypeController.getCatalogObjects();
-        
-        println("Listing furniture types of the catalog: " + fTypeController.getNameActiveCatalog());
-        
-        print(types);
-        
-        if(types.isEmpty())
-            println("The catalog is empty.");
-    }
-    
-    public void select() throws ElementNotFoundException {
+    public void select() throws ElementNotFoundBusinessException {
         String name = readString("Enter the name of the furniture type you want to select");
         fTypeController.select(name);
     }
     
-    public void unselect() throws BusinessException, ElementNotFoundException {
+    public void unselect() {
         selected();
         
         String name = readString("Please, enter the name of the furniture type you want to unselect");
@@ -70,6 +56,4 @@ public class FurnitureTypeCommands
             print(types);
         }
     }
-    
-    
 }

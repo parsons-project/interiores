@@ -1,6 +1,9 @@
 package interiores.business.models.catalogs;
 
 import horarios.shared.Catalog;
+import horarios.shared.ElementNotFoundException;
+import interiores.business.exceptions.DefaultCatalogOverwriteException;
+import interiores.business.exceptions.ElementNotFoundBusinessException;
 import java.util.Collection;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -47,5 +50,30 @@ public class NamedCatalog<X extends PersistentIdObject>
     
     public String getName() {
         return name;
+    }
+    
+    public X get(String id)
+            throws ElementNotFoundBusinessException
+    {
+        try {
+            return super.getObject(id);
+        }
+        catch(ElementNotFoundException e) {
+            throw new ElementNotFoundBusinessException(name, id, e);
+        }
+    }
+    
+    public X getForWrite(String id)
+            throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException
+    {
+        if(isDefault())
+            throw new DefaultCatalogOverwriteException();
+        
+        return get(id);
+    }
+    
+    @Override
+    public X getObject(String id) {
+        throw new UnsupportedOperationException("getObject method in NamedCatalog is deprecated.");
     }
 }

@@ -10,7 +10,7 @@ import javax.xml.bind.JAXBException;
  *
  * @author alvaro
  */
-public class CatalogCommands 
+abstract public class CatalogCommands 
     extends CommandGroup 
 {
     private static final String LIST_MSG = "Listing names of available %s catalogs:";
@@ -45,9 +45,10 @@ public class CatalogCommands
     
     public void _new() throws BusinessException {
         String question = String.format(NEW_MSG, catalogTypeName);
-        Collection catalogNames = readStrings(question);
+        Collection<String> catalogNames = readStrings(question);
         
-        catalogController.create(catalogNames);
+        for(String catalogName : catalogNames)
+            catalogController.create(catalogName);
     }
     
     public void checkout() throws BusinessException {
@@ -74,8 +75,9 @@ public class CatalogCommands
     
     public void merge() throws BusinessException {
         String question = String.format(MERGE_MSG, catalogTypeName);
-        Collection catalogNames = readStrings(question);
+        Collection<String> catalogNames = readStrings(question);
         
-        catalogController.merge(catalogNames);
+        for(String catalogName : catalogNames)
+            catalogController.merge(catalogName);
     }
 }

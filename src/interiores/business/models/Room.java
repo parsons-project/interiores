@@ -43,7 +43,7 @@ public class Room extends Model {
         wishList.add(f);
     }
     
-    public void removeWantedFurniture(String id) throws BusinessException {
+    public void removeWantedFurniture(String id) {
         for (int i = 0; i < wishList.size(); i++)
             if (wishList.get(i).getID().equals(id)) wishList.remove(i);
     }

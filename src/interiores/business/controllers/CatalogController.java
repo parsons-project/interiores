@@ -32,41 +32,37 @@ abstract public class CatalogController<I extends PersistentIdObject>
         
         loadedCatalogs.put(defaultCatalog.getName(), defaultCatalog);
         
-        data.set(name + "Catalog", defaultCatalog);
+        data.set(name, defaultCatalog);
     }
     
-    public void create(Collection<String> catalogNames) throws BusinessException {
-        for(String catalogName : catalogNames) {
-            if(catalogName.equals(NamedCatalog.getDefaultName()))
-                throw new DefaultCatalogOverwriteException();
-
-            loadedCatalogs.put(catalogName, new NamedCatalog(catalogName, getActiveCatalog()));
-        }
+    public void create(String catalogName) throws BusinessException {
+        if(catalogName.equals(NamedCatalog.getDefaultName()))
+            throw new DefaultCatalogOverwriteException();
+        
+        loadedCatalogs.put(catalogName, new NamedCatalog(catalogName, getActiveCatalog()));
     }
     
     public void checkout(String catalogName) throws BusinessException {
         if(! loadedCatalogs.containsKey(catalogName))
             throw new CatalogNotFoundException(catalogName);
         
-        data.set(name + "Catalog", loadedCatalogs.get(catalogName));
+        data.set(name, loadedCatalogs.get(catalogName));
     }
     
-    public void merge(Collection<String> catalogNames) throws BusinessException {
+    public void merge(String catalogName) throws BusinessException {
         NamedCatalog<I> currentCatalog = getActiveCatalog();
         
         if(currentCatalog.isDefault())
             throw new DefaultCatalogOverwriteException();
         
-        for(String catalogName : catalogNames) {
-            if (! loadedCatalogs.containsKey(catalogName))
-                throw new CatalogNotFoundException(catalogName);
-
-            Collection<I> toMerge = loadedCatalogs.get(catalogName).getCopyObjects();
-
-            for (I fType : toMerge) {
-                if (! currentCatalog.hasObject(fType)) {
+        if (! loadedCatalogs.containsKey(catalogName))
+            throw new CatalogNotFoundException(catalogName);
+        
+        Collection<I> toMerge = loadedCatalogs.get(catalogName).getCopyObjects();
+        
+        for (I fType : toMerge) {
+            if (! currentCatalog.hasObject(fType)) {
                     currentCatalog.add(fType);
-                }
             }
         }
     }
@@ -101,6 +97,6 @@ abstract public class CatalogController<I extends PersistentIdObject>
     }
     
     protected NamedCatalog<I> getActiveCatalog() {
-        return (NamedCatalog) data.get(name + "Catalog");
+        return (NamedCatalog) data.get(name);
     }
 }

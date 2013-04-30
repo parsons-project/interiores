@@ -10,7 +10,7 @@ import interiores.core.data.JAXBDataController;
 public class RoomTypesCatalogController
     extends CatalogController<RoomType>
 {
-    private static final String CATALOG_TYPE_NAME = "roomTypes";
+    private static final String CATALOG_TYPE_NAME = "roomTypesCatalog";
     
     public static String getCatalogTypeName() {
         return CATALOG_TYPE_NAME;

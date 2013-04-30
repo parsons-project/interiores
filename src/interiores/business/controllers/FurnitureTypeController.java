@@ -2,6 +2,7 @@ package interiores.business.controllers;
 
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
+import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.Room;
 import interiores.business.models.WantedFurniture;
@@ -32,21 +33,28 @@ public class FurnitureTypeController
     }
     
         
-    public void select(String name) throws ElementNotFoundBusinessException {
+    public void select(String name)
+            throws ElementNotFoundBusinessException, NoRoomCreatedException
+    {
         List<WantedFurniture> l = getRoom().getWishList();
         WantedFurniture wf = new WantedFurniture(getActiveCatalog().get(name), l.size());
         l.add(wf);
     }
     
-    public void unselect(String name) {
+    public void unselect(String name) throws NoRoomCreatedException {
         getRoom().removeWantedFurniture(name);
     }
     
-    public List<WantedFurniture> getRoomFurniture() {
+    public List<WantedFurniture> getRoomFurniture()
+            throws NoRoomCreatedException
+    {
         return getRoom().getWishList();
     }
     
-    private Room getRoom() {
+    private Room getRoom() throws NoRoomCreatedException {
+        if(! data.has("room"))
+            throw new NoRoomCreatedException();
+        
         return (Room) data.get("room");
     }
 }

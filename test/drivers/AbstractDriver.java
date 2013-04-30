@@ -26,6 +26,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Vector;
 
 /**
  *
@@ -51,10 +52,11 @@ public abstract class AbstractDriver {
     
     public static Collection<Point> readPointCollection() {
         int n = iostream.readInt("How many points?: ");
-        Collection<Point> points = new ArrayList<Point>(n);
+        
+        ArrayList<Point> points = new ArrayList<Point>();
                 
-        for (Point pt : points) {
-            pt = readPoint();
+        for (int i = 0; i < n; ++i) {
+            points.add(readPoint());
         }
         
         return points;
@@ -112,10 +114,10 @@ public abstract class AbstractDriver {
     
     public static Collection<FurnitureModel> readFurnitureModelCollection() {
         int n = iostream.readInt("How many models?: ");
-        Collection<FurnitureModel> models = new ArrayList<FurnitureModel>(n);
+        ArrayList<FurnitureModel> models = new ArrayList<FurnitureModel>();
                 
-        for (FurnitureModel m : models) {
-            m = readFurnitureModel();
+        for (int i = 0; i < n; ++i) {
+            models.add(readFurnitureModel());
         }
         
         return models;
@@ -125,10 +127,10 @@ public abstract class AbstractDriver {
     public static Collection<FurnitureType> readFurnitureTypeCollection() {
         
         int n = iostream.readInt("How many types?: ");
-        Collection<FurnitureType> furnitureTypes = new ArrayList<FurnitureType>(n);
+        ArrayList<FurnitureType> furnitureTypes = new ArrayList<FurnitureType>();
                 
-        for (FurnitureType ft : furnitureTypes) {
-            ft = readFurnitureType();
+        for (int i = 0; i < n; ++i) {
+            furnitureTypes.add(readFurnitureType());
         }
         
         return furnitureTypes;
@@ -165,10 +167,10 @@ public abstract class AbstractDriver {
     
     public static Collection<Orientation> readOrientationCollection() {
         int n = iostream.readInt("How many orientations?: ");
-        Collection<Orientation> os = new ArrayList<Orientation>(n);
+        ArrayList<Orientation> os = new ArrayList<Orientation>();
                 
-        for (Orientation o : os) {
-            o = readOrientation();
+        for (int i = 0; i < n; ++i) {
+            os.add(readOrientation());
         }
         
         return os;
@@ -248,10 +250,10 @@ public abstract class AbstractDriver {
     
     public static Collection<UnaryConstraint> readUnaryConstraintCollection() {
         int n = iostream.readInt("How many unary constraints?: ");
-        Collection<UnaryConstraint> unaries = new ArrayList<UnaryConstraint>(n);
+        ArrayList<UnaryConstraint> unaries = new ArrayList<UnaryConstraint>();
                 
-        for (UnaryConstraint uc : unaries) {
-            uc = readUnaryConstraint();
+        for (int i = 0; i < n; ++i) {
+            unaries.add(readUnaryConstraint());
         }
         
         return unaries;
@@ -278,18 +280,18 @@ public abstract class AbstractDriver {
         
         iostream.println("Enter the list of lists of furniture models: ");
         int n = iostream.readInt("How many lists of furniture models?:");
-        List<List<FurnitureModel>> metaModels = new ArrayList<List<FurnitureModel>>(n);
+        List<List<FurnitureModel>> metaModels = new ArrayList<List<FurnitureModel>>();
                 
-        for (List<FurnitureModel> lm : metaModels) {
-            lm = (List) readFurnitureModelCollection();
+        for (int i = 0; i < n; ++i) {
+            metaModels.add((List) readFurnitureModelCollection());
         }
         
         iostream.println("Enter the list of lists of unary constraints: ");
         n = iostream.readInt("How many lists of unary constraints?: ");
-        List<List<UnaryConstraint>> metaUC = new ArrayList<List<UnaryConstraint>>(n);
+        List<List<UnaryConstraint>> metaUC = new ArrayList<List<UnaryConstraint>>();
                 
-        for (List<UnaryConstraint> luc : metaUC) {
-            luc = (List) readUnaryConstraintCollection();
+        for (int i = 0; i < n; ++i) {
+            metaUC.add((List) readUnaryConstraintCollection());
         }
        
         

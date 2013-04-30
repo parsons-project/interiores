@@ -18,7 +18,6 @@ public class FurnitureVariableDriver {
     
     public void main() {  
         introduction();
-        variable = readFurnitureVariable();
         boolean exit = false;
         while (!exit) {
             menu();
@@ -59,7 +58,9 @@ public class FurnitureVariableDriver {
         System.out.println(" methods. There are options in the menu to display");
         System.out.println(" or set the state of this object." + NEW_LINE);
         System.out.println("If the preconditions of a method are not met, the");
-        System.out.println(" result is unspecified." + NEW_LINE);
+        System.out.println(" result is unspecified." + NEW_LINE + NEW_LINE);
+        System.out.println("Define the Variable object:" + NEW_LINE);
+        variable = readFurnitureVariable();
     }
     
     private void menu() {
@@ -72,6 +73,7 @@ public class FurnitureVariableDriver {
         System.out.println("5) trimDomain(Variable variable, int iteration)" + NEW_LINE);    
         System.out.println("6) undoTrimDomain(Variable variable, Value value, int iteration)" + NEW_LINE);    
         System.out.println("7) exit" + NEW_LINE);
+        System.out.println(">> ");
     }
     
     private void getNextDomainValueTester() {

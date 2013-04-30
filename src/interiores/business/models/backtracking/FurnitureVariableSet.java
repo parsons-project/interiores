@@ -52,7 +52,6 @@ public class FurnitureVariableSet
        
     /**
      * Default Constructor.
-     * 
      */
     public FurnitureVariableSet(Room room,
         List<List<FurnitureModel>> variablesModels, 
@@ -73,6 +72,12 @@ public class FurnitureVariableSet
     }
    
 
+    /**
+     * Selects a variable from variables[depth..variableCount-1] and sets it
+     * as actual variable.
+     * The iterators of the actual variable are reset.
+     */
+    //note: trivial implementation. To be optimized.
     @Override
     protected void setActualVariable() {
         actual = variables[depth];
@@ -80,7 +85,7 @@ public class FurnitureVariableSet
     }
 
     
-   @Override
+    @Override
     protected void trimDomains() {
         for (int i = depth + 1; i < variableCount; ++i) {
             variables[i].trimDomain(actual, depth);
@@ -117,6 +122,8 @@ public class FurnitureVariableSet
     }
     
     
+    //note: preliminar implementation. Final implementation should take more
+    //things into consideration (e.g., not blocking paths)
     @Override
     protected boolean canAssignToActual(Value value) {
         for (int i = 0; i < depth; ++i) {
@@ -139,6 +146,7 @@ public class FurnitureVariableSet
     }
     
     
+    //note: trivial implementation. To be optimized.
     @Override
     protected void preliminarTrimDomains() {
         for (int i = 0; i < variableCount; ++i) {

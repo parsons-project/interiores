@@ -18,9 +18,8 @@ public class FurnitureVariableSetDriver extends AbstractDriver {
     public static void main(String[] args) {  
         introduction();
         boolean exit = false;
-        while (!exit) {
-            menu();
-            int option = iostream.readInt();
+        while (!exit) {  
+            int option = menu();
             switch (option) {
                 case 0:  iostream.println(variableSet.toString());
                          break;
@@ -50,14 +49,14 @@ public class FurnitureVariableSetDriver extends AbstractDriver {
         variableSet = readFurnitureVariableSet();
     }
     
-    private static void menu() {
+    private static int menu() {
         iostream.println("Options:");
         iostream.println("");
         iostream.println("0) See the VariableSet");
         iostream.println("1) Define a new VariableSet");
         iostream.println("2) solve()");
         iostream.println("3) exit");
-        iostream.println(">> ");
+        return iostream.readInt(">> ");
     }
     
     private static void solveTester() throws NoSolutionException {

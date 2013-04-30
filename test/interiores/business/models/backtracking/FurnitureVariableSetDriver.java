@@ -1,13 +1,15 @@
 
 package interiores.business.models.backtracking;
 
+import drivers.AbstractDriver;
 import interiores.core.presentation.terminal.IOStream;
+import interiores.shared.backtracking.NoSolutionException;
 
 /**
  *
  * @author nil.mamano
  */
-public class FurnitureVariableSetDriver {
+public class FurnitureVariableSetDriver extends AbstractDriver {
 
     private static IOStream iostream = new IOStream(System.in, System.out);
     String NEW_LINE = System.getProperty("line.separator");
@@ -21,12 +23,18 @@ public class FurnitureVariableSetDriver {
             menu();
             int option = iostream.readInt();
             switch (option) {
-                case 0:  System.out.println(variableSet.toString());
+                case 0:  iostream.println(variableSet.toString());
                          break;
                 case 1:  variableSet = readFurnitureVariableSet();
                          break;
-                case 2:  solveTester();
-                         break;
+                case 2: 
+                    try{
+                        solveTester();
+                    }
+                    catch (NoSolutionException nse) {
+                        System.out.println("No solution Found");
+                    }
+                    break;
                 case 3: exit = true;
                          break;
                 default: System.out.println("Invalid option");
@@ -51,7 +59,7 @@ public class FurnitureVariableSetDriver {
         System.out.println(">> ");
     }
     
-    private void solveTester() {
+    private void solveTester() throws NoSolutionException {
         System.out.println("Calling solve() method..." + NEW_LINE);
         variableSet.solve();
         System.out.println("Done. You can check if a solution was found, and ");

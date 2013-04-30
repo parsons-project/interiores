@@ -5,6 +5,7 @@
 package interiores.business.models;
 
 import interiores.business.models.constraints.UnaryConstraint;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,14 @@ public class WantedFurniture {
     
     public void removeConstraint(String type) {
         constraints.remove(type);
+    }
+    
+    public UnaryConstraint getConstraint(String ctype) {
+        return constraints.get(ctype);
+    }
+    
+    public Collection getConstraints() {
+        return constraints.values();
     }
     
     @Override

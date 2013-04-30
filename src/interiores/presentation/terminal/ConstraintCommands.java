@@ -22,14 +22,12 @@ public class ConstraintCommands extends CommandGroup {
         this.constraintController = constraintController;
     }
     
-    public void add() {
+    public void add() throws ClassNotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         String type = readString("Specify the kind of constraint you want to add");
         
         List<Object> parameters = new ArrayList();
-        if (type.equals("color")) parameters.add(readString("Choose the color you want for this furniture"));
-        else if (type.equals("material")) parameters.add(readString("Choose the material you want for this furniture"));
-        else if (type.equals("orientation"))
-            parameters.add(readString("Choose the direction towards which this furniture will be oriented"));
+        if (type.equals("color") || type.equals("material") || type.equals("orientation"))
+            parameters.add(readString("Choose the " + type + " you want for this furniture"));
         else if (type.equals("price")) parameters.add(readInt("Enter the maximum price you want to pay"));
         else if (type.equals("width") || type.equals("depth")) {
             parameters.add(readInt("Enter a range of " + type + "s for this furniture"));
@@ -49,20 +47,27 @@ public class ConstraintCommands extends CommandGroup {
             else if (specific.equals("wall")) parameters.add(readString(""));
         }
         
-        String variableID = readString("Select the variable to which you want to apply the constraint");
+        String furnitureID = readString("Select the furniture to which you want to apply the constraint");
         
-        constraintController.add(type,parameters,variableID);
+        constraintController.add(type,parameters,furnitureID);
         
     }
-    /*
-    public void list() {
-        String variable = readString("Select the variable whose constraints you want to show");
-        Collection constraints = constraintController.getConstraints(variable);
+    
+    public void remove() {
+        String ctype = readString("Specify the kind of constraint you want to remove");
+        String furnitureID = readString("Select the furniture from which you want to remove the constraint");
         
-        println("List of constraints defined for " + variable);
+        constraintController.remove(ctype,furnitureID);
+    }
+    
+    public void list() {
+        String furn = readString("Select the furniture whose constraints you want to show");
+        Collection constraints = constraintController.getConstraints(furn);
+        
+        println("List of constraints defined for " + furn);
         print(constraints);
         if(constraints.isEmpty())
-            println("There are no constraints defined for that variable");
-    }*/
+            println("There are no constraints defined for " + furn);
+    }
 
 }

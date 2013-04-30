@@ -4,6 +4,7 @@ import interiores.core.business.BusinessException;
 import interiores.core.business.Model;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,9 @@ public class Room extends Model {
         this(type,new Dimension(width, height) );
     }
     
+    
+    // WISHLIST-RELATED OPERATIONS
+    
     public void addWantedFurniture(WantedFurniture f) {
         wishList.add(f);
     }
@@ -47,6 +51,14 @@ public class Room extends Model {
     public List<WantedFurniture> getWishList() {
         return wishList;
     }
+    
+    public WantedFurniture getWantedFurniture(String name) {
+        for (int i = 0; i < wishList.size(); i++)
+            if (wishList.get(i).getID().equals(name)) return wishList.get(i);
+        return null;
+    }
+    
+    // (end) WISHLIST-RELATED OPERATIONS
     
     
     public RoomType getType() {

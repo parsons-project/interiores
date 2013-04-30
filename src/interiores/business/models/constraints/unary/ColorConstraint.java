@@ -38,6 +38,11 @@ public class ColorConstraint
         this.color = color;
     }
     
+    public ColorConstraint(String color) throws ClassNotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        Class c = Class.forName("java.awt.Color");
+        this.color = (Color) c.getDeclaredField(color).get(null);
+    }
+    
     /**
      * Eliminates models which do not satisfy the constraint.
      * @param variable The variable whose values have to be checked.

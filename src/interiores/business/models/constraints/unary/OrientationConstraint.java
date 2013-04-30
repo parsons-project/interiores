@@ -3,6 +3,7 @@ package interiores.business.models.constraints.unary;
 import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.UnaryConstraint;
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,6 +28,11 @@ public class OrientationConstraint
     
     public OrientationConstraint() {
         
+    }
+    
+    public OrientationConstraint(Orientation o) {
+        validOrientations = new ArrayList();
+        validOrientations.add(o);
     }
     
     /**

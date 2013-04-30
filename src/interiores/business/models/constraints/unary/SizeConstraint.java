@@ -95,16 +95,16 @@ public class SizeConstraint
     }
     
     
-     /**
-     * Modifies the maximum price defined for the constraint
-     * @param newMin The new minimum size
-     * @param newMax The new maximum size
-     */
-    public void changeSizeLimits(Dimension newMin, Dimension newMax) {
-        minSize = newMin;
-        maxSize = newMax;
+    
+    public void changeWidth(int minWidth, int maxWidth) {
+        minSize.width = minWidth;
+        maxSize.width = maxWidth;
     }
-     
+    
+    public void changeDepth(int minDepth, int maxDepth) {
+        minSize.depth = minDepth;
+        maxSize.depth = maxDepth;
+    }
     
     @Override
     public String toString() {

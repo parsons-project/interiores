@@ -9,5 +9,5 @@ import java.util.Map;
 public interface Observable
 {
     public void addListener(Observer obs);
-    public void notify(String name, Map<String, Object> data);
+    public void notify(String name, Map<String, ?> data);
 }

@@ -11,6 +11,8 @@ import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
 import interiores.utils.BinaryConstraintAssociation;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -204,6 +206,14 @@ public class FurnitureVariableSet
         return null;
     }
     
+    public Collection<FurnitureValue> getValues() {
+        Collection<FurnitureValue> values = new ArrayList();
+        
+        for(int i = 0; i < variables.length; ++i)
+            values.add((FurnitureValue) variables[i].getAssignedValue());
+        
+        return values;
+    }
     
     @Override
     public String toString() {

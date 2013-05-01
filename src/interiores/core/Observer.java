@@ -8,5 +8,5 @@ import java.util.Map;
  */
 public interface Observer
 {
-    public void notify(String name, Map<String, Object> data);
+    public void notify(String name, Map<String, ?> data);
 }

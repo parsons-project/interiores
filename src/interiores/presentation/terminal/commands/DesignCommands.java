@@ -5,6 +5,7 @@
 package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.DesignController;
+import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.presentation.terminal.CommandGroup;
 
 /**
@@ -18,8 +19,9 @@ public class DesignCommands extends CommandGroup {
        this.designController = designController;
    }
    
-   public void solve() {
+   public void solve() throws NoRoomCreatedException {
        designController.solve();
+       
        if (designController.hasSolution()) {
            println(designController.getDesign());
        }

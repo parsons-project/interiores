@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * This class represents a type of room, defined by a name, the type of furniture it should have,
+ * This class represents a type nof room, defined by a name, the type of furniture it should have,
  * and the type furniture it can't have
  * @author alvaro
  */

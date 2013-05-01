@@ -113,7 +113,6 @@ public class FurnitureVariableSet
             allAssigned = true;
         }
     }
-
     
     @Override
     protected void trimDomains() {
@@ -165,12 +164,12 @@ public class FurnitureVariableSet
                 OrientedRectangle otherArea = ((FurnitureValue) variables[i].getAssignedValue()).getArea();
                 if (!binaryConstraints.isSatisfied(actual, variables[i]) ||
                     actualArea.intersects(otherArea)) {
-                    undoAssignToActual();
+                    actual.undoAssignValue();
                     return false;
                 }
 
             }
-            undoAssignToActual();
+            actual.undoAssignValue();
             return true;
         }
         return false;
@@ -186,6 +185,9 @@ public class FurnitureVariableSet
     
     @Override
     protected void undoAssignToActual() {
+        if (depth >= 0) {
+            actual = variables[depth];
+        }
         actual.undoAssignValue();
     }
     

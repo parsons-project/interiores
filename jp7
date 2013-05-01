@@ -1,0 +1,11 @@
+new room kitchen 240 360
+list fm chair
+select ft chair
+select ft chair
+select ft chair
+select ft chair
+add constraint orientation S chair1
+add constraint distance min 100 chair2 chair4
+add constraint distance min 100 chair3 chair2
+add constraint distance min 100 chair2 chair1
+solve design

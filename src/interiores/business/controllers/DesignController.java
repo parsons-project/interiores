@@ -64,6 +64,7 @@ public class DesignController
                                                                   variableConstraints, bcs);
         // And try to solve it
         try {
+            notify("designStarted");
             furVarSet.solve();
             solutionFound = true;
             lastSolution = furVarSet.toString();
@@ -74,6 +75,7 @@ public class DesignController
         catch (NoSolutionException nse) {
             solutionFound = false;
         }
+        notify("designFinished", "isFound", solutionFound);
         
     }
     

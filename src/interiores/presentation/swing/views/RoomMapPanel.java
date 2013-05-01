@@ -21,6 +21,7 @@ import java.util.Map.Entry;
 public class RoomMapPanel extends SwingPanel
 {
     private GridMap map;
+    private String info;
 
     /**
      * Creates new form RoomMap
@@ -50,6 +51,7 @@ public class RoomMapPanel extends SwingPanel
     {
         if(map != null)
             map.draw((Graphics2D) g);
+        g.drawString(info, 10, 10);
     }
     
     @Event(paramNames = {"width", "depth"})
@@ -85,4 +87,18 @@ public class RoomMapPanel extends SwingPanel
     public void furnitureAdded(String name, OrientedRectangle area, Color color) {
         map.addFurniture(name, area, color);
     }
+    
+    @Event(paramNames = {"isFound"})
+    public void designFinished(boolean isFound) {
+        if (isFound) info = "Solution found :)";
+        else info = "Solution not found :(";
+        repaint();
+    }
+    
+    @Event
+    public void designStarted() {
+        info = "Searching...";
+        repaint();
+    }
+    
 }

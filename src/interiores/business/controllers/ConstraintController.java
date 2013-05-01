@@ -34,7 +34,7 @@ public class ConstraintController
     extends InterioresController {
     
     /**
-     * Creates a particular instance
+     * Creates a particular instance of the constraint controller
      * @param data The data controller that will give access to the objects this controller will use
      */
     public ConstraintController(JAXBDataController data)

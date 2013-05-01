@@ -38,9 +38,8 @@ public class ColorConstraint
         this.color = color;
     }
     
-    public ColorConstraint(String color) throws ClassNotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-        Class c = Class.forName("java.awt.Color");
-        this.color = (Color) c.getDeclaredField(color).get(null);
+    public ColorConstraint(String color) {
+        this.color = Color.decode(color);
     }
     
     /**

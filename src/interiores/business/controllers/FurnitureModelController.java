@@ -4,8 +4,8 @@ import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.FurnitureType;
+import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
-import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Dimension;
@@ -17,17 +17,17 @@ import java.util.Collection;
  * @author hector
  */
 public class FurnitureModelController
-    extends BusinessController
+    extends CatalogAccessController<FurnitureType>
 {
     public FurnitureModelController(JAXBDataController data) {
-        super(data);
+        super(data, AvailableCatalog.FURNITURE_TYPES);
     }
     
     public void add(String furnitureTypeName, String name, int width, int depth, float price,
             String color, String material)
             throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException, BusinessException
     {
-        FurnitureType furnitureType = getFurnitureTypeCatalog().getForWrite(furnitureTypeName);
+        FurnitureType furnitureType = getForWrite(furnitureTypeName);
         
         Dimension size = new Dimension(width, depth);
         Color modelColor = Color.decode(color);
@@ -41,7 +41,7 @@ public class FurnitureModelController
     public void rm(String furnitureTypeName, String name)
             throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException, BusinessException
     {
-        FurnitureType furnitureType = getFurnitureTypeCatalog().getForWrite(furnitureTypeName);
+        FurnitureType furnitureType = getForWrite(furnitureTypeName);
         
         furnitureType.removeFurnitureModel(name);
     }
@@ -49,15 +49,8 @@ public class FurnitureModelController
     public Collection<FurnitureModel> getFurnitureModels(String furnitureTypeName)
             throws ElementNotFoundBusinessException
     {
-        FurnitureType furnitureType = getFurnitureTypeCatalog().get(furnitureTypeName);
+        FurnitureType furnitureType = get(furnitureTypeName);
         
         return furnitureType.getFurnitureModels();
-    }
-    
-    private NamedCatalog<FurnitureType> getFurnitureTypeCatalog() {
-        String ftCatalogTypeName = FurnitureTypesCatalogController.getCatalogTypeName();
-        NamedCatalog<FurnitureType> ftCatalog = (NamedCatalog) data.get(ftCatalogTypeName);
-        
-        return ftCatalog;
     }
 }

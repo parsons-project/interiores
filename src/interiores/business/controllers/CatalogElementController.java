@@ -1,9 +1,10 @@
 package interiores.business.controllers;
 
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
+import interiores.business.exceptions.ElementNotFoundBusinessException;
+import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.PersistentIdObject;
-import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import java.util.Collection;
@@ -13,14 +14,10 @@ import java.util.Collection;
  * @author hector
  */
 abstract public class CatalogElementController<I extends PersistentIdObject>
-    extends BusinessController
+    extends CatalogAccessController<I>
 {
-    private String name;
-    
-    public CatalogElementController(JAXBDataController data, String name) {
-        super(data);
-        
-        this.name = name;
+    public CatalogElementController(JAXBDataController data, AvailableCatalog catalog) {
+        super(data, catalog);
     }
     
     protected void add(I element)
@@ -44,16 +41,8 @@ abstract public class CatalogElementController<I extends PersistentIdObject>
         
         activeCatalog.delete(elementName);
     }
-        
+    
     public Collection<I> getCatalogObjects() {
         return getActiveCatalog().getObjects();
-    }
-    
-    public String getNameActiveCatalog() {
-        return getActiveCatalog().getName();
-    }
-    
-    protected NamedCatalog<I> getActiveCatalog() {
-        return (NamedCatalog<I>) data.get(name);
     }
 }

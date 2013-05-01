@@ -4,10 +4,9 @@
  */
 package interiores.business.controllers;
 
+import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Orientation;
-import interiores.business.models.Room;
 import interiores.business.models.WantedFurniture;
-import interiores.business.models.WishList;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.business.models.constraints.binary.MaxDistanceConstraint;
@@ -18,7 +17,7 @@ import interiores.business.models.constraints.unary.MaterialConstraint;
 import interiores.business.models.constraints.unary.OrientationConstraint;
 import interiores.business.models.constraints.unary.PriceConstraint;
 import interiores.business.models.constraints.unary.SizeConstraint;
-import interiores.core.business.BusinessController;
+import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -29,19 +28,22 @@ import java.util.List;
  *
  * @author larribas
  */
-public class ConstraintController extends BusinessController {
+public class ConstraintController
+    extends InterioresController {
     
     public ConstraintController(JAXBDataController data)
     {
         super(data);
     }
 
-    public Collection getConstraints(String id) {
+    public Collection getConstraints(String id)
+            throws NoRoomCreatedException
+    {
         return getWishList().getConstraints(id);
     }
 
-    public void add(String type, List<Object> parameters, String furnitureID) throws ClassNotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
-        
+    public void add(String type, List<Object> parameters, String furnitureID) throws NoRoomCreatedException
+    {
         if (type.equals("width") || type.equals("depth")) {
             // We get the SizeConstraint of that furniture. If there isn't one, we create it
             if (getWantedFurniture(furnitureID).getConstraint("size")==null)
@@ -92,8 +94,9 @@ public class ConstraintController extends BusinessController {
         
     }
     
-    public void add(String type, List<Object> parameters, String furn1, String furn2) throws ClassNotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
-        
+    public void add(String type, List<Object> parameters, String furn1, String furn2)
+            throws BusinessException
+    {
         if (type.equals("distance"))
         {
             String rel = (String) parameters.get(0);
@@ -101,35 +104,27 @@ public class ConstraintController extends BusinessController {
             BinaryConstraint bc = null;
             if (rel.equals("min")) bc = new MinDistanceConstraint(dist);
             else if (rel.equals("max")) bc = new MaxDistanceConstraint(dist);
-            else throw new Exception(rel + " constraint doesn't exist");
+            else throw new BusinessException(rel + " constraint doesn't exist");
             
             getWishList().addBinaryConstraint(rel, bc, furn1, furn2);
         }
     }
     
-    public void remove(String ctype, String furnitureID) {
+    public void remove(String ctype, String furnitureID)
+            throws NoRoomCreatedException
+    {
         getWantedFurniture(furnitureID).removeConstraint(ctype);
     }
     
-    public void remove(String ctype, String furn1, String furn2) {
+    public void remove(String ctype, String furn1, String furn2)
+            throws NoRoomCreatedException
+    {
         getWishList().removeBinaryConstraint(ctype, furn1, furn2);
     }
     
-    private WantedFurniture getWantedFurniture(String id) {
+    private WantedFurniture getWantedFurniture(String id)
+            throws NoRoomCreatedException
+    {
         return getWishList().getWantedFurniture(id);
     }
-    
-    private WishList getWishList() {
-        return (WishList) data.get("wishList");
-    }
-
-    private Room getRoom() {
-        return (Room) data.get("room"); 
-    }
-
-   
-    
-    
-    
-    
 }

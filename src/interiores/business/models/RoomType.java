@@ -4,7 +4,6 @@ import interiores.business.models.catalogs.PersistentIdObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -16,10 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class RoomType
     extends PersistentIdObject
-{
-    @XmlAttribute
-    private String name; // name of the type
-    
+{    
     /**
      * Set containing all the FurnitureTypes that must be in this type of room
      */
@@ -41,7 +37,7 @@ public class RoomType
     }
     
     public RoomType(String name, Collection<FurnitureType> mustHave, Collection<FurnitureType> cantHave) {
-        this.name = name;
+        super(name);
         this.mustHave = new HashSet();
         this.cantHave = new HashSet();
         
@@ -53,7 +49,7 @@ public class RoomType
     }
     
     public String getName() {
-        return name;        
+        return identifier;        
     }
     
     public HashSet<String> getMandatory() {
@@ -99,6 +95,6 @@ public class RoomType
     
     @Override
     public String toString() {
-        return name;
+        return identifier;
     }
 }

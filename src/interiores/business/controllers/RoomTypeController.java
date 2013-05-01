@@ -63,7 +63,6 @@ public class RoomTypeController
             throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException
     {
         NamedCatalog<RoomType> activeCatalog = getActiveCatalog();
-        
         return activeCatalog.getForWrite(roomTypeName);
     }
     

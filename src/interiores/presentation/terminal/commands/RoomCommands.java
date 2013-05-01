@@ -3,6 +3,7 @@ package interiores.presentation.terminal.commands;
 import interiores.business.controllers.RoomController;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
+import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
 import javax.xml.bind.JAXBException;
 
@@ -21,7 +22,7 @@ public class RoomCommands extends CommandGroup
     }
     
     public void _new()
-            throws ElementNotFoundBusinessException
+            throws ElementNotFoundBusinessException, BusinessException
     {
         String type = readString("Enter the name of the room type you want to create:");
         int width = readInt("Enter the width of the room in centimeters:");

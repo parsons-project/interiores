@@ -71,9 +71,9 @@ public class FurnitureVariableSet
        this.binaryConstraints = new BinaryConstraintSet();
        for (int i = 0; i < bca.size(); i++) {
            Debug.println("Adding Binary constraint " + bca.get(i).toString());
-           Debug.println("Furniture1 is " + getVariable(bca.get(i).furniture1));
-           Debug.println("Furniture2 is " + getVariable(bca.get(i).furniture2));
-           Debug.println("Constraint is " + getVariable(bca.get(i).constraint.toString()));
+           Debug.println("Furniture1 is " + getVariable(bca.get(i).furniture1).getID());
+           Debug.println("Furniture2 is " + getVariable(bca.get(i).furniture2).getID());
+           Debug.println("Constraint is " + bca.get(i).constraint.toString());
            binaryConstraints.addConstraint(getVariable(bca.get(i).furniture1), getVariable(bca.get(i).furniture2),
                    bca.get(i).constraint);
        }

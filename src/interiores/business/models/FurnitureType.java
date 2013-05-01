@@ -18,7 +18,8 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * This class represents the type of a furniture model
+ * This class represents a type of furniture.
+ * It contains a list of particular models of that type, and default unary and binary constraints
  * @author alvaro
  */
 @XmlRootElement
@@ -50,11 +51,12 @@ public class FurnitureType
         super();
     }
     
+    
     /**
-     * Full constructor that specifies the properties of the furniture type 
-     * @param name Name of the furniture type
-     * @param min Minimum dimensions a model of this type should have
-     * @param max Maximum dimensions a model of this type should have
+     * Creates a new furniture type
+     * @param name The name of the type of furniture
+     * @param widthRange A range of valid widths
+     * @param depthRange A range of valid depths
      */
     public FurnitureType(String name, Range widthRange, Range depthRange) {
         super(name);
@@ -69,22 +71,43 @@ public class FurnitureType
         
     }
     
+    /**
+     * Returns the unary constraints defined for this type
+     * @return A list of unary constraints set by default
+     */
     public List<UnaryConstraint> getUnaryConstraints() {
         return unaryConstraints;
     }
     
+    /**
+     * Returns the binary constraints defined for this type
+     * @return A map of binary constraints defined between this type and another
+     */
     public Map<String, ArrayList<BinaryConstraint>> getBinaryConstraints() {
         return binaryConstraints;
     }
     
+    /**
+     * Gets all the particular models of this type of furniture
+     * @return A list containing all the furniture models of this type
+     */
     public List<FurnitureModel> getFurnitureModels() {
         return new ArrayList(models.values());
     }
     
+    /**
+     * Adds a default unary constraint to the type
+     * @param unaryConstraint The unary constraint to add
+     */
     public void addUnaryConstraint(UnaryConstraint unaryConstraint) {
         unaryConstraints.add(unaryConstraint);
     }
     
+    /**
+     * Adds a default binary constraint to the type
+     * @param other The other type of furniture
+     * @param binaryConstraint The binary constraint to add 
+     */
     public void addBinaryConstraint(FurnitureType other, BinaryConstraint binaryConstraint) {
         if(! binaryConstraints.containsKey(other.getId()))
             binaryConstraints.put(other.getId(), new ArrayList());
@@ -92,6 +115,11 @@ public class FurnitureType
         binaryConstraints.get(other.getId()).add(binaryConstraint);
     }
     
+    /**
+     * Adds a new model of this type. This 
+     * @param furnitureModel
+     * @throws BusinessException 
+     */
     public void addFurnitureModel(FurnitureModel furnitureModel)
             throws BusinessException
     {

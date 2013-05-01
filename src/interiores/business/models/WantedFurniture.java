@@ -62,7 +62,7 @@ public class WantedFurniture {
     
     /**
      * Returns all the unary constraints applied to the wanted piece of furniture.
-     * @return the set of unary constarints
+     * @return the set of unary constraints
      */
     public Collection getConstraints() {
         return constraints.values();

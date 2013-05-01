@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-      
 public class FurnitureVariable
 	implements Variable
 {
@@ -353,27 +352,5 @@ public class FurnitureVariable
         return result.toString();
     }
     
-//    /**
-//     * Adds a new constraint dinamically, so that it can be checked before the
-//     * algorithm starts.
-//     * @param newConstr the new constraint.
-//     */
-//    //pre: iteration = 0
-//    public void applyModelConstraint(ModelConstraint newConstr) {
-//        constraints.add(newConstr);
-//        
-//        Iterator startingModels = domainModels[0].iterator();
-//        
-//        while (startingModels.hasNext()) {
-//            if (!newConstr.isSatisfied(startingModels.next()))
-//                startingModels.remove();
-//        }
-//    }
-//
-//    public void removeModelConstraint(ModelConstraint oldConstr) {
-//        constraints.remove(oldConstr);
-//        // Here I've got to figure out how to restore the removed models
-//    }
-//    
       
 }

@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * 
+ * Constraint representing a maximum separation between two variables
  * @author alvaro
  */
 @XmlRootElement
@@ -27,6 +27,12 @@ public class MaxDistanceConstraint
         this.distance = distance;
     }
     
+    /**
+     * Checks whether two variables satisfy the constraint
+     * @param fvariable1 The first variable
+     * @param fvariable2 The second variable
+     * @return 'true' if the two variables are separated by 'distance' cm. 'false' otherwise
+     */
     @Override
     public boolean isSatisfied(FurnitureVariable fvariable1, FurnitureVariable fvariable2) {
         

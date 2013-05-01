@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * This binary constraint represents 
+ * Constraint representing a minimum separation between two variables
  * @author alvaro
  */
 @XmlRootElement
@@ -28,6 +28,12 @@ public class MinDistanceConstraint
         this.distance = distance;
     }
     
+    /**
+     * Checks whether two variables satisfy the constraint
+     * @param fvariable1 The first variable
+     * @param fvariable2 The second variable
+     * @return 'true' if the two variables are separated by, at least, 'distance' cm. 'false' otherwise
+     */
     @Override
     public boolean isSatisfied(FurnitureVariable fvariable1, FurnitureVariable fvariable2) {
         

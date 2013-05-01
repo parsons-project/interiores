@@ -90,22 +90,4 @@ public enum Orientation {
         }
     }
 
-    // public static void main(String[] args) {
-    // 	Orientation o = N;
-    // 	System.out.println(o + " -> Nord");
-    // 	o = o.rotateLeft();
-    // 	System.out.println(o + " -> West");
-    // 	o = o.rotateRight();
-    // 	System.out.println(o + " -> Nord");
-    // 	o = o.complementary();
-    // 	System.out.println(o + " -> Sud");
-    // 	o = o.complementary();
-    // 	System.out.println(o + " -> Nord");
-    // 	o = o.rotateRight();
-    // 	System.out.println(o + " -> East");
-    // 	o = o.complementary();
-    // 	System.out.println(o + " -> West");
-	
-	
-    // }
 }

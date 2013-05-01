@@ -9,12 +9,14 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * Represents a room.
+ * A room belongs to a certain type and is of a determined size
  * @author hector
  */
 @XmlRootElement
 public class Room
 {
+    // The topmost dimensions the application supports
     private static final int MAX_WIDTH = 1000;
     private static final int MAX_DEPTH = 1000;
     
@@ -28,6 +30,12 @@ public class Room
         
     }
     
+    /**
+     * Creates a new room
+     * @param type The type of room this one belongs to
+     * @param size The size of this room
+     * @throws BusinessException 
+     */
     public Room(RoomType type, Dimension size)
             throws BusinessException
     {
@@ -44,16 +52,31 @@ public class Room
         this.size = size;
     }
     
+    /**
+     * Creates a new room
+     * @param type The type of room this one belongs to
+     * @param width The width of this room
+     * @param depth The depth of this room
+     * @throws BusinessException 
+     */
     public Room(RoomType type, int width, int depth)
             throws BusinessException
     {
         this(type, new Dimension(width, depth));
     }
     
+    /**
+     * Gets the type of the room
+     * @return RoomType of this room
+     */
     public RoomType getType() {
         return type;
     }
     
+    /**
+     * Gets the dimension or size of the room
+     * @return Dimension object representing the size of this room
+     */
     public Dimension getDimension() {
         return size;
     }
@@ -66,6 +89,10 @@ public class Room
         return size.depth;
     }
     
+    /**
+     * Converts the characteristics of the room into a map
+     * @return A Map containing the features that define the room
+     */
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap();
         

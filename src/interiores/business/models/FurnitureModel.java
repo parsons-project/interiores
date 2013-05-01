@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
- *
+ * Represents a furniture model of a specific type. A model has its own name, size, price, color, and material
  * @author larribas
  */
 @XmlRootElement

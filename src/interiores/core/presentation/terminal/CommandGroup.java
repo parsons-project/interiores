@@ -38,8 +38,8 @@ abstract public class CommandGroup
         
         String choice = readString(question + " (" + available + ")");
         
-        while(! list.contains(choice))
-            choice = iostream.readString();
+        if(! list.contains(choice))
+            choice = list.get(0);
         
         return choice;
     }

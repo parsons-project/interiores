@@ -9,5 +9,10 @@ import java.util.Map;
  */
 public interface Observer
 {
+    /**
+     * Notifies the Observer instance that some event has occurred.
+     * @param name The event name
+     * @param data Data related with the event
+     */
     public void notify(String name, Map<String, ?> data);
 }

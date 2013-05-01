@@ -17,7 +17,7 @@ import java.util.List;
 public class FurnitureVariable
 	implements Variable
 {
- 
+    private String identifier;
 
     /**
     * This vector of lists contains all models available for this variable.
@@ -93,8 +93,10 @@ public class FurnitureVariable
     * The set of restrictions is "unaryConstraints".
     */
     //pre: the iteration of the variableSet is 0
-    public FurnitureVariable(List<FurnitureModel> models, Room room,
+    public FurnitureVariable(String id, List<FurnitureModel> models, Room room,
             List<UnaryConstraint> unaryConstraints, int variableCount) {
+        
+        identifier = id;
         
         isAssigned = false;
         iteration = 0;
@@ -285,6 +287,9 @@ public class FurnitureVariable
         return assignedValue;
     }
 
+    public String getID() {
+        return identifier;
+    }
     
     /**
      * Initializes the orientations list with all available orientations.

@@ -10,6 +10,7 @@ import interiores.business.models.constraints.UnaryConstraint;
 import interiores.core.business.BusinessController;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
+import interiores.utils.BinaryConstraintAssociation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,18 +36,19 @@ public class DesignController extends BusinessController
         WishList wishList = (WishList) data.get("wishList");
         Room room = (Room) data.get("room");
         
-        Collection<WantedFurniture> furniture = wishList.getWantedFurniture();
-        
+        List<String> furniture = new ArrayList(wishList.getFurnitureNames());
         List<List<FurnitureModel>> variableModels = new ArrayList();
         List<List<UnaryConstraint>> variableConstraints = new ArrayList();
         
-        for (WantedFurniture wf : furniture) {
-            variableModels.add(wf.getType().getFurnitureModels());
-            variableConstraints.add(new ArrayList<UnaryConstraint>(wf.getConstraints()));
+        for (String wf : furniture) {
+            variableModels.add(wishList.getWantedFurniture(wf).getType().getFurnitureModels());
+            variableConstraints.add(new ArrayList<UnaryConstraint>(wishList.getWantedFurniture(wf).getConstraints()));
         }
         
-        FurnitureVariableSet furVarSet = new FurnitureVariableSet(room, variableModels,
-                                                                  variableConstraints, new BinaryConstraintSet());
+        List<BinaryConstraintAssociation> bcs = wishList.getBinaryConstraints();
+        
+        FurnitureVariableSet furVarSet = new FurnitureVariableSet(room, furniture, variableModels,
+                                                                  variableConstraints, bcs);
         try {
             furVarSet.solve();
             solutionFound = true;

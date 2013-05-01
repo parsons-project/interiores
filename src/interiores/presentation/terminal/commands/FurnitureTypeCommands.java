@@ -36,9 +36,13 @@ public class FurnitureTypeCommands
         fTypeController.add(name, minWidth, maxWidth, minDepth, maxDepth);
     }
     
-    public void select() throws ElementNotFoundBusinessException, NoRoomCreatedException, ElementNotFoundException {
-        String name = readString("Enter the name of the furniture type you want to select");
-        fTypeController.select(name);
+    public void select()
+            throws ElementNotFoundBusinessException, NoRoomCreatedException, ElementNotFoundException
+    {
+        Collection<String> names = readStrings("Enter the name of the furniture types you want to select");
+        
+        for(String name : names)
+            fTypeController.select(name);
     }
     
     public void unselect()

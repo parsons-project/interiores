@@ -4,6 +4,7 @@ import interiores.core.Observable;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +28,20 @@ abstract public class BusinessController implements Observable
     {
         listeners.add(obs);
     }
-
+    
+    public void notify(String name) {
+        notify(name, new HashMap());
+    }
+    
+    public void notify(String name, String dataName, Object data) {
+        Map<String, Object> map = new HashMap();
+        map.put(dataName, data);
+        
+        notify(name, map);
+    }
+    
     @Override
-    public void notify(String name, Map<String, Object> data)
+    public void notify(String name, Map<String, ?> data)
     {
         for(Observer o : listeners)
             o.notify(name, data);

@@ -34,7 +34,7 @@ public class SwingController extends PresentationController
     }
     
     @Override
-    public void notify(String name, Map<String, Object> data)
+    public void notify(String name, Map<String, ?> data)
     {
         if(! events.containsKey(name))
             return;
@@ -90,7 +90,7 @@ public class SwingController extends PresentationController
      * @param entry A view-method pair
      * @param data Mapped data
      */
-    private void invokeEvent(Entry<View, Method> entry, Map<String, Object> data) { 
+    private void invokeEvent(Entry<View, Method> entry, Map<String, ?> data) { 
         View view = entry.getKey();
         Method method = entry.getValue();
         Event annotation = method.getAnnotation(Event.class);

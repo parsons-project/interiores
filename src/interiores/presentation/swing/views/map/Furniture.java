@@ -1,6 +1,7 @@
 package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
+import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -16,9 +17,9 @@ public class Furniture
 {
     private String name;
     
-    public Furniture(String name, int x, int y, int width, int depth)
+    public Furniture(String name, OrientedRectangle area, Color color)
     {
-        super(x, y, width, depth, Color.cyan);
+        super(area, color);
         
         this.name = name;
     }

@@ -47,11 +47,11 @@ public class TerminalController extends PresentationController
     }
     
     @Override
-    public void notify(String name, Map<String, Object> data)
+    public void notify(String name, Map<String, ?> data)
     {
         System.out.println(name);
         
-        for(Map.Entry<String, Object> e : data.entrySet())
+        for(Map.Entry<String, ?> e : data.entrySet())
             iostream.println(e.getKey() + ": " + e.getValue().toString());
     }
     

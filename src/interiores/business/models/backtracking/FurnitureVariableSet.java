@@ -91,8 +91,13 @@ public class FurnitureVariableSet
     //note: trivial implementation. To be optimized.
     @Override
     protected void setActualVariable() {
-        actual = variables[depth];
-        actual.resetIterators();
+        if (variables.length != 0) {
+            actual = variables[depth];
+            actual.resetIterators();
+        }
+        else {
+            allAssigned = true;
+        }
     }
 
     

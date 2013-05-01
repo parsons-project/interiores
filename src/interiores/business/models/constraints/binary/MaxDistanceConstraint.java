@@ -34,4 +34,10 @@ public class MaxDistanceConstraint
         
         return rectangle1.enlarge(distance).intersects(rectangle2);
     }
+    
+    @Override
+    public String toString() {
+        return "Maximum distance = " + distance + "cm constraint";
+    }
+    
 }

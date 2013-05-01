@@ -3,6 +3,7 @@ package interiores.business.controllers;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Room;
 import interiores.business.models.RoomType;
+import interiores.business.models.WishList;
 import interiores.core.business.BusinessController;
 import interiores.core.business.Model;
 import interiores.core.data.JAXBDataController;
@@ -26,6 +27,10 @@ public class RoomController extends BusinessController
 
         data.set("room", room);
         notify("roomCreated", room);
+        
+        WishList wl = new WishList();
+        data.set("wishList",wl);
+        
     }
     
     public void saveRoom(String path) throws JAXBException, NoRoomCreatedException

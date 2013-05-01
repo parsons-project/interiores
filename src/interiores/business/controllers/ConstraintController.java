@@ -7,7 +7,11 @@ package interiores.business.controllers;
 import interiores.business.models.Orientation;
 import interiores.business.models.Room;
 import interiores.business.models.WantedFurniture;
+import interiores.business.models.WishList;
+import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.models.constraints.binary.MaxDistanceConstraint;
+import interiores.business.models.constraints.binary.MinDistanceConstraint;
 import interiores.business.models.constraints.unary.AreaConstraint;
 import interiores.business.models.constraints.unary.ColorConstraint;
 import interiores.business.models.constraints.unary.MaterialConstraint;
@@ -16,7 +20,6 @@ import interiores.business.models.constraints.unary.PriceConstraint;
 import interiores.business.models.constraints.unary.SizeConstraint;
 import interiores.core.business.BusinessController;
 import interiores.core.data.JAXBDataController;
-import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,10 +37,10 @@ public class ConstraintController extends BusinessController {
     }
 
     public Collection getConstraints(String id) {
-        return getWantedFurniture(id).getConstraints();
+        return getWishList().getConstraints(id);
     }
 
-    public void add(String type, List<Object> parameters, String furnitureID) throws ClassNotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    public void add(String type, List<Object> parameters, String furnitureID) throws ClassNotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
         
         if (type.equals("width") || type.equals("depth")) {
             // We get the SizeConstraint of that furniture. If there isn't one, we create it
@@ -86,18 +89,42 @@ public class ConstraintController extends BusinessController {
 
             getWantedFurniture(furnitureID).addConstraint(type, uc);
         }
+        
+    }
+    
+    public void add(String type, List<Object> parameters, String furn1, String furn2) throws ClassNotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
+        
+        if (type.equals("distance"))
+        {
+            String rel = (String) parameters.get(0);
+            int dist = (Integer) parameters.get(1);
+            BinaryConstraint bc = null;
+            if (rel.equals("min")) bc = new MinDistanceConstraint(dist);
+            else if (rel.equals("max")) bc = new MaxDistanceConstraint(dist);
+            else throw new Exception(rel + " constraint doesn't exist");
+            
+            getWishList().addBinaryConstraint(rel, bc, furn1, furn2);
+        }
     }
     
     public void remove(String ctype, String furnitureID) {
         getWantedFurniture(furnitureID).removeConstraint(ctype);
     }
     
-    private WantedFurniture getWantedFurniture(String id) {
-        return getRoom().getWantedFurniture(id);
+    public void remove(String ctype, String furn1, String furn2) {
+        getWishList().removeBinaryConstraint(ctype, furn1, furn2);
     }
     
+    private WantedFurniture getWantedFurniture(String id) {
+        return getWishList().getWantedFurniture(id);
+    }
+    
+    private WishList getWishList() {
+        return (WishList) data.get("wishList");
+    }
+
     private Room getRoom() {
-        return (Room) data.get("room");
+        return (Room) data.get("room"); 
     }
 
    

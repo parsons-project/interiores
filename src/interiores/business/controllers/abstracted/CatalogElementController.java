@@ -1,7 +1,6 @@
-package interiores.business.controllers;
+package interiores.business.controllers.abstracted;
 
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.PersistentIdObject;

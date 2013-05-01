@@ -1,4 +1,4 @@
-package interiores.business.controllers;
+package interiores.business.controllers.abstracted;
 
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Room;

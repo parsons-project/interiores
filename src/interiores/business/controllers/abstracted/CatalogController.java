@@ -1,4 +1,4 @@
-package interiores.business.controllers;
+package interiores.business.controllers.abstracted;
 
 import interiores.business.exceptions.CatalogNotFoundException;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;

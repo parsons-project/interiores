@@ -4,6 +4,7 @@
  */
 package interiores.business.controllers;
 
+import interiores.business.controllers.abstracted.InterioresController;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Orientation;
 import interiores.business.models.WantedFurniture;

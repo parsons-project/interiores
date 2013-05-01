@@ -1,5 +1,6 @@
 package interiores.business.controllers;
 
+import interiores.business.controllers.abstracted.CatalogController;
 import interiores.business.models.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.core.data.JAXBDataController;

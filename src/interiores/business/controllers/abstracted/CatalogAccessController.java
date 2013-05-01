@@ -1,4 +1,4 @@
-package interiores.business.controllers;
+package interiores.business.controllers.abstracted;
 
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
@@ -11,7 +11,7 @@ import interiores.core.data.JAXBDataController;
  *
  * @author hector
  */
-public class CatalogAccessController<I extends PersistentIdObject>
+abstract public class CatalogAccessController<I extends PersistentIdObject>
     extends InterioresController
 {
     private String keyData;

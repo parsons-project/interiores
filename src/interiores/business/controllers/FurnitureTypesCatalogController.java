@@ -1,5 +1,6 @@
 package interiores.business.controllers;
 
+import interiores.business.controllers.abstracted.CatalogController;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;

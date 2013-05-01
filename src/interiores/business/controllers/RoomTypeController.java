@@ -1,5 +1,6 @@
 package interiores.business.controllers;
 
+import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.FurnitureType;

@@ -1,6 +1,6 @@
 package interiores.presentation.terminal;
 
-import interiores.business.controllers.CatalogElementController;
+import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
 import java.util.Collection;

@@ -35,7 +35,7 @@ public class FurnitureVariable
     * The vector size never changes and is equal to the amount of iterations of
     * the algorithm.
     */
-    public List<FurnitureModel>[] domainModels;
+    public List<FurnitureModel> domainModels;
 
     /**
     * This vector of hash sets contains all positions available for this variable.
@@ -102,10 +102,6 @@ public class FurnitureVariable
         isAssigned = false;
         iteration = 0;
     
-        domainModels = new ArrayList[variableCount];
-        for(int i = 0; i < variableCount; ++i)
-            domainModels[i] = null;
-        
         domainPositions = new HashSet[variableCount];
         for(int i = 0; i < variableCount; ++i)
             domainPositions[i] = null;        
@@ -113,7 +109,7 @@ public class FurnitureVariable
         orientations = new ArrayList<Orientation>();
         defaultOrientations();
         
-        domainModels[0] = models;
+        domainModels = models;
 
         //add all positions in the room
         domainPositions[0] = new HashSet<Point>();
@@ -128,7 +124,7 @@ public class FurnitureVariable
         
         positionIterator = domainPositions[0].iterator();
         orientationIterator = orientations.iterator();
-        modelIterator = domainModels[0].iterator();
+        modelIterator = domainModels.iterator();
 
         this.unaryConstraints = unaryConstraints;
         
@@ -236,11 +232,6 @@ public class FurnitureVariable
             }
         }
         
-        // move all models (unoptimized for now)
-        domainModels[iteration+1] = domainModels[iteration];
-        domainModels[iteration] = new ArrayList<FurnitureModel>();
-       
-        
     }
 
     
@@ -273,10 +264,6 @@ public class FurnitureVariable
         domainPositions[iteration].addAll(domainPositions[iteration+1]);
         domainPositions[iteration+1] = null;
         
-        //concatenate lists of models to merge them
-        domainModels[iteration].addAll(domainModels[iteration+1]);
-        //Note: this operation should be a concatenation, which should take
-        //constant time, but it is O(n) instead!!
     }
 
     
@@ -310,10 +297,13 @@ public class FurnitureVariable
      * Resets the iterators so that they will iterate through all of the
      * variables' domain, for the iteration "iteration" of the algorithm.
      */
-    public void resetIterators() {
+    public void resetIterators(int iteration) {
+        
+        this.iteration = iteration;
+        
         positionIterator = domainPositions[iteration].iterator();
         orientationIterator = orientations.iterator();
-        modelIterator = domainModels[iteration].iterator();
+        modelIterator = domainModels.iterator();
         
         currentPosition = (Point) positionIterator.next();
         currentModel = (FurnitureModel) modelIterator.next();
@@ -333,24 +323,20 @@ public class FurnitureVariable
         if (isAssigned) result.append(assignedValue.toString() + NEW_LINE);
         else result.append("none" + NEW_LINE);
         
-        result.append(" Models available by iteration" + NEW_LINE);
-        result.append("iteration    model names" + NEW_LINE);
-        for (int i = 0; i < domainModels.length; ++i) {
-            result.append(i + "             [ ");
-            for (FurnitureModel model : domainModels[i])
+        result.append(" Models available" + NEW_LINE);
+        for (FurnitureModel model : domainModels)
                 result.append(model.getName() + " ");
-            result.append("]" + NEW_LINE);    
-        }
         
-        result.append(" Positions available by iteration" + NEW_LINE);
-        result.append("iteration    positions" + NEW_LINE);
-        for (int i = 0; i < domainPositions.length; ++i) {
-            result.append(i + "             [ ");
-            for (Point point : domainPositions[i]) {
-                result.append("(" + point.x + "," + point.y + ") ");
-            }
-             result.append("]" + NEW_LINE);    
-        }        
+        
+//        result.append(" Positions available by iteration" + NEW_LINE);
+//        result.append("iteration    positions" + NEW_LINE);
+//        for (int i = 0; i < domainPositions.length && domainPositions[i] != null; ++i) {
+//            result.append(i + "             [ ");
+//            for (Point point : domainPositions[i]) {
+//                result.append("(" + point.x + "," + point.y + ") ");
+//            }
+//             result.append("]" + NEW_LINE);    
+//        }        
         
         result.append(" Constraints:" + NEW_LINE);
         for (UnaryConstraint constraint : unaryConstraints) {

@@ -1,6 +1,8 @@
 package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
+import interiores.business.models.Orientation;
+import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
 import interiores.business.models.constraints.BinaryConstraintSet;
 import interiores.business.models.constraints.UnaryConstraint;
@@ -8,6 +10,7 @@ import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
 import interiores.utils.BinaryConstraintAssociation;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -47,12 +50,17 @@ public class FurnitureVariableSet
     /**
      * Indicates whether all variables have an assigned value.
      */
-    boolean allAssigned;
+    private boolean allAssigned;
 
+    /**
+     * Contains the room rectangle
+     */
+    private OrientedRectangle roomArea;
+    
     /**
      * Indicates restrictions amongst two variables.
      */
-    BinaryConstraintSet binaryConstraints;
+    private BinaryConstraintSet binaryConstraints;
        
     /**
      * Default Constructor.
@@ -61,6 +69,8 @@ public class FurnitureVariableSet
         List<List<FurnitureModel>> variablesModels, 
         List<List<UnaryConstraint>> variablesUnaryConstraints,
         List<BinaryConstraintAssociation> bca) {
+        
+        roomArea = new OrientedRectangle(new Point(0, 0), room.getDimension(), Orientation.S);
         
         variableCount = variablesModels.size();
 
@@ -95,7 +105,7 @@ public class FurnitureVariableSet
     protected void setActualVariable() {
         if (variables.length != 0) {
             actual = variables[depth];
-            actual.resetIterators();
+            actual.resetIterators(depth);
         }
         else {
             allAssigned = true;
@@ -144,16 +154,30 @@ public class FurnitureVariableSet
     //things into consideration (e.g., not blocking paths)
     @Override
     protected boolean canAssignToActual(Value value) {
-        for (int i = 0; i < depth; ++i) {
-            if (!binaryConstraints.isSatisfied(actual, variables[i]))
+        
+        OrientedRectangle actualArea = ((FurnitureValue) value).getArea();
+        
+        if (roomArea.contains(actualArea)) {
+            assignToActual(value);
+            for (int i = 0; i < depth; ++i) {
+                OrientedRectangle otherArea = ((FurnitureValue) variables[i].getAssignedValue()).getArea();
+                if (!binaryConstraints.isSatisfied(actual, variables[i]) ||
+                    actualArea.intersects(otherArea)) {
+                    undoAssignToActual();
                     return false;
+                }
+
+            }
+            undoAssignToActual();
+            return true;
         }
-        return true;
+        return false;
+
     }
 
     
     @Override
-    protected void assignToActual(Value value) {
+    protected void assignToActual(Value value) {        
         actual.assignValue(value);
     }
 
@@ -199,18 +223,16 @@ public class FurnitureVariableSet
         result.append(this.getClass().getName() + ":" + NEW_LINE);
         result.append("Iteration: " + depth + NEW_LINE);
         result.append("Number of variables: " + variableCount + NEW_LINE);
-        result.append("Variables with an assigned value (by iteration): " + NEW_LINE);
-        for (int i = 0; i < depth; ++i) {
-            result.append(i + ")" + NEW_LINE + variables[i].toString());
-        }
+        
         result.append("Variables without assigned value: " + NEW_LINE);
         for (int i = depth; i < variableCount; ++i) {
-            result.append(variables[i].toString());
+            //result.append(variables[i].getID() + NEW_LINE);
+            result.append(variables[i].getAssignedValue().toString() + NEW_LINE);
         }
-        result.append("Actual variable:" + NEW_LINE);
-        if (actual == null) result.append("none" + NEW_LINE);
-        else result.append(actual.toString());
-        result.append("Are all variables assigned? " + NEW_LINE);
+//        result.append("Actual variable:" + NEW_LINE);
+//        if (actual == null) result.append("none" + NEW_LINE);
+//        else result.append(actual.toString());
+//        result.append("Are all variables assigned? " + NEW_LINE);
         if (allAssigned) result.append("Yes" + NEW_LINE);
         else result.append("No" + NEW_LINE);
         result.append("Binary restrictions:" + NEW_LINE);

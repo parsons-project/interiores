@@ -12,24 +12,46 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 
 /**
- *
+ * Represents a terminal command line tool presentation controller.
  * @author hector
  */
 public class TerminalController extends PresentationController
 {
-    private String commandsPath;
+    /**
+     * The package where the commands are located
+     */
+    private String commandsPackage;
+    
+    /**
+     * The input/output stream that the terminal uses
+     */
     private IOStream iostream;
+    
+    /**
+     * Map of commands identified by subject name
+     */
     private Map<String, CommandGroup> commands;
+    
+    /**
+     * Map of available shortcuts for the commands subjects
+     */
     private Map<String, String> shortcuts;
     
-    public TerminalController(String commandsPath)
+    /**
+     * Constructs a new TerminalController with the default System input/output.
+     * @param commandsPackage The package where the commands are located
+     */
+    public TerminalController(String commandsPackage)
     {
-        this.commandsPath = commandsPath;
+        this.commandsPackage = commandsPackage;
         iostream = new IOStream(System.in, System.out);
         commands = new HashMap();
         shortcuts = new HashMap();
     }
     
+    /**
+     * Initializes and runs the terminal.
+     */
     @Override
     public void init()
     {
@@ -46,21 +68,35 @@ public class TerminalController extends PresentationController
         }
     }
     
+    /**
+     * Recieves events and, in debug mode, prints the information received.
+     * @param name Name of the event
+     * @param data Data related with the event
+     */
     @Override
     public void notify(String name, Map<String, ?> data)
     {
-        System.out.println(name);
+        if(Debug.isEnabled()) {
+            System.out.println(name);
         
-        for(Map.Entry<String, ?> e : data.entrySet())
-            iostream.println(e.getKey() + ": " + e.getValue().toString());
+            for(Map.Entry<String, ?> e : data.entrySet())
+                iostream.println(e.getKey() + ": " + e.getValue().toString());
+        }
     }
     
+    /**
+     * Adds a business controller on top of the terminal creating a command subject of the same name and
+     * associating the business controller to it.
+     * These controllers are injected into the commands of the terminal using reflection.
+     * @param name Name of the business controller
+     * @param controller Business controller to add
+     */
     @Override
     public void addBusinessController(String name, BusinessController controller)
     {
         try
         {
-            Class comgroupClass = Class.forName(commandsPath + "." + Utils.capitalize(name) +
+            Class comgroupClass = Class.forName(commandsPackage + "." + Utils.capitalize(name) +
                     "Commands");
             
             CommandGroup comgroup = (CommandGroup) comgroupClass.getConstructor(
@@ -78,11 +114,20 @@ public class TerminalController extends PresentationController
         }
     }
     
+    /**
+     * Adds a shortcut for a command subject.
+     * @param subject Subject of the command
+     * @param shortcut The wanted shortcut
+     */
     public void addShortcut(String subject, String shortcut) {
         shortcuts.put(shortcut, subject);
     }
     
-    public void exec(String line)
+    /**
+     * Executes a command line.
+     * @param line The command line.
+     */
+    private void exec(String line)
     {
         try
         {
@@ -127,6 +172,12 @@ public class TerminalController extends PresentationController
         }
     }
     
+    /**
+     * Returns the full subject of the given shortcut, if the shortcut does not exist it returns the
+     * shortcut itself.
+     * @param shortcut The shortcut of the subject to get
+     * @return The full subject
+     */
     private String getSubject(String shortcut) {
         if(! shortcuts.containsKey(shortcut))
             return shortcut;
@@ -134,6 +185,11 @@ public class TerminalController extends PresentationController
         return shortcuts.get(shortcut);
     }
     
+    /**
+     * Tells whether a command is a reserved word for a Java method.
+     * @param s Command name
+     * @return True if s is a reserved word, false otherwise
+     */
     private boolean isReserved(String s)
     {
         return (s.equals("new"));

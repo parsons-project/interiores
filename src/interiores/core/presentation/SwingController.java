@@ -236,9 +236,17 @@ public class SwingController extends PresentationController
         
         Class viewClass = view.getClass();
         
-        for(Method method : viewClass.getMethods())
-            if(method.isAnnotationPresent(Event.class))
-                events.get(method.getName()).remove(new SimpleEntry<View, Method>(view, method));
+        // Remove assigned events
+        for(Method method : viewClass.getMethods()) {
+            if(method.isAnnotationPresent(Event.class)) {
+                List< Entry<View, Method> > entries = events.get(method.getName());
+                
+                for(int i = 0; i < entries.size(); ++i) {
+                    if(entries.get(i).getKey().equals(view))
+                        entries.remove(i);
+                }
+            }
+        }
         
         vloader.unload(viewName);
     }

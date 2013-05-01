@@ -62,8 +62,6 @@ public abstract class AbstractDriver {
     
     public static FurnitureModel readFurnitureModel() {
         
-        FurnitureType ftype = readFurnitureType();
-        
         String name = iostream.readString("Enter the name of the furniture model: ");
         
         iostream.println("Enter the dimensions of the model: ");
@@ -77,7 +75,7 @@ public abstract class AbstractDriver {
         String material = iostream.readString("Enter the material of the furniture model");
         
         
-        return new FurnitureModel(ftype, name, dim, price, color, material);
+        return new FurnitureModel(name, dim, price, color, material);
         
     }
     

@@ -1,13 +1,19 @@
 package interiores.business.controllers;
 
+import horarios.shared.ElementNotFoundException;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.Room;
 import interiores.business.models.WantedFurniture;
+import interiores.business.models.WishList;
+import interiores.business.models.catalogs.NamedCatalog;
+import interiores.core.business.BusinessController;
+import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Range;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -32,23 +38,25 @@ public class FurnitureTypeController
         super.add(toAdd);
     }
     
-        
-    public void select(String name)
-            throws ElementNotFoundBusinessException, NoRoomCreatedException
-    {
-        List<WantedFurniture> l = getRoom().getWishList();
-        WantedFurniture wf = new WantedFurniture(getActiveCatalog().get(name), l.size());
-        l.add(wf);
+    public void select(String name) throws ElementNotFoundException {
+        WantedFurniture wf = new WantedFurniture(getActiveCatalog().getObject(name));
+        getWishList().addWantedFurniture(wf);
     }
     
-    public void unselect(String name) throws NoRoomCreatedException {
-        getRoom().removeWantedFurniture(name);
+    public void unselect(String name) throws BusinessException, ElementNotFoundException {
+        getWishList().removeWantedFurniture(name);
     }
     
-    public List<WantedFurniture> getRoomFurniture()
-            throws NoRoomCreatedException
-    {
-        return getRoom().getWishList();
+    public String getNameActiveCatalog() {
+        return getActiveCatalog().getName();
+    }
+    
+    public Collection getRoomFurniture() {
+        return getWishList().getFurnitureNames();
+    }
+    
+    private WishList getWishList() {
+        return (WishList) data.get("wishList");
     }
     
     private Room getRoom() throws NoRoomCreatedException {

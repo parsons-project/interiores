@@ -34,4 +34,9 @@ public class MinDistanceConstraint
         
         return !rectangle1.enlarge(distance).intersects(rectangle2);
     }
+    
+    @Override
+    public String toString() {
+        return "Minimum distance = " + distance + "cm constraint";
+    }
 }

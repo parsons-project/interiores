@@ -15,14 +15,12 @@ import java.util.Map;
  */
 public class WantedFurniture {
     
-    private String identifier;
     private FurnitureType type;
     
     private Map<String, UnaryConstraint> constraints;
     
-    public WantedFurniture(FurnitureType ft, int id) {
+    public WantedFurniture(FurnitureType ft) {
         type = ft;
-        identifier = type.getName() + id;
         constraints = new HashMap();
     }
     
@@ -46,14 +44,8 @@ public class WantedFurniture {
         return type;
     }
     
-    @Override
-    public String toString() {
-        return identifier;
+    public String getTypeName() {
+        return type.getName();
     }
-    
-    public String getID() {
-        return identifier;
-    }
-    
     
 }

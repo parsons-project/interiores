@@ -1,9 +1,11 @@
 package interiores.presentation.terminal;
 
+import horarios.shared.ElementNotFoundException;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
+import interiores.core.business.BusinessException;
 import java.util.Collection;
 
 /**
@@ -33,13 +35,13 @@ public class FurnitureTypeCommands
         fTypeController.add(name, minWidth, maxWidth, minDepth, maxDepth);
     }
     
-    public void select() throws ElementNotFoundBusinessException, NoRoomCreatedException {
+    public void select() throws ElementNotFoundBusinessException, NoRoomCreatedException, ElementNotFoundException {
         String name = readString("Enter the name of the furniture type you want to select");
         fTypeController.select(name);
     }
     
     public void unselect()
-            throws NoRoomCreatedException
+            throws NoRoomCreatedException, BusinessException, ElementNotFoundException
     {
         selected();
         

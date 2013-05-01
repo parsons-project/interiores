@@ -23,43 +23,15 @@ public class Room extends Model {
     @XmlAttribute
     private Dimension size;
     
-    private List<WantedFurniture> wishList;
-    
         
     public Room(RoomType type, Dimension size) {
         this.type = type;
         this.size = size;
-        wishList = new ArrayList();
     }
     
     public Room(RoomType type, int width, int height) {
         this(type,new Dimension(width, height) );
     }
-    
-    
-    // WISHLIST-RELATED OPERATIONS
-    
-    public void addWantedFurniture(WantedFurniture f) {
-        wishList.add(f);
-    }
-    
-    public void removeWantedFurniture(String id) {
-        for (int i = 0; i < wishList.size(); i++)
-            if (wishList.get(i).getID().equals(id)) wishList.remove(i);
-    }
-    
-    public List<WantedFurniture> getWishList() {
-        return wishList;
-    }
-    
-    public WantedFurniture getWantedFurniture(String name) {
-        for (int i = 0; i < wishList.size(); i++)
-            if (wishList.get(i).getID().equals(name)) return wishList.get(i);
-        return null;
-    }
-    
-    // (end) WISHLIST-RELATED OPERATIONS
-    
     
     public RoomType getType() {
         return type;

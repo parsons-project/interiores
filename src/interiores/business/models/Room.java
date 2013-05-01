@@ -2,7 +2,7 @@ package interiores.business.models;
 
 import interiores.core.business.BusinessException;
 import interiores.core.business.Model;
-import java.awt.Dimension;
+import interiores.utils.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -46,7 +46,7 @@ public class Room extends Model {
     }
     
     public int getHeight() {
-        return size.height;
+        return size.depth;
     }
     
     @Override
@@ -54,8 +54,8 @@ public class Room extends Model {
         Map<String, Object> map = new HashMap();
         
         map.put("type", type.getName());
-        map.put("width", (int) size.getWidth());
-        map.put("height", (int) size.getHeight());
+        map.put("width", (int) size.width);
+        map.put("height", (int) size.depth);
         
         return map;
     }

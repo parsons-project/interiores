@@ -42,7 +42,7 @@ public class DesignController extends BusinessController
         
         for (WantedFurniture wf : furniture) {
             variableModels.add(wf.getType().getFurnitureModels());
-            variableConstraints.add((List) wf.getConstraints());
+            variableConstraints.add((List<UnaryConstraint>)wf.getConstraints());
         }
         
         FurnitureVariableSet furVarSet = new FurnitureVariableSet(room, variableModels,

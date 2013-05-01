@@ -14,7 +14,7 @@ public class RoomElement
     private static final Color DEFAULT_COLOR = Walls.getColor();
     
     protected OrientedRectangle rectangle;
-    private Color color;
+    protected Color color;
     
     public RoomElement(OrientedRectangle area) {
         this(area, DEFAULT_COLOR);

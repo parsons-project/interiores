@@ -11,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  *
@@ -68,12 +70,12 @@ public class RoomMapPanel extends SwingPanel
     }
     
     @Event(paramNames = {"design"})
-    public void roomDesigned(Collection<FurnitureValue> design) {
-        for(FurnitureValue value : design) {
-            String name = value.getModel().getType();
-            Color color = value.getModel().getColor();
+    public void roomDesigned(Map<String, FurnitureValue> design) {
+        for(Entry<String, FurnitureValue> entry : design.entrySet()) {
+            String name = entry.getKey();
+            Color color = entry.getValue().getModel().getColor();
             
-            furnitureAdded(name, value.getArea(), color);
+            furnitureAdded(name, entry.getValue().getArea(), color);
         }
         
         repaint();

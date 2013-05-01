@@ -13,8 +13,10 @@ import interiores.utils.BinaryConstraintAssociation;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class FurnitureVariableSet
 	extends VariableSet
@@ -206,11 +208,11 @@ public class FurnitureVariableSet
         return null;
     }
     
-    public Collection<FurnitureValue> getValues() {
-        Collection<FurnitureValue> values = new ArrayList();
+    public Map<String, FurnitureValue> getValues() {
+        Map<String, FurnitureValue> values = new HashMap();
         
         for(int i = 0; i < variables.length; ++i)
-            values.add((FurnitureValue) variables[i].getAssignedValue());
+            values.put(variables[i].getID(), (FurnitureValue) variables[i].getAssignedValue());
         
         return values;
     }

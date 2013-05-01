@@ -61,11 +61,11 @@ public class RoomType
     }
     
     public void removeFromMandatory(FurnitureType fType) {
-        mustHave.remove(fType.getId());
+        removeFromMandatory(fType.getId());
     }
     
     public void removeFromMandatory(String fTypename) {
-        cantHave.remove(fTypename);
+        mustHave.remove(fTypename);
     }
     
     public HashSet<String> getForbidden() {
@@ -77,7 +77,7 @@ public class RoomType
     }
     
     public void removeFromForbidden(FurnitureType fType) {
-        cantHave.remove(fType.getId());
+        removeFromForbidden(fType.getId());
     }
     
     public void removeFromForbidden(String fTypename) {

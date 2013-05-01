@@ -28,6 +28,7 @@ public class GridMap
     private Map<Point, Drawable> elements;
     private Walls walls;
     private boolean isGridEnabled;
+    private String status;
     
     public GridMap(int roomWidth, int roomDepth) {
         width = roomWidth + getPadding() * 2;
@@ -35,6 +36,7 @@ public class GridMap
         elements = new HashMap();
         walls = new Walls(roomWidth, roomDepth);
         isGridEnabled = false;
+        status = "";
     }
     
     public void addDoor(String wall, int size, int displacement, boolean hasToOpenToLeft,
@@ -79,6 +81,9 @@ public class GridMap
         
         for(Drawable element : elements.values())
             element.draw(g);
+        
+        g.setColor(Color.black);
+        g.drawString(status, 10, 20);
     }
     
     private void drawGrid(Graphics2D g) {
@@ -107,5 +112,9 @@ public class GridMap
     
     public int getHeight() {
         return (int)(depth * SCALE);
+    }
+    
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

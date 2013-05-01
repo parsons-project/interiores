@@ -10,7 +10,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -21,7 +20,6 @@ import java.util.Map.Entry;
 public class RoomMapPanel extends SwingPanel
 {
     private GridMap map;
-    private String info;
 
     /**
      * Creates new form RoomMap
@@ -49,9 +47,10 @@ public class RoomMapPanel extends SwingPanel
     @Override
     public void paintComponent(Graphics g)
     {
-        if(map != null)
-            map.draw((Graphics2D) g);
-        g.drawString(info, 10, 10);
+        if(map != null) {
+            Graphics2D g2d = (Graphics2D) g;
+            map.draw(g2d);
+        }
     }
     
     @Event(paramNames = {"width", "depth"})
@@ -90,14 +89,16 @@ public class RoomMapPanel extends SwingPanel
     
     @Event(paramNames = {"isFound"})
     public void designFinished(boolean isFound) {
-        if (isFound) info = "Solution found :)";
-        else info = "Solution not found :(";
+        if (isFound) map.setStatus("Solution found! :)");
+        else map.setStatus("Solution not found :(");
+        
         repaint();
     }
     
     @Event
     public void designStarted() {
-        info = "Searching...";
+        map.setStatus("Searching...");
+        
         repaint();
     }
     

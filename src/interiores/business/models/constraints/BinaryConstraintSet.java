@@ -1,6 +1,7 @@
 package interiores.business.models.constraints;
 
 import interiores.business.models.backtracking.FurnitureVariable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -83,7 +84,18 @@ public class BinaryConstraintSet {
      * @return True if everything went correctly
      */
     public boolean addConstraint(FurnitureVariable fvariable1, FurnitureVariable fvariable2, BinaryConstraint bc) {
-        binConstraintsSet.get(new UnorderedFurnitureVariablePair(fvariable1,fvariable2)).add(bc);
+        
+        UnorderedFurnitureVariablePair pair = new UnorderedFurnitureVariablePair(fvariable1,fvariable2);
+        
+        if (binConstraintsSet.get(pair) == null) {
+            List<BinaryConstraint> list = new ArrayList<BinaryConstraint>();
+            list.add(bc);
+            binConstraintsSet.put(pair, list);
+                
+        }
+        else {
+            binConstraintsSet.get(pair).add(bc);
+        }
         return true;
     }
     
@@ -98,7 +110,7 @@ public class BinaryConstraintSet {
         UnorderedFurnitureVariablePair pair = new UnorderedFurnitureVariablePair(fvariable1, fvariable2);
         
         // If the list is void we should return true
-        if (binConstraintsSet.containsKey(pair)) {
+        if (binConstraintsSet != null && binConstraintsSet.containsKey(pair)) {
             List<BinaryConstraint> binConsL = binConstraintsSet.get(pair);
             for (BinaryConstraint bc : binConsL) {
                 if (! bc.isSatisfied(fvariable1, fvariable2)) return false;

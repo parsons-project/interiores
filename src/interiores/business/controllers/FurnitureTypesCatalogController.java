@@ -9,7 +9,7 @@ import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 
 /**
- *
+ * Business controller covering the operations performed over the catalog of furniture types
  * @author hector
  */
 public class FurnitureTypesCatalogController
@@ -17,6 +17,10 @@ public class FurnitureTypesCatalogController
 {
     private static final String CATALOG_TYPE_NAME = "typesCatalog";
     
+    /**
+     * Creates a particular instance of the furniture type catalog controller, and initializes it
+     * @param data The data controller that will give access to the objects this controller will use
+     */
     public FurnitureTypesCatalogController(JAXBDataController data) {
         super(data, AvailableCatalog.FURNITURE_TYPES);
         

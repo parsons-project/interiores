@@ -8,12 +8,16 @@ import interiores.business.models.catalogs.factories.DefaultRoomTypesCatalogFact
 import interiores.core.data.JAXBDataController;
 
 /**
- *
+ * Business controller covering the operations performed over a catalog of room types
  * @author hector
  */
 public class RoomTypesCatalogController
     extends CatalogController<RoomType>
 {
+    /**
+     * Creates a particular instance of the room type catalog controller, and initializes it
+     * @param data The data controller that will give access to the objects this controller will use
+     */
     public RoomTypesCatalogController(JAXBDataController data) {
         super(data, AvailableCatalog.ROOM_TYPES);
         

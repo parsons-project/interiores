@@ -93,7 +93,7 @@ public class FurnitureVariableSet
     protected void setActualVariable() {
         if (variables.length != 0) {
             actual = variables[depth];
-            actual.resetIterators();
+            actual.resetIterators(depth);
         }
         else {
             allAssigned = true;

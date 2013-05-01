@@ -5,6 +5,7 @@ import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import java.awt.Point;
@@ -84,7 +85,7 @@ public class FurnitureVariable
     private Orientation currentOrientation;
     private FurnitureModel currentModel;
     
- 
+    private boolean firstValueIteration;
     
     
     /**
@@ -137,7 +138,10 @@ public class FurnitureVariable
     public Value getNextDomainValue() {
         
         //1) iterate
-        if (positionIterator.hasNext()) {
+        if (firstValueIteration) {
+            firstValueIteration = false;
+        }
+        else if (positionIterator.hasNext()) {
             currentPosition = (Point) positionIterator.next();
         }
         else if (orientationIterator.hasNext()) {
@@ -308,7 +312,9 @@ public class FurnitureVariable
         
         currentPosition = (Point) positionIterator.next();
         currentModel = (FurnitureModel) modelIterator.next();
-        currentOrientation = (Orientation) orientationIterator.next();    
+        currentOrientation = (Orientation) orientationIterator.next();
+        
+        firstValueIteration = true;
     }
     
     

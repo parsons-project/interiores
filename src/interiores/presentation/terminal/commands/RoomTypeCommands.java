@@ -1,5 +1,6 @@
-package interiores.presentation.terminal;
+package interiores.presentation.terminal.commands;
 
+import interiores.presentation.terminal.commands.abstracted.CatalogElementCommands;
 import interiores.business.controllers.RoomTypeController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;

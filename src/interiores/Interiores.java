@@ -1,5 +1,3 @@
-/*
- */
 package interiores;
 
 import interiores.core.Application;
@@ -29,7 +27,7 @@ public class Interiores
         
         // Application dependencies
         JAXBDataController dataController = new MappedDataController();
-        TerminalController terminalController = new TerminalController("interiores.presentation.terminal");
+        TerminalController terminal = new TerminalController("interiores.presentation.terminal.commands");
         SwingController swingController = new SwingController("interiores.presentation.swing.views");
         
         // Persistance layer
@@ -37,7 +35,7 @@ public class Interiores
         
         // Presentation layer
         app.addPresentation(swingController);
-        app.addPresentation(terminalController);
+        app.addPresentation(terminal);
         
         // Business layer
         app.addBusiness("room");
@@ -50,12 +48,12 @@ public class Interiores
         app.addBusiness("roomTypesCatalog");
         
         // Some terminal shortcuts!
-        terminalController.addShortcut("furnitureModel", "fm");
-        terminalController.addShortcut("furnitureType", "ft");
-        terminalController.addShortcut("roomType", "rt");
-        terminalController.addShortcut("furnitureTypesCatalog", "ftc");
-        terminalController.addShortcut("roomTypesCatalog", "rtc");
-        terminalController.addShortcut("constraint", "c");
+        terminal.addShortcut("furnitureModel", "fm");
+        terminal.addShortcut("furnitureType", "ft");
+        terminal.addShortcut("roomType", "rt");
+        terminal.addShortcut("furnitureTypesCatalog", "ftc");
+        terminal.addShortcut("roomTypesCatalog", "rtc");
+        terminal.addShortcut("constraint", "c");
         
         // Run, run, run!!!
         app.init();

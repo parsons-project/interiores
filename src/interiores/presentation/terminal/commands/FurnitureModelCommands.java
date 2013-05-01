@@ -1,4 +1,4 @@
-package interiores.presentation.terminal;
+package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.FurnitureModelController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;

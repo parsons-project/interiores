@@ -8,7 +8,6 @@ import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,7 +122,9 @@ public class FurnitureType
     public void addFurnitureModel(FurnitureModel furnitureModel)
             throws BusinessException
     {
-        if (! isDimensionOK(furnitureModel.getSize()))
+        Dimension modelDimension = furnitureModel.getSize();
+        
+        if (! modelDimension.isBetween(widthRange, depthRange))
             throw new BusinessException("The furniture model is not inside the range of the type "
                     + "dimensions. Width range: " + widthRange + " Depth range: " + depthRange);
         
@@ -163,16 +164,6 @@ public class FurnitureType
      */
     public Range getDepthRange() {
         return depthRange;
-    }
-    
-    
-    /**
-     * Checks if dimension is between the minimum and the maximum dimensions of the type
-     * @param dimension The dimension to be checked
-     * @return True if the dimension is between the min and the max dimensions of the type, false otherwise
-     */
-    private boolean isDimensionOK(Dimension dimension) {
-        return dimension.isWidthBetween(widthRange) && dimension.isDepthBetween(depthRange);
     }
     
     @Override

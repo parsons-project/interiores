@@ -46,6 +46,7 @@ public class ConstraintController
      * Gets all all the unary and binary constraints related to the specified wanted furniture
      * @param id Identifier of the furniture
      * @return A collection of both unary and binary constraints
+     * @throws NoRoomCreatedException 
      */
     public Collection getConstraints(String id)
             throws NoRoomCreatedException
@@ -59,6 +60,7 @@ public class ConstraintController
      * @param type The type of the constraint we want to add
      * @param parameters A list of parameters (its length depends on the type of constraint being defined)
      * @param furnitureID A valid ID of the furniture we want to apply the constraint to
+     * @throws NoRoomCreatedException
      */
     public void add(String type, List<Object> parameters, String furnitureID) throws NoRoomCreatedException
     {
@@ -94,7 +96,7 @@ public class ConstraintController
                 else if (mode.equals("walls")) {
                     String whichWalls = (String) parameters.get(1);
                     int roomWidth = getRoom().getWidth();
-                    int roomDepth = getRoom().getHeight();
+                    int roomDepth = getRoom().getDepth();
                     if (whichWalls.equals("N") || whichWalls.equals("all"))
                         for (int i = 0; i < roomWidth; i++) validPositions.add(new Point(0,i));
                     if (whichWalls.equals("S") || whichWalls.equals("all"))
@@ -120,6 +122,7 @@ public class ConstraintController
      * @param parameters A list of parameters (its length depends on the type of constraint being defined)
      * @param furn1 A valid ID of the first furniture component we want to apply the constraint to
      * @param furn2 A valid ID of the second furniture component we want to apply the constraint to
+     * @throws BusinessException
      */
     public void add(String type, List<Object> parameters, String furn1, String furn2)
             throws BusinessException
@@ -142,6 +145,7 @@ public class ConstraintController
      * If there was no constraint of that type over that furniture, it does nothing
      * @param ctype The type of the constraint we want to remove
      * @param furnitureID A valid ID of the piece of furniture whose constraint we want to remove
+     * @throws NoRoomCreatedException
      */
     public void remove(String ctype, String furnitureID)
             throws NoRoomCreatedException
@@ -155,6 +159,7 @@ public class ConstraintController
      * @param ctype The type of the constraint we want to remove
      * @param furn1 A valid ID of the first piece of furniture whose constraint we want to remove
      * @param furn2 A valid ID of the second piece of furniture whose constraint we want to remove
+     * @throws NoRoomCreatedException
      */
     public void remove(String ctype, String furn1, String furn2)
             throws NoRoomCreatedException
@@ -162,7 +167,12 @@ public class ConstraintController
         getWishList().removeBinaryConstraint(ctype, furn1, furn2);
     }
     
-    // Gets a specific piece of wanted furniture, defined by its ID within our wish list
+    /**
+     * Gets a specific piece of wanted furniture, defined by its ID within our wish list
+     * @param id The ID of the furniture you want to obtain
+     * @return The particular furniture piece with ID = id
+     * @throws NoRoomCreatedException 
+     */
     private WantedFurniture getWantedFurniture(String id)
             throws NoRoomCreatedException
     {

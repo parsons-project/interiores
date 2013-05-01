@@ -41,7 +41,7 @@ public class MaterialConstraint
      */
     @Override
     public void eliminateInvalidValues(FurnitureVariable variable) {
-        Iterator it = variable.domainModels[0].iterator();
+        Iterator it = variable.domainModels.iterator();
         while (it.hasNext()) {
             FurnitureModel model = (FurnitureModel) it.next();
             if (!model.getMaterial().equals(material))

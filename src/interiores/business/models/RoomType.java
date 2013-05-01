@@ -1,9 +1,9 @@
 package interiores.business.models;
 
 import interiores.business.models.catalogs.PersistentIdObject;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
+import interiores.utils.Dimension;
+import java.util.TreeSet;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,18 +15,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class RoomType
     extends PersistentIdObject
-{    
+{
+    /**
+     * Minimum dimensions that a room of this type must have
+     */
+    @XmlElement
+    private Dimension minDimension;
+    
     /**
      * Set containing all the FurnitureTypes that must be in this type of room
      */
     @XmlElementWrapper
-    private HashSet<String> mustHave;
+    private TreeSet<String> mustHave;
     
     /**
      * Set containing all the FurnitureTypes that can't be in this type
      */
     @XmlElementWrapper
-    private HashSet<String> cantHave;
+    private TreeSet<String> cantHave;
     
     public RoomType() {
         this(null);
@@ -37,28 +43,30 @@ public class RoomType
      * @param name The name of the room type
      */
     public RoomType(String name) {
-        this(name, new ArrayList(), new ArrayList());
+        this(name, new Dimension(), new String[0], new String[0]);
     }
     
+
     /**
      * Full creator of the room type
      * @param name The name of the room type
      * @param mustHave A collection of the furniture types that a room of this type
      *                 must have
-     * @param cantHave A collection of the furniture types that a room of this type
+     * @param cantHave A Vector of strings of the furniture types that a room of this type
      *                 cannot contain
      */    
-    public RoomType(String name, Collection<FurnitureType> mustHave,
-                    Collection<FurnitureType> cantHave) {
+    public RoomType(String name, Dimension minDimension, String[] mustHave, String[] cantHave) {
         super(name);
-        this.mustHave = new HashSet();
-        this.cantHave = new HashSet();
         
-        for(FurnitureType fType : mustHave)
-            this.mustHave.add(fType.getId());
+        this.minDimension = minDimension;
+        this.mustHave = new TreeSet();
+        this.cantHave = new TreeSet();
         
-        for(FurnitureType fType : cantHave)
-            this.cantHave.add(fType.getId());
+        for(int i = 0; i < mustHave.length; ++i)
+            this.mustHave.add(mustHave[i]);
+        
+        for(int i = 0; i < cantHave.length; ++i)
+            this.cantHave.add(cantHave[i]);
     }
     
     /**
@@ -68,12 +76,16 @@ public class RoomType
     public String getName() {
         return identifier;        
     }
+
+    public Dimension getMinimumDimension() {
+        return minDimension;
+    }
     
     /**
-     * Get a hash set of the names of the funiture types that this type of room must contain. 
-     * @return A hash set of the names of the funiture types that this type of room must contain.
-     */
-    public HashSet<String> getMandatory() {
+     * Get a tree set of the names of the funiture types that this type of room must contain. 
+     * @return A tree set of the names of the funiture types that this type of room must contain.
+     */    
+    public TreeSet<String> getMandatory() {
         return mustHave;
     }
     
@@ -91,7 +103,7 @@ public class RoomType
      * @param fType The furniture type to be removed 
      */
     public void removeFromMandatory(FurnitureType fType) {
-        cantHave.remove(fType.getId());
+        removeFromMandatory(fType.getId());
     }
     
     /**
@@ -100,14 +112,14 @@ public class RoomType
      * @param fTypename The furniture type name to be removed 
      */
     public void removeFromMandatory(String fTypename) {
-        cantHave.remove(fTypename);
+        mustHave.remove(fTypename);
     }
     
     /**
-     * Get a hash set of the names of the funiture types that this type of room can't contain. 
-     * @return A hash set of the names of the funiture types that this type of room can't contain.
+     * Get a tree set of the names of the funiture types that this type of room can't contain. 
+     * @return A tree set of the names of the funiture types that this type of room can't contain.
      */
-    public HashSet<String> getForbidden() {
+    public TreeSet<String> getForbidden() {
         return cantHave;
     }
     
@@ -125,7 +137,7 @@ public class RoomType
      * @param fTypename The furniture type name to be removed 
      */
     public void removeFromForbidden(FurnitureType fType) {
-        cantHave.remove(fType.getId());
+        removeFromForbidden(fType.getId());
     }
     
      /**

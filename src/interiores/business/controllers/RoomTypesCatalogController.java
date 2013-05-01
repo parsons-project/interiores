@@ -1,6 +1,10 @@
 package interiores.business.controllers;
 
+import interiores.business.controllers.abstracted.CatalogController;
 import interiores.business.models.RoomType;
+import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.business.models.catalogs.NamedCatalog;
+import interiores.business.models.catalogs.factories.DefaultRoomTypesCatalogFactory;
 import interiores.core.data.JAXBDataController;
 
 /**
@@ -10,14 +14,15 @@ import interiores.core.data.JAXBDataController;
 public class RoomTypesCatalogController
     extends CatalogController<RoomType>
 {
-    private static final String CATALOG_TYPE_NAME = "roomTypesCatalog";
-    
-    public static String getCatalogTypeName() {
-        return CATALOG_TYPE_NAME;
-    }
-        
     public RoomTypesCatalogController(JAXBDataController data) {
-        super(data, CATALOG_TYPE_NAME);
+        super(data, AvailableCatalog.ROOM_TYPES);
+        
+        // Temporary default catalog overwrite
+        NamedCatalog defaultCatalog;
+        
+        defaultCatalog = DefaultRoomTypesCatalogFactory.getCatalog();
+        
+        loadedCatalogs.put(defaultCatalog.getName(), defaultCatalog);
+        setActiveCatalog(defaultCatalog);
     }
-    
 }

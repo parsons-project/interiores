@@ -1,10 +1,10 @@
-package interiores.business.controllers;
+package interiores.business.controllers.abstracted;
 
 import interiores.business.exceptions.CatalogNotFoundException;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
+import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.PersistentIdObject;
-import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import java.util.Collection;
@@ -17,22 +17,20 @@ import javax.xml.bind.JAXBException;
  * @author hector
  */
 abstract public class CatalogController<I extends PersistentIdObject>
-    extends BusinessController
+    extends CatalogAccessController<I>
 {
-    private String name;
     protected Map<String, NamedCatalog<I>> loadedCatalogs;
     
-    public CatalogController(JAXBDataController data, String name) {
-        super(data);
+    public CatalogController(JAXBDataController data, AvailableCatalog catalog) {
+        super(data, catalog);
         
-        this.name = name;
         loadedCatalogs = new TreeMap();
         
         NamedCatalog<I> defaultCatalog = new NamedCatalog();
         
         loadedCatalogs.put(defaultCatalog.getName(), defaultCatalog);
         
-        data.set(name, defaultCatalog);
+        setActiveCatalog(defaultCatalog);
     }
     
     public void create(String catalogName) throws BusinessException {
@@ -46,7 +44,7 @@ abstract public class CatalogController<I extends PersistentIdObject>
         if(! loadedCatalogs.containsKey(catalogName))
             throw new CatalogNotFoundException(catalogName);
         
-        data.set(name, loadedCatalogs.get(catalogName));
+        setActiveCatalog(loadedCatalogs.get(catalogName));
     }
     
     public void merge(String catalogName) throws BusinessException {
@@ -88,15 +86,7 @@ abstract public class CatalogController<I extends PersistentIdObject>
         data.save(getActiveCatalog(), path, classes);
     }
     
-    public String getNameActiveCatalog() {
-        return getActiveCatalog().getName();
-    }
-    
     public Collection<String> getNamesLoadedCatalogs() {
         return loadedCatalogs.keySet();
-    }
-    
-    protected NamedCatalog<I> getActiveCatalog() {
-        return (NamedCatalog) data.get(name);
     }
 }

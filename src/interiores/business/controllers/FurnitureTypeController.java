@@ -1,20 +1,16 @@
 package interiores.business.controllers;
 
-import horarios.shared.ElementNotFoundException;
+import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.FurnitureType;
-import interiores.business.models.Room;
 import interiores.business.models.WantedFurniture;
-import interiores.business.models.WishList;
-import interiores.business.models.catalogs.NamedCatalog;
-import interiores.core.business.BusinessController;
+import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Range;
 import java.util.Collection;
-import java.util.List;
 
 /**
  *
@@ -24,7 +20,7 @@ public class FurnitureTypeController
     extends CatalogElementController<FurnitureType>
 {
     public FurnitureTypeController(JAXBDataController data) {
-        super(data, FurnitureTypesCatalogController.getCatalogTypeName());
+        super(data, AvailableCatalog.FURNITURE_TYPES);
     }
     
     public void add(String name, int minWidth, int maxWidth, int minDepth, int maxDepth)
@@ -38,32 +34,22 @@ public class FurnitureTypeController
         super.add(toAdd);
     }
     
-    public void select(String name) throws ElementNotFoundBusinessException {
-        WantedFurniture wf = new WantedFurniture(getActiveCatalog().get(name));
+    public void select(String name)
+            throws ElementNotFoundBusinessException, NoRoomCreatedException
+    {
+        WantedFurniture wf = new WantedFurniture(get(name));
         getWishList().addWantedFurniture(wf);
     }
     
-    public void unselect(String name) throws BusinessException, ElementNotFoundException {
+    public void unselect(String name)
+            throws BusinessException
+    {
         getWishList().removeWantedFurniture(name);
     }
     
-    @Override
-    public String getNameActiveCatalog() {
-        return getActiveCatalog().getName();
-    }
-    
-    public Collection getRoomFurniture() {
+    public Collection getRoomFurniture()
+            throws NoRoomCreatedException
+    {
         return getWishList().getFurnitureNames();
-    }
-    
-    private WishList getWishList() {
-        return (WishList) data.get("wishList");
-    }
-    
-    private Room getRoom() throws NoRoomCreatedException {
-        if(! data.has("room"))
-            throw new NoRoomCreatedException();
-        
-        return (Room) data.get("room");
     }
 }

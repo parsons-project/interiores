@@ -1,5 +1,6 @@
-package interiores.presentation.terminal;
+package interiores.presentation.terminal.commands;
 
+import interiores.presentation.terminal.commands.abstracted.CatalogCommands;
 import interiores.business.controllers.RoomTypesCatalogController;
 
 /**

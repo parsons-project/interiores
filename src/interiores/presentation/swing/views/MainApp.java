@@ -144,16 +144,16 @@ public class MainApp extends SwingFrame
     private javax.swing.JLabel roomType;
     // End of variables declaration//GEN-END:variables
     
-    @Event(paramNames = {"type", "width", "height"})
-    public void roomCreated(String type, int width, int height)
+    @Event(paramNames = {"type", "width", "depth"})
+    public void roomCreated(String type, int width, int depth)
     {
         roomType.setText(type);
-        roomSize.setText(width + " x " + height + " (cm)");
+        roomSize.setText(width + " x " + depth + " (cm)");
     }
     
-    @Event(paramNames = {"type", "width", "height"})
-    public void roomLoaded(String type, int width, int height)
+    @Event(paramNames = {"type", "width", "depth"})
+    public void roomLoaded(String type, int width, int depth)
     {
-        roomCreated(type, width, height);
+        roomCreated(type, width, depth);
     }
 }

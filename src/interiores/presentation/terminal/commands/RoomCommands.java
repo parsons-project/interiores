@@ -1,4 +1,4 @@
-package interiores.presentation.terminal;
+package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.RoomController;
 import interiores.core.business.BusinessException;

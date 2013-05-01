@@ -1,4 +1,4 @@
-package interiores.presentation.terminal;
+package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.ConstraintController;
 import interiores.business.exceptions.NoRoomCreatedException;

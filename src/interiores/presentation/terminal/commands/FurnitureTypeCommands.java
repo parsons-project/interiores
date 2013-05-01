@@ -1,4 +1,4 @@
-package interiores.presentation.terminal;
+package interiores.presentation.terminal.commands;
 
 import horarios.shared.ElementNotFoundException;
 import interiores.business.controllers.FurnitureTypeController;

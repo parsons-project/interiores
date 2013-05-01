@@ -1,7 +1,9 @@
 package interiores.business.models;
 
+import interiores.core.business.BusinessException;
 import interiores.core.business.Model;
 import interiores.utils.Dimension;
+import interiores.utils.Range;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -13,6 +15,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class Room extends Model {
+    private static final int MAX_WIDTH = 1000;
+    private static final int MAX_DEPTH = 1000;
+    
     @XmlAttribute
     private RoomType type;
     
@@ -23,12 +28,25 @@ public class Room extends Model {
         
     }
     
-    public Room(RoomType type, Dimension size) {
+    public Room(RoomType type, Dimension size)
+            throws BusinessException
+    {
+        Dimension minTypeDimension = type.getMinimumDimension();
+        
+        Range widthRange = new Range(minTypeDimension.width, MAX_WIDTH);
+        Range depthRange = new Range(minTypeDimension.depth, MAX_DEPTH);
+        
+        if(! size.isBetween(widthRange, depthRange))
+            throw new BusinessException("The room you are trying to create is not between the permitted "
+                    + "dimension range. Width[" + widthRange + "], Depth[" + depthRange + "]");
+        
         this.type = type;
         this.size = size;
     }
     
-    public Room(RoomType type, int width, int depth) {
+    public Room(RoomType type, int width, int depth)
+            throws BusinessException
+    {
         this(type, new Dimension(width, depth));
     }
     

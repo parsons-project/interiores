@@ -25,6 +25,16 @@ public class Dimension
         this.depth = depth;
     }
     
+    /**
+     * Checks if dimension is between the given ranges
+     * @param widthRange The width range
+     * @param depthRange The depth range
+     * @return True if the dimension is between the given ranges, false otherwise
+     */
+    public boolean isBetween(Range widthRange, Range depthRange) {
+        return isWidthBetween(widthRange) && isDepthBetween(depthRange);
+    }
+    
     public boolean isWidthBetween(Range widthRange) {
         return (widthRange.min <= width && widthRange.max >= width);
     }

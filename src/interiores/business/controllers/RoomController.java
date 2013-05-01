@@ -7,7 +7,7 @@ import interiores.business.models.Room;
 import interiores.business.models.RoomType;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.AvailableCatalog;
-import interiores.core.business.Model;
+import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import javax.xml.bind.JAXBException;
 
@@ -24,7 +24,7 @@ public class RoomController
     }
     
     public void create(String typeName, int width, int depth)
-            throws ElementNotFoundBusinessException
+            throws ElementNotFoundBusinessException, BusinessException
     {
         RoomType type = get(typeName);
         Room room = new Room(type, width, depth);

@@ -60,6 +60,10 @@ public class RoomType
         return identifier;        
     }
     
+    public Dimension getMinimumDimension() {
+        return minDimension;
+    }
+    
     public TreeSet<String> getMandatory() {
         return mustHave;
     }

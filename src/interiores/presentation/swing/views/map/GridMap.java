@@ -21,7 +21,7 @@ public class GridMap
     private static final String GRID_COLOR = "#EEEEEE";
     private static final int RESOLUTION = 5;
     private static final int PADDING = 10;
-    private static final double SCALE = 2;
+    private static final double SCALE = 1.4;
     
     private int width;
     private int depth;

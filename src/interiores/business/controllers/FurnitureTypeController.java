@@ -38,8 +38,8 @@ public class FurnitureTypeController
         super.add(toAdd);
     }
     
-    public void select(String name) throws ElementNotFoundException {
-        WantedFurniture wf = new WantedFurniture(getActiveCatalog().getObject(name));
+    public void select(String name) throws ElementNotFoundBusinessException {
+        WantedFurniture wf = new WantedFurniture(getActiveCatalog().get(name));
         getWishList().addWantedFurniture(wf);
     }
     
@@ -47,6 +47,7 @@ public class FurnitureTypeController
         getWishList().removeWantedFurniture(name);
     }
     
+    @Override
     public String getNameActiveCatalog() {
         return getActiveCatalog().getName();
     }

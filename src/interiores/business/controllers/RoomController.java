@@ -34,7 +34,7 @@ public class RoomController
         WishList wishList = new WishList();
         setWishList(wishList);
         
-        notify("roomCreated", room);
+        notify("roomCreated", room.toMap());
     }
     
     public void save(String path) throws JAXBException, NoRoomCreatedException
@@ -48,6 +48,6 @@ public class RoomController
         
         setRoom(room);
         
-        notify("roomLoaded", room);
+        notify("roomLoaded", room.toMap());
     }
 }

@@ -1,7 +1,6 @@
 package interiores.business.models;
 
 import interiores.core.business.BusinessException;
-import interiores.core.business.Model;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
 import java.util.HashMap;
@@ -14,7 +13,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author hector
  */
 @XmlRootElement
-public class Room extends Model {
+public class Room
+{
     private static final int MAX_WIDTH = 1000;
     private static final int MAX_DEPTH = 1000;
     
@@ -66,7 +66,6 @@ public class Room extends Model {
         return size.depth;
     }
     
-    @Override
     public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap();
         

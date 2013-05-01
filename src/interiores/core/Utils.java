@@ -6,11 +6,15 @@ package interiores.core;
  */
 public class Utils
 {
-    static public String capitalize(String s)
+    public static String capitalize(String s)
     {
         char[] arrayString = s.toCharArray();
         arrayString[0] = Character.toUpperCase(arrayString[0]);
         
         return new String(arrayString);
+    }
+    
+    public static String padRight(String s, int n) {
+        return String.format("%1$-" + n + "s", s);
     }
 }

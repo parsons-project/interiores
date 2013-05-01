@@ -4,9 +4,12 @@
  */
 package interiores.business.models;
 
+import interiores.core.Utils;
 import interiores.data.adapters.ColorAdapter;
 import interiores.utils.Dimension;
 import java.awt.Color;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -17,7 +20,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  * @author larribas
  */
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FurnitureModel {
+    @XmlAttribute
+    private String type;       // Furniture's type of this model
+        
     @XmlAttribute
     private String name;        // Comercial name of the furniture model
     
@@ -34,9 +41,6 @@ public class FurnitureModel {
     @XmlAttribute
     private String material;    // Material the furniture model is made in
     
-    @XmlAttribute
-    private String ftype; // Furniture's type of this model
-    
     /**
      * Default constructor.
      */
@@ -46,7 +50,7 @@ public class FurnitureModel {
     
     /**
      * Full constructor that specifies all of the features of a furniture model.
-     * @param ftype Furniture model's type
+     * @param type Furniture model's type
      * @param name Comercial name of the furniture model
      * @param size Size of the furniture model
      * @param price Market price of the furniture model
@@ -68,11 +72,11 @@ public class FurnitureModel {
      * @return The furniture type of the model
      */
     public String getType() {
-        return ftype;
+        return type;
     }
     
-    public void setType(String ftype) {
-        this.ftype = ftype;
+    public void setType(String type) {
+        this.type = type;
     }
     
     /**
@@ -119,7 +123,7 @@ public class FurnitureModel {
     public String toString() {
         String colorString = "r=" + color.getRed() + ",g=" + color.getGreen() + ",b=" + color.getBlue();
         
-        return name + " Size[" + size + "], Price[" + price + "], Color[" + colorString + "], "
-        + "[Material: " + material + "]";
+        return Utils.padRight(name, 20) + "Size[" + size + "], Price[" + price + "], Color[" + colorString
+                + "], [Material: " + material + "]";
     }
 }

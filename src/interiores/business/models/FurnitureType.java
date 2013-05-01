@@ -3,6 +3,7 @@ package interiores.business.models;
 import interiores.business.models.catalogs.PersistentIdObject;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.core.Utils;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
@@ -148,7 +149,7 @@ public class FurnitureType
     
     @Override
     public String toString() {
-        return getName() + " " + widthRange.toString() + " " + depthRange.toString();
+        return Utils.padRight(getName(), 20) + "Width[" + widthRange.toString() + "], Depth["
+                + depthRange.toString() + "]";
     }
-    
 }

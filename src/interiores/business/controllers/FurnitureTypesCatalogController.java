@@ -1,8 +1,9 @@
 package interiores.business.controllers;
 
 import interiores.business.models.FurnitureType;
-import interiores.business.models.catalogs.DefaultFurnitureTypesCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
+import interiores.business.models.catalogs.factories.DefaultFurnitureTypesCatalogFactory;
+import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 
 /**
@@ -22,7 +23,14 @@ public class FurnitureTypesCatalogController
         super(data, CATALOG_TYPE_NAME);
         
         // Temporary default catalog overwrite
-        NamedCatalog defaultCatalog = new DefaultFurnitureTypesCatalog();
+        NamedCatalog defaultCatalog;
+        
+        try {
+            defaultCatalog = DefaultFurnitureTypesCatalogFactory.getCatalog();
+        }
+        catch(BusinessException e) {
+            defaultCatalog = new NamedCatalog();
+        }
         
         loadedCatalogs.put(defaultCatalog.getName(), defaultCatalog);
         data.set("typesCatalog", defaultCatalog);

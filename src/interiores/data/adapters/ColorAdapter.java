@@ -14,7 +14,7 @@ public class ColorAdapter extends XmlAdapter<String, Color>
         String rgb = Integer.toHexString(color.getRGB());
         rgb = rgb.substring(2, rgb.length());
         
-        return rgb;
+        return "#" + rgb;
     }
     
     @Override

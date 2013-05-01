@@ -35,7 +35,7 @@ public class FurnitureVariable
     * the algorithm.
     */
     public List<FurnitureModel>[] domainModels;
- 
+
     /**
     * This vector of hash sets contains all positions available for this variable.
     * 

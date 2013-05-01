@@ -7,6 +7,7 @@ package interiores.business.models;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
+import interiores.utils.BinaryConstraintAssociation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,17 +20,6 @@ import java.util.Set;
  * @author larribas
  */
 public class WishList {
-    
-    class BinaryConstraintAssociation {
-        public String furniture1;
-        public String furniture2;
-        public BinaryConstraint constraint;
-        
-        @Override
-        public String toString() {
-            return constraint + " defined between " + furniture1 + " and " + furniture2;
-        }
-    }
     
     private Map<String,WantedFurniture> furniture;
     private Map<String,BinaryConstraintAssociation> binaryConstraints;
@@ -80,6 +70,10 @@ public class WishList {
         }
         
         return result;
+    }
+    
+    public List getBinaryConstraints() {
+        return new ArrayList(binaryConstraints.values());
     }
     
     public Collection getFurnitureNames() {

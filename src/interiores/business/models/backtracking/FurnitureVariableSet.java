@@ -4,8 +4,10 @@ import interiores.business.models.FurnitureModel;
 import interiores.business.models.Room;
 import interiores.business.models.constraints.BinaryConstraintSet;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
+import interiores.utils.BinaryConstraintAssociation;
 import java.util.Iterator;
 import java.util.List;
 
@@ -53,19 +55,28 @@ public class FurnitureVariableSet
     /**
      * Default Constructor.
      */
-    public FurnitureVariableSet(Room room,
+    public FurnitureVariableSet(Room room, List<String> variableNames,
         List<List<FurnitureModel>> variablesModels, 
         List<List<UnaryConstraint>> variablesUnaryConstraints,
-        BinaryConstraintSet binaryConstraints) {
+        List<BinaryConstraintAssociation> bca) {
         
         variableCount = variablesModels.size();
 
         variables = new FurnitureVariable[variableCount];
         for(int i = 0; i < variableCount; ++i)
-            variables[i] = new FurnitureVariable(variablesModels.get(i), room,
+            variables[i] = new FurnitureVariable(variableNames.get(i), variablesModels.get(i), room,
                 variablesUnaryConstraints.get(i), variableCount);
 
-       this.binaryConstraints = binaryConstraints;
+        
+       this.binaryConstraints = new BinaryConstraintSet();
+       for (int i = 0; i < bca.size(); i++) {
+           Debug.println("Adding Binary constraint " + bca.get(i).toString());
+           Debug.println("Furniture1 is " + getVariable(bca.get(i).furniture1));
+           Debug.println("Furniture2 is " + getVariable(bca.get(i).furniture2));
+           Debug.println("Constraint is " + getVariable(bca.get(i).constraint.toString()));
+           binaryConstraints.addConstraint(getVariable(bca.get(i).furniture1), getVariable(bca.get(i).furniture2),
+                   bca.get(i).constraint);
+       }
         
        allAssigned = false;
        actual = null;
@@ -156,6 +167,12 @@ public class FurnitureVariableSet
                 constraint.eliminateInvalidValues(variables[i]);
             }
         }
+    }
+    
+    private FurnitureVariable getVariable(String name) {
+        for (int i = 0; i < variableCount; i++)
+            if (variables[i].getID().equals(name)) return variables[i];
+        return null;
     }
     
     

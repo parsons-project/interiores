@@ -55,6 +55,7 @@ public class Interiores
         terminalController.addShortcut("roomType", "rt");
         terminalController.addShortcut("furnitureTypesCatalog", "ftc");
         terminalController.addShortcut("roomTypesCatalog", "rtc");
+        terminalController.addShortcut("constraint", "c");
         
         // Run, run, run!!!
         app.init();

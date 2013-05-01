@@ -1,5 +1,3 @@
-/*
- */
 package interiores;
 
 import interiores.core.Application;

@@ -7,7 +7,8 @@ package interiores.utils;
 import interiores.business.models.constraints.BinaryConstraint;
 
 /**
- *
+ * Represents a binary constraint between two furniture pieces
+ * within the wish list
  * @author larribas
  */
 public class BinaryConstraintAssociation {

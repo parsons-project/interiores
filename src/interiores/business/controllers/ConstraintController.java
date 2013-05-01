@@ -26,23 +26,39 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- *
+ * Business Controller covering the use cases related to constraints
  * @author larribas
  */
 public class ConstraintController
     extends InterioresController {
     
+    /**
+     * Creates a particular instance
+     * @param data The data controller that will give access to the objects this controller will use
+     */
     public ConstraintController(JAXBDataController data)
     {
         super(data);
     }
 
+     /**
+     * Gets all all the unary and binary constraints related to the specified wanted furniture
+     * @param id Identifier of the furniture
+     * @return A collection of both unary and binary constraints
+     */
     public Collection getConstraints(String id)
             throws NoRoomCreatedException
     {
         return getWishList().getConstraints(id);
     }
 
+    /**
+     * Creates a determined constraint and adds it to a furniture.
+     * If a constraint of that type already existed, it is replaced
+     * @param type The type of the constraint we want to add
+     * @param parameters A list of parameters (its length depends on the type of constraint being defined)
+     * @param furnitureID A valid ID of the furniture we want to apply the constraint to
+     */
     public void add(String type, List<Object> parameters, String furnitureID) throws NoRoomCreatedException
     {
         if (type.equals("width") || type.equals("depth")) {
@@ -95,6 +111,14 @@ public class ConstraintController
         
     }
     
+    /**
+     * Creates a determined binary constraint and adds it to a pair of furniture pieces.
+     * If a constraint of that type already existed between the tow furniture pieces, it is replaced
+     * @param type The type of the constraint we want to add
+     * @param parameters A list of parameters (its length depends on the type of constraint being defined)
+     * @param furn1 A valid ID of the first furniture component we want to apply the constraint to
+     * @param furn2 A valid ID of the second furniture component we want to apply the constraint to
+     */
     public void add(String type, List<Object> parameters, String furn1, String furn2)
             throws BusinessException
     {
@@ -111,21 +135,36 @@ public class ConstraintController
         }
     }
     
+    /**
+     * Removes a constraint of a specific type that has been defined over a certain piece of furniture.
+     * If there was no constraint of that type over that furniture, it does nothing
+     * @param ctype The type of the constraint we want to remove
+     * @param furnitureID A valid ID of the piece of furniture whose constraint we want to remove
+     */
     public void remove(String ctype, String furnitureID)
             throws NoRoomCreatedException
     {
         getWantedFurniture(furnitureID).removeConstraint(ctype);
     }
     
+    /**
+     * Removes a binary constraint of a specific type that has been defined over two certain pieces of furniture.
+     * If there was no constraint of that type over those pieces of furniture, it does nothing
+     * @param ctype The type of the constraint we want to remove
+     * @param furn1 A valid ID of the first piece of furniture whose constraint we want to remove
+     * @param furn2 A valid ID of the second piece of furniture whose constraint we want to remove
+     */
     public void remove(String ctype, String furn1, String furn2)
             throws NoRoomCreatedException
     {
         getWishList().removeBinaryConstraint(ctype, furn1, furn2);
     }
     
+    // Gets a specific piece of wanted furniture, defined by its ID within our wish list
     private WantedFurniture getWantedFurniture(String id)
             throws NoRoomCreatedException
     {
         return getWishList().getWantedFurniture(id);
     }
+       
 }

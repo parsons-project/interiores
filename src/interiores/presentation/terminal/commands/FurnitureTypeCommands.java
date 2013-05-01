@@ -1,5 +1,6 @@
 package interiores.presentation.terminal.commands;
 
+import interiores.presentation.terminal.commands.abstracted.CatalogElementCommands;
 import horarios.shared.ElementNotFoundException;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;

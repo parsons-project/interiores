@@ -75,6 +75,10 @@ public class FurnitureModel {
         return type;
     }
     
+    /**
+     * Sets the type of the furniture
+     * @param type The type of this piece of furniture
+     */
     public void setType(String type) {
         this.type = type;
     }

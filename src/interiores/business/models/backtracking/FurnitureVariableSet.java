@@ -228,7 +228,7 @@ public class FurnitureVariableSet
         
         result.append("Variables without assigned value: " + NEW_LINE);
         for (int i = depth; i < variableCount; ++i) {
-            //result.append(variables[i].getID() + NEW_LINE);
+            result.append(variables[i].getID() + ": ");
             result.append(variables[i].getAssignedValue().toString() + NEW_LINE);
         }
 //        result.append("Actual variable:" + NEW_LINE);

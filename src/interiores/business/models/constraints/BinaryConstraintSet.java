@@ -65,7 +65,7 @@ public class BinaryConstraintSet {
      * Void constructor
      */
     public BinaryConstraintSet() {
-        
+        this.binConstraintsSet = new HashMap<UnorderedFurnitureVariablePair, List<BinaryConstraint>>();
     }
     
     /**
@@ -90,8 +90,7 @@ public class BinaryConstraintSet {
         if (binConstraintsSet.get(pair) == null) {
             List<BinaryConstraint> list = new ArrayList<BinaryConstraint>();
             list.add(bc);
-            binConstraintsSet.put(pair, list);
-                
+            binConstraintsSet.put(pair, list);        
         }
         else {
             binConstraintsSet.get(pair).add(bc);
@@ -110,7 +109,7 @@ public class BinaryConstraintSet {
         UnorderedFurnitureVariablePair pair = new UnorderedFurnitureVariablePair(fvariable1, fvariable2);
         
         // If the list is void we should return true
-        if (binConstraintsSet != null && binConstraintsSet.containsKey(pair)) {
+        if (binConstraintsSet.containsKey(pair)) {
             List<BinaryConstraint> binConsL = binConstraintsSet.get(pair);
             for (BinaryConstraint bc : binConsL) {
                 if (! bc.isSatisfied(fvariable1, fvariable2)) return false;

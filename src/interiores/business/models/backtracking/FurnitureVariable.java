@@ -328,15 +328,15 @@ public class FurnitureVariable
                 result.append(model.getName() + " ");
         
         
-        result.append(" Positions available by iteration" + NEW_LINE);
-        result.append("iteration    positions" + NEW_LINE);
-        for (int i = 0; i < domainPositions.length && domainPositions[i] != null; ++i) {
-            result.append(i + "             [ ");
-            for (Point point : domainPositions[i]) {
-                result.append("(" + point.x + "," + point.y + ") ");
-            }
-             result.append("]" + NEW_LINE);    
-        }        
+//        result.append(" Positions available by iteration" + NEW_LINE);
+//        result.append("iteration    positions" + NEW_LINE);
+//        for (int i = 0; i < domainPositions.length && domainPositions[i] != null; ++i) {
+//            result.append(i + "             [ ");
+//            for (Point point : domainPositions[i]) {
+//                result.append("(" + point.x + "," + point.y + ") ");
+//            }
+//             result.append("]" + NEW_LINE);    
+//        }        
         
         result.append(" Constraints:" + NEW_LINE);
         for (UnaryConstraint constraint : unaryConstraints) {

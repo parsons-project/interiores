@@ -1,6 +1,8 @@
 package interiores.core.presentation.terminal;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -22,6 +24,24 @@ abstract public class CommandGroup
     
     public Collection<String> readStrings(String question) {
         return iostream.readStrings(question);
+    }
+    
+    public String readChoice(String question, String ... choices) {
+        List<String> list = Arrays.asList(choices);
+        
+        String available = "Available choices are: ";
+        
+        for(int i = 0; i < list.size(); ++i) {
+            if(i != 0) available += ", ";
+            available += list.get(i);
+        }
+        
+        String choice = readString(question + " (" + available + ")");
+        
+        while(! list.contains(choice))
+            choice = iostream.readString();
+        
+        return choice;
     }
     
     public int readInt(String question)

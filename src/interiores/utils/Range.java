@@ -26,6 +26,6 @@ public class Range {
     
     @Override
     public String toString() {
-        return "min=" + min + ", max=" + max + ")";
+        return "min=" + min + ", max=" + max;
     }
 }

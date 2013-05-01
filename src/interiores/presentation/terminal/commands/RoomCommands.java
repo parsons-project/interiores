@@ -1,7 +1,8 @@
 package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.RoomController;
-import interiores.core.business.BusinessException;
+import interiores.business.exceptions.ElementNotFoundBusinessException;
+import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.presentation.terminal.CommandGroup;
 import javax.xml.bind.JAXBException;
 
@@ -20,25 +21,28 @@ public class RoomCommands extends CommandGroup
     }
     
     public void _new()
+            throws ElementNotFoundBusinessException
     {
-        String type = readString("Especifica qué tipo de habitación quieres crear");
-        int width = readInt("Introduce el ancho de la habitación en cm");
-        int height = readInt("Introduce la altura de la habitación en cm");
+        String type = readString("Enter the name of the room type you want to create:");
+        int width = readInt("Enter the width of the room in centimeters:");
+        int depth = readInt("Enter the depth of the room in centimeters:");
         
-        roomController.newRoom(type, width, height);
+        roomController.create(type, width, depth);
     }
     
-    public void save() throws BusinessException, JAXBException
+    public void save()
+            throws JAXBException, NoRoomCreatedException
     {
         String path = readString("Especifica la ruta donde guardar la habitación");
         
-        roomController.saveRoom(path);
+        roomController.save(path);
     }
     
-    public void load() throws JAXBException
+    public void load()
+            throws JAXBException
     {
         String path = readString("Especifica la ruta desde donde cargar");
         
-        roomController.loadRoom(path);
+        roomController.load(path);
     }
 }

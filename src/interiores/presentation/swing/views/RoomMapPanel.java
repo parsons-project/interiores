@@ -46,10 +46,10 @@ public class RoomMapPanel extends SwingPanel
             map.draw((Graphics2D) g);
     }
     
-    @Event(paramNames = {"width", "height"})
-    public void roomCreated(int width, int height)
+    @Event(paramNames = {"width", "depth"})
+    public void roomCreated(int width, int depth)
     {
-        map = new GridMap(width, height);
+        map = new GridMap(width, depth);
         
         if(Debug.isEnabled())
             map.enableGrid();
@@ -57,10 +57,10 @@ public class RoomMapPanel extends SwingPanel
         setPreferredSize(new Dimension(map.getWidth(), map.getHeight()));  
     }
     
-    @Event(paramNames = {"width", "height"})
-    public void roomLoaded(int width, int height)
+    @Event(paramNames = {"width", "depth"})
+    public void roomLoaded(int width, int depth)
     {
-        roomCreated(width, height);
+        roomCreated(width, depth);
     }
     
     @Event(paramNames = {"orientation", "size", "displacement", "hasToOpenLeft", "hasToOpenOutwards"})

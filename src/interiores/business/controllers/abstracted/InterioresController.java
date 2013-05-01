@@ -29,6 +29,10 @@ public class InterioresController
         return (WishList) data.get(KEY_WISH_LIST);
     }
     
+    protected void setWishList(WishList wishList) {
+        data.set(KEY_WISH_LIST, wishList);
+    }
+    
     protected Room getRoom()
             throws NoRoomCreatedException
     {
@@ -36,5 +40,9 @@ public class InterioresController
             throw new NoRoomCreatedException();
         
         return (Room) data.get(KEY_ROOM);
+    }
+    
+    protected void setRoom(Room room) {
+        data.set(KEY_ROOM, room);
     }
 }

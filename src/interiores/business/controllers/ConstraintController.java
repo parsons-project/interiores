@@ -94,7 +94,7 @@ public class ConstraintController
                 else if (mode.equals("walls")) {
                     String whichWalls = (String) parameters.get(1);
                     int roomWidth = getRoom().getWidth();
-                    int roomDepth = getRoom().getHeight();
+                    int roomDepth = getRoom().getDepth();
                     if (whichWalls.equals("N") || whichWalls.equals("all"))
                         for (int i = 0; i < roomWidth; i++) validPositions.add(new Point(0,i));
                     if (whichWalls.equals("S") || whichWalls.equals("all"))

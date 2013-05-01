@@ -19,7 +19,7 @@ public class ColorConstraint
     extends UnaryConstraint {
     
     /** 
-     * 'color' represents the exact color a piece of furniture should be in
+     * 'color' represents the exact color a piece of furniture should be, in
      * order to satisfy the constraint.
      */
     @XmlAttribute

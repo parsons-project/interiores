@@ -24,7 +24,7 @@ public class DesignController extends BusinessController
     private String lastSolution;
     
     /**
-     * Creates a particular instance of the constraint controller
+     * Creates a particular instance of the design controller
      * @param data The data controller that will give access to the objects this controller will use
      */
     public DesignController(JAXBDataController data) {

@@ -46,8 +46,8 @@ public class OrientedRectangle extends Rectangle {
     public OrientedRectangle enlarge(int size) {
         int newX = x - size;
         int newY = y - size;
-        int newW = width + size;
-        int newH = height + size;
+        int newW = width +  2 * size;
+        int newH = height + 2 * size;
         return new OrientedRectangle(newX, newY, newW, newH, this.orientation);
     }
     
@@ -59,8 +59,8 @@ public class OrientedRectangle extends Rectangle {
     public OrientedRectangle enlarge(Dimension dimension) {
         int newX = x - dimension.width;
         int newY = y - dimension.depth;
-        int newW = width + dimension.width;
-        int newH = height + dimension.depth;
+        int newW = width + 2 * dimension.width;
+        int newH = height + 2 * dimension.depth;
         return new OrientedRectangle(newX, newY, newW, newH, this.orientation);
     }
     

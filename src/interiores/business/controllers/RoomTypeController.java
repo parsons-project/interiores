@@ -6,6 +6,7 @@ import interiores.business.models.FurnitureType;
 import interiores.business.models.RoomType;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.data.JAXBDataController;
+import java.util.Collection;
 
 /**
  *
@@ -28,7 +29,7 @@ public class RoomTypeController
     public void addToMandatory(String roomTypeName, String furnitureTypeName)
             throws DefaultCatalogOverwriteException, ElementNotFoundBusinessException
     {
-        RoomType roomType = getRoomTypeForWrite(roomTypeName);
+        RoomType roomType = getActiveCatalog().getForWrite(roomTypeName);
         FurnitureType furnitureType = getFurnitureType(furnitureTypeName);
         
         roomType.addToMandatory(furnitureType);
@@ -37,7 +38,7 @@ public class RoomTypeController
     public void removeFromMandatory(String roomTypeName, String furnitureTypeName)
             throws DefaultCatalogOverwriteException, ElementNotFoundBusinessException
     {
-        RoomType roomType = getRoomTypeForWrite(roomTypeName);
+        RoomType roomType = getActiveCatalog().getForWrite(roomTypeName);
         
         roomType.removeFromMandatory(furnitureTypeName);
     }
@@ -45,7 +46,7 @@ public class RoomTypeController
     public void addToForbidden(String roomTypeName, String furnitureTypeName)
             throws DefaultCatalogOverwriteException, ElementNotFoundBusinessException
     {
-        RoomType roomType = getRoomTypeForWrite(roomTypeName);
+        RoomType roomType = getActiveCatalog().getForWrite(roomTypeName);
         FurnitureType furnitureType = getFurnitureType(furnitureTypeName);
         
         roomType.addToForbidden(furnitureType);
@@ -54,16 +55,25 @@ public class RoomTypeController
     public void removeFromForbidden(String roomTypeName, String furnitureTypeName)
             throws DefaultCatalogOverwriteException, ElementNotFoundBusinessException
     {
-        RoomType roomType = getRoomTypeForWrite(roomTypeName);
+        RoomType roomType = getActiveCatalog().getForWrite(roomTypeName);
         
         roomType.removeFromForbidden(furnitureTypeName);
     }
-        
-    private RoomType getRoomTypeForWrite(String roomTypeName)
-            throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException
+    
+    public Collection<String> getMandatory(String roomTypeName)
+            throws ElementNotFoundBusinessException
     {
-        NamedCatalog<RoomType> activeCatalog = getActiveCatalog();
-        return activeCatalog.getForWrite(roomTypeName);
+        RoomType roomType = getActiveCatalog().get(roomTypeName);
+        
+        return roomType.getMandatory();
+    }
+    
+    public Collection<String> getForbidden(String roomTypeName)
+            throws ElementNotFoundBusinessException
+    {
+        RoomType roomType = getActiveCatalog().get(roomTypeName);
+        
+        return roomType.getForbidden();
     }
     
     private FurnitureType getFurnitureType(String furnitureTypeName)

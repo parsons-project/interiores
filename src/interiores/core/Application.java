@@ -5,7 +5,6 @@ import interiores.core.data.JAXBDataController;
 import interiores.core.presentation.PresentationController;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -17,16 +16,22 @@ public class Application
     private JAXBDataController data;
     private List<PresentationController> presentations;
     
-    public Application(String appPkg) throws JAXBException
+    public Application(String appPkg)
     {
         this.appPkg = appPkg;
         presentations = new ArrayList();
     }
     
-    public void init() throws Exception
-    {   
-        for(PresentationController presentation : presentations)
-            presentation.init();
+    public void init()
+    {
+        try {
+            for(PresentationController presentation : presentations)
+                presentation.init();
+        }
+        catch(Exception e) {
+            if(Debug.isEnabled())
+                e.printStackTrace();
+        }
     }
     
     public void setDataController(JAXBDataController data) {
@@ -41,7 +46,8 @@ public class Application
                     "Controller");
             
             addBusiness(name,
-                    (BusinessController) controllerClass.getConstructor(JAXBDataController.class).newInstance(data));
+                    (BusinessController) controllerClass.getConstructor(JAXBDataController.class).newInstance(
+                    data));
         }
         catch(Exception e)
         {

@@ -89,13 +89,20 @@ public class FurnitureVariable
     
     
     /**
-    * Default Constructor. The resulting variable has as domain the models in
-    * "models", every position in room and all orientations.
-    * The set of restrictions is "unaryConstraints".
-    */
-    //pre: the iteration of the variableSet is 0
+     * Default Constructor. The resulting variable has as domain the models in
+     * "models", every position in room and all orientations.
+     * The set of restrictions is "unaryConstraints". Its resolution defaults to 5.
+     * @pre the iteration of the variableSet is 0
+     */
     public FurnitureVariable(String id, List<FurnitureModel> models, Room room,
             List<UnaryConstraint> unaryConstraints, int variableCount) {
+        this(id, models, room, unaryConstraints, variableCount, 5);
+    }
+    
+    
+    
+    public FurnitureVariable(String id, List<FurnitureModel> models, Room room,
+            List<UnaryConstraint> unaryConstraints, int variableCount, int resolution) {
         
         identifier = id;
         
@@ -113,8 +120,8 @@ public class FurnitureVariable
 
         //add all positions in the room
         domainPositions[0] = new HashSet<Point>();
-        for (int i = 0; i < room.getDepth(); ++i) {
-            for (int j = 0; j < room.getWidth(); ++j)
+        for (int i = 0; i < room.getDepth(); i += resolution) {
+            for (int j = 0; j < room.getWidth(); j += resolution)
                 domainPositions[0].add(new Point(i,j));
         }
         

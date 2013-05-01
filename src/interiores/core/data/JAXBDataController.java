@@ -1,6 +1,5 @@
 package interiores.core.data;
 
-import java.util.List;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -37,7 +36,16 @@ public interface JAXBDataController {
      * @throws JAXBException 
      */
     public void save(Object o, String path) throws JAXBException;
-    public void save(Object o, String path, Class[] boundclasses) throws JAXBException;
+    
+    /**
+     * Load the given object as XML in the given path using the boundClasses to translate all the data.
+     * This method is useful to say explicitly which classes JAXB has to take into account to save the data.
+     * @param o Object to save as XML
+     * @param path Path where to save the file with the generated XML
+     * @param boundClasses Classes that JAXB has to take into account
+     * @throws JAXBException 
+     */
+    public void save(Object o, String path, Class[] boundClasses) throws JAXBException;
     
     /**
      * Load an instance of the given class from the XML found in path
@@ -47,5 +55,14 @@ public interface JAXBDataController {
      * @throws JAXBException 
      */
     public Object load(Class c, String path) throws JAXBException;
+    
+    /**
+     * Load an instance from the XML found in path using the boundClasses to understand all the data.
+     * This method is useful to say explicitly which classes JAXB has to take into account to load the data.
+     * @param boundClasses Classes that JAXB has to look at
+     * @param path Path to the XML file to load
+     * @return The loaded object
+     * @throws JAXBException 
+     */
     public Object load(Class[] boundClasses, String path) throws JAXBException;
 }

@@ -15,7 +15,7 @@ public class Application
     /**
      * Application package used to find the business controllers
      */
-    private String appPkg;
+    private String appPackage;
     
     /**
      * The controller of the application data layer
@@ -31,9 +31,9 @@ public class Application
      * Application constructor.
      * @param appPkg Application package used to find the business controllers
      */
-    public Application(String appPkg)
+    public Application(String appPackage)
     {
-        this.appPkg = appPkg;
+        this.appPackage = appPackage;
         presentations = new ArrayList();
     }
     
@@ -81,7 +81,7 @@ public class Application
     {
         try
         {
-            Class controllerClass = Class.forName(appPkg + ".business.controllers." + Utils.capitalize(name) +
+            Class controllerClass = Class.forName(appPackage + ".business.controllers." + Utils.capitalize(name) +
                     "Controller");
             
             addBusiness(name,

@@ -39,7 +39,8 @@ public class ConstraintCommands extends CommandGroup {
             constraintController.add(type,parameters,furn1,furn2);
         }
         else {
-            if (type.equals("color") || type.equals("material") || type.equals("orientation"))
+            if (type.equals("color") || type.equals("material") || type.equals("orientation") ||
+                    type.equals("model"))
                 parameters.add(readString("Choose the " + type + " you want for this furniture"));
             else if (type.equals("price")) parameters.add(readInt("Enter the maximum price you want to pay"));
             else if (type.equals("width") || type.equals("depth")) {

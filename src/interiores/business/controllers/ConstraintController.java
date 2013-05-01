@@ -15,6 +15,7 @@ import interiores.business.models.constraints.binary.MinDistanceConstraint;
 import interiores.business.models.constraints.unary.AreaConstraint;
 import interiores.business.models.constraints.unary.ColorConstraint;
 import interiores.business.models.constraints.unary.MaterialConstraint;
+import interiores.business.models.constraints.unary.ModelConstraint;
 import interiores.business.models.constraints.unary.OrientationConstraint;
 import interiores.business.models.constraints.unary.PriceConstraint;
 import interiores.business.models.constraints.unary.SizeConstraint;
@@ -78,6 +79,7 @@ public class ConstraintController
 
             if (type.equals("color")) uc = new ColorConstraint((String) parameters.get(0));
             else if (type.equals("material")) uc = new MaterialConstraint((String) parameters.get(0));
+            else if (type.equals("model")) uc = new ModelConstraint((String) parameters.get(0));
             else if (type.equals("orientation")) uc = new OrientationConstraint(Orientation.valueOf((String) parameters.get(0)));
             else if (type.equals("price")) uc = new PriceConstraint((Integer) parameters.get(0));
             else if (type.equals("position")) {

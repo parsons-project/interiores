@@ -15,12 +15,12 @@ public class Walls implements Drawable {
     private static final int DEPTH = 5;
     private static final Color COLOR = Color.decode("#999999");
     private int width;
-    private int height;
+    private int depth;
     private Map<Point, WallElement> elements;
     
     public Walls(int width, int height) {
         this.width = width;
-        this.height = height;
+        this.depth = height;
         elements = new HashMap();
     }
     
@@ -37,7 +37,7 @@ public class Walls implements Drawable {
         g.setColor(COLOR);
         
         drawHorizontalWall(g, 0, DEPTH);
-        drawHorizontalWall(g, height, 0);
+        drawHorizontalWall(g, depth, 0);
         
         drawVerticalWall(g, 0, DEPTH);
         drawVerticalWall(g, width, 0);
@@ -63,7 +63,7 @@ public class Walls implements Drawable {
     public void drawVerticalWall(Graphics2D g, int x, int halign) {
         int padding = GridMap.getPadding();
         
-        for(int i = 0; i < width; i += DEPTH) {
+        for(int i = 0; i < depth; i += DEPTH) {
             Point p = new Point(x - halign, i);
         
             if(elements.containsKey(p))
@@ -85,7 +85,7 @@ public class Walls implements Drawable {
                 break;
             
             case S:
-                p.y = height;
+                p.y = depth;
                 
             case N:
                 p.x = displacement;

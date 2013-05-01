@@ -6,7 +6,6 @@ import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.catalogs.AvailableCatalog;
-import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Dimension;

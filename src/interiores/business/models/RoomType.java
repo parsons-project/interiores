@@ -61,7 +61,7 @@ public class RoomType
     }
     
     public void removeFromMandatory(FurnitureType fType) {
-        cantHave.remove(fType.getId());
+        mustHave.remove(fType.getId());
     }
     
     public void removeFromMandatory(String fTypename) {

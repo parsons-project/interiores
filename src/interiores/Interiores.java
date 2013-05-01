@@ -8,13 +8,14 @@ import interiores.core.presentation.TerminalController;
 import interiores.data.MappedDataController;
 
 /**
- *
+ * Main application class.
  * @author hector
  */
 public class Interiores
 {
 
     /**
+     * Main application method.
      * @param args the command line arguments
      */
     public static void main(String[] args)

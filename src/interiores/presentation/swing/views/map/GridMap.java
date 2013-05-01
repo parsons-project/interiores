@@ -1,6 +1,7 @@
 package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
+import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
 import interiores.presentation.swing.views.map.doors.LeftDoor;
 import interiores.presentation.swing.views.map.doors.RightDoor;
@@ -53,14 +54,13 @@ public class GridMap
     }
     
     public void addPillar(int x, int y, int width, int depth) {
-        elements.put(new Point(x, y), new RoomElement(x, y, width, depth));
+        //elements.put(new Point(x, y), new RoomElement(x, y, width, depth));
     }
     
-    public void addFurniture(String name, int x, int y, int width, int depth, String orientation) {
-        Furniture furniture = new Furniture(name, x, y, width, depth);
-        furniture.setOrientation(Orientation.valueOf(orientation));
+    public void addFurniture(String name, OrientedRectangle area, Color color) {
+        Furniture furniture = new Furniture(name, area, color);
         
-        elements.put(new Point(x, y), furniture);
+        elements.put(new Point((int)area.getX(), (int)area.getY()), furniture);
     }
     
     @Override

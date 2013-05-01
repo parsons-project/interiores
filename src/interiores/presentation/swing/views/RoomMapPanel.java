@@ -1,12 +1,18 @@
 package interiores.presentation.swing.views;
 
+import interiores.business.models.OrientedRectangle;
+import interiores.business.models.backtracking.FurnitureValue;
 import interiores.core.Debug;
 import interiores.core.presentation.annotation.Event;
 import interiores.presentation.swing.SwingPanel;
 import interiores.presentation.swing.views.map.GridMap;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  *
@@ -63,24 +69,20 @@ public class RoomMapPanel extends SwingPanel
         roomCreated(width, depth);
     }
     
-    @Event(paramNames = {"orientation", "size", "displacement", "hasToOpenLeft", "hasToOpenOutwards"})
-    public void doorAdded(String orientation, int size, int displacement, boolean hasToOpenLeft,
-            boolean hasToOpenOutwards) {
-        map.addDoor(orientation, size, displacement, hasToOpenLeft, hasToOpenOutwards);
-    }
-    
-    @Event(paramNames = {"orientation", "size", "displacement"})
-    public void windowAdded(String orientation, int size, int displacement) {
-        map.addWindow(orientation, size, displacement);
-    }
-    
-    @Event(paramNames = {"x", "y", "width", "depth"})
-    public void pillarAdded(int x, int y, int width, int depth) {
-        map.addPillar(x, y, width, depth);
+    @Event(paramNames = {"design"})
+    public void roomDesigned(Map<String, FurnitureValue> design) {
+        for(Entry<String, FurnitureValue> entry : design.entrySet()) {
+            String name = entry.getKey();
+            Color color = entry.getValue().getModel().getColor();
+            
+            furnitureAdded(name, entry.getValue().getArea(), color);
+        }
+        
+        repaint();
     }
     
     @Event(paramNames = {"name", "x", "y", "width", "depth", "orientation"})
-    public void furnitureAdded(String name, int x, int y, int width, int depth, String orientation) {
-        map.addFurniture(name, x, y, width, depth, orientation);
+    public void furnitureAdded(String name, OrientedRectangle area, Color color) {
+        map.addFurniture(name, area, color);
     }
 }

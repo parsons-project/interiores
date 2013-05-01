@@ -1,6 +1,7 @@
 package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
+import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -16,9 +17,9 @@ public class Furniture
 {
     private String name;
     
-    public Furniture(String name, int x, int y, int width, int depth)
+    public Furniture(String name, OrientedRectangle area, Color color)
     {
-        super(x, y, width, depth, Color.cyan);
+        super(area, color);
         
         this.name = name;
     }
@@ -47,7 +48,12 @@ public class Furniture
         int startW = ((int)rectangle.getWidth())/2 - stringW/2;
         int startH = ((int)rectangle.getHeight())/2 + stringH/2;
         
-        g.setColor(Color.black);
+        Color textColor = Color.black;
+        
+        if(color == textColor)
+            textColor = Color.white;
+        
+        g.setColor(textColor);
         g.drawString(name, (int)rectangle.getX() + startW, (int)rectangle.getY() + startH);
     }
     

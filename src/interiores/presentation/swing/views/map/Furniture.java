@@ -48,7 +48,12 @@ public class Furniture
         int startW = ((int)rectangle.getWidth())/2 - stringW/2;
         int startH = ((int)rectangle.getHeight())/2 + stringH/2;
         
-        g.setColor(Color.black);
+        Color textColor = Color.black;
+        
+        if(color == textColor)
+            textColor = Color.white;
+        
+        g.setColor(textColor);
         g.drawString(name, (int)rectangle.getX() + startW, (int)rectangle.getY() + startH);
     }
     

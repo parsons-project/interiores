@@ -52,7 +52,7 @@ public class FurnitureTypeController
     }
     
     public Collection getRoomFurniture() {
-        return getWishList().getWantedFurniture();
+        return getWishList().getFurnitureNames();
     }
     
     private WishList getWishList() {

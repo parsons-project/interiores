@@ -82,12 +82,16 @@ public class WishList {
         return result;
     }
     
-    public Collection getWantedFurniture() {
+    public Collection getFurnitureNames() {
         return furniture.keySet();
     }
     
     public WantedFurniture getWantedFurniture(String id) {
         return furniture.get(id);
+    }
+    
+    public Collection getWantedFurniture() {
+        return furniture.values();
     }
     
     private String existsBinaryConstraint(String ctype, String f1, String f2) {

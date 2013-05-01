@@ -3,6 +3,7 @@ package interiores.business.controllers;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Room;
 import interiores.business.models.WantedFurniture;
+import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.constraints.BinaryConstraintSet;
 import interiores.business.models.constraints.UnaryConstraint;
@@ -31,14 +32,15 @@ public class DesignController extends BusinessController
     
     public void solve() {
         
+        WishList wishList = (WishList) data.get("wishList");
         Room room = (Room) data.get("room");
         
-        List<WantedFurniture> wishList = room.getWishList();
+        Collection<WantedFurniture> furniture = wishList.getWantedFurniture();
         
         List<List<FurnitureModel>> variableModels = new ArrayList();
         List<List<UnaryConstraint>> variableConstraints = new ArrayList();
         
-        for (WantedFurniture wf : wishList) {
+        for (WantedFurniture wf : furniture) {
             variableModels.add(wf.getType().getFurnitureModels());
             variableConstraints.add((List) wf.getConstraints());
         }

@@ -1,59 +1,136 @@
-Breu descripció de les estructures de dades i algorismes utilitzats per a implementar les funcionalitats principals.
+Breu descripciÃ³ de les estructures de dades i algorismes utilitzats per a
+implementar les funcionalitats principals.
 
-Introducció
+IntroducciÃ³
 
-En un problema de satisfacció de restriccions (CSP), tenim un conjunt de variables, cadascuna amb un domini de valors, i un conjunt de restriccions que relacionen els valors d'aquestes variables.
-En el cas de disseny d'interiors, les variables son tipus de moble, mentre que els valors consten de 3 camps: posició, model de moble i orientació.
-L'algorisme utilitzat es basa en forward checking: cada cop que s'assigna un valor a una variable, es comprova el domini de les variables que encara no han estat assignades i s'elimina dels seus dominis aquells valors incompatibles amb el valor assignat. Tot i això, aquesta operació no és exhaustiva, i per tant és necessari garantir que el valor realment és vàlid. Finalment, en cas d’haver de fer un pas enrera, caldrà desfer els canvis en els dominis de les variables.
+En un problema de satisfacciÃ³ de restriccions (CSP), tenim un conjunt de variables,
+cadascuna amb un domini de valors, i un conjunt de restriccions que relacionen els
+valors d'aquestes variables.
+En el cas de disseny d'interiors, les variables son tipus de moble, mentre que els
+valors consten de 3 camps: posiciÃ³, model de moble i orientaciÃ³.
+L'algorisme utilitzat es basa en forward checking: cada cop que s'assigna un valor
+a una variable, es comprova el domini de les variables que encara no han estat assignades i s'elimina dels seus dominis aquells valors incompatibles amb el valor assignat. Tot i aixÃ³, aquesta operaciÃ³ no Ã³s exhaustiva, i per tant Ã³s necessari garantir que el valor realment Ã³s vÃ³lid. Finalment, en cas dÃ³haver de fer un pas enrera, caldrÃ³ desfer els canvis en els dominis de les variables.
 
-Aquest esquema ens defineix tres operacions crítiques per al rendiment de l’algorisme.
-trimDomains()
-canPlace()
-undoTrimDomains()
+Aquest esquema ens defineix tres operacions crÃ­tiques per al rendiment de l'algorisme.
+- trimDomains()
+- canPlace()
+- undoTrimDomains()
 
 Les estructures de dades de cada variable
 
-Per guardar el domini de les variables hem decidit guardar cada camp (model, posició i orientació) per separat. Tenim un conjunt per cada un d’aquests atributs i el domini és el seu producte cartesià. Les implicacions d’aquesta decisió són que utilitzem una fracció molt reduïda de memòria, i que podem eliminar múltiples valors del domini en una sola operació (per exemple, tots els valors que tenen un model). Per contra, perdem granularitat (per exemple, no podem eliminar una posició per un moble concret).
+Per guardar el domini de les variables hem decidit guardar cada camp (model,
+posiciÃ³ i orientaciÃ³) per separat. Tenim un conjunt per cada un d'aquests atributs
+i el domini Ã³s el seu producte cartesiÃ . Les implicacions d'aquesta decisiÃ³ sÃ³n
+que utilitzem una fracciÃ³ molt reduÃ¯da de memÃ²ria, i que podem eliminar mÃºltiples
+valors del domini en una sola operaciÃ³ (per exemple, tots els valors que tenen un
+model). Per contra, perdem granularitat (per exemple, no podem eliminar una posiciÃ³
+per un moble concret).
 
-Els models els hem ficat en una llista. A cada iteració de l’algorisme fins que se li assigna un valor, trimDomain() agafa els models que continuen sent vàlids i els mou a una nova llista. Per tant, tenim un vector de llistes en que a cada posició podem veure els models que han deixat de ser vàlids. Aquesta decisió implica que l’ús de memòria és constant, que recòrrer el conjunt de mobles vàlids serà menys costós a cada iteració i que l’operació undoTrimDomain() la podem fer en temps constant concatenant la llista corresponent a la iteració actual amb l’anterior.
+Els models els hem ficat en una llista, ordenada per mida (els que ocupen menys
+espai primers) i en cas d'empat, per preu. Com que les restriccions binÃ ries
+relacionen els tipus de moble
+i no els models concrets, estimem que no hi haurÃ  gaires canvis en el domini de models
+al llarg de les iteracions de l'algorisme. Per tant, estimem que no val la pena
+fer trimDomain() sobre el conjunt de mobles; una altre raÃ³ d'aquesta decisiÃ³ Ã©s que,
+a diferÃ¨ncia de les posicions, podem comenÃ§ar iterant per els models que tenen mÃ©s
+probabilitat d'Ã¨xit (els mÃ©s petits, els mÃ©s barats, ...), per tant no volem perdre
+temps valorant si s'han de descartar els models, ja que els que serien descartats serien
+els que en la majoria dels casos no es provarien. Aquest conjunt serÃ  estÃ tic al llarg de l'execuciÃ³.
 
-Per les posicions, una llista no ens serveix ja que el conjunt estimem que serà molt més gran i el temps d’accés no seria acceptable. Per això, les posicions es troben en un HashSet, que és una taula de hash d’elements únics. Anàlogament als models, a cada iteració movem els valors que romanen vàlids a un nou HashSet. En aquest cas, per això, la operació undoTrimDomain() consistirà en unir dos sets element a element.
+Les posicions troben en un HashSet, que Ã©s una taula de hash d'elements Ãºnics.
+Aquest conjunt serÃ  el blanc principal de l'operaciÃ³ trimDomain(). A cada
+iteraciÃ³ de l'algorisme fins que se li assigna un valor, trimDomain() agafa
+les posicions que continuen sent vÃ lides i els mou a un nou HashSet.
+Per tant, tenim un vector de HashSet en que a cada
+posiciÃ³ podem veure les posicions que han deixat de ser vÃ lides en aquella iteraciÃ³.
+Aquesta decisiÃ³ implica que l'Ãºs de memÃ³ria Ã©s constant i que recÃ³rrer el conjunt
+de posicions vÃ lides serÃ  menys costÃ³s a cada iteraciÃ³. Per fer undoTrimDomain(),
+caldrÃ  unir el HashSet de l'iteraciÃ³ actual amb l'anterior.
 
+Una optimitzaciÃ³ a considerar per la tercera entrega consisteix en substituir
+els HashSets per una estructura prÃ³pia, que consisteix en representar les
+posicions vÃ³lides amb booleans en una matriu de la mida de lÃ³habitaciÃ³. Per
+tal de no haver de recÃ³rrer tota la matriu al recÃ³rrer el domini, les posicions
+vÃ³lides estarien linkejades com en una linked list (sense cap ordre especial).
+AixÃ³ es pot accedir a una posiciÃ³ mÃ³s rÃ³pidament que en un hashset i sÃ³eviten
+les operacions de redimensiÃ³ dels hashsets. Per contra, lÃ³Ã³s de memÃ³ria
+s'incrementa en un factor equivalent a el nombre de iteracions, ja que es
+necessita una matriu per cada una).
 
-Una optimització a considerar per la tercera entrega consisteix en substituir els HashSets per una estructura pròpia, que consisteix en representar les posicions vàlides amb booleans en una matriu de la mida de l’habitació. Per tal de no haver de recórrer tota la matriu al recórrer el domini, les posicions vàlides estarien linkejades com en una linked list (sense cap ordre especial). Així es pot accedir a una posició més ràpidament que en un hashset i s’eviten les operacions de redimensió dels hashsets. Per contra, l’ús de memòria s’incrementa en un factor equivalent a el nombre de iteracions, ja que es necessita una matriu per cada una).
+Una altra optimitzaciÃ³ ja aplicada consisteix en que, si es preveu que caldrÃ 
+moure la majoria d'elements, primer fer un swap() del conjunt origen i destÃ­
+(cost constant en java, ja que nomÃ©s
+modifiquem les referÃ¨ncies) i moure des del destÃ­ a l'origen els elements que
+no s'havien de moure. Aquesta optimitzaciÃ³ funciona molt bÃ© ja que, en general,
+estimem que les posicions que es descarten a cada iteraciÃ³ sÃ³n poques.
 
-Una altra optimització ja aplicada tant al vector de llistes com al de HashSets consisteix en que, si preveiem que caldrà moure la majoria d’elements, primer fer un swap() del conjunt origen i destí (cost constant en java, ja que només modifiquem les referències) i moure des del destí a l’origen els elements que no s’havien de moure. Aquesta optimització funciona molt bé ja que, en general, estimem que els valors del domini que es descarten a cada iteració són pocs.
+El conjunt d'orientacions Ã©s estÃ tic i estÃ  en una llista de 4 elements, que no
+muta d'iteraciÃ³ en iteraciÃ³.
 
-El conjunt d’orientacions és estàtic i està en una llista de 4 elements, que no muta d’iteració en iteració.
-
-Finalment, les variables guarden en una llista les seves restriccions unàries, aquelles que només les incumbeixen a elles. Aquestes restriccions s’utilitzen per descartar valors del domini en un pas previ al backtracking, i per tant el cost d’evaluar-les no és rellevant per en quant a l’eficiència de l’algorisme.
+Finalment, les variables guarden en una llista les seves restriccions unÃ ries,
+aquelles que nomÃ©s les incumbeixen a elles. Aquestes restriccions s'utilitzen
+per descartar valors del domini en un pas previ al backtracking, i per tant el
+cost d'evaluar-les no Ã©s significant en quant a l'eficiÃ¨ncia de l'algorisme.
 
 Les estructures de dades del conjunt de variables
 
-Les variables es guarden en un vector, ordenades per ordre en que han estat assignades. Les variables encara sense valor assignat es troben a les darreres posicions, sense cap ordre particular. Això ens permet, sabent la iteració actual, recórrer només les variables que encara no han estat assignades, quelcom desitjable per operacions com next() (operació que tria la següent variable a assignar d’entre les que no tenen valor).
+Les variables es guarden en un vector, ordenades per ordre en que han estat
+assignades. Les variables encara sense valor assignat es troben a les darreres
+posicions, sense cap ordre particular. AixÃ² ens permet, sabent la iteraciÃ³ actual,
+recÃ²rrer nomÃ©s les variables que encara no han estat assignades, quelcom desitjable
+per operacions com next() (operaciÃ³ que tria la segÃ¼ent variable a assignar d'entre
+les que no tenen valor).
 
-El conjunt de variables també emmagatzema les restriccions binàries, aquelles que relacionen més d’una variable. Les restriccions binàries es guarden en un HashMap, ...
+El conjunt de variables tambÃ© emmagatzema les restriccions binÃ ries, aquelles que
+relacionen mÃ©s d'una variable. Les restriccions binÃ ries es guarden en un HashMap, ...
 
 Els detalls de l'algorisme
 
-Hem volgut evitar comtre l'error d'optimització prematura. Per això, la versió actual és provisional i no està optimitzada. Moltes de les funcionalitats descrites en aquest apartat seran afegides per la versió final; no obstant, hem triat les estructures de dades per tal que sigui factible afegir-les.
-A continuació, 
+Hem volgut evitar comtre l'error d'optimitzaciÃ³ prematura. Per aixÃ³, la versiÃ³
+actual Ã©s provisional i no estÃ  optimitzada. Moltes de les funcionalitats
+descrites en aquest apartat seran afegides per la versiÃ³ final; no obstant,
+hem triat les estructures de dades per tal que sigui factible afegir-les.
+A continuaciÃ³, es descriuen els papers de les funcions principals.
 
 1. PreliminarTrimDomains()
-Aquí s'eliminarà, per cada variable: 
-Els models que no satisfaguin alguna restricció unària.
-Els models tals que la suma del seu preu més el preu del moble més barat de la resta de variables supera el pressupost exigit.
-Dels restants, els models tals que existex un altre model més curt, més estret i més barat.
-Les posicions tals que ni el moble més curt ni el moble més llarg hi caben, tenint en compte parets i elements fixes.
-A més, s'ordenaran els models de més petit a més gran (i en cas d'empat, per preu), per tal que  al iterar pel domini s'escullin mobles el més apropiats possible.
+AquÃ­ s'eliminarÃ , per cada variable: 
+- Els models que no satisfaguin alguna restricciÃ³ unÃ ria.
+- Els models tals que la suma del seu preu mÃ©s el preu del moble mÃ©s barat de la
+resta de variables supera el pressupost exigit.
+- Dels restants, els models tals que existex un altre model mÃ©s curt, mÃ©s estret i mÃ©s barat.
+- Les posicions tals que ni el moble mÃ©s curt ni el moble mÃ©s llarg hi caben,
+tenint en compte parets i elements fixes.
 
 2.  next()
-Per triar la variable següent, es farà un valoració ponderada de tres factors:
-La grandària del moble més petit
-La grandària del domini
-El nombre i característiques de restriccions binàries
+Per triar la variable segÃ¼ent, es farÃ  un valoraciÃ³ ponderada de tres factors:
+- La grandÃ ria del moble mÃ©s petit
+- La grandÃ ria del domini
+- El nombre i caracterÃ­stiques de restriccions binÃ ries
 
 3. trimDomains()
-Es descarta, per cada variable:
-Les posicions ocupades pel nou moble (això és l'únic que està implementat a la versió actual) així com aquelles tals que el moble més estret i el més curt xocarien amb el nou moble.
-L'anàleg però amb les posicions ocupades per l'espai passiu del nou moble (l'espai necessari per utilitzar-lo).
+Es descarta, per cada variable encara no assignada:
+- Les posicions ocupades pel nou moble (aixÃ³ Ã©s l'Ãºnic que estÃ  implementat a la
+versiÃ³ actual) aixÃ­ com aquelles tals que el moble mÃ©s estret i el mÃ©s curt
+xocarien amb el nou moble.
+- L'anÃ leg perÃ² amb les posicions ocupades per l'espai passiu del nou moble
+(l'espai necessari per utilitzar-lo).
+A mÃ©s, es buscarien les restriccions binÃ ries que impliquin al moble colÂ·locat i
+a algun dels mobles que encara no tenen valor assignat, i es restringiria el seu
+conjunt de posicions en base a aquesta restricciÃ³.
+
+4. undoTrimDomains()
+Per cada variable no assignada,
+es fa un uniÃ³ entre els conjunts de posicions de l'iteraciÃ³ actual i la anterior.
+
+5. canPlace()
+Donada una variable i un valor del domini, per saber si es pot assignar, es mira
+que la posiciÃ³ estigui lliure. La posiciÃ³ fa referÃ¨ncia a la cantonada superior
+esquerra, i per tant cal veure que el moble no intersecti amb res.
+A mÃ©s es comproben les restriccions binÃ ries que l'afecten. Si tÃ© una restricciÃ³ binÃ ria
+amb un moble que encara no ha estat colÂ·locat, no es tÃ© en compte.
+
+
+6. getNextDomainValue()
+Els conjunts del domini s'iteren en aquest ordre: primer les posicions, desprÃ©s les
+orientacions i finalment els models. 
+

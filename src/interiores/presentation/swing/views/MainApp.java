@@ -41,18 +41,18 @@ public class MainApp extends SwingFrame
         roomType = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Diseño de interiores");
+        setTitle("Interiors design");
         setAlwaysOnTop(true);
 
-        jLabel1.setText("Tipo:");
+        jLabel1.setText("Type:");
 
-        jLabel2.setText("Datos última habitación creada/cargada:");
+        jLabel2.setText("Info about the last room created/loaded:");
 
-        jLabel3.setText("Dimensiones:");
+        jLabel3.setText("Dimensions:");
 
-        roomSize.setText("Desconocidas");
+        roomSize.setText("Unknown");
 
-        roomType.setText("Desconocido");
+        roomType.setText("Unknown");
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

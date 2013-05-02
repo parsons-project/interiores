@@ -45,7 +45,7 @@ public class RoomMap extends SwingFrame
     {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Mapa de la habitación");
+        setTitle("Room map");
         setAlwaysOnTop(true);
         setResizable(false);
 

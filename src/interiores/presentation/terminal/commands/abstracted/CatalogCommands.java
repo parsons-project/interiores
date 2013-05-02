@@ -3,6 +3,7 @@ package interiores.presentation.terminal.commands.abstracted;
 import interiores.business.controllers.abstracted.CatalogController;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.annotation.Command;
 import java.util.Collection;
 import javax.xml.bind.JAXBException;
 

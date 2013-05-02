@@ -72,6 +72,8 @@ public class RoomMapPanel extends SwingPanel
     
     @Event(paramNames = {"design"})
     public void roomDesigned(Map<String, FurnitureValue> design) {
+        map.clear();
+        
         for(Entry<String, FurnitureValue> entry : design.entrySet()) {
             String name = entry.getKey();
             Color color = entry.getValue().getModel().getColor();

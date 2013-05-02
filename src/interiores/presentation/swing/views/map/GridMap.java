@@ -39,6 +39,11 @@ public class GridMap
         status = "";
     }
     
+    public void clear() {
+        elements.clear();
+        status = "";
+    }
+    
     public void addDoor(String wall, int size, int displacement, boolean hasToOpenToLeft,
             boolean hasToOpenOutwards) {
         Door door;

@@ -4,6 +4,7 @@ import interiores.business.controllers.ConstraintController;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +23,7 @@ public class ConstraintCommands extends CommandGroup {
         this.constraintController = constraintController;
     }
     
+    @Command("Add a constraint to selected furniture")
     public void add()
             throws BusinessException
     {
@@ -70,6 +72,7 @@ public class ConstraintCommands extends CommandGroup {
         
     }
     
+    @Command("Remove an applied constraint")
     public void remove()
             throws NoRoomCreatedException
     {
@@ -86,6 +89,7 @@ public class ConstraintCommands extends CommandGroup {
         
     }
     
+    @Command("List constraints applied to some selected furniture")
     public void list()
             throws NoRoomCreatedException
     {

@@ -31,6 +31,9 @@ public class Interiores
         TerminalController terminal = new TerminalController("interiores.presentation.terminal.commands");
         SwingController swingController = new SwingController("interiores.presentation.swing.views");
         
+        // Terminal welcome message
+        terminal.setWelcomeMessage("Welcome to Interiors design! Use 'help' to see the available commands.");
+        
         // Persistance layer
         app.setDataController(dataController);
         

@@ -6,8 +6,10 @@ import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
 import interiores.core.presentation.terminal.IOStream;
+import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -45,6 +47,11 @@ public class TerminalController extends PresentationController
     private Map<String, String> shortcuts;
     
     /**
+     * The welcoming message that the terminal shows on initialization
+     */
+    private String welcomeMsg;
+    
+    /**
      * Constructs a new TerminalController with the default System input/output.
      * @param commandsPackage The package where the commands are located
      */
@@ -56,12 +63,18 @@ public class TerminalController extends PresentationController
         shortcuts = new HashMap();
     }
     
+    public void setWelcomeMessage(String welcomeMsg) {
+        this.welcomeMsg = welcomeMsg;
+    }
+    
     /**
      * Initializes and runs the terminal.
      */
     @Override
     public void init()
     {
+        iostream.println(welcomeMsg);
+        
         String line = iostream.readLine();
         
         while(line != null && !line.startsWith("quit"))
@@ -158,13 +171,18 @@ public class TerminalController extends PresentationController
             Debug.println("Action is " + action + " on subject " + subject);
             
             if(! commands.containsKey(subject))
-                throw new Exception("There is no subject known as " + subject);
+                throw new BusinessException("There is no subject known as " + subject);
             
             CommandGroup comgroup = commands.get(subject);
             Class comgroupClass = comgroup.getClass();
             
             try {
-                comgroupClass.getMethod(method).invoke(comgroup);
+                Method command = comgroupClass.getMethod(method);
+                
+                if(! command.isAnnotationPresent(Command.class))
+                    throw new BusinessException(action + " command not found on subject " + subject + ".");
+                
+                command.invoke(comgroup);
             }
             catch(InvocationTargetException e) {
                 throw e.getCause();
@@ -194,6 +212,8 @@ public class TerminalController extends PresentationController
             
             iostream.println("    " + Utils.padRight(cSubject.name(), HELP_PADDING) + cSubject.description());
         }
+        
+        iostream.println("Use 'help [command]' to show more information about the command.");
     }
     
     /**

@@ -5,6 +5,7 @@ import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
 import javax.xml.bind.JAXBException;
 
@@ -23,6 +24,7 @@ public class RoomCommands extends CommandGroup
         this.roomController = roomController;
     }
     
+    @Command("Create a new room")
     public void _new()
             throws ElementNotFoundBusinessException, BusinessException
     {
@@ -33,6 +35,7 @@ public class RoomCommands extends CommandGroup
         roomController.create(type, width, depth);
     }
     
+    @Command("Save the current room")
     public void save()
             throws JAXBException, NoRoomCreatedException
     {
@@ -41,6 +44,7 @@ public class RoomCommands extends CommandGroup
         roomController.save(path);
     }
     
+    @Command("Load a room")
     public void load()
             throws JAXBException
     {

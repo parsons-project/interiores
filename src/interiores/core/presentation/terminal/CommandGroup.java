@@ -1,5 +1,9 @@
 package interiores.core.presentation.terminal;
 
+import interiores.core.Utils;
+import interiores.core.presentation.terminal.annotation.Command;
+import interiores.core.presentation.terminal.annotation.CommandSubject;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -11,6 +15,11 @@ import java.util.List;
  */
 abstract public class CommandGroup
 {
+    /**
+     * Padding of the help command
+     */
+    private static final int HELP_PADDING = 20;
+    
     /**
      * The input/output streams to read/print data from/to the user
      */
@@ -103,5 +112,27 @@ abstract public class CommandGroup
     public void print(Collection<?> collection) {
         for(Object o : collection)
             println(o.toString());
+    }
+    
+    @Command("Obtain detailed command information")
+    public void help() {
+        Class commandClass = getClass();
+        CommandSubject cSubject = (CommandSubject) commandClass.getAnnotation(CommandSubject.class);
+        
+        println("Available commands for " + cSubject.name() + ":");
+        
+        for(Method method : commandClass.getMethods()) {
+            if(! method.isAnnotationPresent(Command.class))
+                continue;
+            
+            Command commandAnnotation = method.getAnnotation(Command.class);
+            
+            String name = method.getName();
+            
+            if(name.startsWith("_"))
+                name = name.substring(1);
+            
+            iostream.println("    " + Utils.padRight(name + " " + cSubject.name(), HELP_PADDING) + commandAnnotation.value());
+        }
     }
 }

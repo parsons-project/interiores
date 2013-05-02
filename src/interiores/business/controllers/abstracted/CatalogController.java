@@ -69,6 +69,7 @@ abstract public class CatalogController<I extends PersistentIdObject>
         // Bound PersistentIdObject to load all data
         Class[] classes = { NamedCatalog.class, PersistentIdObject.class };
         
+        if (path.indexOf("/")==-1) path = System.getProperty("user.dir") + path;
         NamedCatalog loadedCatalog = (NamedCatalog<I>) data.load(classes, path);
         
         if(loadedCatalog.isDefault())
@@ -83,10 +84,12 @@ abstract public class CatalogController<I extends PersistentIdObject>
         // Bound PersistentIdObject to save all data
         Class[] classes = { activeCatalog.getClass(), PersistentIdObject.class };
         
+        if (path.indexOf("/")==-1) path = System.getProperty("user.dir") + path;
         data.save(getActiveCatalog(), path, classes);
     }
     
     public Collection<String> getNamesLoadedCatalogs() {
         return loadedCatalogs.keySet();
     }
+    
 }

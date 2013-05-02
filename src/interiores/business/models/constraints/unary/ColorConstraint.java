@@ -3,8 +3,10 @@ package interiores.business.models.constraints.unary;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.core.business.BusinessException;
 import interiores.data.adapters.ColorAdapter;
 import java.awt.Color;
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -38,8 +40,12 @@ public class ColorConstraint
         this.color = color;
     }
     
-    public ColorConstraint(String color) {
-        this.color = Color.decode(color);
+    public ColorConstraint(String color) throws BusinessException {
+        try {
+            this.color = (Color) Class.forName("java.awt.Color").getField(color).get(null);
+        } catch (Exception e) {
+            throw new BusinessException("The color " + color + " is not available.");
+        }
     }
     
     /**

@@ -63,7 +63,8 @@ public class ConstraintController
      * @param furnitureID A valid ID of the furniture we want to apply the constraint to
      * @throws NoRoomCreatedException
      */
-    public void add(String type, List<Object> parameters, String furnitureID) throws NoRoomCreatedException
+    public void add(String type, List<Object> parameters, String furnitureID)
+            throws NoRoomCreatedException, BusinessException
     {
         if (type.equals("width") || type.equals("depth")) {
             // We get the SizeConstraint of that furniture. If there isn't one, we create it

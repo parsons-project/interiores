@@ -24,4 +24,3 @@ public class ElementNotFoundException extends Exception{
         super("The element: " + id + " is not into the Catalog", cause);
     }
 }
-

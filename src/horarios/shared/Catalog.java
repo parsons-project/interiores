@@ -138,5 +138,3 @@ public class Catalog<X extends IdObject> {
         return table.keySet();
     }
 }
-
-

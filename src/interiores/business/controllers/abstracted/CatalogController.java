@@ -5,6 +5,7 @@ import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.PersistentIdObject;
+import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import java.util.Collection;
@@ -69,7 +70,11 @@ abstract public class CatalogController<I extends PersistentIdObject>
         // Bound PersistentIdObject to load all data
         Class[] classes = { NamedCatalog.class, PersistentIdObject.class };
         
-        if (path.indexOf("/")==-1) path = System.getProperty("user.dir") + path;
+        if(!path.startsWith("/"))
+            path = getAbsolutePath(path);
+        
+        Debug.println("Loading from " + path);
+        
         NamedCatalog loadedCatalog = (NamedCatalog<I>) data.load(classes, path);
         
         if(loadedCatalog.isDefault())
@@ -84,12 +89,20 @@ abstract public class CatalogController<I extends PersistentIdObject>
         // Bound PersistentIdObject to save all data
         Class[] classes = { activeCatalog.getClass(), PersistentIdObject.class };
         
-        if (path.indexOf("/")==-1) path = System.getProperty("user.dir") + path;
+        if(!path.startsWith("/"))
+            path = getAbsolutePath(path);
+        
+        Debug.println("Saving to " + path);
+        
         data.save(getActiveCatalog(), path, classes);
     }
     
     public Collection<String> getNamesLoadedCatalogs() {
         return loadedCatalogs.keySet();
+    }
+    
+    private String getAbsolutePath(String path) {
+        return System.getProperty("user.dir") + System.getProperty("file.separator") + path;
     }
     
 }

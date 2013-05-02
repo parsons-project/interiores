@@ -3,6 +3,7 @@ package interiores.presentation.terminal.commands.abstracted;
 import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.annotation.Command;
 import java.util.Collection;
 
 /**
@@ -20,6 +21,7 @@ abstract public class CatalogElementCommands
         this.catalogTypeName = catalogTypeName;
     }
     
+    @Command("Remove a type of furniture from the catalog")
     public void rm() throws BusinessException {
         Collection<String> names = readStrings("Enter the names of the " + catalogTypeName  + " you want "
                 + "to remove:");
@@ -28,6 +30,7 @@ abstract public class CatalogElementCommands
             catalogElementController.rm(name);
     }
     
+    @Command("Obtain a list containing all the available furniture types")
     public void list() {
         Collection elements = catalogElementController.getCatalogObjects();
         

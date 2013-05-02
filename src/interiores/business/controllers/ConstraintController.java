@@ -19,6 +19,7 @@ import interiores.business.models.constraints.unary.ModelConstraint;
 import interiores.business.models.constraints.unary.OrientationConstraint;
 import interiores.business.models.constraints.unary.PriceConstraint;
 import interiores.business.models.constraints.unary.SizeConstraint;
+import interiores.business.models.constraints.unary.WallConstraint;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import java.awt.Point;
@@ -92,22 +93,23 @@ public class ConstraintController
                     for (int i = (Integer) parameters.get(1); i <= (Integer) parameters.get(3); i++)
                         for (int j = (Integer) parameters.get(2); j <= (Integer) parameters.get(4); j++)
                             validPositions.add(new Point(i,j));
+                    
+                    uc = new AreaConstraint(validPositions);
                 }
                 else if (mode.equals("walls")) {
                     String whichWalls = (String) parameters.get(1);
                     int roomWidth = getRoom().getWidth();
                     int roomDepth = getRoom().getDepth();
-                    if (whichWalls.equals("N") || whichWalls.equals("all"))
-                        for (int i = 0; i < roomWidth; i++) validPositions.add(new Point(0,i));
-                    if (whichWalls.equals("S") || whichWalls.equals("all"))
-                        for (int i = 0; i < roomWidth; i++) validPositions.add(new Point(roomDepth-1,i));
-                    if (whichWalls.equals("W") || whichWalls.equals("all"))
-                        for (int i = 0; i < roomDepth; i++) validPositions.add(new Point(i,0));
-                    if (whichWalls.equals("E") || whichWalls.equals("all"))
-                        for (int i = 0; i < roomDepth; i++) validPositions.add(new Point(i,roomWidth-1));
+                    
+                    Orientation[] orientations;
+                    
+                    if(whichWalls.equals("all"))
+                        orientations = Orientation.values();
+                    else
+                        orientations = new Orientation[]{ Orientation.valueOf(whichWalls) };
+                        
+                    uc = new WallConstraint(roomWidth, roomDepth, orientations);
                 }
-                
-                uc = new AreaConstraint(validPositions);
             }
 
             getWantedFurniture(furnitureID).addConstraint(type, uc);

@@ -3,6 +3,7 @@ package interiores.business.models.constraints.unary;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.UnaryConstraint;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -45,9 +46,18 @@ public class AreaConstraint
      */
     @Override
     public void eliminateInvalidValues(FurnitureVariable variable) {        
-        Iterator i = validPositions.iterator();
-        while (i.hasNext())
-            variable.domainPositions[0].remove( (Point) i.next());
+        Iterator it = variable.domainPositions[0].iterator();
+        
+        List<Object> invalidPositions = new ArrayList();
+        
+        while(it.hasNext()) {
+            Object p = it.next();
+            if(! validPositions.contains(p))
+                invalidPositions.add(p);
+        }
+        
+        for(Object position : invalidPositions)
+            variable.domainPositions[0].remove(position);
     }
     
     /**

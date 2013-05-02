@@ -175,6 +175,9 @@ public class FurnitureVariable
     //Pre: the 3 iterators point to valid values
     @Override
     public boolean hasMoreValues() {
+        if(domainModels.size() == 0 || domainPositions[iteration].size() == 0 || orientations.size() == 0)
+            return false;
+        
         return modelIterator.hasNext() || positionIterator.hasNext() ||
                orientationIterator.hasNext();
     }
@@ -311,9 +314,12 @@ public class FurnitureVariable
         orientationIterator = orientations.iterator();
         modelIterator = domainModels.iterator();
         
-        currentPosition = (Point) positionIterator.next();
-        currentModel = (FurnitureModel) modelIterator.next();
-        currentOrientation = (Orientation) orientationIterator.next();
+        // 
+        if(positionIterator.hasNext() && modelIterator.hasNext() && orientationIterator.hasNext()) {
+            currentPosition = (Point) positionIterator.next();
+            currentModel = (FurnitureModel) modelIterator.next();
+            currentOrientation = (Orientation) orientationIterator.next();
+        }
         
         firstValueIteration = true;
     }

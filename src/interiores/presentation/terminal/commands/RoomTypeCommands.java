@@ -1,15 +1,17 @@
 package interiores.presentation.terminal.commands;
 
-import interiores.presentation.terminal.commands.abstracted.CatalogElementCommands;
 import interiores.business.controllers.RoomTypeController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
+import interiores.core.presentation.terminal.annotation.CommandSubject;
+import interiores.presentation.terminal.commands.abstracted.CatalogElementCommands;
 import java.util.Collection;
 
 /**
  *
  * @author hector
  */
+@CommandSubject(name = "rt", description = "Room types related commands")
 public class RoomTypeCommands
     extends CatalogElementCommands
 {

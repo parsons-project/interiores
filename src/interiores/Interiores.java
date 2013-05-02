@@ -48,14 +48,6 @@ public class Interiores
         app.addBusiness("furnitureTypesCatalog");
         app.addBusiness("roomTypesCatalog");
         
-        // Some terminal shortcuts!
-        terminal.addShortcut("furnitureModel", "fm");
-        terminal.addShortcut("furnitureType", "ft");
-        terminal.addShortcut("roomType", "rt");
-        terminal.addShortcut("furnitureTypesCatalog", "ftc");
-        terminal.addShortcut("roomTypesCatalog", "rtc");
-        terminal.addShortcut("constraint", "c");
-        
         // Run, run, run!!!
         app.init();
     }

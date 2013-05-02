@@ -6,9 +6,11 @@ import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
 import interiores.core.presentation.terminal.IOStream;
+import interiores.core.presentation.terminal.annotation.CommandSubject;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -17,6 +19,11 @@ import javax.xml.bind.JAXBException;
  */
 public class TerminalController extends PresentationController
 {
+    /**
+     * The padding for the commands name when showing the help.
+     */
+    private static final int HELP_PADDING = 20;
+    
     /**
      * The package where the commands are located
      */
@@ -45,7 +52,7 @@ public class TerminalController extends PresentationController
     {
         this.commandsPackage = commandsPackage;
         iostream = new IOStream(System.in, System.out);
-        commands = new HashMap();
+        commands = new TreeMap();
         shortcuts = new HashMap();
     }
     
@@ -99,11 +106,21 @@ public class TerminalController extends PresentationController
             Class comgroupClass = Class.forName(commandsPackage + "." + Utils.capitalize(name) +
                     "Commands");
             
+            if(!comgroupClass.isAnnotationPresent(CommandSubject.class))
+                throw new Exception("There is no CommandSubject annotation in the " + name + " command group.");
+            
+            CommandSubject cSubject = (CommandSubject) comgroupClass.getAnnotation(CommandSubject.class);
+            
+            String commandName = cSubject.name();
+            
+            if(! name.equals(commandName))
+                shortcuts.put(name, commandName);
+            
             CommandGroup comgroup = (CommandGroup) comgroupClass.getConstructor(
                     controller.getClass()).newInstance(controller);
             
             comgroup.setIOStream(iostream);
-            commands.put(name, comgroup);
+            commands.put(commandName, comgroup);
             
             super.addBusinessController(name, controller);
         }
@@ -112,15 +129,6 @@ public class TerminalController extends PresentationController
             if(Debug.isEnabled())
                 e.printStackTrace();
         }
-    }
-    
-    /**
-     * Adds a shortcut for a command subject.
-     * @param subject Subject of the command
-     * @param shortcut The wanted shortcut
-     */
-    public void addShortcut(String subject, String shortcut) {
-        shortcuts.put(shortcut, subject);
     }
     
     /**
@@ -135,6 +143,11 @@ public class TerminalController extends PresentationController
             
             String action, method;
             action = method = iostream.readString();
+            
+            if(action.equals("help") && !iostream.hasNext()) {
+                showHelp();
+                return;
+            }
             
             if(isReserved(action))
                 method = "_" + action;
@@ -169,6 +182,17 @@ public class TerminalController extends PresentationController
         catch(Throwable e) {
             if(Debug.isEnabled())
                 e.printStackTrace();
+        }
+    }
+    
+    public void showHelp() {
+        iostream.println("Available commands:");
+        
+        for(CommandGroup command : commands.values()) {
+            Class commandClass = command.getClass();
+            CommandSubject cSubject = (CommandSubject) commandClass.getAnnotation(CommandSubject.class);
+            
+            iostream.println("    " + Utils.padRight(cSubject.name(), HELP_PADDING) + cSubject.description());
         }
     }
     

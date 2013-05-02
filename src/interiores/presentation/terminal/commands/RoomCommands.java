@@ -5,12 +5,14 @@ import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.annotation.CommandSubject;
 import javax.xml.bind.JAXBException;
 
 /**
  *
  * @author hector
  */
+@CommandSubject(name = "room", description = "Room related commands")
 public class RoomCommands extends CommandGroup
 {
     private RoomController roomController;

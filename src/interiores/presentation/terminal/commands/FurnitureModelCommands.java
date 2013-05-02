@@ -6,12 +6,14 @@ import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.FurnitureModel;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.annotation.CommandSubject;
 import java.util.Collection;
 
 /**
  *
  * @author hector
  */
+@CommandSubject(name = "fm", description = "Furniture model related commands")
 public class FurnitureModelCommands
     extends CommandGroup
 {

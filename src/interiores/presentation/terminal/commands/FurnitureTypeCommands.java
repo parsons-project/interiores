@@ -7,12 +7,14 @@ import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.business.BusinessException;
+import interiores.core.presentation.terminal.annotation.CommandSubject;
 import java.util.Collection;
 
 /**
  *
  * @author hector
  */
+@CommandSubject(name = "ft", description = "Furniture type related commands")
 public class FurnitureTypeCommands
     extends CatalogElementCommands
 {

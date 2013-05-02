@@ -7,11 +7,13 @@ package interiores.presentation.terminal.commands;
 import interiores.business.controllers.DesignController;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.annotation.CommandSubject;
 
 /**
  *
  * @author alvaro
  */
+@CommandSubject(name = "design", description = "Design related commands")
 public class DesignCommands extends CommandGroup {
    private DesignController designController;
    

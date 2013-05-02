@@ -31,7 +31,7 @@ public class MaxDistanceConstraint
      * Checks whether two variables satisfy the constraint
      * @param fvariable1 The first variable
      * @param fvariable2 The second variable
-     * @return 'true' if the two variables are separated by 'distance' cm. 'false' otherwise
+     * @return 'true' if the two variables are separated by, at most, 'distance' cm. 'false' otherwise
      */
     @Override
     public boolean isSatisfied(FurnitureVariable fvariable1, FurnitureVariable fvariable2) {

@@ -16,14 +16,14 @@ import java.util.Set;
  * This class represents the bag of furniture types that the user wants to
  * include in the room and the constraints required upon them.
  * Internally, this class prepares the room set up to be passed to the
- * algorihm classes.
+ * algorithm classes.
  * @author larribas
  */
 public class WishList {
     
     /**
      * multi-set (set with repeated elements) of furniture
-     * types that are suposed to fit in the room, known as WantedFurniture. 
+     * types that are supposed to fit in the room, known as WantedFurniture. 
      */
     private Map<String,WantedFurniture> furniture;
     

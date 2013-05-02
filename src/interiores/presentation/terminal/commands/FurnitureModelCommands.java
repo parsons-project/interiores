@@ -6,6 +6,7 @@ import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.FurnitureModel;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
 import java.util.Collection;
 
@@ -23,6 +24,7 @@ public class FurnitureModelCommands
         this.fModelController = fModelController;
     }
     
+    @Command("Add a furniture model to the current furniture type catalog")
     public void add()
             throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException, BusinessException
     {
@@ -39,6 +41,7 @@ public class FurnitureModelCommands
         fModelController.add(fTypeName, name, width, depth, price, color, material);
     }
     
+    @Command("Remove a furniture model from the type catalog")
     public void rm()
             throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException, BusinessException
     {
@@ -50,6 +53,7 @@ public class FurnitureModelCommands
         fModelController.rm(fTypeName, name);
     }
     
+    @Command("Obtain a list of particular models belonging to a type")
     public void list()
             throws ElementNotFoundBusinessException
     {

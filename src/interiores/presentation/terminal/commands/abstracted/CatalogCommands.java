@@ -3,6 +3,7 @@ package interiores.presentation.terminal.commands.abstracted;
 import interiores.business.controllers.abstracted.CatalogController;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.annotation.Command;
 import java.util.Collection;
 import javax.xml.bind.JAXBException;
 
@@ -24,12 +25,13 @@ abstract public class CatalogCommands
     
     private CatalogController catalogController;
     private String catalogTypeName;
-    
+
     public CatalogCommands(CatalogController catalogController, String catalogTypeName) {
         this.catalogController = catalogController;
         this.catalogTypeName = catalogTypeName;
     }
-    
+
+    @Command("List the elements of the catalog")
     public void list() {
         Collection<String> catalogNames = catalogController.getNamesLoadedCatalogs();
         String activeCatalog = catalogController.getNameActiveCatalog();
@@ -43,6 +45,7 @@ abstract public class CatalogCommands
         }
     }
     
+    @Command("Creates a new catalog given its name")
     public void _new() throws BusinessException {
         String question = String.format(NEW_MSG, catalogTypeName);
         Collection<String> catalogNames = readStrings(question);
@@ -51,6 +54,7 @@ abstract public class CatalogCommands
             catalogController.create(catalogName);
     }
     
+    @Command("Selects the catalog to be used")
     public void checkout() throws BusinessException {
         String question = String.format(CHECKOUT_MSG, catalogTypeName);
         String catalogName = readString(question);
@@ -58,6 +62,7 @@ abstract public class CatalogCommands
         catalogController.checkout(catalogName);
     }
     
+    @Command("Loads a catalog given a path to a filename")
     public void load() throws JAXBException, BusinessException {
         String question = String.format(LOAD_MSG, catalogTypeName);
         String path = readString(question);
@@ -65,6 +70,7 @@ abstract public class CatalogCommands
         catalogController.load(path);
     }
     
+    @Command("Saves the catalog to the given path")
     public void save() throws JAXBException {
         String activeCatalog = catalogController.getNameActiveCatalog();
         String question = String.format(SAVE_MSG, activeCatalog, catalogTypeName);
@@ -73,6 +79,7 @@ abstract public class CatalogCommands
         catalogController.save(path);
     }
     
+    @Command("Merges two or more catalogs with the current being used")
     public void merge() throws BusinessException {
         String question = String.format(MERGE_MSG, catalogTypeName);
         Collection<String> catalogNames = readStrings(question);

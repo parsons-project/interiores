@@ -7,6 +7,7 @@ import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.business.BusinessException;
+import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
 import java.util.Collection;
 
@@ -26,6 +27,7 @@ public class FurnitureTypeCommands
         this.fTypeController = fTypeController;
     }
     
+    @Command("Add a furniture type to the type catalog")
     public void add() throws DefaultCatalogOverwriteException {
         String name = readString("Enter the name of the furniture type you want to add");
         
@@ -38,6 +40,7 @@ public class FurnitureTypeCommands
         fTypeController.add(name, minWidth, maxWidth, minDepth, maxDepth);
     }
     
+    @Command("Select a furniture type you want for your room")
     public void select()
             throws ElementNotFoundBusinessException, NoRoomCreatedException, ElementNotFoundException
     {
@@ -47,6 +50,7 @@ public class FurnitureTypeCommands
             fTypeController.select(name);
     }
     
+    @Command("Remove a furniture type from the list of wanted furniture")
     public void unselect()
             throws NoRoomCreatedException, BusinessException, ElementNotFoundException
     {
@@ -56,6 +60,7 @@ public class FurnitureTypeCommands
         fTypeController.unselect(name);
     }
     
+    @Command("Obtain a list containing all the selected furniture")
     public void selected()
             throws NoRoomCreatedException
     {

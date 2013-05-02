@@ -61,7 +61,8 @@ public class RoomMapPanel extends SwingPanel
         if(Debug.isEnabled())
             map.enableGrid();
         
-        setPreferredSize(new Dimension(map.getWidth(), map.getHeight()));  
+        setPreferredSize(new Dimension(map.getWidth(), map.getHeight()));
+        repaint();
     }
     
     @Event(paramNames = {"width", "depth"})

@@ -7,6 +7,7 @@ package interiores.presentation.terminal.commands;
 import interiores.business.controllers.DesignController;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
 
 /**
@@ -21,6 +22,7 @@ public class DesignCommands extends CommandGroup {
        this.designController = designController;
    }
    
+   @Command("Generate a valid design for the room")
    public void solve() throws NoRoomCreatedException {
        designController.solve();
        

@@ -77,7 +77,7 @@ public class TerminalController extends PresentationController
         
         String line = iostream.readLine();
         
-        while(line != null && !line.startsWith("quit"))
+        while(line != null)
         {
             // Set subcommand prompt
             iostream.setPrompt('#');
@@ -157,6 +157,11 @@ public class TerminalController extends PresentationController
             String action, method;
             action = method = iostream.readString();
             
+            if(action.equals("quit")) {
+                quit();
+                return;
+            }
+            
             if(action.equals("help") && !iostream.hasNext()) {
                 showHelp();
                 return;
@@ -214,6 +219,13 @@ public class TerminalController extends PresentationController
         }
         
         iostream.println("Use 'help [command]' to show more information about the command.");
+    }
+    
+    public void quit() {
+        boolean isConfirmed = iostream.readBoolean("Are you sure do you really want to quit?");
+        
+        if(isConfirmed)
+            System.exit(0);
     }
     
     /**

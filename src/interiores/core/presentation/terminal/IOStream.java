@@ -86,6 +86,18 @@ public class IOStream
         }
     }
     
+    public boolean readBoolean() {
+        String input = readString();
+        
+        return input.equals("y") || input.equals("yes");
+    }
+    
+    public boolean readBoolean(String question) {
+        println(question + " (yes/no)");
+        
+        return readBoolean();
+    }
+    
     /**
      * Reads a string from the input buffer/stream.
      * @return The read string

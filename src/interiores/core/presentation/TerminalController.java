@@ -4,14 +4,10 @@ import interiores.core.Debug;
 import interiores.core.Utils;
 import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
+import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.CommandGroup;
 import interiores.core.presentation.terminal.IOStream;
-import interiores.core.Options;
-import interiores.core.presentation.terminal.annotation.Command;
-import interiores.core.presentation.terminal.annotation.CommandOptions;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -29,11 +25,6 @@ public class TerminalController extends PresentationController
     private static final int HELP_PADDING = 20;
     
     /**
-     * The options pattern
-     */
-    private static final String OPTIONS_PATTERN = "--([a-z]+)";
-    
-    /**
      * The package where the commands are located
      */
     private String commandsPackage;
@@ -47,11 +38,6 @@ public class TerminalController extends PresentationController
      * Map of command groups identified by subject name
      */
     private Map<String, CommandGroup> commandGroups;
-    
-    /**
-     * Map of maps: subject -> command -> method
-     */
-    private Map<String, Map<String, Method>> commands;
     
     /**
      * Map of available shortcuts for the commands subjects
@@ -72,7 +58,6 @@ public class TerminalController extends PresentationController
         this.commandsPackage = commandsPackage;
         iostream = new IOStream(System.in, System.out);
         commandGroups = new TreeMap();
-        commands = new HashMap();
         shortcuts = new HashMap();
     }
     
@@ -136,13 +121,21 @@ public class TerminalController extends PresentationController
                 throw new Exception("There is no CommandSubject annotation in the " + name + " command "
                         + "group.");
             
-            CommandSubject cSubject = (CommandSubject) comGroupClass.getAnnotation(CommandSubject.class);
-            String comGroupName = cSubject.name();
+            CommandSubject commandSubject = (CommandSubject)comGroupClass.getAnnotation(CommandSubject.class);
+            String commandGroupName = commandSubject.name();
             
-            if(! name.equals(comGroupName))
-                shortcuts.put(name, comGroupName);
+            if(! name.equals(commandGroupName))
+                shortcuts.put(name, commandGroupName);
             
-            addCommandGroup(comGroupName, comGroupClass, controller);
+            AdvancedCommandGroup commandGroup = (AdvancedCommandGroup) comGroupClass.getConstructor(
+                controller.getClass()).newInstance(controller);
+            
+            commandGroup.setName(commandGroupName);
+            commandGroup.setDescription(commandSubject.description());
+            commandGroup.setIOStream(iostream);
+            commandGroup.scanCommands();
+            
+            commandGroups.put(commandGroupName, commandGroup);
             super.addBusinessController(name, controller);
         }
         catch(Exception e)
@@ -150,23 +143,6 @@ public class TerminalController extends PresentationController
             if(Debug.isEnabled())
                 e.printStackTrace();
         }
-    }
-    
-    private void addCommandGroup(String comGroupName, Class comGroupClass, BusinessController controller)
-            throws NoSuchMethodException, InstantiationException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException
-    {
-        CommandGroup commandGroup = (CommandGroup) comGroupClass.getConstructor(
-                controller.getClass()).newInstance(controller);
-        
-        commandGroup.setIOStream(iostream);
-        commandGroups.put(comGroupName, commandGroup);
-        
-        commands.put(comGroupName, new HashMap());
-        
-        for(Method method : comGroupClass.getMethods())
-            if(method.isAnnotationPresent(Command.class))
-                commands.get(comGroupName).put(method.getName(), method);
     }
     
     /**
@@ -178,29 +154,29 @@ public class TerminalController extends PresentationController
         iostream.putIntoInputBuffer(line);
         
         String actionName, commandName;
-        actionName = commandName = iostream.readString();
+        commandName = iostream.readString();
         
-        if(actionName.equals("quit")) {
+        if(commandName.equals("quit")) {
             quit();
             return;
         }
         
-        if(actionName.equals("help") && !iostream.hasNext()) {
+        if(commandName.equals("help") && !iostream.hasNext()) {
             showHelp();
             return;
         }
         
-        if(isReserved(actionName))
-            commandName = "_" + actionName;
-        
         String shortcut = iostream.readString();
         String subjectName = getSubject(shortcut);
         
-        Debug.println("Action is " + actionName + " on subject " + subjectName);
+        Debug.println("Action is " + commandName + " on subject " + subjectName);
         
         try
         {         
-            exec(subjectName, commandName, actionName);
+            if(! commandGroups.containsKey(subjectName))
+                throw new BusinessException("There is no subject known as " + subjectName);
+            
+            commandGroups.get(subjectName).exec(commandName);
         }
         catch(BusinessException e) {
             iostream.println("[Business error] " + e.getMessage());
@@ -220,60 +196,12 @@ public class TerminalController extends PresentationController
         }
     }
     
-    private void exec(String subjectName, String commandName, String actionName)
-            throws Throwable
-    {
-        if(! commandGroups.containsKey(subjectName))
-            throw new BusinessException("There is no subject known as " + subjectName);
-        
-        CommandGroup commandGroup = commandGroups.get(subjectName);
-        Map<String, Method> subjectCommands = commands.get(subjectName);
-        
-        if(! subjectCommands.containsKey(commandName))
-            throw new BusinessException(actionName + " command not found on subject " + subjectName + ".");
-            
-        Method command = subjectCommands.get(commandName);
-        Options commandOptions = getOptions();
-        
-        try {
-            if(command.isAnnotationPresent(CommandOptions.class)) {
-                CommandOptions optionsAnnotation = command.getAnnotation(CommandOptions.class);
-                commandOptions.disableIfNotPresent(optionsAnnotation.value());
-                
-                command.invoke(commandGroup, commandOptions);
-            }
-            else {
-                if(commandOptions.hasOptions())
-                    Debug.println("This command does not accept any option.");
-                
-                command.invoke(commandGroup);
-            }
-        }
-        catch(InvocationTargetException e) {
-            throw e.getCause();
-        }
-    }
-    
-    private Options getOptions() {
-        Options options = new Options();
-        
-        while(iostream.hasNext(OPTIONS_PATTERN)) {
-            String option = iostream.readString().substring(2);
-            options.enable(option);
-        }
-        
-        return options;
-    }
-    
     public void showHelp() {
         iostream.println("Available commands:");
         
-        for(CommandGroup command : commandGroups.values()) {
-            Class commandClass = command.getClass();
-            CommandSubject cSubject = (CommandSubject) commandClass.getAnnotation(CommandSubject.class);
-            
-            iostream.println("    " + Utils.padRight(cSubject.name(), HELP_PADDING) + cSubject.description());
-        }
+        for(CommandGroup commandGroup : commandGroups.values())
+            iostream.println("    " + Utils.padRight(commandGroup.getName(), HELP_PADDING) +
+                    commandGroup.getDescription());
         
         iostream.println("    " + Utils.padRight("quit", HELP_PADDING) + "Closes the application");
         iostream.println("Use 'help [command]' to show more information about the command.");
@@ -297,15 +225,5 @@ public class TerminalController extends PresentationController
             return shortcut;
         
         return shortcuts.get(shortcut);
-    }
-    
-    /**
-     * Tells whether a command is a reserved word for a Java method.
-     * @param s Command name
-     * @return True if s is a reserved word, false otherwise
-     */
-    private boolean isReserved(String s)
-    {
-        return (s.equals("new"));
     }
 }

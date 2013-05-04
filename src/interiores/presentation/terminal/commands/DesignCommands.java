@@ -7,7 +7,7 @@ package interiores.presentation.terminal.commands;
 import interiores.business.controllers.DesignController;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.Options;
-import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandOptions;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
@@ -17,7 +17,7 @@ import interiores.core.presentation.terminal.annotation.CommandSubject;
  * @author alvaro
  */
 @CommandSubject(name = "design", description = "Design related commands")
-public class DesignCommands extends CommandGroup {
+public class DesignCommands extends AdvancedCommandGroup {
    private DesignController designController;
    
    public DesignCommands(DesignController designController) {
@@ -28,7 +28,7 @@ public class DesignCommands extends CommandGroup {
    @CommandOptions("debug")
    public void solve(Options options) throws NoRoomCreatedException {
        if(options.isEnabled("debug")) {
-           println("Debug mode");
+           println("Solving in debug mode");
            designController.debug();
        }
        else {

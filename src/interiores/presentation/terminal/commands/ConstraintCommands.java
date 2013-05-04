@@ -3,7 +3,7 @@ package interiores.presentation.terminal.commands;
 import interiores.business.controllers.ConstraintController;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.business.BusinessException;
-import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.List;
  * @author larribas
  */
 @CommandSubject(name = "c", description = "Constraint related commands")
-public class ConstraintCommands extends CommandGroup {
+public class ConstraintCommands extends AdvancedCommandGroup {
     
     private ConstraintController constraintController;
     

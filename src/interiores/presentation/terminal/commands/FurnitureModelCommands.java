@@ -5,7 +5,7 @@ import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.FurnitureModel;
 import interiores.core.business.BusinessException;
-import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
 import java.util.Collection;
@@ -16,7 +16,7 @@ import java.util.Collection;
  */
 @CommandSubject(name = "fm", description = "Furniture model related commands")
 public class FurnitureModelCommands
-    extends CommandGroup
+    extends AdvancedCommandGroup
 {
     private FurnitureModelController fModelController;
     

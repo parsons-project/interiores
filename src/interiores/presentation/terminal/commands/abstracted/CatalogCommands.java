@@ -2,7 +2,7 @@ package interiores.presentation.terminal.commands.abstracted;
 
 import interiores.business.controllers.abstracted.CatalogController;
 import interiores.core.business.BusinessException;
-import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.annotation.Command;
 import java.util.Collection;
 import javax.xml.bind.JAXBException;
@@ -12,7 +12,7 @@ import javax.xml.bind.JAXBException;
  * @author alvaro
  */
 abstract public class CatalogCommands 
-    extends CommandGroup 
+    extends AdvancedCommandGroup 
 {
     private static final String LIST_MSG = "Listing names of available %s catalogs:";
     private static final String NEW_MSG = "Enter the name of the %s catalog you want to create:";

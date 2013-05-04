@@ -1,20 +1,18 @@
 package interiores.core.presentation.terminal;
 
+import interiores.core.Options;
 import interiores.core.Utils;
+import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.annotation.Command;
-import interiores.core.presentation.terminal.annotation.CommandSubject;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents a group of terminal commands under a common subject.
- * Provides some handy methods to read/print data from/to the user.
+ *
  * @author hector
  */
-abstract public class CommandGroup
+public class CommandGroup
 {
     /**
      * Padding of the help command
@@ -24,7 +22,42 @@ abstract public class CommandGroup
     /**
      * The input/output streams to read/print data from/to the user
      */
-    private IOStream iostream;
+    protected IOStream iostream;
+    
+    /**
+     * The name of the command subject
+     */
+    private String name = "unknown";
+    
+    /**
+     * The description of the command group
+     */
+    private String description = "No description";
+    
+    /**
+     * Map of available commands
+     */
+    private Map<String, CommandAction> commands;
+    
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+    
+    public String getName()
+    {
+        return name;
+    }
+    
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+    
+    public String getDescription()
+    {
+        return description;
+    }
     
     /**
      * Sets the input/output streams.
@@ -35,106 +68,55 @@ abstract public class CommandGroup
         this.iostream = iostream;
     }
     
-    /**
-     * Reads a string from the user asking a question.
-     * @param question The question to ask
-     * @return The read string
-     */
-    public String readString(String question)
+    public void scanCommands()
     {
-        return iostream.readString(question);
+        commands = new HashMap();
+        
+        for(Method method : getClass().getMethods())
+        {
+            if(! method.isAnnotationPresent(Command.class))
+                continue;
+            
+            Command commandInfo = method.getAnnotation(Command.class);
+            
+            CommandAction command = new CommandAction(this, method, commandInfo.value());
+            commands.put(command.getName(), command);
+        }
     }
     
-    /**
-     * Reads all the strings left in the input buffer asking a question.
-     * @param question The question to ask
-     * @return The read strings
-     */
-    public Collection<String> readStrings(String question) {
-        return iostream.readStrings(question);
+    public void exec(String commandName)
+            throws Throwable
+    {
+        if(! commands.containsKey(commandName))
+            throw new BusinessException(commandName + " command not found on subject " + name + ".");
+        
+        CommandAction command = commands.get(commandName);
+         
+        Options currentOptions = getOptions(command);
+        commands.get(commandName).exec(currentOptions);
     }
     
-    /**
-     * Reads a choice from the input asking a question.
-     * If the answer of the user it's not a valid choice, the first choice parameter is taken as default.
-     * @param question The question to ask
-     * @param choices The valid choices
-     * @return The choice that the user has selected
-     */
-    public String readChoice(String question, String ... choices) {
-        List<String> list = Arrays.asList(choices);
+    public Options getOptions(CommandAction command) {
+        Options options = new Options();
         
-        String available = "Available choices are: ";
+        for(String commandOption : command.getOptions())
+            options.disable(commandOption);
         
-        for(int i = 0; i < list.size(); ++i) {
-            if(i != 0) available += ", ";
-            available += list.get(i);
+        while(iostream.hasNext(command.getOptionsPattern())) {
+            String option = command.getOptionName(iostream.readString());
+            options.enable(option);
         }
         
-        String choice = readString(question + " (" + available + ")");
-        
-        if(! list.contains(choice))
-            choice = list.get(0);
-        
-        return choice;
-    }
-    
-    /**
-     * Reads an integer from the input asking a question.
-     * @param question The question to ask
-     * @return The read integer
-     */
-    public int readInt(String question)
-    {       
-        return iostream.readInt(question);
-    }
-    
-    /**
-     * Reads a float from the input asking a question.
-     * @param question The question to ask
-     * @return The read float
-     */
-    public float readFloat(String question) {
-        return iostream.readFloat(question);
-    }
-    
-    /**
-     * Prints a line to the output stream.
-     * @param line Line to print
-     */
-    public void println(String line) {
-        iostream.println(line);
-    }
-    
-    /**
-     * Prints a collection of objects.
-     * @param collection The collection of objects to print
-     */
-    public void print(Collection<?> collection) {
-        for(Object o : collection)
-            println(o.toString());
+        return options;
     }
     
     @Command("Obtain detailed command information")
     public void help() {
-        Class commandClass = getClass();
-        CommandSubject cSubject = (CommandSubject) commandClass.getAnnotation(CommandSubject.class);
+        iostream.println("Available commands for " + name + ":");
         
-        println("Available commands for " + cSubject.name() + ":");
-        
-        for(Method method : commandClass.getMethods()) {
-            if(! method.isAnnotationPresent(Command.class))
-                continue;
-            
-            Command commandAnnotation = method.getAnnotation(Command.class);
-            
-            String name = method.getName();
-            
-            if(name.startsWith("_"))
-                name = name.substring(1);
-            
-            iostream.println("    " + Utils.padRight(name + " " + cSubject.name(), HELP_PADDING)
-                    + commandAnnotation.value());
+        for(CommandAction command : commands.values()) {
+            iostream.println("    " + Utils.padRight(command.getName() + " " + name, HELP_PADDING)
+                    + command.getDescription());
         }
     }
 }

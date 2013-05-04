@@ -176,7 +176,7 @@ public class FurnitureVariable
     //Pre: the 3 iterators point to valid values
     @Override
     public boolean hasMoreValues() {
-        if(domainModels.size() == 0 || domainPositions[iteration].size() == 0 || orientations.size() == 0)
+        if(domainModels.isEmpty() || domainPositions[iteration].isEmpty() || orientations.isEmpty())
             return false;
         
         return modelIterator.hasNext() || positionIterator.hasNext() ||

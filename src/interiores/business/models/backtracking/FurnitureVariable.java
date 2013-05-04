@@ -8,8 +8,10 @@ import interiores.business.models.constraints.UnaryConstraint;
 import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
+import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +36,7 @@ public class FurnitureVariable
     * The vector size never changes and is equal to the amount of iterations of
     * the algorithm.
     */
-    public List<FurnitureModel> domainModels;
+    public Collection<FurnitureModel> domainModels;
 
     /**
     * This vector of hash sets contains all positions available for this variable.
@@ -60,7 +62,7 @@ public class FurnitureVariable
     /**
      * This list contains the constraints regarding the variable.
      */
-    public List<UnaryConstraint> unaryConstraints;
+    public Collection<UnaryConstraint> unaryConstraints;
 
     /**
     * Represents the value taken by the variable, in case it is assigned.
@@ -93,16 +95,16 @@ public class FurnitureVariable
      * The set of restrictions is "unaryConstraints". Its resolution defaults to 5.
      * @pre the iteration of the variableSet is 0
      */
-    public FurnitureVariable(String id, List<FurnitureModel> models, Room room,
-            List<UnaryConstraint> unaryConstraints, int variableCount) {
-        this(id, models, room, unaryConstraints, variableCount, 5);
+    public FurnitureVariable(String id, Collection<FurnitureModel> models, Dimension roomSize,
+            Collection<UnaryConstraint> unaryConstraints, int variableCount) {
+        this(id, models, roomSize, unaryConstraints, variableCount, 5);
     }
     
     
     
-    public FurnitureVariable(String id, List<FurnitureModel> models, Room room,
-            List<UnaryConstraint> unaryConstraints, int variableCount, int resolution) {
-        
+    public FurnitureVariable(String id, Collection<FurnitureModel> models, Dimension roomSize,
+            Collection<UnaryConstraint> unaryConstraints, int variableCount, int resolution)
+    {    
         identifier = id;
         
         isAssigned = false;
@@ -116,11 +118,12 @@ public class FurnitureVariable
         defaultOrientations();
         
         domainModels = models;
+        this.unaryConstraints = unaryConstraints;
 
         //add all positions in the room
         domainPositions[0] = new HashSet<Point>();
-        for (int i = 0; i < room.getDepth(); i += resolution) {
-            for (int j = 0; j < room.getWidth(); j += resolution)
+        for (int i = 0; i < roomSize.depth; i += resolution) {
+            for (int j = 0; j < roomSize.width; j += resolution)
                 domainPositions[0].add(new Point(i,j));
         }
         
@@ -131,9 +134,6 @@ public class FurnitureVariable
         positionIterator = domainPositions[0].iterator();
         orientationIterator = orientations.iterator();
         modelIterator = domainModels.iterator();
-
-        this.unaryConstraints = unaryConstraints;
-        
     }
 
 
@@ -179,8 +179,7 @@ public class FurnitureVariable
         if(domainModels.isEmpty() || domainPositions[iteration].isEmpty() || orientations.isEmpty())
             return false;
         
-        return modelIterator.hasNext() || positionIterator.hasNext() ||
-               orientationIterator.hasNext();
+        return modelIterator.hasNext() || positionIterator.hasNext() || orientationIterator.hasNext();
     }
 
     

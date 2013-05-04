@@ -1,9 +1,9 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
+import interiores.business.models.WishList;
 import interiores.business.models.constraints.BinaryConstraintSet;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.core.Debug;
@@ -11,11 +11,8 @@ import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
 import interiores.utils.BinaryConstraintAssociation;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 public class FurnitureVariableSet
@@ -67,29 +64,30 @@ public class FurnitureVariableSet
     /**
      * Default Constructor.
      */
-    public FurnitureVariableSet(Room room, List<String> variableNames,
-        List<List<FurnitureModel>> variablesModels, 
-        List<List<UnaryConstraint>> variablesUnaryConstraints,
-        List<BinaryConstraintAssociation> bca) {
-        
+    public FurnitureVariableSet(Room room, WishList wishList)
+    {
         roomArea = new OrientedRectangle(new Point(0, 0), room.getDimension(), Orientation.S);
         
-        variableCount = variablesModels.size();
-
+        variableCount = wishList.getSize();
         variables = new FurnitureVariable[variableCount];
-        for(int i = 0; i < variableCount; ++i)
-            variables[i] = new FurnitureVariable(variableNames.get(i), variablesModels.get(i), room,
-                variablesUnaryConstraints.get(i), variableCount);
-
         
-       this.binaryConstraints = new BinaryConstraintSet();
-       for (int i = 0; i < bca.size(); i++) {
-           Debug.println("Adding Binary constraint " + bca.get(i).toString());
-           Debug.println("Furniture1 is " + getVariable(bca.get(i).furniture1).getID());
-           Debug.println("Furniture2 is " + getVariable(bca.get(i).furniture2).getID());
-           Debug.println("Constraint is " + bca.get(i).constraint.toString());
-           binaryConstraints.addConstraint(getVariable(bca.get(i).furniture1), getVariable(bca.get(i).furniture2),
-                   bca.get(i).constraint);
+        int i = 0;
+        for(String variableName : wishList.getFurnitureNames()) {
+            variables[i] = new FurnitureVariable(variableName, wishList.getFurnitureModels(variableName),
+                    room.getDimension(), wishList.getUnaryConstraints(variableName), variableCount);
+            ++i;
+        }
+
+       binaryConstraints = new BinaryConstraintSet();
+       
+       for(BinaryConstraintAssociation bca : wishList.getBinaryConstraints()) {
+           Debug.println("Adding Binary constraint " + bca.toString());
+           Debug.println("Furniture1 is " + getVariable(bca.furniture1).getID());
+           Debug.println("Furniture2 is " + getVariable(bca.furniture2).getID());
+           Debug.println("Constraint is " + bca.constraint.toString());
+           
+           binaryConstraints.addConstraint(getVariable(bca.furniture1),
+                   getVariable(bca.furniture2), bca.constraint);
        }
         
        allAssigned = false;
@@ -228,7 +226,7 @@ public class FurnitureVariableSet
         result.append("Iteration: " + depth + NEW_LINE);
         result.append("Number of variables: " + variableCount + NEW_LINE);
         
-        result.append("Variables without assigned value: " + NEW_LINE);
+        result.append("Variables: " + NEW_LINE);
         for (int i = depth; i < variableCount; ++i) {
             result.append(variables[i].getID() + ": ");
             result.append(variables[i].getAssignedValue().toString() + NEW_LINE);
@@ -237,7 +235,7 @@ public class FurnitureVariableSet
 //        if (actual == null) result.append("none" + NEW_LINE);
 //        else result.append(actual.toString());
 //        result.append("Are all variables assigned? " + NEW_LINE);
-        if (allAssigned) result.append("Yes" + NEW_LINE);
+        if (allAssigned) result.append("All assigned: Yes" + NEW_LINE);
         else result.append("No" + NEW_LINE);
         result.append("Binary restrictions:" + NEW_LINE);
         result.append(binaryConstraints.toString());

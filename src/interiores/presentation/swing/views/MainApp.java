@@ -145,14 +145,14 @@ public class MainApp extends SwingFrame
     // End of variables declaration//GEN-END:variables
     
     @Event(paramNames = {"type", "width", "depth"})
-    public void roomCreated(String type, int width, int depth)
+    public void roomCreated(String type, int width, int depth) throws InterruptedException
     {
         roomType.setText(type);
         roomSize.setText(width + " x " + depth + " (cm)");
     }
     
     @Event(paramNames = {"type", "width", "depth"})
-    public void roomLoaded(String type, int width, int depth)
+    public void roomLoaded(String type, int width, int depth) throws InterruptedException
     {
         roomCreated(type, width, depth);
     }

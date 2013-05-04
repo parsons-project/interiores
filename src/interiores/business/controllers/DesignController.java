@@ -7,6 +7,7 @@ import interiores.business.models.Room;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.utils.BinaryConstraintAssociation;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 public class DesignController
     extends InterioresController
+    implements Observer
 {
     
     private boolean solutionFound = false;
@@ -45,23 +47,8 @@ public class DesignController
         WishList wishList = getWishList();
         Room room = getRoom();
         
-        // First, we initialize the data structures VariableSet will use
-        List<String> furniture = new ArrayList(wishList.getFurnitureNames());
-        List<List<FurnitureModel>> variableModels = new ArrayList();
-        List<List<UnaryConstraint>> variableConstraints = new ArrayList();
+        FurnitureVariableSet furVarSet = new FurnitureVariableSet(room, wishList);
         
-        // We add a list of models and unary constraints for each furniture in the list
-        for (String wf : furniture) {
-            variableModels.add(wishList.getWantedFurniture(wf).getType().getFurnitureModels());
-            variableConstraints.add(new ArrayList<UnaryConstraint>(wishList.getWantedFurniture(wf).getConstraints()));
-        }
-        
-        // Then, we obtain all the binary constraints
-        List<BinaryConstraintAssociation> bcs = wishList.getBinaryConstraints();
-        
-        // Build a FurnitureVariableSet from scrath
-        FurnitureVariableSet furVarSet = new FurnitureVariableSet(room, furniture, variableModels,
-                                                                  variableConstraints, bcs);
         // And try to solve it
         try {
             notify("designStarted");
@@ -76,6 +63,10 @@ public class DesignController
             solutionFound = false;
         }
         notify("designFinished", "isFound", solutionFound);
+        
+    }
+    
+    public void debug() {
         
     }
     

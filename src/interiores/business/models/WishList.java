@@ -2,6 +2,7 @@
 package interiores.business.models;
 
 import interiores.business.models.constraints.BinaryConstraint;
+import interiores.business.models.constraints.UnaryConstraint;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.utils.BinaryConstraintAssociation;
@@ -25,12 +26,12 @@ public class WishList {
      * multi-set (set with repeated elements) of furniture
      * types that are supposed to fit in the room, known as WantedFurniture. 
      */
-    private Map<String,WantedFurniture> furniture;
+    private Map<String, WantedFurniture> furniture;
     
     /**
      * set of binary constraints that affect two WantedFurniture.
      */
-    private Map<String,BinaryConstraintAssociation> binaryConstraints;
+    private Map<String, BinaryConstraintAssociation> binaryConstraints;
     
     /**
      * Default constructor.
@@ -57,6 +58,10 @@ public class WishList {
      */
     public void removeWantedFurniture(String id) {
         furniture.remove(id);
+    }
+    
+    public int getSize() {
+        return furniture.size();
     }
     
     /**
@@ -111,19 +116,22 @@ public class WishList {
         return result;
     }
     
+    public Collection<UnaryConstraint> getUnaryConstraints(String name) {
+        return furniture.get(name).getConstraints();
+    }
     /**
      * Returns all the binary constraints.
      * @return List containing all the binary constraints.
      */
-    public List getBinaryConstraints() {
-        return new ArrayList(binaryConstraints.values());
+    public Collection<BinaryConstraintAssociation> getBinaryConstraints() {
+        return binaryConstraints.values();
     }
     
     /**
      * Returns the identifiers of the WantedFurniture
      * @return the string identifying the WantedFurnitures
      */
-    public Collection getFurnitureNames() {
+    public Collection<String> getFurnitureNames() {
         return furniture.keySet();
     }
     
@@ -142,6 +150,10 @@ public class WishList {
      */
     public Collection getWantedFurniture() {
         return furniture.values();
+    }
+    
+    public Collection<FurnitureModel> getFurnitureModels(String name) {
+        return furniture.get(name).getType().getFurnitureModels();
     }
     
     /**

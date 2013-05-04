@@ -212,6 +212,10 @@ public class IOStream
         return ibuffer.hasNext();
     }
     
+    public boolean hasNext(String pattern) {
+        return ibuffer.hasNext(pattern);
+    }
+    
     /**
      * Tells whether the input buffer has one or more integers left.
      * @return True if the input buffer has one or more integers left, false otherwise

@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a group of terminal commands under a common subject.
@@ -132,7 +133,8 @@ abstract public class CommandGroup
             if(name.startsWith("_"))
                 name = name.substring(1);
             
-            iostream.println("    " + Utils.padRight(name + " " + cSubject.name(), HELP_PADDING) + commandAnnotation.value());
+            iostream.println("    " + Utils.padRight(name + " " + cSubject.name(), HELP_PADDING)
+                    + commandAnnotation.value());
         }
     }
 }

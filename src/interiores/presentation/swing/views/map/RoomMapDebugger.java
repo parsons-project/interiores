@@ -14,7 +14,8 @@ import java.util.List;
 public class RoomMapDebugger
     extends RoomMap
 {
-    private static final String GRID_COLOR = "#EEEEEE";
+    private static final Color COLOR_GRID = Color.decode("#EEEEEE");
+    private static final Color COLOR_POINT = Color.decode("#C3D9FF"); // Gmail blue
     
     private boolean isGridEnabled;
     private List<Point> points;
@@ -44,7 +45,12 @@ public class RoomMapDebugger
     
     @Override
     public void drawElements(Graphics2D g)
-    {      
+    {
+        g.setColor(COLOR_POINT);
+        
+        for(Point p : points)
+            g.fillRect(p.x + getPadding(), p.y + getPadding(), RESOLUTION, RESOLUTION);
+        
         if(isGridEnabled)
             drawGrid(g);
         
@@ -52,10 +58,10 @@ public class RoomMapDebugger
     }
     
     private void drawGrid(Graphics2D g) {
-        int rows = width / RoomMap.getResolution();
-        int cols = depth / RoomMap.getResolution();
+        int rows = width / RESOLUTION;
+        int cols = depth / RESOLUTION;
         
-        g.setColor(Color.decode(GRID_COLOR));
+        g.setColor(COLOR_GRID);
         
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < cols; j++)

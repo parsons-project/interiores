@@ -2,6 +2,7 @@
  */
 package interiores.presentation.swing.views;
 
+import interiores.business.models.backtracking.FurnitureValue;
 import interiores.core.presentation.annotation.Event;
 import interiores.presentation.swing.SwingFrame;
 import interiores.presentation.swing.views.map.RoomMapDebugger;
@@ -242,7 +243,8 @@ public class RoomMapDebuggerFrame extends SwingFrame
         showView();
     }
     
-    public void debugDesignFinished() {
-        setVisible(false);
+    @Event(paramNames = "value")
+    public void nextValue(FurnitureValue value) {
+        map.addPoint(value.getPosition());
     }
 }

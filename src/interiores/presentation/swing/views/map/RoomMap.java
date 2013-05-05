@@ -19,9 +19,9 @@ public class RoomMap
     implements Drawable
 {
 
-    private static final int RESOLUTION = 5;
-    private static final int PADDING = 10;
-    private static final double SCALE = 1.4;
+    protected static final int RESOLUTION = 5;
+    protected static final int PADDING = 10;
+    protected static final double SCALE = 1.4;
     
     protected int width;
     protected int depth;

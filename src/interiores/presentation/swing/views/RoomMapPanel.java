@@ -1,9 +1,13 @@
 package interiores.presentation.swing.views;
 
+import interiores.business.events.room.RoomCreatedEvent;
+import interiores.business.events.room.RoomDesignFinishedEvent;
+import interiores.business.events.room.RoomDesignStartedEvent;
+import interiores.business.events.room.RoomLoadedEvent;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.core.Debug;
-import interiores.core.presentation.annotation.Event;
+import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.SwingPanel;
 import interiores.presentation.swing.views.map.RoomMap;
 import interiores.presentation.swing.views.map.RoomMapDebugger;
@@ -11,7 +15,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.Map;
 import java.util.Map.Entry;
 
 /**
@@ -64,9 +67,12 @@ public class RoomMapPanel extends SwingPanel
         return map;
     }
     
-    @Event(paramNames = {"width", "depth"})
-    public void roomCreated(int width, int depth)
+    @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
+    public void createMap(RoomCreatedEvent event)
     {
+        int width = event.getWidth();
+        int depth = event.getDepth();
+        
         if(Debug.isEnabled()) {
             // Debug mode! Let's load a debugger map!
             map = new RoomMapDebugger(width, depth);
@@ -80,44 +86,38 @@ public class RoomMapPanel extends SwingPanel
         setPreferredSize(new Dimension(map.getWidth(), map.getHeight()));
         repaint();
     }
-    
-    @Event(paramNames = {"width", "depth"})
-    public void roomLoaded(int width, int depth)
-    {
-        roomCreated(width, depth);
-    }
-    
-    @Event(paramNames = {"design"})
-    public void roomDesigned(Map<String, FurnitureValue> design) {
-        map.clear();
-        
-        for(Entry<String, FurnitureValue> entry : design.entrySet()) {
-            String name = entry.getKey();
-            Color color = entry.getValue().getModel().getColor();
-            
-            furnitureAdded(name, entry.getValue().getArea(), color);
-        }
-        
-        repaint();
-    }
-    
-    @Event(paramNames = {"name", "x", "y", "width", "depth", "orientation"})
-    public void furnitureAdded(String name, OrientedRectangle area, Color color) {
-        map.addFurniture(name, area, color);
-    }
-    
-    @Event(paramNames = {"isFound"})
-    public void designFinished(boolean isFound) {
-        if (isFound) map.setStatus("Solution found! :)");
-        else map.setStatus("Solution not found :(");
-        
-        repaint();
-    }
-    
-    @Event
-    public void designStarted() {
+      
+    @Listen(RoomDesignStartedEvent.class)
+    public void putSearching() {
         map.setStatus("Searching...");
         
         repaint();
+    }
+    
+    @Listen(RoomDesignFinishedEvent.class)
+    public void updateDesign(RoomDesignFinishedEvent event) {
+        if (event.hasDesign())
+        {
+            map.setStatus("Solution found! :)");
+            
+            map.clear();
+        
+            for(Entry<String, FurnitureValue> entry : event.getDesign()) {
+                String name = entry.getKey();
+                Color color = entry.getValue().getModel().getColor();
+
+                addFurniture(name, entry.getValue().getArea(), color);
+            }
+
+            repaint();
+        }
+        else
+            map.setStatus("Solution not found :(");
+        
+        repaint();
+    }
+    
+    public void addFurniture(String name, OrientedRectangle area, Color color) {
+        map.addFurniture(name, area, color);
     }
 }

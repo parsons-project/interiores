@@ -1,8 +1,9 @@
 package interiores.core.presentation;
 
 import interiores.core.Debug;
+import interiores.core.Event;
 import interiores.core.business.BusinessController;
-import interiores.core.presentation.annotation.Event;
+import interiores.core.presentation.annotation.Listen;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.AbstractMap.SimpleEntry;
@@ -31,13 +32,13 @@ public class SwingController extends PresentationController
     /**
      * Map of events that the loaded views are listening
      */
-    private Map<String, List< Entry<View, Method> >> events;
+    private Map<Class, List< Entry<View, Method> >> events;
     
     /**
      * Constructs a SwingController given the package where the views are located
      * @param viewsPackage The package where the views of this controller are located 
      */
-    public SwingController(Class mainView)
+    public SwingController(Class<? extends View> mainView)
     {
         super();
         this.mainView = mainView;
@@ -61,20 +62,42 @@ public class SwingController extends PresentationController
      * @param data Data related with the event
      */
     @Override
-    public void notify(String name, Map<String, ?> data)
+    public void notify(Event event)
     {
-        if(! events.containsKey(name))
+        Class eventClass = event.getClass();
+        
+        if(! events.containsKey(eventClass))
             return;
         
-        try
-        {
-            for(Entry e : events.get(name))
-                invokeEvent(e, data);
+        for(Entry e : events.get(eventClass))
+                invokeEvent(e, event);
+    }
+    
+    /**
+     * Given a view, one of its methods and some mapped data, calls the method using the mapped data as
+     * parameters using the parameter names from the Event annotation as keys of the map.
+     * Magic code! Be careful!
+     * @param entry A view-method pair
+     * @param data Mapped data
+     */
+    private void invokeEvent(Entry<View, Method> entry, Event event) { 
+        try {
+            Method method = entry.getValue();
+            
+            if(method.getParameterTypes().length == 0)
+                method.invoke(entry.getKey());
+            else
+                method.invoke(entry.getKey(), event);
         }
-        catch(Exception e)
-        {
-            e.printStackTrace();
+        catch(IllegalAccessException e) {
+            if(Debug.isEnabled())
+                e.printStackTrace();
         }
+        catch(InvocationTargetException e) {
+            if(Debug.isEnabled())
+                e.printStackTrace();
+        }
+        
     }
     
     @Override
@@ -89,7 +112,7 @@ public class SwingController extends PresentationController
      * @param viewClass The class of the view to load
      * @throws Exception 
      */
-    public void load(Class viewClass) throws Exception
+    public void load(Class<? extends View> viewClass) throws Exception
     {            
         if(! vloader.isLoaded(viewClass))
         {   
@@ -103,7 +126,7 @@ public class SwingController extends PresentationController
             {
                 view.onLoad();
                 
-                configureEvents(view);
+                configureEvents(viewClass, view);
             }
             catch(Exception e)
             {
@@ -113,93 +136,40 @@ public class SwingController extends PresentationController
         }
     }
     
-    /**
-     * Congirues the events that listens a given view.
-     * @param view The view to which configure the events
-     */
-    private void configureEvents(View view) {
-        Class viewClass = view.getClass();
         
+    /**
+     * Configures the events that listens a given view.
+     * @param viewClass Class of the view
+     * @param view Instance to which configure the events
+     */
+    private void configureEvents(Class viewClass, View view)
+    {
         for(Method m : viewClass.getMethods()) {
-            if(m.isAnnotationPresent(Event.class))
-                addEvent(m.getName(), new SimpleEntry(view, m));
-        }
-    }
-    
-    /**
-     * Given a view, one of its methods and some mapped data, calls the method using the mapped data as
-     * parameters using the parameter names from the Event annotation as keys of the map.
-     * Magic code! Be careful!
-     * @param entry A view-method pair
-     * @param data Mapped data
-     */
-    private void invokeEvent(Entry<View, Method> entry, Map<String, ?> data) { 
-        View view = entry.getKey();
-        Method method = entry.getValue();
-        Event annotation = method.getAnnotation(Event.class);
-        String[] paramNames = annotation.paramNames();
-        
-        try {
-            switch(paramNames.length) {
-                case 0:
-                    method.invoke(view);
-                    break;
-                    
-                case 1:
-                    method.invoke(view, data.get(paramNames[0]));
-                    break;
-                    
-                case 2:
-                    method.invoke(view, data.get(paramNames[0]), data.get(paramNames[1]));
-                    break;
-                    
-                case 3:
-                    method.invoke(view, data.get(paramNames[0]), data.get(paramNames[1]),
-                            data.get(paramNames[2]));
-                    break;
-                    
-                case 4:
-                    method.invoke(view, data.get(paramNames[0]), data.get(paramNames[1]),
-                            data.get(paramNames[2]), data.get(paramNames[3]));
-                    break;
-                    
-                case 5:
-                    method.invoke(view, data.get(paramNames[0]), data.get(paramNames[1]),
-                            data.get(paramNames[2]), data.get(paramNames[3]), data.get(paramNames[4]));
-                    break;
-                    
-                case 6:
-                    method.invoke(view, data.get(paramNames[0]), data.get(paramNames[1]),
-                            data.get(paramNames[2]), data.get(paramNames[3]), data.get(paramNames[4]),
-                            data.get(paramNames[5]));
-                    break;
-                    
-                case 7:
-                    method.invoke(view, data.get(paramNames[0]), data.get(paramNames[1]),
-                            data.get(paramNames[2]), data.get(paramNames[3]), data.get(paramNames[4]),
-                            data.get(paramNames[6]), data.get(paramNames[7]));
-                    break;
-                    
-                default:
-                    throw new IllegalArgumentException("Too much arguments needed for the event.");
+            if(m.isAnnotationPresent(Listen.class)) {
+                for(Class eventClass : m.getAnnotation(Listen.class).value())
+                    addEvent(eventClass, new SimpleEntry(view, m));
             }
         }
-        catch(IllegalAccessException e) {
-            if(Debug.isEnabled())
-                e.printStackTrace();
-        }
-        catch(InvocationTargetException e) {
-            if(Debug.isEnabled())
-                e.printStackTrace();
-        }
+    }
         
+    /**
+     * Adds view listener to the given event.
+     * @param eventClass Class of the event
+     * @param entry Entry that contains the view and the method to be called when the event occurs
+     */
+    private void addEvent(Class eventClass, Entry<View, Method> entry)
+    {
+        if(! events.containsKey(eventClass))
+            events.put(eventClass, new ArrayList());
+        
+        events.get(eventClass).add(entry);
     }
     
     /**
      * Shows a loaded view.
      * @param viewClass The class of the view to show
      */
-    public void show(Class viewClass)
+    public void show(Class<? extends View> viewClass)
     {
         try {
             if(! vloader.isLoaded(viewClass))
@@ -224,23 +194,10 @@ public class SwingController extends PresentationController
     }
     
     /**
-     * Adds view listener to the given event.
-     * @param event Name of the event
-     * @param entry Entry that contains the view and the method to be called when the event occurs
-     */
-    private void addEvent(String event, Entry<View, Method> entry)
-    {
-        if(! events.containsKey(event))
-            events.put(event, new ArrayList());
-        
-        events.get(event).add(entry);
-    }
-    
-    /**
      * Unloads the view with the given name.
      * @param viewClass The name of the view to unload
      */
-    public void close(Class viewClass)
+    public void close(Class<? extends View> viewClass)
     {
         if(! vloader.isLoaded(viewClass))
             return;
@@ -249,7 +206,7 @@ public class SwingController extends PresentationController
         
         // Remove assigned events
         for(Method method : viewClass.getMethods()) {
-            if(method.isAnnotationPresent(Event.class)) {
+            if(method.isAnnotationPresent(Listen.class)) {
                 List< Entry<View, Method> > entries = events.get(method.getName());
                 
                 for(int i = 0; i < entries.size(); ++i) {

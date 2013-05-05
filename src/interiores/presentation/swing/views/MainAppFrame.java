@@ -1,6 +1,8 @@
 package interiores.presentation.swing.views;
 
-import interiores.core.presentation.annotation.Event;
+import interiores.business.events.room.RoomCreatedEvent;
+import interiores.business.events.room.RoomLoadedEvent;
+import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.SwingFrame;
 
 /**
@@ -144,16 +146,10 @@ public class MainAppFrame extends SwingFrame
     private javax.swing.JLabel roomType;
     // End of variables declaration//GEN-END:variables
     
-    @Event(paramNames = {"type", "width", "depth"})
-    public void roomCreated(String type, int width, int depth) throws InterruptedException
+    @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
+    public void updateText(RoomCreatedEvent event)
     {
-        roomType.setText(type);
-        roomSize.setText(width + " x " + depth + " (cm)");
-    }
-    
-    @Event(paramNames = {"type", "width", "depth"})
-    public void roomLoaded(String type, int width, int depth) throws InterruptedException
-    {
-        roomCreated(type, width, depth);
+        roomType.setText(event.getType());
+        roomSize.setText(event.getWidth() + " x " + event.getDepth() + " (cm)");
     }
 }

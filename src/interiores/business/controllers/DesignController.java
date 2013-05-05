@@ -1,6 +1,9 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.InterioresController;
+import interiores.business.events.room.DebugRoomDesignStartedEvent;
+import interiores.business.events.room.RoomDesignFinishedEvent;
+import interiores.business.events.room.RoomDesignStartedEvent;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Room;
 import interiores.business.models.WishList;
@@ -39,7 +42,6 @@ public class DesignController
     public void solve()
             throws NoRoomCreatedException
     {
-        
         WishList wishList = getWishList();
         Room room = getRoom();
         
@@ -57,26 +59,29 @@ public class DesignController
         FurnitureVariableSetDebugger debugFurVarSet = new FurnitureVariableSetDebugger(room, wishList);
         debugFurVarSet.addListener(this);
         
-        notify("debugDesignStarted");
+        notify(new DebugRoomDesignStartedEvent());
         computeSolution(debugFurVarSet);
     }
     
     private void computeSolution(FurnitureVariableSet furVarSet)
     {
+        RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
+        
         // And try to solve it
         try {
-            notify("designStarted");
+            notify(new RoomDesignStartedEvent());
             furVarSet.solve();
             solutionFound = true;
             lastSolution = furVarSet.toString();
             
             
-            notify("roomDesigned", "design", furVarSet.getValues());
+            roomDesigned.setDesign(furVarSet.getValues());
         }
         catch (NoSolutionException nse) {
             solutionFound = false;
         }
-        notify("designFinished", "isFound", solutionFound);
+        
+        notify(roomDesigned);
     }
     
     /**

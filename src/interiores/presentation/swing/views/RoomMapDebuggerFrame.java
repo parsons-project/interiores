@@ -2,8 +2,10 @@
  */
 package interiores.presentation.swing.views;
 
+import interiores.business.events.backtracking.NextValueEvent;
+import interiores.business.events.room.DebugRoomDesignStartedEvent;
 import interiores.business.models.backtracking.FurnitureValue;
-import interiores.core.presentation.annotation.Event;
+import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.SwingFrame;
 import interiores.presentation.swing.views.map.RoomMapDebugger;
 
@@ -238,13 +240,13 @@ public class RoomMapDebuggerFrame extends SwingFrame
     private javax.swing.JList variablesList;
     // End of variables declaration//GEN-END:variables
 
-    @Event
+    @Listen(DebugRoomDesignStartedEvent.class)
     public void debugDesignStarted() {
         showView();
     }
     
-    @Event(paramNames = "value")
-    public void nextValue(FurnitureValue value) {
-        map.addPoint(value.getPosition());
+    @Listen(NextValueEvent.class)
+    public void nextValue(NextValueEvent event) {
+        map.addPoint(event.getPosition());
     }
 }

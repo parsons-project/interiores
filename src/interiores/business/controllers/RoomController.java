@@ -1,6 +1,8 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogAccessController;
+import interiores.business.events.room.RoomCreatedEvent;
+import interiores.business.events.room.RoomLoadedEvent;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Room;
@@ -46,7 +48,7 @@ public class RoomController
         WishList wishList = new WishList();
         setWishList(wishList);
         
-        notify("roomCreated", room.toMap());
+        notify(new RoomCreatedEvent(room));
     }
     
     /**
@@ -71,6 +73,6 @@ public class RoomController
         
         setRoom(room);
         
-        notify("roomLoaded", room.toMap());
+        notify(new RoomLoadedEvent(room));
     }
 }

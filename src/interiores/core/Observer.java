@@ -1,7 +1,5 @@
 package interiores.core;
 
-import java.util.Map;
-
 /**
  * All the instances that implement this interface can recieve notifications from Observable instances.
  * The Observer interface is part of the observer pattern.
@@ -11,8 +9,7 @@ public interface Observer
 {
     /**
      * Notifies the Observer instance that some event has occurred.
-     * @param name The event name
-     * @param data Data related with the event
+     * @param event The event occurred
      */
-    public void notify(String name, Map<String, ?> data);
+    public void notify(Event event);
 }

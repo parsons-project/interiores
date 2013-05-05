@@ -1,12 +1,11 @@
 package interiores.core.business;
 
+import interiores.core.Event;
 import interiores.core.Observable;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Represents a controller of the application business layer.
@@ -47,45 +46,13 @@ abstract public class BusinessController implements Observable
     }
     
     /**
-     * Notifies an event to all the business controller listeners
-     * @param name Name of the event
-     */
-    public void notify(String name) {
-        notify(name, new HashMap());
-    }
-    
-    /**
-     * Notifies an event to all the business controller listeners with one entry of data.
-     * @param name Name of the event
-     * @param dataName Name of the entry of data
-     * @param data Value of the entry of data
-     */
-    public void notify(String name, String dataName, Object data) {
-        Map<String, Object> map = new HashMap();
-        map.put(dataName, data);
-        
-        notify(name, map);
-    }
-    
-    /**
      * Notifies an event to all the business controller listeners a related data.
-     * @param name Name of the event
-     * @param data Data related to the event
+     * @param event Event to be notified
      */
     @Override
-    public void notify(String name, Map<String, ?> data)
+    public void notify(Event event)
     {
         for(Observer o : listeners)
-            o.notify(name, data);
-    }
-    
-    /**
-     * Notifies an event to all the business controller listeners with the domain model as related data.
-     * @param name Name of the event
-     * @param m Related domain model
-     */
-    public void notify(String name, Model m)
-    {
-        notify(name, m.toMap());
+            o.notify(event);
     }
 }

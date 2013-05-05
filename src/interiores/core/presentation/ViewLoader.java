@@ -37,7 +37,7 @@ public class ViewLoader
      * @param viewClass The view class
      * @return True if the view is loaded, false otherwise
      */
-    public boolean isLoaded(Class viewClass)
+    public boolean isLoaded(Class<? extends View> viewClass)
     {
         return views.containsKey(viewClass);
     }
@@ -47,7 +47,7 @@ public class ViewLoader
      * @param name The name of the view to load
      * @throws Exception 
      */
-    public void load(Class viewClass) throws Exception
+    public void load(Class<? extends View> viewClass) throws Exception
     {
         View view;
         
@@ -73,7 +73,7 @@ public class ViewLoader
      * Unloads a view.
      * @param viewClass The class of the view to unload
      */
-    public void unload(Class viewClass)
+    public void unload(Class<? extends View> viewClass)
     {
         views.remove(viewClass);
     }
@@ -83,8 +83,8 @@ public class ViewLoader
      * @param viewClass Class of the view to get
      * @return If the view is loaded returns the loaded view. If not, returns null.
      */
-    public View get(Class viewClass)
+    public <T extends View> T get(Class<T> viewClass)
     {
-        return views.get(viewClass);
+        return (T) views.get(viewClass);
     }
 }

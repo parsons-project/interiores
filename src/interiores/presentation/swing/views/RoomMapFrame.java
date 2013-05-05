@@ -1,6 +1,8 @@
 package interiores.presentation.swing.views;
 
-import interiores.core.presentation.annotation.Event;
+import interiores.business.events.room.RoomCreatedEvent;
+import interiores.business.events.room.RoomLoadedEvent;
+import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.SwingFrame;
 import java.awt.BorderLayout;
 
@@ -26,6 +28,7 @@ public class RoomMapFrame extends SwingFrame
     }
     
     @Override
+    @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
     public void showView()
     {
         //this.removeAll();
@@ -100,16 +103,4 @@ public class RoomMapFrame extends SwingFrame
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-    
-    @Event
-    public void roomCreated()
-    {
-        showView();
-    }
-    
-    @Event
-    public void roomLoaded()
-    {
-        roomCreated();
-    }
 }

@@ -4,6 +4,7 @@ import interiores.core.data.JAXBDataController;
 import interiores.shared.data.DataController;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.bind.JAXBException;
 
 /**
  *

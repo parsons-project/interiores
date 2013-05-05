@@ -1,6 +1,7 @@
 package interiores.core.presentation;
 
 import interiores.core.Debug;
+import interiores.core.Event;
 import interiores.core.Utils;
 import interiores.core.business.BusinessController;
 import interiores.core.business.BusinessException;
@@ -92,7 +93,7 @@ public class TerminalController extends PresentationController
      * @param data Data related with the event
      */
     @Override
-    public void notify(String name, Map<String, ?> data)
+    public void notify(Event event)
     {
         // @TODO Disable terminal notifications forever?
         /*if(Debug.isEnabled()) {

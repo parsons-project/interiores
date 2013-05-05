@@ -72,7 +72,7 @@ public class Door
                 break;
         }
         
-        rectangle.setLocation(renderX + GridMap.getPadding(), renderY + GridMap.getPadding());
+        rectangle.setLocation(renderX + RoomMap.getPadding(), renderY + RoomMap.getPadding());
         rectangle.setOrientation(orientation);
     }
 }

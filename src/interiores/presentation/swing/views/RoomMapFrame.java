@@ -8,12 +8,12 @@ import java.awt.BorderLayout;
  *
  * @author hector
  */
-public class RoomMap extends SwingFrame
+public class RoomMapFrame extends SwingFrame
 {
     /**
      * Creates new form RoomMap
      */
-    public RoomMap()
+    public RoomMapFrame()
     {
         initComponents();
         setLayout(new BorderLayout());
@@ -74,16 +74,16 @@ public class RoomMap extends SwingFrame
             }
         } catch (ClassNotFoundException ex)
         {
-            java.util.logging.Logger.getLogger(RoomMap.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RoomMapFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex)
         {
-            java.util.logging.Logger.getLogger(RoomMap.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RoomMapFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex)
         {
-            java.util.logging.Logger.getLogger(RoomMap.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RoomMapFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex)
         {
-            java.util.logging.Logger.getLogger(RoomMap.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RoomMapFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -92,7 +92,7 @@ public class RoomMap extends SwingFrame
         {
             public void run()
             {
-                new RoomMap().setVisible(true);
+                new RoomMapFrame().setVisible(true);
             }
         });
     }

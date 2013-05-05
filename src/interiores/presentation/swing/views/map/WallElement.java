@@ -20,7 +20,7 @@ abstract public class WallElement
         this.y = y;
         this.size = size;
         
-        rectangle = new OrientedRectangle(x + GridMap.getPadding(), y + GridMap.getPadding(), depth, size,
+        rectangle = new OrientedRectangle(x + RoomMap.getPadding(), y + RoomMap.getPadding(), depth, size,
                 Orientation.S);
     }
     
@@ -32,7 +32,7 @@ abstract public class WallElement
         this.x = x;
         this.y = y;
         
-        rectangle.setLocation(x + GridMap.getPadding(), y + GridMap.getPadding());
+        rectangle.setLocation(x + RoomMap.getPadding(), y + RoomMap.getPadding());
         rectangle.setOrientation(orientation);
     }
 }

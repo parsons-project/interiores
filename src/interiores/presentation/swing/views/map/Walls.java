@@ -47,7 +47,7 @@ public class Walls implements Drawable {
     }
     
     public void drawHorizontalWall(Graphics2D g, int y, int valign) {
-        int padding = GridMap.getPadding();
+        int padding = RoomMap.getPadding();
         int drawableWidth = width + DEPTH;
         
         for(int i = 0 - DEPTH; i < drawableWidth; i += DEPTH) {
@@ -61,7 +61,7 @@ public class Walls implements Drawable {
     }
     
     public void drawVerticalWall(Graphics2D g, int x, int halign) {
-        int padding = GridMap.getPadding();
+        int padding = RoomMap.getPadding();
         
         for(int i = 0; i < depth; i += DEPTH) {
             Point p = new Point(x - halign, i);

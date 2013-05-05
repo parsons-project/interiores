@@ -2,17 +2,13 @@ package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.InterioresController;
 import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.models.FurnitureModel;
 import interiores.business.models.Room;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
-import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
-import interiores.utils.BinaryConstraintAssociation;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -49,6 +45,24 @@ public class DesignController
         
         FurnitureVariableSet furVarSet = new FurnitureVariableSet(room, wishList);
         
+        computeSolution(furVarSet);
+    }
+    
+    public void debug()
+            throws NoRoomCreatedException
+    {     
+        WishList wishList = getWishList();
+        Room room = getRoom();
+        
+        FurnitureVariableSetDebugger debugFurVarSet = new FurnitureVariableSetDebugger(room, wishList);
+        debugFurVarSet.addListener(this);
+        
+        notify("debugDesignStarted");
+        computeSolution(debugFurVarSet);
+    }
+    
+    private void computeSolution(FurnitureVariableSet furVarSet)
+    {
         // And try to solve it
         try {
             notify("designStarted");
@@ -63,11 +77,6 @@ public class DesignController
             solutionFound = false;
         }
         notify("designFinished", "isFound", solutionFound);
-        
-    }
-    
-    public void debug() {
-        
     }
     
     /**

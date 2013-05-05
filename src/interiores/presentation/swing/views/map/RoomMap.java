@@ -15,27 +15,26 @@ import java.util.Map;
  * 
  * @author hector
  */
-public class GridMap
+public class RoomMap
     implements Drawable
 {
-    private static final String GRID_COLOR = "#EEEEEE";
+
     private static final int RESOLUTION = 5;
     private static final int PADDING = 10;
     private static final double SCALE = 1.4;
     
-    private int width;
-    private int depth;
+    protected int width;
+    protected int depth;
     private Map<Point, Drawable> elements;
     private Walls walls;
-    private boolean isGridEnabled;
     private String status;
+    private Drawable debugger;
     
-    public GridMap(int roomWidth, int roomDepth) {
+    public RoomMap(int roomWidth, int roomDepth) {
         width = roomWidth + getPadding() * 2;
         depth = roomDepth + getPadding() * 2;
         elements = new HashMap();
         walls = new Walls(roomWidth, roomDepth);
-        isGridEnabled = false;
         status = "";
     }
     
@@ -79,9 +78,10 @@ public class GridMap
         g.setColor(Color.white);
         g.fillRect(0, 0, width, depth);
         
-        if(isGridEnabled)
-            drawGrid(g);
-        
+        drawElements(g);
+    }
+    
+    protected void drawElements(Graphics2D g) {
         walls.draw(g);
         
         for(Drawable element : elements.values())
@@ -91,24 +91,12 @@ public class GridMap
         g.drawString(status, 10, 20);
     }
     
-    private void drawGrid(Graphics2D g) {
-        int rows = width / RESOLUTION;
-        int cols = depth / RESOLUTION;
-        
-        g.setColor(Color.decode(GRID_COLOR));
-        
-        for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < cols; j++)
-                g.drawRect(i*5, j*5, 5, 5);
-        }
-    }
-    
     public static int getPadding() {
         return RESOLUTION * PADDING;
     }
     
-    public void enableGrid() {
-        isGridEnabled = true;
+    public static int getResolution() {
+        return RESOLUTION;
     }
     
     public int getWidth() {
@@ -121,5 +109,9 @@ public class GridMap
     
     public void setStatus(String status) {
         this.status = status;
+    }
+    
+    public void setDebugger(Drawable debugger) {
+        this.debugger = debugger;
     }
 }

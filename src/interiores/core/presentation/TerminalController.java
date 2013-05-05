@@ -94,12 +94,13 @@ public class TerminalController extends PresentationController
     @Override
     public void notify(String name, Map<String, ?> data)
     {
-        if(Debug.isEnabled()) {
+        // @TODO Disable terminal notifications forever?
+        /*if(Debug.isEnabled()) {
             System.out.println(name);
         
             for(Map.Entry<String, ?> e : data.entrySet())
                 iostream.println(e.getKey() + ": " + e.getValue().toString());
-        }
+        }*/
     }
     
     /**

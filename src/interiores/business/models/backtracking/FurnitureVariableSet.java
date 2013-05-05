@@ -44,12 +44,12 @@ public class FurnitureVariableSet
      * This is the variable that the algorithm is trying to assign in the
      * current iteration.
      */
-    private FurnitureVariable actual;
+    protected FurnitureVariable actual;
     
     /**
      * Indicates whether all variables have an assigned value.
      */
-    private boolean allAssigned;
+    protected boolean allAssigned;
 
     /**
      * Contains the room rectangle

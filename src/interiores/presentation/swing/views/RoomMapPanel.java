@@ -5,7 +5,8 @@ import interiores.business.models.backtracking.FurnitureValue;
 import interiores.core.Debug;
 import interiores.core.presentation.annotation.Event;
 import interiores.presentation.swing.SwingPanel;
-import interiores.presentation.swing.views.map.GridMap;
+import interiores.presentation.swing.views.map.RoomMap;
+import interiores.presentation.swing.views.map.RoomMapDebugger;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -19,7 +20,7 @@ import java.util.Map.Entry;
  */
 public class RoomMapPanel extends SwingPanel
 {
-    private GridMap map;
+    private RoomMap map;
 
     /**
      * Creates new form RoomMap
@@ -28,6 +29,12 @@ public class RoomMapPanel extends SwingPanel
     {
         map = null;
         initComponents();
+    }
+    
+    @Override
+    public void onLoad() throws Exception {
+        if(Debug.isEnabled())
+            presentation.load("RoomMapDebuggerFrame");
     }
 
     /**
@@ -53,13 +60,22 @@ public class RoomMapPanel extends SwingPanel
         }
     }
     
+    public RoomMap getRoomMap() {
+        return map;
+    }
+    
     @Event(paramNames = {"width", "depth"})
     public void roomCreated(int width, int depth)
     {
-        map = new GridMap(width, depth);
-        
-        if(Debug.isEnabled())
-            map.enableGrid();
+        if(Debug.isEnabled()) {
+            // Debug mode! Let's load a debugger map!
+            map = new RoomMapDebugger(width, depth);
+            
+            RoomMapDebuggerFrame debuggerGui = (RoomMapDebuggerFrame) presentation.get("RoomMapDebuggerFrame");
+            debuggerGui.setDebuggee(this); // Debug me please!
+        }
+        else
+            map = new RoomMap(width, depth); // A simple room map on production
         
         setPreferredSize(new Dimension(map.getWidth(), map.getHeight()));
         repaint();
@@ -104,5 +120,4 @@ public class RoomMapPanel extends SwingPanel
         
         repaint();
     }
-    
 }

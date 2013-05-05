@@ -23,7 +23,7 @@ public class RoomElement
     public RoomElement(OrientedRectangle area, Color color) {
         rectangle = (OrientedRectangle) area.clone();
         
-        rectangle.translate(GridMap.getPadding(), GridMap.getPadding());
+        rectangle.translate(RoomMap.getPadding(), RoomMap.getPadding());
         this.color = color;
     }
     

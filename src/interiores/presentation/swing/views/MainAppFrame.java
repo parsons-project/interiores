@@ -7,13 +7,13 @@ import interiores.presentation.swing.SwingFrame;
  *
  * @author hector0193
  */
-public class MainApp extends SwingFrame
+public class MainAppFrame extends SwingFrame
 {
 
     /**
      * Creates new form MainView
      */
-    public MainApp()
+    public MainAppFrame()
     {
         initComponents();
     }
@@ -21,7 +21,7 @@ public class MainApp extends SwingFrame
     @Override
     public void onLoad() throws Exception
     {
-        presentation.load("RoomMap");
+        presentation.load("RoomMapFrame");
     }
     
     /**
@@ -114,16 +114,16 @@ public class MainApp extends SwingFrame
             }
         } catch (ClassNotFoundException ex)
         {
-            java.util.logging.Logger.getLogger(MainApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainAppFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex)
         {
-            java.util.logging.Logger.getLogger(MainApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainAppFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex)
         {
-            java.util.logging.Logger.getLogger(MainApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainAppFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex)
         {
-            java.util.logging.Logger.getLogger(MainApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainAppFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -132,7 +132,7 @@ public class MainApp extends SwingFrame
         {
             public void run()
             {
-                new MainApp().setVisible(true);
+                new MainAppFrame().setVisible(true);
             }
         });
     }

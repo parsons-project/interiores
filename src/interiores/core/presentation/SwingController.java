@@ -45,8 +45,8 @@ public class SwingController extends PresentationController
     @Override
     public void init() throws Exception
     {
-        load("MainApp");
-        show("MainApp");
+        load("MainAppFrame");
+        show("MainAppFrame");
     }
     
     /**

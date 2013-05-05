@@ -1,6 +1,7 @@
 package interiores.core.presentation;
 
 import interiores.core.Debug;
+import interiores.core.business.BusinessController;
 import interiores.core.presentation.annotation.Event;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,6 +19,11 @@ import java.util.Map.Entry;
 public class SwingController extends PresentationController
 {
     /**
+     * The class of the main view to load on initialization
+     */
+    private Class mainView;
+    
+    /**
      * The view loader used to load and manage views
      */
     private ViewLoader vloader;
@@ -31,10 +37,11 @@ public class SwingController extends PresentationController
      * Constructs a SwingController given the package where the views are located
      * @param viewsPackage The package where the views of this controller are located 
      */
-    public SwingController(String viewsPackage)
+    public SwingController(Class mainView)
     {
         super();
-        vloader = new ViewLoader(viewsPackage);
+        this.mainView = mainView;
+        vloader = new ViewLoader();
         events = new HashMap();
     }
     
@@ -45,8 +52,7 @@ public class SwingController extends PresentationController
     @Override
     public void init() throws Exception
     {
-        load("MainAppFrame");
-        show("MainAppFrame");
+        show(mainView);
     }
     
     /**
@@ -71,18 +77,25 @@ public class SwingController extends PresentationController
         }
     }
     
+    @Override
+    public void addBusinessController(String name, BusinessController controller) {
+        vloader.addBusinessController(controller);
+        
+        super.addBusinessController(name, controller);
+    }
+    
     /**
      * Loads a view on memory given its name.
-     * @param viewName The name of the view to load
+     * @param viewClass The class of the view to load
      * @throws Exception 
      */
-    public void load(String viewName) throws Exception
+    public void load(Class viewClass) throws Exception
     {            
-        if(! vloader.isLoaded(viewName))
+        if(! vloader.isLoaded(viewClass))
         {   
-            vloader.load(viewName);
+            vloader.load(viewClass);
             
-            View view = vloader.get(viewName);
+            View view = vloader.get(viewClass);
             
             view.setPresentation(this);
             
@@ -94,7 +107,7 @@ public class SwingController extends PresentationController
             }
             catch(Exception e)
             {
-                vloader.unload(viewName);
+                vloader.unload(viewClass);
                 throw e;
             }
         }
@@ -184,15 +197,15 @@ public class SwingController extends PresentationController
     
     /**
      * Shows a loaded view.
-     * @param viewName The name of the view to show
+     * @param viewClass The class of the view to show
      */
-    public void show(String viewName)
+    public void show(Class viewClass)
     {
         try {
-            if(! vloader.isLoaded(viewName))
-                load(viewName);
+            if(! vloader.isLoaded(viewClass))
+                load(viewClass);
         
-            get(viewName).showView();
+            get(viewClass).showView();
         }
         catch(Exception e) {
             if(Debug.isEnabled())
@@ -202,12 +215,12 @@ public class SwingController extends PresentationController
     
     /**
      * Obtains a loaded view.
-     * @param viewName The name of the view to obtain
+     * @param viewClass The class of the view to obtain
      * @return The loaded view if the view was previously loaded, null otherwise
      */
-    public View get(String viewName)
+    public <T extends View> T get(Class<T> viewClass)
     {
-        return vloader.get(viewName);
+        return (T) vloader.get(viewClass);
     }
     
     /**
@@ -225,16 +238,14 @@ public class SwingController extends PresentationController
     
     /**
      * Unloads the view with the given name.
-     * @param viewName The name of the view to unload
+     * @param viewClass The name of the view to unload
      */
-    public void close(String viewName)
+    public void close(Class viewClass)
     {
-        View view = get(viewName);
-        
-        if(view == null)
+        if(! vloader.isLoaded(viewClass))
             return;
         
-        Class viewClass = view.getClass();
+        View view = get(viewClass);
         
         // Remove assigned events
         for(Method method : viewClass.getMethods()) {
@@ -248,6 +259,6 @@ public class SwingController extends PresentationController
             }
         }
         
-        vloader.unload(viewName);
+        vloader.unload(viewClass);
     }
 }

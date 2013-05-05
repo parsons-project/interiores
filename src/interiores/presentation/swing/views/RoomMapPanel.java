@@ -34,7 +34,7 @@ public class RoomMapPanel extends SwingPanel
     @Override
     public void onLoad() throws Exception {
         if(Debug.isEnabled())
-            presentation.load("RoomMapDebuggerFrame");
+            presentation.load(RoomMapDebuggerFrame.class);
     }
 
     /**
@@ -71,7 +71,7 @@ public class RoomMapPanel extends SwingPanel
             // Debug mode! Let's load a debugger map!
             map = new RoomMapDebugger(width, depth);
             
-            RoomMapDebuggerFrame debuggerGui = (RoomMapDebuggerFrame) presentation.get("RoomMapDebuggerFrame");
+            RoomMapDebuggerFrame debuggerGui = presentation.get(RoomMapDebuggerFrame.class);
             debuggerGui.setDebuggee(this); // Debug me please!
         }
         else

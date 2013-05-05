@@ -6,6 +6,7 @@ import interiores.core.data.JAXBDataController;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.TerminalController;
 import interiores.data.MappedDataController;
+import interiores.presentation.swing.views.MainAppFrame;
 
 /**
  * Main application class.
@@ -29,7 +30,7 @@ public class Interiores
         // Application dependencies
         JAXBDataController dataController = new MappedDataController();
         TerminalController terminal = new TerminalController("interiores.presentation.terminal.commands");
-        SwingController swingController = new SwingController("interiores.presentation.swing.views");
+        SwingController swingController = new SwingController(MainAppFrame.class);
         
         // Terminal welcome message
         terminal.setWelcomeMessage("Welcome to Interiors design! Use 'help' to see the available commands.");

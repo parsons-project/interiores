@@ -1,5 +1,7 @@
 package interiores.core.presentation;
 
+import interiores.core.business.BusinessController;
+import interiores.core.presentation.annotation.Business;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,31 +10,36 @@ import java.util.Map;
  * @author hector
  */
 public class ViewLoader
-{
+{ 
     /**
-     * The package where the views are located
+     * The controllers available for the views
      */
-    private String viewsPackage;
+    private Map<Class, BusinessController> controllers;
     
     /**
      * The views loaded identified by name
      */
-    private Map<String, View> views;
+    private Map<Class, View> views;
     
-    public ViewLoader(String viewsPkg)
+    public ViewLoader()
     {
-        this.viewsPackage = viewsPkg;
-        views = new HashMap<String, View>();
+        views = new HashMap();
+        controllers = new HashMap();
+    }
+    
+    public void addBusinessController(BusinessController controller)
+    {
+        controllers.put(controller.getClass(), controller);
     }
     
     /**
      * Tells whether a view is loaded or not.
-     * @param name The view name
+     * @param viewClass The view class
      * @return True if the view is loaded, false otherwise
      */
-    public boolean isLoaded(String name)
+    public boolean isLoaded(Class viewClass)
     {
-        return views.containsKey(name);
+        return views.containsKey(viewClass);
     }
     
     /**
@@ -40,29 +47,44 @@ public class ViewLoader
      * @param name The name of the view to load
      * @throws Exception 
      */
-    public void load(String name) throws Exception
+    public void load(Class viewClass) throws Exception
     {
-        Class viewClass = Class.forName(viewsPackage + "." + name);
+        View view;
         
-        views.put(name, (View)viewClass.newInstance());
+        if(viewClass.isAnnotationPresent(Business.class))
+        {
+            Business viewBusiness = (Business) viewClass.getAnnotation(Business.class);
+            Class controllerClass = viewBusiness.value();
+            
+            if(! controllers.containsKey(controllerClass))
+                throw new Exception("There is no controller loaded as " + controllerClass.getName() + 
+                        " for the view " + viewClass.getName());
+            
+            BusinessController controller = controllers.get(controllerClass);
+            view = (View) viewClass.getConstructor(controllerClass).newInstance(controller);
+        }
+        else
+            view = (View) viewClass.newInstance();
+        
+        views.put(viewClass, view);
     }
     
     /**
      * Unloads a view.
-     * @param name The name of the view to unload
+     * @param viewClass The class of the view to unload
      */
-    public void unload(String name)
+    public void unload(Class viewClass)
     {
-        views.remove(name);
+        views.remove(viewClass);
     }
     
     /**
      * Gets a loaded view.
-     * @param name Name of the view
+     * @param viewClass Class of the view to get
      * @return If the view is loaded returns the loaded view. If not, returns null.
      */
-    public View get(String name)
+    public View get(Class viewClass)
     {
-        return views.get(name);
+        return views.get(viewClass);
     }
 }

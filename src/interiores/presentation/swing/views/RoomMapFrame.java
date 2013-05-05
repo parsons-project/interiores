@@ -22,13 +22,15 @@ public class RoomMapFrame extends SwingFrame
     @Override
     public void onLoad() throws Exception
     {
-        presentation.load("RoomMapPanel"); 
+        presentation.load(RoomMapPanel.class); 
     }
     
     @Override
     public void showView()
     {
-        RoomMapPanel map = (RoomMapPanel) presentation.get("RoomMapPanel");
+        //this.removeAll();
+        
+        RoomMapPanel map = (RoomMapPanel) presentation.get(RoomMapPanel.class);
         add(map, BorderLayout.CENTER);
         pack();
         

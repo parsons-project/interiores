@@ -21,7 +21,7 @@ public class MainAppFrame extends SwingFrame
     @Override
     public void onLoad() throws Exception
     {
-        presentation.load("RoomMapFrame");
+        presentation.load(RoomMapFrame.class);
     }
     
     /**

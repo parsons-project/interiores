@@ -25,6 +25,7 @@ public class DesignController
     
     private boolean solutionFound = false;
     private String lastSolution;
+    private FurnitureVariableSet currentFurVarSet;
     
     /**
      * Creates a particular instance of the design controller
@@ -56,15 +57,16 @@ public class DesignController
         WishList wishList = getWishList();
         Room room = getRoom();
         
-        FurnitureVariableSetDebugger debugFurVarSet = new FurnitureVariableSetDebugger(room, wishList);
-        debugFurVarSet.addListener(this);
+        FurnitureVariableSetDebugger furVarSetDebug = new FurnitureVariableSetDebugger(room, wishList);
+        furVarSetDebug.addListener(this);
         
         notify(new DebugRoomDesignStartedEvent());
-        computeSolution(debugFurVarSet);
+        computeSolution(furVarSetDebug);
     }
     
     private void computeSolution(FurnitureVariableSet furVarSet)
     {
+        currentFurVarSet = furVarSet;
         RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
         
         // And try to solve it

@@ -28,7 +28,6 @@ public class RoomMap
     private Map<Point, Drawable> elements;
     private Walls walls;
     private String status;
-    private Drawable debugger;
     
     public RoomMap(int roomWidth, int roomDepth) {
         width = roomWidth + getPadding() * 2;
@@ -109,9 +108,5 @@ public class RoomMap
     
     public void setStatus(String status) {
         this.status = status;
-    }
-    
-    public void setDebugger(Drawable debugger) {
-        this.debugger = debugger;
     }
 }

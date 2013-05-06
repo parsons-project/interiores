@@ -1,5 +1,6 @@
 package interiores.business.events.backtracking;
 
+import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.core.Event;
 import java.awt.Point;
@@ -21,5 +22,15 @@ public class NextValueEvent
     public Point getPosition()
     {
         return value.getPosition();
+    }
+    
+    public String getModelName()
+    {
+        return value.getModel().getName();
+    }
+    
+    public Orientation getOrientation()
+    {
+        return value.getArea().getOrientation();
     }
 }

@@ -98,9 +98,9 @@ public class RoomMapPanel extends SwingPanel
     public void updateDesign(RoomDesignFinishedEvent event) {
         if (event.hasDesign())
         {
-            map.setStatus("Solution found! :)");
-            
             map.clear();
+            
+            map.setStatus("Solution found! :)");
         
             for(Entry<String, FurnitureValue> entry : event.getDesign()) {
                 String name = entry.getKey();
@@ -108,8 +108,6 @@ public class RoomMapPanel extends SwingPanel
 
                 addFurniture(name, entry.getValue().getArea(), color);
             }
-
-            repaint();
         }
         else
             map.setStatus("Solution not found :(");

@@ -1,8 +1,12 @@
 package interiores.business.models.backtracking;
 
+import interiores.business.events.backtracking.ActualVariableSetEvent;
 import interiores.business.events.backtracking.NextValueEvent;
+import interiores.business.events.backtracking.ValueAssignedEvent;
+import interiores.business.events.backtracking.ValueUnassignedEvent;
 import interiores.business.models.Room;
 import interiores.business.models.WishList;
+import interiores.core.Debug;
 import interiores.core.Event;
 import interiores.core.Observable;
 import interiores.core.Observer;
@@ -31,8 +35,8 @@ public class FurnitureVariableSetDebugger
     protected void setActualVariable() {
         super.setActualVariable();
         
-        /*if(! allAssigned)
-            notify("variableSet", "variable", actual);*/
+        if(! allAssigned)
+            notify(new ActualVariableSetEvent(actual));
     }
     
     @Override
@@ -42,6 +46,20 @@ public class FurnitureVariableSetDebugger
         notify(new NextValueEvent((FurnitureValue) value));
         
         return value;
+    }
+    
+    @Override
+    protected void assignToActual(Value value) {
+        super.assignToActual(value);
+        
+        notify(new ValueAssignedEvent((FurnitureValue) value));
+    }
+    
+    @Override
+    protected void undoAssignToActual() {
+        super.undoAssignToActual();
+        
+        notify(new ValueUnassignedEvent());
     }
     
     @Override

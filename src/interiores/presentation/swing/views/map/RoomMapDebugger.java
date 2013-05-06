@@ -44,7 +44,7 @@ public class RoomMapDebugger
     }
     
     @Override
-    public void drawElements(Graphics2D g)
+    protected void drawElements(Graphics2D g)
     {
         g.setColor(COLOR_POINT);
         
@@ -67,5 +67,12 @@ public class RoomMapDebugger
             for(int j = 0; j < cols; j++)
                 g.drawRect(i*5, j*5, 5, 5);
         }
+    }
+   
+    @Override
+    public void clear()
+    {
+        super.clear();
+        points.clear();
     }
 }

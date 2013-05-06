@@ -10,6 +10,7 @@ import interiores.business.models.Orientation;
 import interiores.business.models.WantedFurniture;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.models.constraints.binary.FacingConstraint;
 import interiores.business.models.constraints.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.binary.MinDistanceConstraint;
 import interiores.business.models.constraints.unary.AreaConstraint;
@@ -140,6 +141,12 @@ public class ConstraintController
             else throw new BusinessException(rel + " constraint doesn't exist");
             
             getWishList().addBinaryConstraint(rel, bc, furn1, furn2);
+        }
+        else if (type.equals("face")) {
+            if (! parameters.isEmpty())
+                throw new BusinessException("This constraint only receives a pair of furnitures");
+            
+            getWishList().addBinaryConstraint("face", new FacingConstraint(), furn1, furn2);
         }
     }
     

@@ -36,6 +36,7 @@ public class ConstraintCommands extends AdvancedCommandGroup {
                         + " Enter <min> to set a minimum distance.") );
                 parameters.add(readInt("Enter the distance measured in cm"));
             }
+            else if (type.equals("face")) {}
             else throw new BusinessException(type + "constraint doesn't exist");
             
             String furn1 = readString("Select the two pieces of furniture you want to apply the constraint to");
@@ -103,7 +104,7 @@ public class ConstraintCommands extends AdvancedCommandGroup {
     }
     
     private boolean isBinary(String constraintType) {
-        return constraintType.equals("distance");
+        return constraintType.equals("distance") || constraintType.equals("face");
     }
 
 }

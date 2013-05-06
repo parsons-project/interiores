@@ -152,7 +152,7 @@ public class WishList {
         return furniture.values();
     }
     
-    public Collection<FurnitureModel> getFurnitureModels(String name) {
+    public List<FurnitureModel> getFurnitureModels(String name) {
         return furniture.get(name).getType().getFurnitureModels();
     }
     

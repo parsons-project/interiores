@@ -122,8 +122,8 @@ public class FurnitureVariable
 
         //add all positions in the room
         domainPositions[0] = new HashSet<Point>();
-        for (int i = 0; i < roomSize.depth; i += resolution) {
-            for (int j = 0; j < roomSize.width; j += resolution)
+        for (int i = 0; i < roomSize.width; i += resolution) {
+            for (int j = 0; j < roomSize.depth; j += resolution)
                 domainPositions[0].add(new Point(i,j));
         }
         

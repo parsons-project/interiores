@@ -20,44 +20,13 @@ public class FurnitureVariable
 	implements Variable
 {
     private String identifier;
-
-    /**
-    * This vector of lists contains all models available for this variable.
-    * The models belong to the furniture type associated to the variable.
-    * 
-    * Moreover, it gives information about what models have been discarded and,
-    * in such cases, in which iteration of the algorithm they were discarded:
-    * At any given iteration i (depth = i) of the algorithm, all models which
-    * have not been discarded are in the list at the i position of the vector.
-    * Models which have been discarded are in the list at the position
-    * correspondent to the iteration in which they were discarded.
-    * Lists beyond the position i are empty.
-    * 
-    * The vector size never changes and is equal to the amount of iterations of
-    * the algorithm.
-    */
-    public Collection<FurnitureModel> domainModels;
-
-    /**
-    * This vector of hash sets contains all positions available for this variable.
-    * 
-    * Moreover, it gives information about what positions have been discarded and,
-    * in such cases, in which iteration of the algorithm they were discarded:
-    * At any given iteration i (depth = i) of the algorithm, all positions which
-    * have not been discarded are in the set at the i position of the vector.
-    * Positions which have been discarded are in the set at the position
-    * correspondent to the iteration in which they were discarded.
-    * Sets beyond the position i are empty.
-    * 
-    * The vector size never changes and is equal to the amount of iterations of
-    * the algorithm.
-    */
-    public HashSet<Point>[] domainPositions;
     
+    private int resolution;
+
     /**
-     * This list contains all four possible orientations.
+     * The domain of the variable.
      */
-    public List<Orientation> orientations;
+    Domain domain;
     
     /**
      * This list contains the constraints regarding the variable.
@@ -76,110 +45,48 @@ public class FurnitureVariable
     */
     public int iteration;
     
-    // The following variables are used to iterate over the domain.
-    //Iteration is done in this order: 1) Position, 2) Orientation, 3) Models
-    private Iterator positionIterator;
-    private Iterator orientationIterator;
-    private Iterator modelIterator;
-    
-    private Point currentPosition;
-    private Orientation currentOrientation;
-    private FurnitureModel currentModel;
-    
-    private boolean firstValueIteration;
-    
-    
     /**
      * Default Constructor. The resulting variable has as domain the models in
      * "models", every position in room and all orientations.
      * The set of restrictions is "unaryConstraints". Its resolution defaults to 5.
      * @pre the iteration of the variableSet is 0
      */
-    public FurnitureVariable(String id, Collection<FurnitureModel> models, Dimension roomSize,
+    public FurnitureVariable(String id, List<FurnitureModel> models, Dimension roomSize,
             Collection<UnaryConstraint> unaryConstraints, int variableCount) {
+        
         this(id, models, roomSize, unaryConstraints, variableCount, 5);
     }
     
     
     
-    public FurnitureVariable(String id, Collection<FurnitureModel> models, Dimension roomSize,
-            Collection<UnaryConstraint> unaryConstraints, int variableCount, int resolution)
-    {    
+    public FurnitureVariable(String id, List<FurnitureModel> models,
+            Dimension roomSize, Collection<UnaryConstraint> unaryConstraints,
+            int variableCount, int resolution) { 
+        
         identifier = id;
+        this.resolution = resolution;
         
         isAssigned = false;
         iteration = 0;
     
-        domainPositions = new HashSet[variableCount];
-        for(int i = 0; i < variableCount; ++i)
-            domainPositions[i] = null;        
+        domain = new Domain(models, roomSize, variableCount, resolution);
         
-        orientations = new ArrayList<Orientation>();
-        defaultOrientations();
-        
-        domainModels = models;
         this.unaryConstraints = unaryConstraints;
-
-        //add all positions in the room
-        domainPositions[0] = new HashSet<Point>();
-        for (int i = 0; i < roomSize.depth; i += resolution) {
-            for (int j = 0; j < roomSize.width; j += resolution)
-                domainPositions[0].add(new Point(i,j));
-        }
         
-        currentPosition = null;
-        currentOrientation = null;
-        currentModel = null;
-        
-        positionIterator = domainPositions[0].iterator();
-        orientationIterator = orientations.iterator();
-        modelIterator = domainModels.iterator();
     }
 
 
     //Pre: we have not iterated through all domain values yet.
     @Override
-    public Value getNextDomainValue() {
-        
-        //1) iterate
-        if (firstValueIteration) {
-            firstValueIteration = false;
-        }
-        else if (positionIterator.hasNext()) {
-            currentPosition = (Point) positionIterator.next();
-        }
-        else if (orientationIterator.hasNext()) {
-            positionIterator = domainPositions[iteration].iterator();
-            currentPosition = (Point) positionIterator.next();
-            currentOrientation = (Orientation) orientationIterator.next();
-        }
-        else if (modelIterator.hasNext()) {
-            positionIterator = domainPositions[iteration].iterator();
-            currentPosition = (Point) positionIterator.next();
-            orientationIterator = orientations.iterator();
-            currentOrientation = (Orientation) orientationIterator.next();
-            currentModel = (FurnitureModel) modelIterator.next();
-        }
-        else {
-            throw new UnsupportedOperationException("There are no more domain values");
-        }
-        
-        //2) return the new current value
-        OrientedRectangle area = new OrientedRectangle(currentPosition,
-            currentModel.getSize(), Orientation.S);
-        area.setOrientation(currentOrientation);
-        
-        return new FurnitureValue(area, currentModel);
+    public Value getNextDomainValue() {      
+        return domain.getNextDomainValue(iteration);
     }
 
     
     //Pre: the 3 iterators point to valid values
     @Override
     public boolean hasMoreValues() {
-        if(domainModels.isEmpty() || domainPositions[iteration].isEmpty() || orientations.isEmpty())
-            return false;
-        
-        return modelIterator.hasNext() || positionIterator.hasNext() || orientationIterator.hasNext();
+        return domain.hasMoreValues(iteration);
     }
 
     
@@ -221,25 +128,13 @@ public class FurnitureVariable
         this.iteration = iteration;
        
         // 1) preliminar move of all positions
-        domainPositions[iteration+1] = domainPositions[iteration];
-        domainPositions[iteration] = new HashSet<Point>();
-        
+        domain.pushPositions(iteration);
+               
         // 2) send the affected positions back
         FurnitureValue value = (FurnitureValue) variable.getAssignedValue();
-        OrientedRectangle area = value.getArea();
-        int x = area.x;
-        int y = area.y;
-        int x_max = x+area.width;
-        int y_max = y+area.height;
-        for (int i = x; i < x_max; ++i) {
-            for (int j = y; j < y_max; ++j) {
-                Point p = new Point(i,j);
-                if (domainPositions[iteration+1].contains(p)) {
-                    domainPositions[iteration].add(p);
-                    domainPositions[iteration+1].remove(p);
-                }
-            }
-        }
+        OrientedRectangle invalidRectangle = value.getArea();
+        
+        domain.trimInvalidRectangle(invalidRectangle, iteration);        
         
     }
 
@@ -255,23 +150,8 @@ public class FurnitureVariable
     //     trimDomain or -1 if it was undoTrimDomain).
     @Override
     public void undoTrimDomain(Variable variable, Value value, int iteration) {
-        // 0) update internal iteration
-        this.iteration = iteration;
 
-        // 1) check if swap is beneficial
-        boolean shouldSwap = domainPositions[iteration].size() <
-                             domainPositions[iteration+1].size();
-        
-        // 2) swap
-        if (shouldSwap) {
-            HashSet<Point> aux = domainPositions[iteration];
-            domainPositions[iteration] = domainPositions[iteration+1];
-            domainPositions[iteration+1] = aux;
-        }
-        
-        // 3) merge
-        domainPositions[iteration].addAll(domainPositions[iteration+1]);
-        domainPositions[iteration+1] = null;
+        domain.undoTrimDomain(variable, value, iteration);
         
     }
 
@@ -291,15 +171,7 @@ public class FurnitureVariable
         return identifier;
     }
     
-    /**
-     * Initializes the orientations list with all available orientations.
-     */
-    private void defaultOrientations() {
-        orientations.add(Orientation.N);
-        orientations.add(Orientation.E);
-        orientations.add(Orientation.S);
-        orientations.add(Orientation.W);
-    }	
+	
 	
 
     /**
@@ -308,20 +180,7 @@ public class FurnitureVariable
      */
     public void resetIterators(int iteration) {
         
-        this.iteration = iteration;
-        
-        positionIterator = domainPositions[iteration].iterator();
-        orientationIterator = orientations.iterator();
-        modelIterator = domainModels.iterator();
-        
-        // 
-        if(positionIterator.hasNext() && modelIterator.hasNext() && orientationIterator.hasNext()) {
-            currentPosition = (Point) positionIterator.next();
-            currentModel = (FurnitureModel) modelIterator.next();
-            currentOrientation = (Orientation) orientationIterator.next();
-        }
-        
-        firstValueIteration = true;
+        domain.resetIterators(iteration);
     }
     
     
@@ -335,9 +194,9 @@ public class FurnitureVariable
         if (isAssigned) result.append(assignedValue.toString() + NEW_LINE);
         else result.append("none" + NEW_LINE);
         
-        result.append(" Models available" + NEW_LINE);
-        for (FurnitureModel model : domainModels)
-                result.append(model.getName() + " ");
+        //result.append(" Models available" + NEW_LINE);
+        //for (FurnitureModel model : domainModels)
+        //        result.append(model.getName() + " ");
         
         
 //        result.append(" Positions available by iteration" + NEW_LINE);

@@ -156,21 +156,23 @@ public class FurnitureVariableSet
         
         OrientedRectangle actualArea = ((FurnitureValue) value).getArea();
         
-        if (roomArea.contains(actualArea)) {
-            assignToActual(value);
-            for (int i = 0; i < depth; ++i) {
-                OrientedRectangle otherArea = ((FurnitureValue) variables[i].getAssignedValue()).getArea();
-                if (!binaryConstraints.isSatisfied(actual, variables[i]) ||
-                    actualArea.intersects(otherArea)) {
-                    actual.undoAssignValue();
-                    return false;
-                }
+        if (! roomArea.contains(actualArea)) return false;
 
+        assignToActual(value);
+        for (int i = 0; i < depth; ++i) {
+            OrientedRectangle otherArea =
+                ((FurnitureValue) variables[i].getAssignedValue()).getArea();
+            
+            if (!binaryConstraints.isSatisfied(actual, variables[i]) ||
+                actualArea.intersects(otherArea)) {
+                actual.undoAssignValue();
+                return false;
             }
-            actual.undoAssignValue();
-            return true;
+
         }
-        return false;
+        actual.undoAssignValue();
+        return true;
+        
 
     }
 

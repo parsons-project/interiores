@@ -35,7 +35,7 @@ public class IOStream
     /**
      * Input prompt
      */
-    private char prompt;
+    private String prompt;
     
     /**
      * Creates a new IOStream with the input and output streams given.
@@ -47,14 +47,14 @@ public class IOStream
         this.istream = new BufferedReader(new InputStreamReader(istream));
         this.ostream = ostream;
         ibuffer = new Scanner("");
-        prompt = '>';
+        prompt = ">";
     }
     
     /**
      * Sets the input prompt.
      * @param prompt The new input prompt
      */
-    public void setPrompt(char prompt) {
+    public void setPrompt(String prompt) {
         this.prompt = prompt;
     }
     

@@ -78,11 +78,14 @@ public class TerminalController extends PresentationController
         
         while(line != null)
         {
-            // Set subcommand prompt
-            iostream.setPrompt('#');
-            exec(line);
+            if (! line.startsWith("#")) {
+                // Set subcommand prompt
+                iostream.setPrompt(">>");
+                exec(line);
+               
+            }
             // Set command prompt
-            iostream.setPrompt('>');
+            iostream.setPrompt(">");
             line = iostream.readLine();
         }
     }

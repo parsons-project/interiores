@@ -25,10 +25,9 @@ public class RoomMap
     
     protected int width;
     protected int depth;
-    private Map<Point, Drawable> elements;
+    private Map<String, Drawable> elements;
     private Walls walls;
     private String status;
-    private Drawable debugger;
     
     public RoomMap(int roomWidth, int roomDepth) {
         width = roomWidth + getPadding() * 2;
@@ -38,7 +37,7 @@ public class RoomMap
         status = "";
     }
     
-    public void clear() {
+    public void clearFurniture() {
         elements.clear();
         status = "";
     }
@@ -66,7 +65,11 @@ public class RoomMap
     public void addFurniture(String name, OrientedRectangle area, Color color) {
         Furniture furniture = new Furniture(name, area, color);
         
-        elements.put(new Point((int)area.getX(), (int)area.getY()), furniture);
+        elements.put(name, furniture);
+    }
+    
+    public void removeFurniture(String name) {
+        elements.remove(name);
     }
     
     @Override
@@ -79,16 +82,17 @@ public class RoomMap
         g.fillRect(0, 0, width, depth);
         
         drawElements(g);
-    }
-    
-    protected void drawElements(Graphics2D g) {
-        walls.draw(g);
         
-        for(Drawable element : elements.values())
-            element.draw(g);
+        walls.draw(g);
         
         g.setColor(Color.black);
         g.drawString(status, 10, 20);
+    }
+    
+    protected void drawElements(Graphics2D g)
+    {
+        for(Drawable element : elements.values())
+            element.draw(g);
     }
     
     public static int getPadding() {
@@ -109,9 +113,5 @@ public class RoomMap
     
     public void setStatus(String status) {
         this.status = status;
-    }
-    
-    public void setDebugger(Drawable debugger) {
-        this.debugger = debugger;
     }
 }

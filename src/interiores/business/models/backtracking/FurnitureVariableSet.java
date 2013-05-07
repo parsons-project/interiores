@@ -38,7 +38,7 @@ public class FurnitureVariableSet
      * (which is also the number of iterations of the algorithm), but their
      * elements might be reallocated.
      */
-    private FurnitureVariable[] variables;
+    protected FurnitureVariable[] variables;
     
     /**
      * This is the variable that the algorithm is trying to assign in the
@@ -244,7 +244,6 @@ public class FurnitureVariableSet
 
         return result.toString();
     }
-    
 }
 
 

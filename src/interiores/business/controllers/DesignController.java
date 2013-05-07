@@ -9,6 +9,7 @@ import interiores.business.models.Room;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
+import interiores.core.Debug;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
@@ -25,6 +26,7 @@ public class DesignController
     
     private boolean solutionFound = false;
     private String lastSolution;
+    private FurnitureVariableSet currentFurVarSet;
     
     /**
      * Creates a particular instance of the design controller
@@ -56,15 +58,16 @@ public class DesignController
         WishList wishList = getWishList();
         Room room = getRoom();
         
-        FurnitureVariableSetDebugger debugFurVarSet = new FurnitureVariableSetDebugger(room, wishList);
-        debugFurVarSet.addListener(this);
+        FurnitureVariableSetDebugger furVarSetDebug = new FurnitureVariableSetDebugger(room, wishList);
+        furVarSetDebug.addListener(this);
         
         notify(new DebugRoomDesignStartedEvent());
-        computeSolution(debugFurVarSet);
+        computeSolution(furVarSetDebug);
     }
     
     private void computeSolution(FurnitureVariableSet furVarSet)
     {
+        currentFurVarSet = furVarSet;
         RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
         
         // And try to solve it
@@ -98,5 +101,14 @@ public class DesignController
      */
     public String getDesign() {
         return lastSolution;
+    }
+    
+    public void resumeSolver()
+    {
+        synchronized (currentFurVarSet) {
+            currentFurVarSet.notify();
+        }
+        
+        Debug.println("Solver resumed!");
     }
 }

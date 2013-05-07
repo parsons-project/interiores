@@ -78,7 +78,7 @@ public class TerminalController extends PresentationController
         
         while(line != null)
         {
-            if (! line.startsWith("#")) {
+            if (! line.matches("^\\s*#[\\w\\s]*$")) {
                 // Set subcommand prompt
                 iostream.setPrompt(">>");
                 exec(line);

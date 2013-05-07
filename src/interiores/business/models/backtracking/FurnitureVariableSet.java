@@ -5,14 +5,12 @@ import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
 import interiores.business.models.WishList;
 import interiores.business.models.constraints.BinaryConstraintSet;
-import interiores.business.models.constraints.UnaryConstraint;
 import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
 import interiores.utils.BinaryConstraintAssociation;
 import java.awt.Point;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class FurnitureVariableSet
@@ -159,7 +157,7 @@ public class FurnitureVariableSet
         
         if (! roomArea.contains(actualArea)) return false;
 
-        assignToActual(value);
+        actual.assignValue(value);
         for (int i = 0; i < depth; ++i) {
             OrientedRectangle otherArea =
                 ((FurnitureValue) variables[i].getAssignedValue()).getArea();
@@ -173,8 +171,6 @@ public class FurnitureVariableSet
         }
         actual.undoAssignValue();
         return true;
-        
-
     }
 
     

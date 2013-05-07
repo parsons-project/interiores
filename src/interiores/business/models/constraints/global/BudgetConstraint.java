@@ -4,6 +4,7 @@
  */
 package interiores.business.models.constraints.global;
 
+
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.constraints.GlobalConstraint;
 

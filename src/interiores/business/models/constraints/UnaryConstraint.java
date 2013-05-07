@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
     OrientationConstraint.class, PriceConstraint.class, SizeConstraint.class})
 public abstract class UnaryConstraint {
      /**
-     * Eliminates all values from the variables' domain that do not fulfil the
+     * Eliminates all values from the variables' domain that do not fulfill the
      * restriction.
      * @param variable The specific variable that has to pass the constraint
      */

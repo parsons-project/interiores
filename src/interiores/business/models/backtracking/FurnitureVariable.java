@@ -50,8 +50,7 @@ public class FurnitureVariable
         
         this(id, models, roomSize, unaryConstraints, variableCount, 5);
     }
-    
-    
+       
     
     public FurnitureVariable(String id, List<FurnitureModel> models,
             Dimension roomSize, Collection<UnaryConstraint> unaryConstraints,

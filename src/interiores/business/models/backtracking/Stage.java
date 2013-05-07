@@ -198,8 +198,6 @@ public class Stage {
     }
     
     void addPositions(Collection<Point> newPositions) {
-        int size = positions.size();
-        size += newPositions.size();
         positions.addAll(newPositions);
     }
 

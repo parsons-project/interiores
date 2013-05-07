@@ -111,6 +111,7 @@ public class FurnitureVariableSet
             allAssigned = true;
         }
     }
+ 
     
     @Override
     protected void trimDomains() {
@@ -205,6 +206,7 @@ public class FurnitureVariableSet
             if (variables[i].getID().equals(name)) return variables[i];
         return null;
     }
+   
     
     public Map<String, FurnitureValue> getValues() {
         Map<String, FurnitureValue> values = new HashMap();
@@ -214,6 +216,7 @@ public class FurnitureVariableSet
         
         return values;
     }
+ 
     
     @Override
     public String toString() {
@@ -241,16 +244,3 @@ public class FurnitureVariableSet
         return result.toString();
     }
 }
-
-
-//    public enum Cell {
-//		ACTIVE,PASSIVE,EMPTY,SUPPORT,WALKPATH;
-//    }
-//    
-//    /**
-//    * This map contains, for each iteration of the algorithm,
-//    * the current state of all discrete positions of the room.
-//    * This attribute might be necessary to check that every place in the room is
-//    * accessible.
-//    */
-//    private Cell[][][] map;    

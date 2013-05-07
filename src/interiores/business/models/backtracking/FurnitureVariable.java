@@ -87,7 +87,6 @@ public class FurnitureVariable
     public void assignValue(Value value) {
         isAssigned = true;
         assignedValue = value;
-        //Duda: no deberia crearse una copia de value? -No veo por qué
     }
 
     

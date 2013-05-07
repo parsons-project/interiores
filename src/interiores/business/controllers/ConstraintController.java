@@ -10,9 +10,10 @@ import interiores.business.models.Orientation;
 import interiores.business.models.WantedFurniture;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.UnaryConstraint;
-import interiores.business.models.constraints.binary.FacingConstraint;
+import interiores.business.models.constraints.binary.PartialFacingConstraint;
 import interiores.business.models.constraints.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.binary.MinDistanceConstraint;
+import interiores.business.models.constraints.binary.StraightFacingConstraint;
 import interiores.business.models.constraints.unary.AreaConstraint;
 import interiores.business.models.constraints.unary.ColorConstraint;
 import interiores.business.models.constraints.unary.MaterialConstraint;
@@ -143,10 +144,16 @@ public class ConstraintController
             getWishList().addBinaryConstraint(rel, bc, furn1, furn2);
         }
         else if (type.equals("face")) {
-            if (! parameters.isEmpty())
+            if (parameters.get(0).equals("straight")) {
+                getWishList().addBinaryConstraint("face", new StraightFacingConstraint(), furn1, furn2);
+            }
+            else if (parameters.get(0).equals("partial")) {
+                getWishList().addBinaryConstraint("face", new PartialFacingConstraint(), furn1, furn2);
+            }
+            else
                 throw new BusinessException("This constraint only receives a pair of furnitures");
             
-            getWishList().addBinaryConstraint("face", new FacingConstraint(), furn1, furn2);
+            
         }
     }
     

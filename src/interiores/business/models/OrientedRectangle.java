@@ -119,6 +119,15 @@ public class OrientedRectangle extends Rectangle {
         return this.orientation;
     }
     
+    /**
+     * Get the center of the rectangle
+     * @return The point in the center of the rectangle (absolute respect its
+     *         position)
+     */
+    public Point getCenter() {
+        return new Point(x + width/2, y + height/2);
+    }
+    
     @Override
     public String toString() {
         return super.toString() + " " + this.orientation;

@@ -36,7 +36,9 @@ public class ConstraintCommands extends AdvancedCommandGroup {
                         + " Enter <min> to set a minimum distance.") );
                 parameters.add(readInt("Enter the distance measured in cm"));
             }
-            else if (type.equals("face")) {}
+            else if (type.equals("face")) {
+                parameters.add(readString("Enter the type of facing (partial or straight)"));
+            }
             else throw new BusinessException(type + "constraint doesn't exist");
             
             String furn1 = readString("Select the two pieces of furniture you want to apply the constraint to");

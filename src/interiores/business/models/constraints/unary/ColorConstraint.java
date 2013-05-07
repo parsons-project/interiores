@@ -1,6 +1,7 @@
 package interiores.business.models.constraints.unary;
 
 import interiores.business.models.FurnitureModel;
+import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.core.business.BusinessException;
@@ -53,8 +54,8 @@ public class ColorConstraint
      * @param variable The variable whose values have to be checked.
      */
     @Override
-    public void eliminateInvalidValues(FurnitureVariable variable) {
-        Iterator it = variable.domainModels.iterator();
+    public void eliminateInvalidValues(Domain domain) {
+        Iterator it = domain.getModels(0).iterator();
         while (it.hasNext()) {
             FurnitureModel model = (FurnitureModel) it.next();
             if (!model.getColor().equals(color))

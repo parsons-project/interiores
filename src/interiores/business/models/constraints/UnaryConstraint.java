@@ -1,7 +1,7 @@
 
 package interiores.business.models.constraints;
 
-import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.Domain;
 import interiores.business.models.constraints.unary.AreaConstraint;
 import interiores.business.models.constraints.unary.ColorConstraint;
 import interiores.business.models.constraints.unary.MaterialConstraint;
@@ -24,5 +24,5 @@ public abstract class UnaryConstraint {
      * restriction.
      * @param variable The specific variable that has to pass the constraint
      */
-    public abstract void eliminateInvalidValues(FurnitureVariable variable);
+    public abstract void eliminateInvalidValues(Domain domain);
 }

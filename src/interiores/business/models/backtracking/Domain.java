@@ -72,48 +72,51 @@ public class Domain {
      * @param invalidArea
      * @param iteration 
      */
-    public void trimInvalidRectangle(OrientedRectangle invalidRectangle, int iteration) {
+    public void stripInvalidRectangle(OrientedRectangle invalidRectangle, int iteration) {
         Collection<Point> trimedPositions = 
                 domain[iteration+1].trimInvalidRectangle(invalidRectangle);
         
         domain[iteration].addPositions(trimedPositions);
     }
     
-    
-    void undoTrimDomain(Variable variable, Value value, int iteration) {
+    /**
+     * merges stage iteration+1 into stage iteration.
+     */
+    void undoTrimDomain(int iteration) {
 
-        // 1) check if swap is beneficial
-        boolean shouldSwap = domain[iteration].positions.size() <
-                             domain[iteration+1].positions.size();
-        
-        // 2) swap
-        if (shouldSwap) {
-            HashSet<Point> aux = domain[iteration].positions;
-            domain[iteration].positions = domain[iteration+1].positions;
-            domain[iteration+1].positions = aux;
-        }
-        
-        // 3) merge
-        domain[iteration].positions.addAll(domain[iteration+1].positions);
-        domain[iteration+1].positions = null;
+        domain[iteration].merge(domain[iteration+1]);
     }
+    
+ 
 
     
     
-    void resetIterators(int iteration) {
+    public void resetIterators(int iteration) {
         domain[iteration].resetIterators();
     }
     
-    List<FurnitureModel> getModels(int iteration) {
+    public List<FurnitureModel> getModels(int iteration) {
         return domain[iteration].getModels();
     }
     
-    HashSet<Point> getPositions(int iteration) {
+    public HashSet<Point> getPositions(int iteration) {
         return domain[iteration].getPositions();
     }
     
-    List<Orientation> getOrientations(int iteration) {
+    public List<Orientation> getOrientations(int iteration) {
         return domain[iteration].getOrientations();
+    }
+
+    public void saveAllPositions(int iteration) {
+        domain[iteration].swapPositions(domain[iteration+1]);
+    }
+        
+    public void saveAllModels(int iteration) {
+        domain[iteration].swapModels(domain[iteration+1]);
+    }
+
+    public void saveAllOrientations(int iteration) {
+        domain[iteration].swapOrientations(domain[iteration+1]);
     }
     
     

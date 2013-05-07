@@ -181,6 +181,54 @@ public class Stage {
     void addPositions(Collection<Point> newPositions) {
         positions.addAll(newPositions);
     }
+
+    void swapPositions(Stage stage) {
+        HashSet<Point> aux = this.positions;
+        this.positions = stage.positions;
+        stage.positions = aux;
+    }
+
+    void swapModels(Stage stage) {
+        List<FurnitureModel> aux = this.models;
+        this.models = stage.models;
+        stage.models = aux;
+    }
+
+    void swapOrientations(Stage stage) {
+        List<Orientation> aux = this.orientations;
+        this.orientations = stage.orientations;
+        stage.orientations = aux;
+    }
+
+    void merge(Stage stage) {
+        
+        //A) process positions        
+        // 1) check if swap is beneficial
+        boolean shouldSwapPositions = positions.size() < stage.positions.size();
+        
+        // 2) swap
+        if (shouldSwapPositions) swapPositions(stage);
+        
+        // 3) merge
+        positions.addAll(stage.positions);
+        stage.positions = null;
+        
+        //B) process models
+        // 1) check if swap is beneficial
+        boolean shouldSwapModels = models.size() < stage.models.size();
+        
+        // 2) swap
+        if (shouldSwapModels) swapModels(stage);
+        
+        // 3) merge
+        models.addAll(stage.models);
+        stage.models = null;      
+        
+        //B) process orientations   
+        // 1) merge
+        orientations.addAll(stage.orientations);
+        stage.orientations = null;
+    }
     
     
 }

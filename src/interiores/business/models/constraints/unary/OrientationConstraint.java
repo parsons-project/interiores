@@ -1,7 +1,7 @@
 package interiores.business.models.constraints.unary;
 
 import interiores.business.models.Orientation;
-import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.Domain;
 import interiores.business.models.constraints.UnaryConstraint;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,8 +49,9 @@ public class OrientationConstraint
      * @param variable The variable to be checked.
      */
     @Override
-    public void eliminateInvalidValues(FurnitureVariable variable) {        
-        variable.orientations = validOrientations;
+    public void eliminateInvalidValues(Domain domain) {
+        domain.getOrientations(0).clear();
+        domain.getOrientations(0).addAll(validOrientations);
     }
     
     /**

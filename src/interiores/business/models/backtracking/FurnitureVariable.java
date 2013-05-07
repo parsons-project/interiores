@@ -7,6 +7,7 @@ import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 public class FurnitureVariable
@@ -121,14 +122,19 @@ public class FurnitureVariable
         this.iteration = iteration;
        
         // 1) preliminar move of all positions
-        domain.pushPositions(iteration);
+        domain.saveAllPositions(iteration);
                
         // 2) send the affected positions back
         FurnitureValue value = (FurnitureValue) variable.getAssignedValue();
         OrientedRectangle invalidRectangle = value.getArea();
         
-        domain.trimInvalidRectangle(invalidRectangle, iteration);        
+        domain.stripInvalidRectangle(invalidRectangle, iteration);        
         
+        // 3) move all models
+        domain.saveAllModels(iteration);
+        
+        // 4) move all orientations
+        domain.saveAllOrientations(iteration);
     }
 
     
@@ -143,9 +149,7 @@ public class FurnitureVariable
     //     trimDomain or -1 if it was undoTrimDomain).
     @Override
     public void undoTrimDomain(Variable variable, Value value, int iteration) {
-
-        domain.undoTrimDomain(variable, value, iteration);
-        
+        domain.undoTrimDomain(iteration);       
     }
 
     
@@ -162,10 +166,15 @@ public class FurnitureVariable
 
     public String getID() {
         return identifier;
-    }
-    
-	
-	
+    }	
+
+    void preliminarTrimDomains() {     
+        Iterator it = unaryConstraints.iterator();
+        while (it.hasNext()) {
+            UnaryConstraint constraint = (UnaryConstraint) it.next();
+            constraint.eliminateInvalidValues(domain);
+        }
+    }	
 
     /**
      * Resets the iterators so that they will iterate through all of the
@@ -210,5 +219,4 @@ public class FurnitureVariable
         return result.toString();
     }
     
-      
 }

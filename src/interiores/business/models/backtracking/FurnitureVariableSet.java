@@ -195,14 +195,10 @@ public class FurnitureVariableSet
     //note: trivial implementation. To be optimized.
     @Override
     protected void preliminarTrimDomains() {
-        for (int i = 0; i < variableCount; ++i) {
-            Iterator it = variables[i].unaryConstraints.iterator();
-            while (it.hasNext()) {
-                UnaryConstraint constraint = (UnaryConstraint) it.next();
-                constraint.eliminateInvalidValues(variables[i]);
-            }
-        }
+        for (int i = 0; i < variableCount; ++i)
+            variables[i].preliminarTrimDomains();
     }
+    
     
     private FurnitureVariable getVariable(String name) {
         for (int i = 0; i < variableCount; i++)

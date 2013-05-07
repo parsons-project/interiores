@@ -25,6 +25,8 @@ public class TerminalController extends PresentationController
      */
     private static final int HELP_PADDING = 20;
     
+    private static final String COMMENT_MARK = "#";
+    
     /**
      * The package where the commands are located
      */
@@ -78,16 +80,23 @@ public class TerminalController extends PresentationController
         
         while(line != null)
         {
-            if (! line.matches("^\\s*#[\\w\\s]*$")) {
+            line = line.trim();
+            
+            if (! shouldLineBeIgnored(line)) {
                 // Set subcommand prompt
                 iostream.setPrompt(">>");
                 exec(line);
-               
             }
+            
             // Set command prompt
             iostream.setPrompt(">");
             line = iostream.readLine();
         }
+    }
+    
+    private boolean shouldLineBeIgnored(String line)
+    {
+        return line.isEmpty() || line.startsWith(COMMENT_MARK);
     }
     
     /**

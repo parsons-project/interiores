@@ -1,5 +1,3 @@
-/*
- */
 package interiores.presentation.swing.views;
 
 import interiores.business.controllers.DesignController;
@@ -8,8 +6,8 @@ import interiores.business.events.backtracking.NextValueEvent;
 import interiores.business.events.backtracking.ValueAssignedEvent;
 import interiores.business.events.backtracking.ValueUnassignedEvent;
 import interiores.business.events.room.DebugRoomDesignStartedEvent;
+import interiores.business.events.room.RoomDesignFinishedEvent;
 import interiores.business.models.Orientation;
-import interiores.core.Debug;
 import interiores.core.presentation.annotation.Business;
 import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.SwingFrame;
@@ -29,6 +27,9 @@ public class RoomMapDebuggerFrame extends SwingFrame
     private RoomMapDebugger map;
     private int currentIteration;
     private int skipIterations;
+    private boolean skipForever;
+    private int drawIterations;
+    private boolean isPaused;
     private DefaultListModel variableListModel;
     
     /**
@@ -44,14 +45,6 @@ public class RoomMapDebuggerFrame extends SwingFrame
     {
         this.debuggee = debuggee;
         this.map = (RoomMapDebugger) debuggee.getRoomMap();
-    }
-
-    @Override
-    public void showView()
-    {
-        reset();
-        
-        super.showView();
     }
     
     /**
@@ -82,6 +75,8 @@ public class RoomMapDebuggerFrame extends SwingFrame
         gridCheckBox = new javax.swing.JCheckBox();
         furnitureCheckBox = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
+        resumePauseButton = new javax.swing.JButton();
+        stopButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Room map debugger");
@@ -203,6 +198,24 @@ public class RoomMapDebuggerFrame extends SwingFrame
 
         jLabel5.setText("Variable list:");
 
+        resumePauseButton.setText("Resume");
+        resumePauseButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                resumePauseButtonActionPerformed(evt);
+            }
+        });
+
+        stopButton.setText("Stop");
+        stopButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                stopButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -220,9 +233,11 @@ public class RoomMapDebuggerFrame extends SwingFrame
                         .addComponent(gridCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(furnitureCheckBox))
+                    .addComponent(resumePauseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(stopButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -230,7 +245,11 @@ public class RoomMapDebuggerFrame extends SwingFrame
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(resumePauseButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(stopButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -255,7 +274,16 @@ public class RoomMapDebuggerFrame extends SwingFrame
         if(skipIterations < 1)
             skipIterations = 1;
         
-        designController.resumeSolver(); // Resume the solving!
+        drawIterations = skipIterations / 10;
+        
+        if(drawIterations < 1)
+            drawIterations = 1;
+        
+        else if(drawIterations > 100)
+            drawIterations = 100;
+        
+        // Resume the solving!
+        resume();
     }//GEN-LAST:event_iterateButtonActionPerformed
 
     private void gridCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_gridCheckBoxActionPerformed
@@ -278,6 +306,27 @@ public class RoomMapDebuggerFrame extends SwingFrame
         debuggee.repaint();
     }//GEN-LAST:event_furnitureCheckBoxActionPerformed
 
+    private void resumePauseButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_resumePauseButtonActionPerformed
+    {//GEN-HEADEREND:event_resumePauseButtonActionPerformed
+        if(isPaused) {
+            skipForever = true;
+            drawIterations = 100;
+            
+            resume();
+        }
+        else {
+            skipForever = false;
+            skipIterations = 1;
+        }
+    }//GEN-LAST:event_resumePauseButtonActionPerformed
+
+    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_stopButtonActionPerformed
+    {//GEN-HEADEREND:event_stopButtonActionPerformed
+        designController.stop();
+        resume();
+        map.clearFurniture();
+    }//GEN-LAST:event_stopButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel actualVariableNameLabel;
     private javax.swing.JLabel currentIterationLabel;
@@ -297,11 +346,14 @@ public class RoomMapDebuggerFrame extends SwingFrame
     private javax.swing.JLabel modelLabel;
     private javax.swing.JLabel orientationLabel;
     private javax.swing.JLabel positionLabel;
+    private javax.swing.JButton resumePauseButton;
+    private javax.swing.JButton stopButton;
     private javax.swing.JList variableList;
     // End of variables declaration//GEN-END:variables
 
     @Listen(DebugRoomDesignStartedEvent.class)
     public void debugDesignStarted() {
+        reset();
         showView();
     }
     
@@ -327,18 +379,20 @@ public class RoomMapDebuggerFrame extends SwingFrame
         
         map.addPoint(event.getPosition());
         
-        if(skipIterations > 1)
+        if(skipForever || skipIterations > 1)
         {
             --skipIterations;
-            Debug.println("Iterations left: " + skipIterations);
-            
+                        
             designController.resumeSolver();
             
-            if(skipIterations % 100 == 0)
+            if(skipIterations % drawIterations == 0)
                 debuggee.repaint();
         }
-        else     
+        else
+        {
             debuggee.repaint();
+            pause();
+        }
     }
     
     @Listen(ValueAssignedEvent.class)
@@ -357,6 +411,23 @@ public class RoomMapDebuggerFrame extends SwingFrame
         debuggee.repaint();
     }
     
+    @Listen(RoomDesignFinishedEvent.class)
+    public void disableButtons() {
+        pause();
+        
+        resumePauseButton.setEnabled(false);
+        stopButton.setEnabled(false);
+        iterateButton.setEnabled(false);
+    }
+    
+    private void enableButtons() {
+        pause();
+        
+        resumePauseButton.setEnabled(true);
+        stopButton.setEnabled(true);
+        iterateButton.setEnabled(true);
+    }
+    
     private void reset()
     {
         map.clear();
@@ -368,9 +439,12 @@ public class RoomMapDebuggerFrame extends SwingFrame
         variableListModel = new DefaultListModel();
         variableList.setModel(variableListModel);
         
-        skipIterations = 1;
+        skipIterations = drawIterations = 1;
+        skipForever = false;
         resetCurrentIteration();
         setValueInfo("Unknown", "Unknown", "Unknown");
+        
+        enableButtons();
     }
     
     private void setActualVariableName(String variableName)
@@ -405,5 +479,20 @@ public class RoomMapDebuggerFrame extends SwingFrame
         positionLabel.setText(position);
         modelLabel.setText(modelName);
         orientationLabel.setText(orientation);
+    }
+    
+    private void pause() {
+        setIsPaused(true);
+    }
+    
+    private void resume() {
+        setIsPaused(false);
+        designController.resumeSolver();
+    }
+    
+    private void setIsPaused(boolean isPaused) {
+        this.isPaused = isPaused;
+        
+        resumePauseButton.setText(isPaused ? "Resume" : "Pause");
     }
 }

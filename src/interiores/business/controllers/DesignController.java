@@ -26,7 +26,7 @@ public class DesignController
     
     private boolean solutionFound = false;
     private String lastSolution;
-    private FurnitureVariableSet currentFurVarSet;
+    private FurnitureVariableSetDebugger furVarSetDebug;
     
     /**
      * Creates a particular instance of the design controller
@@ -58,7 +58,7 @@ public class DesignController
         WishList wishList = getWishList();
         Room room = getRoom();
         
-        FurnitureVariableSetDebugger furVarSetDebug = new FurnitureVariableSetDebugger(room, wishList);
+        furVarSetDebug = new FurnitureVariableSetDebugger(room, wishList);
         furVarSetDebug.addListener(this);
         
         notify(new DebugRoomDesignStartedEvent());
@@ -67,7 +67,6 @@ public class DesignController
     
     private void computeSolution(FurnitureVariableSet furVarSet)
     {
-        currentFurVarSet = furVarSet;
         RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
         
         // And try to solve it
@@ -105,10 +104,13 @@ public class DesignController
     
     public void resumeSolver()
     {
-        synchronized (currentFurVarSet) {
-            currentFurVarSet.notify();
+        synchronized (furVarSetDebug) {
+            furVarSetDebug.notify();
         }
-        
-        Debug.println("Solver resumed!");
+    }
+    
+    public void stop()
+    {
+        furVarSetDebug.stop();
     }
 }

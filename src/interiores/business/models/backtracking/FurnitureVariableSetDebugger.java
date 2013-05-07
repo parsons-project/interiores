@@ -23,12 +23,13 @@ public class FurnitureVariableSetDebugger
     extends FurnitureVariableSet
     implements Observable
 {
+    private boolean shouldStop;
     private List<Observer> debuggers;
     
-    public FurnitureVariableSetDebugger(Room room, WishList wishList)
-    {
+    public FurnitureVariableSetDebugger(Room room, WishList wishList) {
         super(room, wishList);
         
+        shouldStop = false;
         debuggers = new ArrayList();
     }
     
@@ -41,6 +42,14 @@ public class FurnitureVariableSetDebugger
     }
     
     @Override
+    protected boolean actualHasMoreValues() {
+        if(shouldStop)
+            return false; // Force to stop checking current variable
+        
+        return super.actualHasMoreValues();
+    }
+    
+    @Override
     synchronized protected Value getNextActualDomainValue() {
         Value value = super.getNextActualDomainValue();
         
@@ -49,6 +58,7 @@ public class FurnitureVariableSetDebugger
         try {
             Debug.println("Pausing solver...");
             wait();
+            Debug.println("Solver resumed!");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -74,6 +84,9 @@ public class FurnitureVariableSetDebugger
     @Override
     public void backtracking() throws NoSolutionException
     {
+        if(shouldStop)
+            throw new NoSolutionException("Solver stopped manually");
+        
         super.backtracking();
         
         if(depth > 0)
@@ -87,7 +100,14 @@ public class FurnitureVariableSetDebugger
     
     @Override
     public void notify(Event event) {
+        if(shouldStop)
+            return; // Stop notifying
+        
         for(Observer debugger : debuggers)
             debugger.notify(event);
+    }
+    
+    public void stop() {
+        shouldStop = true;
     }
 }

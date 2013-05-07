@@ -9,6 +9,7 @@ import interiores.business.models.Room;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
+import interiores.core.Debug;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
@@ -100,5 +101,14 @@ public class DesignController
      */
     public String getDesign() {
         return lastSolution;
+    }
+    
+    public void resumeSolver()
+    {
+        synchronized (currentFurVarSet) {
+            currentFurVarSet.notify();
+        }
+        
+        Debug.println("Solver resumed!");
     }
 }

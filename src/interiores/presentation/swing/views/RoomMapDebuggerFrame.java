@@ -5,6 +5,8 @@ package interiores.presentation.swing.views;
 import interiores.business.controllers.DesignController;
 import interiores.business.events.backtracking.ActualVariableSetEvent;
 import interiores.business.events.backtracking.NextValueEvent;
+import interiores.business.events.backtracking.ValueAssignedEvent;
+import interiores.business.events.backtracking.ValueUnassignedEvent;
 import interiores.business.events.room.DebugRoomDesignStartedEvent;
 import interiores.business.models.Orientation;
 import interiores.core.Debug;
@@ -13,6 +15,7 @@ import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.SwingFrame;
 import interiores.presentation.swing.views.map.RoomMapDebugger;
 import java.awt.Point;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -26,6 +29,7 @@ public class RoomMapDebuggerFrame extends SwingFrame
     private RoomMapDebugger map;
     private int currentIteration;
     private int skipIterations;
+    private DefaultListModel variableListModel;
     
     /**
      * Creates new form RoomMapDebugger
@@ -45,7 +49,6 @@ public class RoomMapDebuggerFrame extends SwingFrame
     @Override
     public void showView()
     {
-        skipIterations = 1;
         reset();
         
         super.showView();
@@ -73,15 +76,17 @@ public class RoomMapDebuggerFrame extends SwingFrame
         modelLabel = new javax.swing.JLabel();
         orientationLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        variablesList = new javax.swing.JList();
+        variableList = new javax.swing.JList();
         iterateButton = new javax.swing.JButton();
         iterationsTextField = new javax.swing.JTextField();
         gridCheckBox = new javax.swing.JCheckBox();
         furnitureCheckBox = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Room map debugger");
         setAlwaysOnTop(true);
+        setResizable(false);
 
         jLabel1.setText("Actual variable:");
 
@@ -165,13 +170,7 @@ public class RoomMapDebuggerFrame extends SwingFrame
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        variablesList.setModel(new javax.swing.AbstractListModel()
-        {
-            String[] strings = { "Not implemented yet" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(variablesList);
+        jScrollPane1.setViewportView(variableList);
 
         iterateButton.setText("Iterate");
         iterateButton.addActionListener(new java.awt.event.ActionListener()
@@ -194,6 +193,13 @@ public class RoomMapDebuggerFrame extends SwingFrame
         });
 
         furnitureCheckBox.setText("Show furniture");
+        furnitureCheckBox.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                furnitureCheckBoxActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Variable list:");
 
@@ -205,7 +211,7 @@ public class RoomMapDebuggerFrame extends SwingFrame
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(iterationsTextField)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -224,7 +230,7 @@ public class RoomMapDebuggerFrame extends SwingFrame
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -246,12 +252,10 @@ public class RoomMapDebuggerFrame extends SwingFrame
     {//GEN-HEADEREND:event_iterateButtonActionPerformed
         skipIterations = Integer.parseInt(iterationsTextField.getText());
         
-        if(skipIterations < 1) skipIterations = 1;
+        if(skipIterations < 1)
+            skipIterations = 1;
         
-        synchronized (this)
-        {
-            notify();
-        }
+        designController.resumeSolver(); // Resume the solving!
     }//GEN-LAST:event_iterateButtonActionPerformed
 
     private void gridCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_gridCheckBoxActionPerformed
@@ -263,6 +267,16 @@ public class RoomMapDebuggerFrame extends SwingFrame
        
        debuggee.repaint();
     }//GEN-LAST:event_gridCheckBoxActionPerformed
+
+    private void furnitureCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_furnitureCheckBoxActionPerformed
+    {//GEN-HEADEREND:event_furnitureCheckBoxActionPerformed
+        if(furnitureCheckBox.isSelected())
+            map.enableDrawFurniture();
+        else
+            map.disableDrawFurniture();
+        
+        debuggee.repaint();
+    }//GEN-LAST:event_furnitureCheckBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel actualVariableNameLabel;
@@ -283,7 +297,7 @@ public class RoomMapDebuggerFrame extends SwingFrame
     private javax.swing.JLabel modelLabel;
     private javax.swing.JLabel orientationLabel;
     private javax.swing.JLabel positionLabel;
-    private javax.swing.JList variablesList;
+    private javax.swing.JList variableList;
     // End of variables declaration//GEN-END:variables
 
     @Listen(DebugRoomDesignStartedEvent.class)
@@ -294,7 +308,14 @@ public class RoomMapDebuggerFrame extends SwingFrame
     @Listen(ActualVariableSetEvent.class)
     public void actualVariableSet(ActualVariableSetEvent event)
     {
-        setActualVariableName(event.getVariableName());
+        String variableName = event.getVariableName();
+        
+        setActualVariableName(variableName);
+        
+        if(! variableListModel.contains(variableName))
+            variableListModel.addElement(variableName);
+        
+        map.setActive(variableName);
     }
     
     @Listen(NextValueEvent.class)
@@ -310,22 +331,44 @@ public class RoomMapDebuggerFrame extends SwingFrame
         {
             --skipIterations;
             Debug.println("Iterations left: " + skipIterations);
-        }
-        else
-        {
-            debuggee.repaint();
             
-            Debug.println("Solve paused");
-            wait();
+            designController.resumeSolver();
+            
+            if(skipIterations % 100 == 0)
+                debuggee.repaint();
         }
+        else     
+            debuggee.repaint();
+    }
+    
+    @Listen(ValueAssignedEvent.class)
+    public void valueAssigned(ValueAssignedEvent event)
+    {
+        map.addFurniture(actualVariableNameLabel.getText(), event.getArea(), event.getModelColor());
+        
+        debuggee.repaint();
+    }
+    
+    @Listen(ValueUnassignedEvent.class)
+    public void valueUnassigned()
+    {
+        map.removeFurniture(actualVariableNameLabel.getText());
+        
+        debuggee.repaint();
     }
     
     private void reset()
     {
         map.clear();
+        
         gridCheckBox.setSelected(map.isGridEnabled());
+        furnitureCheckBox.setSelected(map.shouldDrawFurniture());
         
         setActualVariableName("Unknown");
+        variableListModel = new DefaultListModel();
+        variableList.setModel(variableListModel);
+        
+        skipIterations = 1;
         resetCurrentIteration();
         setValueInfo("Unknown", "Unknown", "Unknown");
     }

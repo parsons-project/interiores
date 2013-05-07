@@ -58,7 +58,12 @@ public class FurnitureVariableSet
      * Indicates restrictions amongst two variables.
      */
     private BinaryConstraintSet binaryConstraints;
-       
+   
+    /**
+     * Indicates restrictions amongst all variables.
+     */
+    Map<String,GlobalConstraint> globalConstraints;
+            
     /**
      * Default Constructor.
      */
@@ -192,8 +197,34 @@ public class FurnitureVariableSet
     //note: trivial implementation. To be optimized.
     @Override
     protected void preliminarTrimDomains() {
+        
+        //1) remove values which do not fit some unary constraint
         for (int i = 0; i < variableCount; ++i)
-            variables[i].preliminarTrimDomains();
+            variables[i].applyUnaryConstraints();
+        
+        //2) remove pieces of furniture such that there is another piece
+        // smaller and cheaper
+        for (int i = 0; i < variableCount; ++i)
+            variables[i].trimUnfitModels();
+        
+        //3) remove furniture too expensive
+        float minBudget = 0;
+        for (int i = 0; i < variableCount; ++i)
+            minBudget += variables[i].getMinPrice();
+       
+        for (int i = 0; i < variableCount; ++i) {
+            //if a model from this variable is more expensive than maxPrice,
+            //there is no possible assignmentment to variables such that
+            //variables[i] has assigned this model and the maxBudget is not exceeded 
+            float maxPrice = maxBudget - ( minBudget - variables[i].getMinPrice());
+            variables[i].trimTooExpensiveModels(maxPrice);
+        }
+        
+        //4) remove positions such that no model fit there due to walls and
+        //topology elements
+        for (int i = 0; i < variableCount; ++i)
+            variables[i].trimObstructedPositions();
+        
     }
     
     

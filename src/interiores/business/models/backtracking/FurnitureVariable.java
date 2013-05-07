@@ -40,6 +40,12 @@ public class FurnitureVariable
     public int iteration;
     
     /**
+     * Value of the cheapest model
+     */
+    private float minPrice;
+    
+    
+    /**
      * Default Constructor. The resulting variable has as domain the models in
      * "models", every position in room and all orientations.
      * The set of restrictions is "unaryConstraints". Its resolution defaults to 5.
@@ -66,6 +72,8 @@ public class FurnitureVariable
         
         this.unaryConstraints = unaryConstraints;
         
+        //minPrice not calculated yet
+        minPrice = -1;
     }
 
 
@@ -166,7 +174,7 @@ public class FurnitureVariable
         return identifier;
     }	
 
-    void preliminarTrimDomains() {     
+    void applyUnaryConstraints() {     
         Iterator it = unaryConstraints.iterator();
         while (it.hasNext()) {
             UnaryConstraint constraint = (UnaryConstraint) it.next();
@@ -181,6 +189,70 @@ public class FurnitureVariable
     public void resetIterators(int iteration) {
         
         domain.resetIterators(iteration);
+    }
+    
+    /**
+     * Returns the price of the cheapest model.
+     * @return 
+     */
+    // pre: iteration == 0
+    public float getMinPrice() {
+
+        if (minPrice >= 0) {
+            //it is already calculated
+            return minPrice;
+        }
+        else {
+            Iterator<FurnitureModel> it = domain.getModels(0).iterator();
+            if (it.hasNext()) {
+                FurnitureModel model = it.next();
+                minPrice = model.getPrice();
+                while (it.hasNext()) {
+                    model = (FurnitureModel) it.next();
+                    if (model.getPrice() < minPrice) minPrice = model.getPrice();
+                }
+            }
+            else {
+                //there are no models
+                minPrice = 0;
+            }
+            return minPrice;
+        }
+    }
+    
+    
+    /**
+     * Eliminates models from the domain such that exists another model
+     * smaller and cheaper.
+     */
+    //pre: iteration == 0
+    void trimUnfitModels() {
+        Iterator<FurnitureModel> evaluatedModelIterator = domain.getModels(0).iterator();
+        while (evaluatedModelIterator.hasNext()) {
+            FurnitureModel evaluatedModel = evaluatedModelIterator.next();
+            boolean hasBeenRemoved = false;
+            Iterator<FurnitureModel> it = evaluatedModelIterator;
+            while (! hasBeenRemoved && it.hasNext()) {
+                FurnitureModel model = it.next();
+                boolean evaluatedModelIsLessFit = (
+                        evaluatedModel.getPrice() >= model.getPrice() &&
+                        evaluatedModel.getSize().depth >= model.getSize().depth &&
+                        evaluatedModel.getSize().width >= model.getSize().width);
+                if (evaluatedModelIsLessFit) {
+                    evaluatedModelIterator.remove();
+                    hasBeenRemoved = true;
+                }
+            }
+        }
+    }
+    
+    
+    void trimTooExpensiveModels(float maxPrice) {
+        Iterator<FurnitureModel> it = domain.getModels(0).iterator();        
+        while (it.hasNext()) {
+            FurnitureModel model = it.next();
+            if (model.getPrice() > maxPrice) it.remove();
+        }
     }
     
     
@@ -216,5 +288,12 @@ public class FurnitureVariable
 
         return result.toString();
     }
+
+    void trimObstructedPositions() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+
+
     
 }

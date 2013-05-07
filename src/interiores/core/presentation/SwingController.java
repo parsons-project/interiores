@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.swing.SwingUtilities;
 
 /**
  * Represents a Swing graphical user interface presentation controller.
@@ -74,30 +75,37 @@ public class SwingController extends PresentationController
     }
     
     /**
-     * Given a view, one of its methods and some mapped data, calls the method using the mapped data as
-     * parameters using the parameter names from the Event annotation as keys of the map.
-     * Magic code! Be careful!
+     * Given a view, one of its methods and an event, calls the method passing the event as
+     * parameter using the AWT event queue to avoid thread race conditions.
      * @param entry A view-method pair
      * @param data Mapped data
      */
-    private void invokeEvent(Entry<View, Method> entry, Event event) { 
-        try {
-            Method method = entry.getValue();
-            
-            if(method.getParameterTypes().length == 0)
-                method.invoke(entry.getKey());
-            else
-                method.invoke(entry.getKey(), event);
-        }
-        catch(IllegalAccessException e) {
-            if(Debug.isEnabled())
-                e.printStackTrace();
-        }
-        catch(InvocationTargetException e) {
-            if(Debug.isEnabled())
-                e.printStackTrace();
-        }
-        
+    private void invokeEvent(final Entry<View, Method> entry, final Event event) { 
+        Runnable callEvent = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Method method = entry.getValue();
+
+                try {
+                    if(method.getParameterTypes().length == 0)
+                        method.invoke(entry.getKey());
+                    else
+                        method.invoke(entry.getKey(), event);
+                }
+                catch(IllegalAccessException e) {
+                    if(Debug.isEnabled())
+                        e.printStackTrace();
+                }
+                catch(InvocationTargetException e) {
+                    if(Debug.isEnabled())
+                        e.printStackTrace();
+                }
+            }
+        };
+
+        SwingUtilities.invokeLater(callEvent);
     }
     
     @Override

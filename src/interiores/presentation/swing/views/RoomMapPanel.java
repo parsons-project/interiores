@@ -98,7 +98,7 @@ public class RoomMapPanel extends SwingPanel
     public void updateDesign(RoomDesignFinishedEvent event) {
         if (event.hasDesign())
         {
-            map.clear();
+            map.clearFurniture();
             
             map.setStatus("Solution found! :)");
         

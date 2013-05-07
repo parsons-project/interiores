@@ -3,7 +3,6 @@ package interiores.business.models.backtracking;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
-import interiores.business.models.Room;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.core.Debug;
 import interiores.shared.backtracking.Value;

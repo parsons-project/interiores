@@ -10,6 +10,7 @@ import interiores.core.Debug;
 import interiores.core.Event;
 import interiores.core.Observable;
 import interiores.core.Observer;
+import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +41,18 @@ public class FurnitureVariableSetDebugger
     }
     
     @Override
-    protected Value getNextActualDomainValue() {
+    synchronized protected Value getNextActualDomainValue() {
         Value value = super.getNextActualDomainValue();
         
         notify(new NextValueEvent((FurnitureValue) value));
+        
+        try {
+            Debug.println("Pausing solver...");
+            wait();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
         
         return value;
     }
@@ -60,6 +69,15 @@ public class FurnitureVariableSetDebugger
         super.undoAssignToActual();
         
         notify(new ValueUnassignedEvent());
+    }
+    
+    @Override
+    public void backtracking() throws NoSolutionException
+    {
+        super.backtracking();
+        
+        if(depth > 0)
+            notify(new ActualVariableSetEvent(variables[depth-1]));
     }
     
     @Override

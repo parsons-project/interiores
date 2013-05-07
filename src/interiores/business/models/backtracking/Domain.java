@@ -42,6 +42,10 @@ public class Domain {
         
         domain[0] = new Stage(models, roomSize, resolution);
         
+        for (int i = 1; i < variableCount; ++i) {
+            domain[i] = new Stage();
+        }
+        
         
     }
     

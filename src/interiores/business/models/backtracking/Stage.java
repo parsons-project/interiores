@@ -64,6 +64,25 @@ public class Stage {
         
     }
     
+    /**
+     * Default constructor. Empty stage.
+     */
+    public Stage() {
+        this.models = new ArrayList();
+        this.positions = new HashSet<Point>();
+        this.orientations = new ArrayList();
+        
+        //initialize iterators
+        currentPosition = null;
+        currentOrientation = null;
+        currentModel = null;
+        
+        positionIterator = positions.iterator();
+        orientationIterator = orientations.iterator();
+        modelIterator = models.iterator();
+    }
+    
+    
     
     //Pre: we have not iterated through all domain values yet.
     public Value getNextDomainValue() {
@@ -179,6 +198,8 @@ public class Stage {
     }
     
     void addPositions(Collection<Point> newPositions) {
+        int size = positions.size();
+        size += newPositions.size();
         positions.addAll(newPositions);
     }
 
@@ -211,7 +232,7 @@ public class Stage {
         
         // 3) merge
         positions.addAll(stage.positions);
-        stage.positions = null;
+        stage.positions.clear();
         
         //B) process models
         // 1) check if swap is beneficial
@@ -222,12 +243,12 @@ public class Stage {
         
         // 3) merge
         models.addAll(stage.models);
-        stage.models = null;      
+        stage.models.clear();      
         
         //B) process orientations   
         // 1) merge
         orientations.addAll(stage.orientations);
-        stage.orientations = null;
+        stage.orientations.clear();
     }
     
     

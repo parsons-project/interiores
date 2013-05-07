@@ -20,7 +20,7 @@ public class RoomMapDebugger
     private static final Color COLOR_GRID = Color.decode("#EEEEEE");
     private static final String[] COLOR_POINTS = new String[]{
                                                                 "#C3D9FF", // Gmail blue
-                                                                "#FFFF88", // Interactive action yellow
+                                                                "#C79810", // 43 Things Gold
                                                                 "#CDEB8B", // Qoop Mint
                                                                 "#D15600", // Etsy Vermillion
                                                                 "#356AA0", // Digg Blue
@@ -33,6 +33,7 @@ public class RoomMapDebugger
     
     private boolean isGridEnabled;
     private boolean shouldDrawFurniture;
+    private List<String> furnitures;
     private Map<String, List<Point>> points;
     private Map<String, Color> colors;
     private String furnitureActive;
@@ -42,6 +43,7 @@ public class RoomMapDebugger
         
         isGridEnabled = Debug.isEnabled();
         shouldDrawFurniture = true;
+        furnitures = new ArrayList();
         points = new HashMap();
         colors = new HashMap();
     }
@@ -82,6 +84,7 @@ public class RoomMapDebugger
     public void setActive(String name)
     {
         if(! points.containsKey(name)) {
+            furnitures.add(name);
             colors.put(name, Color.decode(COLOR_POINTS[points.size() % COLOR_POINTS.length]));
             points.put(name, new ArrayList());
         }
@@ -92,7 +95,7 @@ public class RoomMapDebugger
     @Override
     protected void drawElements(Graphics2D g)
     {
-        for(String furnitureName : points.keySet()) {
+        for(String furnitureName : furnitures) {
             g.setColor(colors.get(furnitureName));
             
             for(Point p : points.get(furnitureName))

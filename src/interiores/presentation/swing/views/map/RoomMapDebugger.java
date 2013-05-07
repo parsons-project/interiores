@@ -124,6 +124,9 @@ public class RoomMapDebugger
     public void clear()
     {
         super.clearFurniture();
+        
+        furnitures.clear();
         points.clear();
+        colors.clear();
     }
 }

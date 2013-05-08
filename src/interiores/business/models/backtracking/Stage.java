@@ -4,10 +4,12 @@ package interiores.business.models.backtracking;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
+import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -60,7 +62,7 @@ public class Stage {
         
         positionIterator = positions.iterator();
         orientationIterator = orientations.iterator();
-        modelIterator = models.iterator();
+        modelIterator = this.models.iterator();
         
     }
     
@@ -68,9 +70,9 @@ public class Stage {
      * Default constructor. Empty stage.
      */
     public Stage() {
-        this.models = new ArrayList();
-        this.positions = new HashSet<Point>();
-        this.orientations = new ArrayList();
+        models = new ArrayList();
+        positions = new HashSet<Point>();
+        orientations = new ArrayList();
         
         //initialize iterators
         currentPosition = null;
@@ -86,7 +88,6 @@ public class Stage {
     
     //Pre: we have not iterated through all domain values yet.
     public Value getNextDomainValue() {
-        
         //1) iterate
         if (firstValueIteration) {
             firstValueIteration = false;
@@ -128,7 +129,7 @@ public class Stage {
     }    
    
 
-    void resetIterators() {      
+    void resetIterators() {  
         positionIterator = positions.iterator();
         orientationIterator = orientations.iterator();
         modelIterator = models.iterator();
@@ -146,13 +147,8 @@ public class Stage {
     /**
      * Returns a list with all orientations.
      */
-    private ArrayList<Orientation> defaultOrientations() {
-        ArrayList<Orientation> allOrientations = new ArrayList();
-        allOrientations.add(Orientation.N);
-        allOrientations.add(Orientation.E);
-        allOrientations.add(Orientation.S);
-        allOrientations.add(Orientation.W);
-        return allOrientations;
+    private List<Orientation> defaultOrientations() {
+        return new ArrayList(Arrays.asList(Orientation.values()));
     }
 
     List<FurnitureModel> getModels() {
@@ -205,18 +201,30 @@ public class Stage {
         HashSet<Point> aux = this.positions;
         this.positions = stage.positions;
         stage.positions = aux;
+        
+        Iterator it = positionIterator;
+        positionIterator = stage.positionIterator;
+        stage.positionIterator = it;
     }
 
     void swapModels(Stage stage) {
         List<FurnitureModel> aux = this.models;
         this.models = stage.models;
         stage.models = aux;
+        
+        Iterator it = modelIterator;
+        modelIterator = stage.modelIterator;
+        stage.modelIterator = it;
     }
 
     void swapOrientations(Stage stage) {
         List<Orientation> aux = this.orientations;
         this.orientations = stage.orientations;
         stage.orientations = aux;
+        
+        Iterator it = orientationIterator;
+        orientationIterator = stage.orientationIterator;
+        stage.orientationIterator = it;
     }
 
     void merge(Stage stage) {

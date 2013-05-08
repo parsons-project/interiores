@@ -4,6 +4,7 @@ package interiores.business.models.backtracking;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
+import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
@@ -32,7 +33,7 @@ public class Domain {
      * correspondent to the iteration in which they were discarded.
      * Stages beyond the position i are empty.
      */
-    public Stage[] domain;
+    private Stage[] domain;
     
     
     public Domain(List<FurnitureModel> models, Dimension roomSize,
@@ -49,12 +50,14 @@ public class Domain {
         
     }
     
-    //Pre: we have not iterated through all domain values yet.
-    public Value getNextDomainValue(int iteration) {      
-        return domain[iteration].getNextDomainValue();
+    public void resetIterators(int iteration) {
+        domain[iteration].resetIterators();
     }
     
-    
+    //Pre: we have not iterated through all domain values yet.
+    public Value getNextDomainValue(int iteration) {   
+        return domain[iteration].getNextDomainValue();
+    }
     
     public boolean hasMoreValues(int iteration) {
         return domain[iteration].hasMoreValues();
@@ -89,14 +92,6 @@ public class Domain {
     void undoTrimDomain(int iteration) {
 
         domain[iteration].merge(domain[iteration+1]);
-    }
-    
- 
-
-    
-    
-    public void resetIterators(int iteration) {
-        domain[iteration].resetIterators();
     }
     
     public List<FurnitureModel> getModels(int iteration) {

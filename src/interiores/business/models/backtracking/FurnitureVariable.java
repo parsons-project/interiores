@@ -3,6 +3,7 @@ package interiores.business.models.backtracking;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
@@ -20,7 +21,7 @@ public class FurnitureVariable
     /**
      * The domain of the variable.
      */
-    Domain domain;
+    private Domain domain;
     
     /**
      * This list contains the constraints regarding the variable.
@@ -32,7 +33,7 @@ public class FurnitureVariable
     * Only valid when isAssigned is true.
     */
     public Value assignedValue;
-    boolean isAssigned;
+    private boolean isAssigned;
     
     /**
     * Represents the iteration of the algorithm.
@@ -56,7 +57,7 @@ public class FurnitureVariable
         
         this(id, models, roomSize, unaryConstraints, variableCount, 5);
     }
-       
+    
     
     public FurnitureVariable(String id, List<FurnitureModel> models,
             Dimension roomSize, Collection<UnaryConstraint> unaryConstraints,
@@ -76,13 +77,21 @@ public class FurnitureVariable
         minPrice = -1;
     }
 
-
+    
+    
+    /**
+     * Resets the iterators so that they will iterate through all of the
+     * variables' domain, for the iteration "iteration" of the algorithm.
+     */
+    public void resetIterators(int iteration) {
+        domain.resetIterators(iteration);
+    }
+    
     //Pre: we have not iterated through all domain values yet.
     @Override
-    public Value getNextDomainValue() {      
+    public Value getNextDomainValue() {
         return domain.getNextDomainValue(iteration);
-    }
-
+    }  
     
     //Pre: the 3 iterators point to valid values
     @Override
@@ -125,8 +134,9 @@ public class FurnitureVariable
     @Override
     public void trimDomain(Variable variable, int iteration) {
         // 0) update internal iteration
-        this.iteration = iteration;
-       
+        this.iteration = iteration + 1;
+        
+        // Prepare next iteration
         // 1) preliminar move of all positions
         domain.saveAllPositions(iteration);
                
@@ -181,15 +191,6 @@ public class FurnitureVariable
             constraint.eliminateInvalidValues(domain);
         }
     }	
-
-    /**
-     * Resets the iterators so that they will iterate through all of the
-     * variables' domain, for the iteration "iteration" of the algorithm.
-     */
-    public void resetIterators(int iteration) {
-        
-        domain.resetIterators(iteration);
-    }
     
     /**
      * Returns the price of the cheapest model.

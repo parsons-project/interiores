@@ -5,6 +5,7 @@ import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
 import interiores.business.models.WishList;
 import interiores.business.models.constraints.BinaryConstraintSet;
+import interiores.business.models.constraints.GlobalConstraint;
 import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
@@ -62,7 +63,7 @@ public class FurnitureVariableSet
     /**
      * Indicates restrictions amongst all variables.
      */
-    Map<String,GlobalConstraint> globalConstraints;
+    Map<String, GlobalConstraint> globalConstraints;
             
     /**
      * Default Constructor.
@@ -207,8 +208,9 @@ public class FurnitureVariableSet
         for (int i = 0; i < variableCount; ++i)
             variables[i].trimUnfitModels();
         
+        // @TODO Refactorize
         //3) remove furniture too expensive
-        float minBudget = 0;
+        /*float minBudget = 0;
         for (int i = 0; i < variableCount; ++i)
             minBudget += variables[i].getMinPrice();
        
@@ -223,7 +225,7 @@ public class FurnitureVariableSet
         //4) remove positions such that no model fit there due to walls and
         //topology elements
         for (int i = 0; i < variableCount; ++i)
-            variables[i].trimObstructedPositions();
+            variables[i].trimObstructedPositions();*/
         
     }
     

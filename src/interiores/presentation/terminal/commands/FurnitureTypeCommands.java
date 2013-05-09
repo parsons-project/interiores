@@ -54,9 +54,7 @@ public class FurnitureTypeCommands
     @Command("Remove a furniture type from the list of wanted furniture")
     public void unselect()
             throws NoRoomCreatedException, BusinessException, ElementNotFoundException
-    {
-        selected();
-        
+    {        
         String name = readString("Please, enter the name of the furniture type you want to unselect");
         fTypeController.unselect(name);
     }

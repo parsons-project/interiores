@@ -4,6 +4,7 @@ import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.ForbiddenFurniture;
+import interiores.business.exceptions.MandatoryFurniture;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.RoomType;
@@ -77,6 +78,10 @@ public class FurnitureTypeController
     public void unselect(String name)
             throws BusinessException
     {
+        RoomType rt = getRoom().getType();
+        if ( rt.isMandatory(get(name.replaceAll("\\d*$",""))) ) // replaceAll(...) removes the trailing numbers
+            throw new MandatoryFurniture(name,rt.getName());
+        
         getWishList().removeWantedFurniture(name);
     }
     

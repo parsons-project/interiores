@@ -26,7 +26,7 @@ public class FurnitureVariable
     /**
      * This list contains the constraints regarding the variable.
      */
-    public Collection<UnaryConstraint> unaryConstraints;
+    private Collection<UnaryConstraint> unaryConstraints;
 
     /**
     * Represents the value taken by the variable, in case it is assigned.
@@ -182,15 +182,15 @@ public class FurnitureVariable
 
     public String getID() {
         return identifier;
-    }	
-
-    void applyUnaryConstraints() {     
-        Iterator it = unaryConstraints.iterator();
-        while (it.hasNext()) {
-            UnaryConstraint constraint = (UnaryConstraint) it.next();
-            constraint.eliminateInvalidValues(domain);
-        }
-    }	
+    }
+    
+    public Domain getDomain() {
+        return domain;
+    }
+    
+    public Collection<UnaryConstraint> getUnaryConstraints() {
+        return unaryConstraints;
+    }
     
     /**
      * Returns the price of the cheapest model.
@@ -220,33 +220,6 @@ public class FurnitureVariable
             return minPrice;
         }
     }
-    
-    
-    /**
-     * Eliminates models from the domain such that exists another model
-     * smaller and cheaper.
-     */
-    //pre: iteration == 0
-    void trimUnfitModels() {
-        Iterator<FurnitureModel> evaluatedModelIterator = domain.getModels(0).iterator();
-        while (evaluatedModelIterator.hasNext()) {
-            FurnitureModel evaluatedModel = evaluatedModelIterator.next();
-            boolean hasBeenRemoved = false;
-            Iterator<FurnitureModel> it = evaluatedModelIterator;
-            while (! hasBeenRemoved && it.hasNext()) {
-                FurnitureModel model = it.next();
-                boolean evaluatedModelIsLessFit = (
-                        evaluatedModel.getPrice() >= model.getPrice() &&
-                        evaluatedModel.getSize().depth >= model.getSize().depth &&
-                        evaluatedModel.getSize().width >= model.getSize().width);
-                if (evaluatedModelIsLessFit) {
-                    evaluatedModelIterator.remove();
-                    hasBeenRemoved = true;
-                }
-            }
-        }
-    }
-    
     
     void trimTooExpensiveModels(float maxPrice) {
         Iterator<FurnitureModel> it = domain.getModels(0).iterator();        

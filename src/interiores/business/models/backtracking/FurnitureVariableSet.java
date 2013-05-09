@@ -1,5 +1,6 @@
 package interiores.business.models.backtracking;
 
+import interiores.business.models.backtracking.trimmers.PreliminarTrimmer;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
@@ -11,7 +12,9 @@ import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
 import interiores.utils.BinaryConstraintAssociation;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FurnitureVariableSet
@@ -64,6 +67,8 @@ public class FurnitureVariableSet
      * Indicates restrictions amongst all variables.
      */
     Map<String, GlobalConstraint> globalConstraints;
+    
+    private List<PreliminarTrimmer> preliminarTrimmers;
             
     /**
      * Default Constructor.
@@ -93,6 +98,8 @@ public class FurnitureVariableSet
            binaryConstraints.addConstraint(getVariable(bca.furniture1),
                    getVariable(bca.furniture2), bca.constraint);
        }
+       
+       preliminarTrimmers = new ArrayList();
         
        allAssigned = false;
        actual = null;
@@ -195,18 +202,15 @@ public class FurnitureVariableSet
     }
     
     
+    public void addPreliminarTrimmer(PreliminarTrimmer preliminarTrimmer) {
+        preliminarTrimmers.add(preliminarTrimmer);
+    }
+    
     //note: trivial implementation. To be optimized.
     @Override
     protected void preliminarTrimDomains() {
-        
-        //1) remove values which do not fit some unary constraint
-        for (int i = 0; i < variableCount; ++i)
-            variables[i].applyUnaryConstraints();
-        
-        //2) remove pieces of furniture such that there is another piece
-        // smaller and cheaper
-        for (int i = 0; i < variableCount; ++i)
-            variables[i].trimUnfitModels();
+        for(PreliminarTrimmer preliminarTrimmer : preliminarTrimmers)
+            preliminarTrimmer.trim(variables);
         
         // @TODO Refactorize
         //3) remove furniture too expensive

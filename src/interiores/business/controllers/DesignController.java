@@ -9,6 +9,8 @@ import interiores.business.models.Room;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
+import interiores.business.models.backtracking.trimmers.preliminar.UnaryConstraintsPreliminarTrimmer;
+import interiores.business.models.backtracking.trimmers.preliminar.UnfitModelsPreliminarTrimmer;
 import interiores.core.Debug;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
@@ -67,6 +69,9 @@ public class DesignController
     
     private void computeSolution(FurnitureVariableSet furVarSet)
     {
+        furVarSet.addPreliminarTrimmer(new UnaryConstraintsPreliminarTrimmer());
+        furVarSet.addPreliminarTrimmer(new UnfitModelsPreliminarTrimmer());
+        
         RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
         
         // And try to solve it

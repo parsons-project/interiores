@@ -101,6 +101,8 @@ public class Application
      */
     public void addBusiness(String name, BusinessController controller)
     {
+        data.set(name + "Controller", controller);
+        
         for(PresentationController presentation : presentations)
             presentation.addBusinessController(name, controller);
     }

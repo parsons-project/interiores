@@ -9,6 +9,7 @@ import interiores.business.models.FurnitureType;
 import interiores.business.models.RoomType;
 import interiores.business.models.WantedFurniture;
 import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Range;

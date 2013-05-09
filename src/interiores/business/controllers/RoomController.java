@@ -9,8 +9,10 @@ import interiores.business.models.Room;
 import interiores.business.models.RoomType;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
+import java.util.Collection;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -48,6 +50,11 @@ public class RoomController
         WishList wishList = new WishList();
         setWishList(wishList);
         
+        // Add all the mandatory types of the selected room to the wishlist
+        Debug.println("Adding the following types by default (mandatory): " + type.getMandatory().toString());
+        for (String name : type.getMandatory())
+            getFurnitureTypeController().select(name);
+        
         notify(new RoomCreatedEvent(room));
     }
     
@@ -74,5 +81,9 @@ public class RoomController
         setRoom(room);
         
         notify(new RoomLoadedEvent(room));
+    }
+
+    private FurnitureTypeController getFurnitureTypeController() {
+        return (FurnitureTypeController) data.get("furnitureTypeController");
     }
 }

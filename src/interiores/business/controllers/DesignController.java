@@ -69,6 +69,7 @@ public class DesignController
     
     private void computeSolution(FurnitureVariableSet furVarSet)
     {
+        // @TODO Refactorize. Create a FurnitureVariableSetFactory
         furVarSet.addPreliminarTrimmer(new UnaryConstraintsPreliminarTrimmer());
         furVarSet.addPreliminarTrimmer(new UnfitModelsPreliminarTrimmer());
         

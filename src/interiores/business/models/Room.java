@@ -1,11 +1,15 @@
 package interiores.business.models;
 
+import interiores.business.exceptions.ForbiddenFurniture;
+import interiores.business.exceptions.MandatoryFurniture;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -25,6 +29,9 @@ public class Room
     
     @XmlAttribute
     private Dimension size;
+    
+    @XmlElement
+    private WishList wishList;
     
     public Room() {
         
@@ -50,6 +57,7 @@ public class Room
         
         this.type = type;
         this.size = size;
+        wishList = new WishList();
     }
     
     /**
@@ -89,17 +97,26 @@ public class Room
         return size.depth;
     }
     
-    /**
-     * Converts the characteristics of the room into a map
-     * @return A Map containing the features that define the room
-     */
-    public Map<String, Object> toMap() {
-        Map<String, Object> map = new HashMap();
+    public WishList getWishList() {
+        return wishList;
+    }
+    
+    public void addWantedFurniture(FurnitureType ft) throws ForbiddenFurniture {
+        if(type.isForbidden(ft))
+            throw new ForbiddenFurniture(ft.getName(), type.getName());
         
-        map.put("type", type.getName());
-        map.put("width", (int) size.width);
-        map.put("depth", (int) size.depth);
+        WantedFurniture wantedFurniture = new WantedFurniture(ft);
+        wishList.addWantedFurniture(wantedFurniture);
+    }
+    
+    public void removeWantedFurniture(String name) throws MandatoryFurniture {
+        String fTypeName = wishList.getWantedFurniture(name).getTypeName();
         
-        return map;
+        if (type.isMandatory(fTypeName) && WishList.isFirstSelection(fTypeName, name))
+            throw new MandatoryFurniture(name, type.getName());
+    }
+    
+    public Collection<String> getFurnitureNames() {
+        return wishList.getFurnitureNames();
     }
 }

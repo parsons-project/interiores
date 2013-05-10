@@ -33,6 +33,10 @@ public class WishList {
      */
     private Map<String, BinaryConstraintAssociation> binaryConstraints;
     
+    public static boolean isFirstSelection(String typeName, String wantedFurnitureId) {
+        return wantedFurnitureId.equals(typeName + "1");
+    }
+    
     /**
      * Default constructor.
      */
@@ -45,10 +49,10 @@ public class WishList {
      * Add a new WantedFurniture 
      * @param f the WantedFurniture to add
      */
-    public void addWantedFurniture(WantedFurniture f) {
+    public void addWantedFurniture(WantedFurniture wf) {
         int i = 1;
-        while (furniture.containsKey(f.getTypeName() + i)) i++;
-        furniture.put(f.getTypeName() + i, f);
+        while (furniture.containsKey(wf.getTypeName() + i)) i++;
+        furniture.put(wf.getTypeName() + i, wf);
     }
     
     /**

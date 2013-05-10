@@ -26,8 +26,8 @@ public class FurnitureVariableSetDebugger
     private boolean shouldStop;
     private List<Observer> debuggers;
     
-    public FurnitureVariableSetDebugger(Room room, WishList wishList) {
-        super(room, wishList);
+    public FurnitureVariableSetDebugger(Room room) {
+        super(room);
         
         shouldStop = false;
         debuggers = new ArrayList();

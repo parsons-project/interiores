@@ -9,6 +9,7 @@ import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.RoomType;
 import interiores.business.models.WantedFurniture;
+import interiores.business.models.WishList;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
@@ -62,12 +63,7 @@ public class FurnitureTypeController
             throws ElementNotFoundBusinessException, NoRoomCreatedException, ForbiddenFurniture
     {
         FurnitureType ft = get(name);
-        RoomType rt = getRoom().getType();
-        if ( rt.isForbidden(ft) )
-            throw new ForbiddenFurniture(name,rt.getName());
-        
-        WantedFurniture wf = new WantedFurniture(ft);
-        getWishList().addWantedFurniture(wf);
+        getRoom().addWantedFurniture(ft);
     }
     
     /**
@@ -78,11 +74,7 @@ public class FurnitureTypeController
     public void unselect(String name)
             throws BusinessException
     {
-        RoomType rt = getRoom().getType();
-        if ( rt.isMandatory(get(name.replaceAll("\\d*$",""))) ) // replaceAll(...) removes the trailing numbers
-            throw new MandatoryFurniture(name,rt.getName());
-        
-        getWishList().removeWantedFurniture(name);
+        getRoom().removeWantedFurniture(name);
     }
     
     /**
@@ -93,7 +85,7 @@ public class FurnitureTypeController
     public Collection getRoomFurniture()
             throws NoRoomCreatedException
     {
-        return getWishList().getFurnitureNames();
+        return getRoom().getFurnitureNames();
     }
 
     /**

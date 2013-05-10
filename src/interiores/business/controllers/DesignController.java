@@ -6,10 +6,8 @@ import interiores.business.events.room.RoomDesignFinishedEvent;
 import interiores.business.events.room.RoomDesignStartedEvent;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Room;
-import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
-import interiores.core.Debug;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
@@ -44,10 +42,9 @@ public class DesignController
     public void solve()
             throws NoRoomCreatedException
     {
-        WishList wishList = getWishList();
         Room room = getRoom();
         
-        FurnitureVariableSet furVarSet = new FurnitureVariableSet(room, wishList);
+        FurnitureVariableSet furVarSet = new FurnitureVariableSet(room);
         
         computeSolution(furVarSet);
     }
@@ -55,10 +52,9 @@ public class DesignController
     public void debug()
             throws NoRoomCreatedException
     {     
-        WishList wishList = getWishList();
         Room room = getRoom();
         
-        furVarSetDebug = new FurnitureVariableSetDebugger(room, wishList);
+        furVarSetDebug = new FurnitureVariableSetDebugger(room);
         furVarSetDebug.addListener(this);
         
         notify(new DebugRoomDesignStartedEvent());

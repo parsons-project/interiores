@@ -68,9 +68,10 @@ public class FurnitureVariableSet
     /**
      * Default Constructor.
      */
-    public FurnitureVariableSet(Room room, WishList wishList)
+    public FurnitureVariableSet(Room room)
     {
         roomArea = new OrientedRectangle(new Point(0, 0), room.getDimension(), Orientation.S);
+        WishList wishList = room.getWishList();
         
         variableCount = wishList.getSize();
         variables = new FurnitureVariable[variableCount];

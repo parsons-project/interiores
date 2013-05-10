@@ -5,6 +5,7 @@ import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomLoadedEvent;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
+import interiores.business.models.FurnitureType;
 import interiores.business.models.Room;
 import interiores.business.models.RoomType;
 import interiores.business.models.WishList;
@@ -44,16 +45,7 @@ public class RoomController
     {
         RoomType type = get(typeName);
         Room room = new Room(type, width, depth);
-
         setRoom(room);
-        
-        WishList wishList = new WishList();
-        setWishList(wishList);
-        
-        // Add all the mandatory types of the selected room to the wishlist
-        Debug.println("Adding the following types by default (mandatory): " + type.getMandatory().toString());
-        for (String name : type.getMandatory())
-            getFurnitureTypeController().select(name);
         
         notify(new RoomCreatedEvent(room));
     }
@@ -81,9 +73,5 @@ public class RoomController
         setRoom(room);
         
         notify(new RoomLoadedEvent(room));
-    }
-
-    private FurnitureTypeController getFurnitureTypeController() {
-        return (FurnitureTypeController) data.get("furnitureTypeController");
     }
 }

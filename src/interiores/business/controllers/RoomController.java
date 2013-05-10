@@ -5,15 +5,12 @@ import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomLoadedEvent;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.models.FurnitureType;
 import interiores.business.models.Room;
 import interiores.business.models.RoomType;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.AvailableCatalog;
-import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
-import java.util.Collection;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -45,7 +42,9 @@ public class RoomController
     {
         RoomType type = get(typeName);
         Room room = new Room(type, width, depth);
-        setRoom(room);
+        WishList wishList = new WishList(room);
+        
+        setWishList(wishList);
         
         notify(new RoomCreatedEvent(room));
     }
@@ -68,10 +67,10 @@ public class RoomController
      */
     public void load(String path) throws JAXBException
     {
-        Room room = (Room) data.load(Room.class, path);
+        WishList wishList = (WishList) data.load(WishList.class, path);
         
-        setRoom(room);
+        setWishList(wishList);
         
-        notify(new RoomLoadedEvent(room));
+        notify(new RoomLoadedEvent(wishList.getRoom()));
     }
 }

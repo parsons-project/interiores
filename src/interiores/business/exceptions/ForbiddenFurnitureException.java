@@ -11,10 +11,10 @@ import interiores.core.business.BusinessException;
  * pertains to the forbidden list of a room type, and thus cannot be placed in that room.
  * @author larribas
  */
-public class ForbiddenFurniture 
+public class ForbiddenFurnitureException 
     extends BusinessException {
     
-    public ForbiddenFurniture(String fname, String rtype) {
+    public ForbiddenFurnitureException(String fname, String rtype) {
         super(fname + " cannot belong to a " + rtype + ".");
     }
     

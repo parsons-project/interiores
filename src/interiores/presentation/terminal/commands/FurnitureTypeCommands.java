@@ -5,7 +5,7 @@ import horarios.shared.ElementNotFoundException;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
-import interiores.business.exceptions.ForbiddenFurniture;
+import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.annotation.Command;
@@ -43,7 +43,7 @@ public class FurnitureTypeCommands
     
     @Command("Select a furniture type you want for your room")
     public void select()
-            throws ElementNotFoundBusinessException, NoRoomCreatedException, ElementNotFoundException, ForbiddenFurniture
+            throws ElementNotFoundBusinessException, NoRoomCreatedException, ElementNotFoundException, ForbiddenFurnitureException
     {
         Collection<String> names = readStrings("Enter the name of the furniture types you want to select");
         

@@ -6,32 +6,44 @@ package interiores.business.models;
 
 import interiores.business.models.constraints.UnaryConstraint;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.TreeMap;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElementWrapper;
 
 /**
  * This class represents a furniture that the user wants to add to the room
  * @author larribas
  */
-public class WantedFurniture {
+public class WantedFurniture
+{
+    @XmlAttribute
+    private String name;
     
-    /*
-     * The type of the furniture
-     */
-    private FurnitureType type;
+    @XmlAttribute
+    private String furnitureTypeName;
     
     /*
      * The unary constraints related to this furniture
      */
-    private Map<String, UnaryConstraint> constraints;
+    @XmlElementWrapper
+    private TreeMap<String, UnaryConstraint> constraints;
     
     /**
      * Simple creator. Creates a wanted furniture given its type
      * @param ft The funiture type of this wanted furniture
      */
-    public WantedFurniture(FurnitureType ft) {
-        type = ft;
-        constraints = new HashMap();
+    public WantedFurniture(String name, String furnitureTypeName) {
+        this.name = name;
+        this.furnitureTypeName = furnitureTypeName;
+        constraints = new TreeMap();
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public String getTypeName() {
+        return furnitureTypeName;
     }
     
     /**
@@ -39,7 +51,7 @@ public class WantedFurniture {
      * @param type The type of the constraint
      * @param constr The unary constraint itself
      */
-    public void addConstraint(String type, UnaryConstraint constr) {
+    public void addUnaryConstraint(String type, UnaryConstraint constr) {
         constraints.put(type, constr);
     }
     
@@ -47,7 +59,7 @@ public class WantedFurniture {
      * Removes a unary constraint to the given wanted furniture
      * @param type The type of the constraint
      */
-    public void removeConstraint(String type) {
+    public void removeUnaryConstraint(String type) {
         constraints.remove(type);
     }
     
@@ -56,7 +68,7 @@ public class WantedFurniture {
      * @param ctype
      * @return the constraint of the given type
      */
-    public UnaryConstraint getConstraint(String ctype) {
+    public UnaryConstraint getUnaryConstraint(String ctype) {
         return constraints.get(ctype);
     }
     
@@ -64,24 +76,7 @@ public class WantedFurniture {
      * Returns all the unary constraints applied to the wanted piece of furniture.
      * @return the set of unary constraints
      */
-    public Collection getConstraints() {
+    public Collection getUnaryConstraints() {
         return constraints.values();
-    }
-    
-    /**
-     * Returns the type of the wanted piece of furniture.
-     * @return the type of the WantedFurniture
-     */
-    public FurnitureType getType() {
-        return type;
-    }
-    
-    /**
-     * Returns the name of the type of the wanted piece of furniture.
-     * @return the name of the type of the WantedFurniture
-     */
-    public String getTypeName() {
-        return type.getName();
-    }
-    
+    } 
 }

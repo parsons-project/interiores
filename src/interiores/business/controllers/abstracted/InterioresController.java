@@ -15,7 +15,7 @@ import interiores.core.data.JAXBDataController;
 public class InterioresController
     extends BusinessController
 {
-    protected static final String KEY_ROOM = "room";
+    protected static final String KEY_WISH_LIST = "wishList";
     
     public InterioresController(JAXBDataController data) {
         super(data);
@@ -24,24 +24,24 @@ public class InterioresController
     protected Room getRoom()
             throws NoRoomCreatedException
     {
-        if(! data.has(KEY_ROOM))
-            throw new NoRoomCreatedException();
-        
-        return (Room) data.get(KEY_ROOM);
-    }
-    
-    protected void setRoom(Room room) {
-        data.set(KEY_ROOM, room);
+        return getWishList().getRoom();
     }
     
     protected WishList getWishList() throws NoRoomCreatedException {
-        return getRoom().getWishList();
+        if(! data.has(KEY_WISH_LIST))
+            throw new NoRoomCreatedException();
+        
+        return (WishList) data.get(KEY_WISH_LIST);
+    }
+    
+    protected void setWishList(WishList wishList) {
+        data.set(KEY_WISH_LIST, wishList);
     }
     
     protected NamedCatalog getCatalog(AvailableCatalog catalog) {
         return (NamedCatalog) data.get(getCatalogKeyData(catalog));
     }
-       
+    
     protected String getCatalogKeyData(AvailableCatalog catalog) {
         return catalog.toString() + "Catalog";
     }

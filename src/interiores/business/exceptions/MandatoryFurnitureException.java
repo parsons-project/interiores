@@ -12,11 +12,11 @@ import interiores.core.business.BusinessException;
  * be removed from that room.
  * @author larribas
  */
-public class MandatoryFurniture
+public class MandatoryFurnitureException
     extends BusinessException {
     
-    public MandatoryFurniture(String fname, String rtype) {
-        super(fname + " is a mandatory furniture for " + rtype + ", and thus it cannot be unselected.");
+    public MandatoryFurnitureException(String fname, String rtype) {
+        super("A " + rtype + " must have at least one " + fname);
     }
     
 }

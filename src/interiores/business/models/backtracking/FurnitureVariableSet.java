@@ -1,15 +1,19 @@
 package interiores.business.models.backtracking;
 
+import interiores.business.exceptions.ElementNotFoundBusinessException;
+import interiores.business.models.FurnitureType;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
-import interiores.business.models.Room;
+import interiores.business.models.WantedFurniture;
 import interiores.business.models.WishList;
+import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.constraints.BinaryConstraintSet;
 import interiores.business.models.constraints.GlobalConstraint;
 import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
 import interiores.utils.BinaryConstraintAssociation;
+import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,18 +72,22 @@ public class FurnitureVariableSet
     /**
      * Default Constructor.
      */
-    public FurnitureVariableSet(Room room)
+    public FurnitureVariableSet(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog)
+            throws ElementNotFoundBusinessException
     {
-        roomArea = new OrientedRectangle(new Point(0, 0), room.getDimension(), Orientation.S);
-        WishList wishList = room.getWishList();
+        Dimension roomDimension = wishList.getRoom().getDimension();
+        roomArea = new OrientedRectangle(new Point(0, 0), roomDimension, Orientation.S);
         
         variableCount = wishList.getSize();
         variables = new FurnitureVariable[variableCount];
         
         int i = 0;
-        for(String variableName : wishList.getFurnitureNames()) {
-            variables[i] = new FurnitureVariable(variableName, wishList.getFurnitureModels(variableName),
-                    room.getDimension(), wishList.getUnaryConstraints(variableName), variableCount);
+        for(WantedFurniture wantedFurniture : wishList.getWantedFurniture()) {
+            String variableName = wantedFurniture.getName();
+            FurnitureType furnitureType = furnitureCatalog.get(wantedFurniture.getTypeName());
+            
+            variables[i] = new FurnitureVariable(variableName, furnitureType.getFurnitureModels(),
+                    roomDimension, wantedFurniture.getUnaryConstraints(), variableCount);
             ++i;
         }
 

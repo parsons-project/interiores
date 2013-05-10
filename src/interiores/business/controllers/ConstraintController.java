@@ -68,10 +68,10 @@ public class ConstraintController
     {
         if (type.equals("width") || type.equals("depth")) {
             // We get the SizeConstraint of that furniture. If there isn't one, we create it
-            if (getWantedFurniture(furnitureID).getConstraint("size")==null)
-                getWantedFurniture(furnitureID).addConstraint("size", new SizeConstraint());
+            if (getWantedFurniture(furnitureID).getUnaryConstraint("size")==null)
+                getWantedFurniture(furnitureID).addUnaryConstraint("size", new SizeConstraint());
             
-            SizeConstraint sc = (SizeConstraint) getWantedFurniture(furnitureID).getConstraint("size");
+            SizeConstraint sc = (SizeConstraint) getWantedFurniture(furnitureID).getUnaryConstraint("size");
             int min = (Integer) parameters.get(0);
             int max = (Integer) parameters.get(1);
             
@@ -113,7 +113,7 @@ public class ConstraintController
                 }
             }
 
-            getWantedFurniture(furnitureID).addConstraint(type, uc);
+            getWantedFurniture(furnitureID).addUnaryConstraint(type, uc);
         }
         
     }
@@ -153,7 +153,7 @@ public class ConstraintController
     public void remove(String ctype, String furnitureID)
             throws NoRoomCreatedException
     {
-        getWantedFurniture(furnitureID).removeConstraint(ctype);
+        getWantedFurniture(furnitureID).removeUnaryConstraint(ctype);
     }
     
     /**

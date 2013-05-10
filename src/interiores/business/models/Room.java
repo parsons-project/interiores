@@ -1,15 +1,10 @@
 package interiores.business.models;
 
-import interiores.business.exceptions.ForbiddenFurniture;
-import interiores.business.exceptions.MandatoryFurniture;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -29,9 +24,6 @@ public class Room
     
     @XmlAttribute
     private Dimension size;
-    
-    @XmlElement
-    private WishList wishList;
     
     public Room() {
         
@@ -57,7 +49,6 @@ public class Room
         
         this.type = type;
         this.size = size;
-        wishList = new WishList();
     }
     
     /**
@@ -81,6 +72,26 @@ public class Room
         return type;
     }
     
+    public String getTypeName() {
+        return type.getName();
+    }
+    
+    public Collection<String> getMandatoryFurniture() {
+        return type.getMandatory();
+    }
+    
+    public Collection<String> getForbiddenFurniture() {
+        return type.getForbidden();
+    }
+    
+    public boolean isMandatory(String typeName) {
+        return type.isMandatory(typeName);
+    }
+    
+    public boolean isForbidden(String typeName) {
+        return type.isForbidden(typeName);
+    }
+    
     /**
      * Gets the dimension or size of the room
      * @return Dimension object representing the size of this room
@@ -95,28 +106,5 @@ public class Room
     
     public int getDepth() {
         return size.depth;
-    }
-    
-    public WishList getWishList() {
-        return wishList;
-    }
-    
-    public void addWantedFurniture(FurnitureType ft) throws ForbiddenFurniture {
-        if(type.isForbidden(ft))
-            throw new ForbiddenFurniture(ft.getName(), type.getName());
-        
-        WantedFurniture wantedFurniture = new WantedFurniture(ft);
-        wishList.addWantedFurniture(wantedFurniture);
-    }
-    
-    public void removeWantedFurniture(String name) throws MandatoryFurniture {
-        String fTypeName = wishList.getWantedFurniture(name).getTypeName();
-        
-        if (type.isMandatory(fTypeName) && WishList.isFirstSelection(fTypeName, name))
-            throw new MandatoryFurniture(name, type.getName());
-    }
-    
-    public Collection<String> getFurnitureNames() {
-        return wishList.getFurnitureNames();
     }
 }

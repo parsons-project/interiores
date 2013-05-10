@@ -3,15 +3,10 @@ package interiores.business.controllers;
 import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
-import interiores.business.exceptions.ForbiddenFurniture;
-import interiores.business.exceptions.MandatoryFurniture;
+import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.FurnitureType;
-import interiores.business.models.RoomType;
-import interiores.business.models.WantedFurniture;
-import interiores.business.models.WishList;
 import interiores.business.models.catalogs.AvailableCatalog;
-import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Range;
@@ -60,10 +55,9 @@ public class FurnitureTypeController
      * @throws NoRoomCreatedException 
      */
     public void select(String name)
-            throws ElementNotFoundBusinessException, NoRoomCreatedException, ForbiddenFurniture
+            throws ElementNotFoundBusinessException, NoRoomCreatedException, ForbiddenFurnitureException
     {
-        FurnitureType ft = get(name);
-        getRoom().addWantedFurniture(ft);
+        getWishList().addWantedFurniture(name);
     }
     
     /**
@@ -74,7 +68,7 @@ public class FurnitureTypeController
     public void unselect(String name)
             throws BusinessException
     {
-        getRoom().removeWantedFurniture(name);
+        getWishList().removeWantedFurniture(name);
     }
     
     /**
@@ -85,7 +79,7 @@ public class FurnitureTypeController
     public Collection getRoomFurniture()
             throws NoRoomCreatedException
     {
-        return getRoom().getFurnitureNames();
+        return getWishList().getFurnitureNames();
     }
 
     /**

@@ -1,4 +1,3 @@
-
 package interiores.business.models;
 
 import interiores.business.exceptions.ForbiddenFurnitureException;
@@ -26,7 +25,7 @@ public class WishList
     private TreeMap<String, WantedFurniture> furniture;
     
     @XmlElementWrapper
-    private TreeMap<String, Integer> furnitureCount;
+    private TreeMap<String, Integer> mandatoryCount;
     
     @XmlElementWrapper
     private TreeMap<String, BinaryConstraintAssociation> binaryConstraints;
@@ -38,11 +37,13 @@ public class WishList
         this.room = room;
         
         furniture = new TreeMap();
-        furnitureCount = new TreeMap();
+        mandatoryCount = new TreeMap();
         binaryConstraints = new TreeMap();
         
-        for(String mandatoryType : room.getMandatoryFurniture())
+        for(String mandatoryType : room.getMandatoryFurniture()) {
+            mandatoryCount.put(mandatoryType, 1);
             add(mandatoryType);
+        }
     }
     
     public Room getRoom() {
@@ -59,16 +60,15 @@ public class WishList
         if(room.isForbidden(typeName))
             throw new ForbiddenFurnitureException(typeName, room.getTypeName());
         
+        if(room.isMandatory(typeName))
+            mandatoryCount.put(typeName, mandatoryCount.get(typeName) + 1);
+        
         add(typeName);
     }
     
     private void add(String typeName) {
-        if(! furnitureCount.containsKey(typeName))
-            furnitureCount.put(typeName, 0);
-        
         String wantedFurnitureId = nextIdFor(typeName);
         furniture.put(wantedFurnitureId, new WantedFurniture(wantedFurnitureId, typeName));
-        furnitureCount.put(typeName, furnitureCount.get(typeName) + 1);
     }
     
     private String nextIdFor(String typeName) {
@@ -88,12 +88,16 @@ public class WishList
             return;
         
         String typeName = furniture.get(wantedFurnitureId).getTypeName();
-        int typeCount = furnitureCount.get(typeName);
         
-        if(typeCount <= 1)
-            throw new MandatoryFurnitureException(typeName, room.getTypeName());
+        if(room.isMandatory(typeName)) {
+            int typeCount = mandatoryCount.get(typeName);
         
-        furnitureCount.put(typeName, typeCount - 1);
+            if(typeCount <= 1)
+                throw new MandatoryFurnitureException(typeName, room.getTypeName());
+        
+            mandatoryCount.put(typeName, typeCount - 1);
+        }
+        
         furniture.remove(wantedFurnitureId);
     }
     

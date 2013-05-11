@@ -2,6 +2,7 @@ package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.OrientedRectangle;
+import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -41,6 +42,8 @@ public class FurnitureValue extends Value {
                                     area.y - passiveOffsets[0],
                                     area.width + passiveOffsets[3] + passiveOffsets[1],
                                     area.height + passiveOffsets[0] + passiveOffsets[2]);
+        
+        Debug.println("r.x = " + r.x + ", r.y = " + r.y + ", r.width = " + r.width + ", r.height = " + r.height);
         return r;
     }
     

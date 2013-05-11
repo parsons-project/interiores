@@ -171,7 +171,8 @@ public class FurnitureVariableSet
         FurnitureValue actual_fv = (FurnitureValue) value;
         // A little explanation: fv.getArea() gets the ACTIVE area of actual_fv
         // while fv.getWholeArea() gets the PASSIVE + ACTIVE area of actual_fv
-        
+        Debug.println(roomArea.toString());
+        Debug.println(actual_fv.getWholeArea().toString());
         if (! roomArea.contains(actual_fv.getWholeArea())) return false;
 
         actual.assignValue(value);

@@ -1,0 +1,12 @@
+new ftc newc
+checkout ftc newc
+add fm chair hoho 60 50 99.77 #FFFFFF wood 40 20 0 70
+list fm chair
+
+new room bedroom 300 400
+select ft chair
+add constraint model hoho chair1
+select ft chair
+add constraint model hoho chair2
+add constraint orientation W chair2
+solve design --debug

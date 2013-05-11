@@ -14,7 +14,9 @@ import java.awt.Rectangle;
 public class FurnitureValue extends Value {
     
     // Represents a positioned-and-oriented area
-    private OrientedRectangle area;
+    private OrientedRectangle activeArea;
+    
+    private Rectangle passiveArea;
         
     // Represents a specific model
     private FurnitureModel model;
@@ -26,29 +28,22 @@ public class FurnitureValue extends Value {
      * @param model 
      */
     public FurnitureValue(OrientedRectangle area, FurnitureModel model) {
-        this.area = area;
+        this.activeArea = area;
         this.model = model;
+        this.passiveArea = computePassiveArea();        
     }
     
     
     public OrientedRectangle getArea() {
-        return area;
+        return activeArea;
     }
     
     public Rectangle getWholeArea() {
-        int[] passiveOffsets = model.getPassiveSpace();
-        
-        Rectangle r = new Rectangle(area.x - passiveOffsets[3],
-                                    area.y - passiveOffsets[0],
-                                    area.width + passiveOffsets[3] + passiveOffsets[1],
-                                    area.height + passiveOffsets[0] + passiveOffsets[2]);
-        
-        Debug.println("r.x = " + r.x + ", r.y = " + r.y + ", r.width = " + r.width + ", r.height = " + r.height);
-        return r;
+        return passiveArea;
     }
     
     public Point getPosition() {
-        return area.getLocation();
+        return activeArea.getLocation();
     }
     
     public FurnitureModel getModel() {
@@ -62,10 +57,19 @@ public class FurnitureValue extends Value {
         String NEW_LINE = System.getProperty("line.separator");
 
         result.append("Model Name: " + model.getName());
-        result.append(" Location: (" + area.x + "," + area.y + ")");
-        result.append(" Orientation: " + area.getOrientation() + ";");
+        result.append(" Location: (" + activeArea.x + "," + activeArea.y + ")");
+        result.append(" Orientation: " + activeArea.getOrientation() + ";");
 
         return result.toString();
+    }
+
+    private Rectangle computePassiveArea() {
+        int o = activeArea.getOrientation().ordinal();
+        int[] passiveOffsets = model.getPassiveSpace();
+        return new Rectangle(activeArea.x - passiveOffsets[3-o],
+                             activeArea.y - passiveOffsets[(4-o) % 4],
+                             activeArea.width + passiveOffsets[(3+o) % 4] + passiveOffsets[(1+o) % 4],
+                             activeArea.height + passiveOffsets[(2+o) % 4] + passiveOffsets[o]        );
     }
 
 

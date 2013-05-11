@@ -39,7 +39,7 @@ public class FurnitureModelController
      * @param material The material the specific model is made from
      */
     public void add(String furnitureTypeName, String name, int width, int depth, float price,
-            String color, String material)
+            String color, String material, int[] passiveOffsets)
             throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException, BusinessException
     {
         FurnitureType furnitureType = getForWrite(furnitureTypeName);
@@ -47,7 +47,7 @@ public class FurnitureModelController
         Dimension size = new Dimension(width, depth);
         Color modelColor = Color.decode(color);
         
-        FurnitureModel furnitureModel = new FurnitureModel(name, size, price, modelColor, material);
+        FurnitureModel furnitureModel = new FurnitureModel(name, size, price, modelColor, material, passiveOffsets);
         
         furnitureType.addFurnitureModel(furnitureModel);
     }
@@ -80,5 +80,13 @@ public class FurnitureModelController
         FurnitureType furnitureType = get(furnitureTypeName);
         
         return furnitureType.getFurnitureModels();
+    }
+    
+    private Color decodeColor(String color) throws Exception {
+        try {
+            return (Color) Class.forName("java.awt.Color").getField(color).get(null);
+        } catch (Exception e) {
+            throw new Exception("The color " + color + " is not available.");
+        }
     }
 }

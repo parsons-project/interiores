@@ -37,8 +37,11 @@ public class FurnitureModelCommands
         float price = readFloat("Enter the price of the furniture model:");
         String color = readString("Enter the color of the furniture model:");
         String material = readString("Enter the material of the furniture model:");
+        int[] passiveOffsets = new int[4];
+        passiveOffsets[0] = readInt("Enter the free space you want at each side, in the following order: N E S W");
+        passiveOffsets[1] = readInt(""); passiveOffsets[2] = readInt(""); passiveOffsets[3] = readInt("");
         
-        fModelController.add(fTypeName, name, width, depth, price, color, material);
+        fModelController.add(fTypeName, name, width, depth, price, color, material, passiveOffsets);
     }
     
     @Command("Remove a furniture model from the type catalog")

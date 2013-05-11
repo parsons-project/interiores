@@ -53,9 +53,9 @@ public class DefaultFurnitureTypesCatalogFactory
         FurnitureType ft = new FurnitureType("chair", new Range(40, 60), new Range(40, 60));
         
         ft.addFurnitureModel(new FurnitureModel("ILLSA", new Dimension(45, 45), 16.99f, Color.WHITE,
-                "plastic"));
+                "plastic", new int[]{30,20,0,20}));
         ft.addFurnitureModel(new FurnitureModel("NADDA", new Dimension(50, 50), 22.99f, Color.GRAY,
-                "pine"));
+                "pine", new int[]{30,20,0,20}));
         
         return ft;
     }

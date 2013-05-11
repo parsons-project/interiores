@@ -184,10 +184,16 @@ public class FurnitureVariable
         return identifier;
     }	
 
-    void applyUnaryConstraints() {     
-        Iterator it = unaryConstraints.iterator();
-        while (it.hasNext()) {
-            UnaryConstraint constraint = (UnaryConstraint) it.next();
+    void applyUnaryConstraints() {
+        Debug.println("IM HEREEEEEEEEEEE!, " + identifier);
+        if (unaryConstraints==null) Debug.println("EMERGENCY!");
+        
+        Iterator i = unaryConstraints.iterator();
+        if (i.hasNext()) i.next().toString();
+        
+        for (UnaryConstraint constraint : unaryConstraints) {
+            Debug.println("IM BEFORE! unaryConstraints.size() = " + unaryConstraints.size() + " constraint==null?" + (constraint==null));
+            Debug.println(constraint.toString());
             constraint.eliminateInvalidValues(domain);
         }
     }	

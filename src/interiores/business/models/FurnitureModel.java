@@ -31,6 +31,9 @@ public class FurnitureModel {
     @XmlElement
     private Dimension size;     // Size of the furniture model
     
+    @XmlElement
+    private int[] passiveSpace = new int[4]; // Passive space requirements for the furniture model
+    
     @XmlAttribute
     private float price;          // Market price of the furniture model
     
@@ -67,6 +70,17 @@ public class FurnitureModel {
         this.material = material;
     }
     
+    public FurnitureModel(String name, Dimension size, float price, Color color,
+            String material, int[] passiveSpace)
+    {
+        this(name,size,price,color,material);
+        
+        if (passiveSpace.length != 4)
+            throw new IllegalArgumentException("Passive space must be defined for all four orientations");
+        
+        this.passiveSpace = passiveSpace;
+    }
+    
     /**
      * Gets the type of the furniture
      * @return The furniture type of the model
@@ -99,6 +113,10 @@ public class FurnitureModel {
         return size;
     }
     
+    public int[] getPassiveSpace() {
+        return passiveSpace;
+    }
+    
     /**
      * Gets the color of the furniture model
      * @return Color object representing the color of the model
@@ -126,8 +144,10 @@ public class FurnitureModel {
     @Override
     public String toString() {
         String colorString = "r=" + color.getRed() + ",g=" + color.getGreen() + ",b=" + color.getBlue();
+        String passive = "N: " + passiveSpace[0] + ", E: " + passiveSpace[1] +
+                         ", S: " + passiveSpace[2] + ", W: " + passiveSpace[3];
         
         return Utils.padRight(name, 20) + "Size[" + size + "], Price[" + price + "], Color[" + colorString
-                + "], [Material: " + material + "]";
+                + "], Material[" + material + "], PassiveSpace[" + passive + "]";
     }
 }

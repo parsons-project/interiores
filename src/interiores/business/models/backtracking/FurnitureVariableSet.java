@@ -168,17 +168,20 @@ public class FurnitureVariableSet
     @Override
     protected boolean canAssignToActual(Value value) {
         
-        OrientedRectangle actualArea = ((FurnitureValue) value).getArea();
+        FurnitureValue actual_fv = (FurnitureValue) value;
+        // A little explanation: fv.getArea() gets the ACTIVE area of actual_fv
+        // while fv.getWholeArea() gets the PASSIVE + ACTIVE area of actual_fv
         
-        if (! roomArea.contains(actualArea)) return false;
+        if (! roomArea.contains(actual_fv.getWholeArea())) return false;
 
         actual.assignValue(value);
         for (int i = 0; i < depth; ++i) {
-            OrientedRectangle otherArea =
-                ((FurnitureValue) variables[i].getAssignedValue()).getArea();
+            FurnitureValue other_fv = (FurnitureValue) variables[i].getAssignedValue();
             
-            if (!binaryConstraints.isSatisfied(actual, variables[i]) ||
-                actualArea.intersects(otherArea)) {
+            if (!binaryConstraints.isSatisfied(actual, variables[i])
+                || actual_fv.getArea().intersects(other_fv.getWholeArea())
+                || actual_fv.getWholeArea().intersects(other_fv.getArea()) )
+            {
                 actual.undoAssignValue();
                 return false;
             }

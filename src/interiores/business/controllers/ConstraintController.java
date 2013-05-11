@@ -89,7 +89,10 @@ public class ConstraintController
             else if (type.equals("position")) {
                 List<Point> validPositions = new ArrayList();
                 String mode = (String) parameters.get(0);
-                if (mode.equals("at")) validPositions.add(new Point((Integer) parameters.get(1), (Integer) parameters.get(2)));
+                if (mode.equals("at")) {
+                    validPositions.add(new Point((Integer) parameters.get(1), (Integer) parameters.get(2)));
+                    uc = new AreaConstraint(validPositions);
+                }
                 else if (mode.equals("range")) {
                     for (int i = (Integer) parameters.get(1); i <= (Integer) parameters.get(3); i++)
                         for (int j = (Integer) parameters.get(2); j <= (Integer) parameters.get(4); j++)
@@ -112,8 +115,7 @@ public class ConstraintController
                     uc = new WallConstraint(roomWidth, roomDepth, orientations);
                 }
             }
-
-            getWantedFurniture(furnitureID).addUnaryConstraint(type, uc);
+            if (uc != null) getWantedFurniture(furnitureID).addUnaryConstraint(type, uc);
         }
         
     }

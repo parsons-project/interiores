@@ -4,4 +4,7 @@ select ft chair
 add uc orientation E chair1
 add uc position at 30 50 chair1
 add bc face straight chair1 chair2
-solve design --debug
+
+select ft sofa
+add bc face partial chair1 sofa1
+solve design

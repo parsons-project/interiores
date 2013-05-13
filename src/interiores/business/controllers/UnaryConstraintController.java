@@ -11,15 +11,16 @@ import interiores.business.models.Room;
 import interiores.business.models.WantedFurniture;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.models.constraints.binary.PartialFacingConstraint;
 import interiores.business.models.constraints.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.binary.MinDistanceConstraint;
+import interiores.business.models.constraints.binary.StraightFacingConstraint;
 import interiores.business.models.constraints.unary.AreaConstraint;
 import interiores.business.models.constraints.unary.ColorConstraint;
 import interiores.business.models.constraints.unary.MaterialConstraint;
 import interiores.business.models.constraints.unary.ModelConstraint;
 import interiores.business.models.constraints.unary.OrientationConstraint;
 import interiores.business.models.constraints.unary.PriceConstraint;
-import interiores.business.models.constraints.unary.SizeRangeConstraint;
 import interiores.business.models.constraints.unary.WallConstraint;
 import interiores.business.models.constraints.unary.DepthConstraint;
 import interiores.business.models.constraints.unary.WidthConstraint;
@@ -35,15 +36,14 @@ import java.util.List;
  * Business Controller covering the use cases related to constraints
  * @author larribas
  */
-public class ConstraintController
+public class UnaryConstraintController
     extends InterioresController {
-    private WantedFurniture WantedFurniture;
     
     /**
-     * Creates a particular instance of the constraint controller
+     * Creates a particular instance of the unary constraint controller
      * @param data The data controller that will give access to the objects this controller will use
      */
-    public ConstraintController(JAXBDataController data)
+    public UnaryConstraintController(JAXBDataController data)
     {
         super(data);
     }
@@ -57,7 +57,7 @@ public class ConstraintController
     public Collection getConstraints(String id)
             throws NoRoomCreatedException
     {
-        return getWishList().getConstraints(id);
+        return getWishList().getUnaryConstraints(id);
     }
     
     public void addWidthConstraint(String furnitureId, int minWidth, int maxWidth)
@@ -143,30 +143,6 @@ public class ConstraintController
         getWantedFurniture(furnitureId).addUnaryConstraint(unaryConstraint);
     }
     
-    /**
-     * Creates a determined binary constraint and adds it to a pair of furniture pieces.
-     * If a constraint of that type already existed between the tow furniture pieces, it is replaced
-     * @param type The type of the constraint we want to add
-     * @param parameters A list of parameters (its length depends on the type of constraint being defined)
-     * @param furn1 A valid ID of the first furniture component we want to apply the constraint to
-     * @param furn2 A valid ID of the second furniture component we want to apply the constraint to
-     * @throws BusinessException
-     */
-    public void add(String type, List<Object> parameters, String furn1, String furn2)
-            throws BusinessException
-    {
-        if (type.equals("distance"))
-        {
-            String rel = (String) parameters.get(0);
-            int dist = (Integer) parameters.get(1);
-            BinaryConstraint bc = null;
-            if (rel.equals("min")) bc = new MinDistanceConstraint(dist);
-            else if (rel.equals("max")) bc = new MaxDistanceConstraint(dist);
-            else throw new BusinessException(rel + " constraint doesn't exist");
-            
-            getWishList().addBinaryConstraint(rel, bc, furn1, furn2);
-        }
-    }
     
     /**
      * Removes a constraint of a specific type that has been defined over a certain piece of furniture.
@@ -194,20 +170,6 @@ public class ConstraintController
             throws NoRoomCreatedException
     {
         getWantedFurniture(furnitureId).removeUnaryConstraint(unaryConstraintClass);
-    }
-    
-    /**
-     * Removes a binary constraint of a specific type that has been defined over two certain pieces of furniture.
-     * If there was no constraint of that type over those pieces of furniture, it does nothing
-     * @param ctype The type of the constraint we want to remove
-     * @param furn1 A valid ID of the first piece of furniture whose constraint we want to remove
-     * @param furn2 A valid ID of the second piece of furniture whose constraint we want to remove
-     * @throws NoRoomCreatedException
-     */
-    public void remove(String ctype, String furn1, String furn2)
-            throws NoRoomCreatedException
-    {
-        getWishList().removeBinaryConstraint(ctype, furn1, furn2);
     }
     
     /**

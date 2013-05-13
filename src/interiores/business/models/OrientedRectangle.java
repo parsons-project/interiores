@@ -66,24 +66,30 @@ public class OrientedRectangle extends Rectangle {
     
     /**
      * Returns a rectangle with the side corresponding to <orientation> expanded
-     * @param size The size of the expansion
+     * @param distance The distance of the expansion
      * @param orientation The orientation to expand
      * @return A new rectangle expanded
      */
-    public OrientedRectangle enlarge(int size, Orientation orientation) {
+    public OrientedRectangle enlarge(int distance, Orientation orientation) {
         int newX = x;
         int newY = y;
         int newW = width;
         int newH = height;
         switch(orientation) {
             case W:
-                newX -= size;
+                newX -= distance;
+                newW += distance;
+                break;
             case N:
-                newY -= size;
+                newY -= distance;
+                newH += distance;
+                break;
             case E:
-                newW += size;
+                newW += distance;
+                break;
             case S:
-                newH += size;
+                newH += distance;
+                break;
         }
         return new OrientedRectangle(newX, newY, newW, newH, this.orientation);
     }
@@ -111,6 +117,15 @@ public class OrientedRectangle extends Rectangle {
      */
     public Orientation getOrientation() {
         return this.orientation;
+    }
+    
+    /**
+     * Get the center of the rectangle
+     * @return The point in the center of the rectangle (absolute respect its
+     *         position)
+     */
+    public Point getCenter() {
+        return new Point(x + width/2, y + height/2);
     }
     
     @Override

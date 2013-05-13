@@ -1,6 +1,6 @@
 package interiores.presentation.terminal.commands;
 
-import interiores.business.controllers.ConstraintController;
+import interiores.business.controllers.UnaryConstraintController;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Orientation;
 import interiores.core.Utils;
@@ -9,22 +9,20 @@ import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  *
  * @author larribas
  */
-@CommandSubject(name = "c", description = "Constraint related commands")
-public class ConstraintCommands extends AdvancedCommandGroup {
+@CommandSubject(name = "uc", description = "Unary-constraint related commands")
+public class UnaryConstraintCommands extends AdvancedCommandGroup {
     private static final String PATTERN_SIZE_TYPE = "^(width|depth)$";
     private static final String PATTERN_SIMPLE_TYPE = "^(color|material|model|orientation)$";
     
-    private ConstraintController constraintController;
+    private UnaryConstraintController constraintController;
     
-    public ConstraintCommands(ConstraintController constraintController) {
+    public UnaryConstraintCommands(UnaryConstraintController constraintController) {
         this.constraintController = constraintController;
     }
     
@@ -75,21 +73,6 @@ public class ConstraintCommands extends AdvancedCommandGroup {
             constraintController.addDepthConstraint(furnitureId, min, max);
     }
     
-    // @TODO Decouple logic from command syntax
-    public void addDistanceConstraint()
-            throws BusinessException
-    {
-        List<Object> parameters = new ArrayList();
-        
-        parameters.add(readString("Enter <max> to set a maximum distance between two pieces of furniture."
-                        + " Enter <min> to set a minimum distance.") );
-        parameters.add(readInt("Enter the distance measured in cm"));
-        
-        String furn1 = readString("Select the two pieces of furniture you want to apply the constraint to");
-        String furn2 = readString("");
-        
-        constraintController.add("distance", parameters, furn1, furn2);
-    }
     
     public void addPriceConstraint()
             throws NoRoomCreatedException
@@ -110,7 +93,7 @@ public class ConstraintCommands extends AdvancedCommandGroup {
         if(specific.equals("at")) {
             int x = readInt("");
             int y = readInt("");
-            
+
             constraintController.addPositionAtConstraint(askFurnitureId(), x, y);
         }
         else if(specific.equals("range")) {
@@ -143,16 +126,8 @@ public class ConstraintCommands extends AdvancedCommandGroup {
             throws NoRoomCreatedException, BusinessException
     {
         String ctype = readString("Specify the kind of constraint you want to remove");
-        if (isBinary(ctype)) {
-            String furn1 = readString("Select the two furniture pieces the constraint is applied to");
-            String furn2 = readString("");
-            constraintController.remove(ctype, furn1, furn2);
-        }
-        else {
-            String furn = readString("Select the furniture piece from which to remove the constraint");
-            constraintController.remove(ctype,furn);
-        }
-        
+        String furn = readString("Select the furniture piece from which to remove the constraint");
+        constraintController.remove(ctype,furn);
     }
     
     @Command("List constraints applied to some selected furniture")
@@ -169,8 +144,4 @@ public class ConstraintCommands extends AdvancedCommandGroup {
             println("There are no constraints defined for " + furn);
     }
     
-    private boolean isBinary(String constraintType) {
-        return constraintType.equals("distance");
-    }
-
 }

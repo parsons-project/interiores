@@ -1,5 +1,5 @@
 new room bedroom 300 300
 select ft chair
-add constraint position walls E chair1
+add uc position walls E chair1
 solve design
 

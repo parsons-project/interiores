@@ -4,7 +4,7 @@ select ft chair
 select ft chair
 select ft chair
 select ft chair
-add constraint distance max 1 chair1 chair2
+add bc distance max 1 chair1 chair2
 select ft chair
 select ft chair
 select ft chair
@@ -21,8 +21,8 @@ select ft chair
 select ft chair
 select ft chair
 select ft chair
-add constraint distance max 1 chair2 chair4
-add constraint distance max 1 chair1 chair4
-add constraint distance min 200 chair4 chair3
-add constraint distance min 400 chair9 chair8
+add bc distance max 1 chair2 chair4
+add bc distance max 1 chair1 chair4
+add bc distance min 200 chair4 chair3
+add bc distance min 400 chair9 chair8
 solve design

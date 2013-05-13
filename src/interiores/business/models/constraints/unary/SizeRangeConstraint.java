@@ -8,12 +8,14 @@ import interiores.utils.Range;
 import java.util.Iterator;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  * SizeConstraint represents a constraint imposed over the size of a piece of furniture
  * @author larribas
  */
 @XmlRootElement
+@XmlSeeAlso({WidthConstraint.class, DepthConstraint.class})
 abstract public class SizeRangeConstraint
     extends UnaryConstraint {
     

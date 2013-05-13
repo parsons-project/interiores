@@ -4,9 +4,8 @@ import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.MandatoryFurnitureException;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.utils.BinaryConstraintAssociation;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -141,19 +140,18 @@ public class WishList
      * @param furnitureID the identifier of the WantedFurniture
      * @return the set of constraints
      */
-    public Collection getConstraints(String furnitureID) {
-        List<Object> result = new ArrayList();
+    public Collection getUnaryConstraints(String furnitureID) {
+        return furniture.get(furnitureID).getUnaryConstraints();
+    }
+    
+    public Collection<BinaryConstraintAssociation> getBinaryConstraints(String furnitureID) {
+        Collection<BinaryConstraintAssociation> result = new LinkedList();
         
-        // First, we add all the unary constraints defined over that piece of furniture
-        result.addAll(furniture.get(furnitureID).getUnaryConstraints());
-        
-        // Second, we add all the binary constraints related to that piece of furniture
         Object[] keys = binaryConstraints.keySet().toArray();
         for (int i = 0; i < keys.length; i++) {
             String k = (String) keys[i];
             if (k.contains(furnitureID)) result.add(binaryConstraints.get(k));
         }
-        
         return result;
     }
     

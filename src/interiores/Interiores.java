@@ -44,7 +44,8 @@ public class Interiores
         
         // Business layer
         app.addBusiness("room");
-        app.addBusiness("constraint");
+        app.addBusiness("unaryConstraint");
+        app.addBusiness("binaryConstraint");
         app.addBusiness("design");
         app.addBusiness("furnitureModel");
         app.addBusiness("furnitureType");

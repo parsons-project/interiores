@@ -18,7 +18,7 @@ import interiores.business.models.constraints.unary.MaterialConstraint;
 import interiores.business.models.constraints.unary.ModelConstraint;
 import interiores.business.models.constraints.unary.OrientationConstraint;
 import interiores.business.models.constraints.unary.PriceConstraint;
-import interiores.business.models.constraints.unary.SizeConstraint;
+import interiores.business.models.constraints.unary.SizeRangeConstraint;
 import interiores.core.presentation.terminal.IOStream;
 import interiores.utils.Range;
 import java.awt.Color;
@@ -242,7 +242,7 @@ public abstract class AbstractDriver {
                 Dimension min = readDimension();
                 iostream.println("Enter the maximum dimension of the constraint: ");
                 Dimension max = readDimension();
-                return new SizeConstraint(min, max);           
+                return new SizeRangeConstraint(min, max);           
         }
     }
     

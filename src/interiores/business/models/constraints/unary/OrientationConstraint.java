@@ -35,6 +35,10 @@ public class OrientationConstraint
         validOrientations.add(o);
     }
     
+    public OrientationConstraint(String orientation) {
+        this(Orientation.valueOf(orientation));
+    }
+    
     /**
      * Creates an orientation constraint such that only those pieces of
      * furniture matching one of the given orientations will satisfy it

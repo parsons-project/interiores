@@ -7,6 +7,7 @@ package interiores.business.controllers;
 import interiores.business.controllers.abstracted.InterioresController;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Orientation;
+import interiores.business.models.Room;
 import interiores.business.models.WantedFurniture;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.UnaryConstraint;
@@ -18,8 +19,11 @@ import interiores.business.models.constraints.unary.MaterialConstraint;
 import interiores.business.models.constraints.unary.ModelConstraint;
 import interiores.business.models.constraints.unary.OrientationConstraint;
 import interiores.business.models.constraints.unary.PriceConstraint;
-import interiores.business.models.constraints.unary.SizeConstraint;
+import interiores.business.models.constraints.unary.SizeRangeConstraint;
 import interiores.business.models.constraints.unary.WallConstraint;
+import interiores.business.models.constraints.unary.DepthConstraint;
+import interiores.business.models.constraints.unary.WidthConstraint;
+import interiores.core.Utils;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import java.awt.Point;
@@ -33,6 +37,7 @@ import java.util.List;
  */
 public class ConstraintController
     extends InterioresController {
+    private WantedFurniture WantedFurniture;
     
     /**
      * Creates a particular instance of the constraint controller
@@ -54,70 +59,88 @@ public class ConstraintController
     {
         return getWishList().getConstraints(id);
     }
-
-    /**
-     * Creates a determined constraint and adds it to a furniture.
-     * If a constraint of that type already existed, it is replaced
-     * @param type The type of the constraint we want to add
-     * @param parameters A list of parameters (its length depends on the type of constraint being defined)
-     * @param furnitureID A valid ID of the furniture we want to apply the constraint to
-     * @throws NoRoomCreatedException
-     */
-    public void add(String type, List<Object> parameters, String furnitureID)
+    
+    public void addWidthConstraint(String furnitureId, int minWidth, int maxWidth)
+            throws NoRoomCreatedException
+    {
+        addConstraint(furnitureId, new WidthConstraint(minWidth, maxWidth));
+    }
+    
+    public void addDepthConstraint(String furnitureId, int minWidth, int maxWidth)
+            throws NoRoomCreatedException
+    {
+        addConstraint(furnitureId, new DepthConstraint(minWidth, maxWidth));
+    }
+    
+    public void addColorConstraint(String furnitureId, String color)
             throws NoRoomCreatedException, BusinessException
     {
-        if (type.equals("width") || type.equals("depth")) {
-            // We get the SizeConstraint of that furniture. If there isn't one, we create it
-            if (getWantedFurniture(furnitureID).getUnaryConstraint("size")==null)
-                getWantedFurniture(furnitureID).addUnaryConstraint("size", new SizeConstraint());
-            
-            SizeConstraint sc = (SizeConstraint) getWantedFurniture(furnitureID).getUnaryConstraint("size");
-            int min = (Integer) parameters.get(0);
-            int max = (Integer) parameters.get(1);
-            
-            if (type.equals("width")) sc.changeWidth(min,max);
-            else sc.changeDepth(min, max);
-        }
-        else {
-            UnaryConstraint uc = null;
-
-            if (type.equals("color")) uc = new ColorConstraint((String) parameters.get(0));
-            else if (type.equals("material")) uc = new MaterialConstraint((String) parameters.get(0));
-            else if (type.equals("model")) uc = new ModelConstraint((String) parameters.get(0));
-            else if (type.equals("orientation")) uc = new OrientationConstraint(Orientation.valueOf((String) parameters.get(0)));
-            else if (type.equals("price")) uc = new PriceConstraint((Integer) parameters.get(0));
-            else if (type.equals("position")) {
-                List<Point> validPositions = new ArrayList();
-                String mode = (String) parameters.get(0);
-                if (mode.equals("at")) {
-                    validPositions.add(new Point((Integer) parameters.get(1), (Integer) parameters.get(2)));
-                    uc = new AreaConstraint(validPositions);
-                }
-                else if (mode.equals("range")) {
-                    for (int i = (Integer) parameters.get(1); i <= (Integer) parameters.get(3); i++)
-                        for (int j = (Integer) parameters.get(2); j <= (Integer) parameters.get(4); j++)
-                            validPositions.add(new Point(i,j));
-                    
-                    uc = new AreaConstraint(validPositions);
-                }
-                else if (mode.equals("walls")) {
-                    String whichWalls = (String) parameters.get(1);
-                    int roomWidth = getRoom().getWidth();
-                    int roomDepth = getRoom().getDepth();
-                    
-                    Orientation[] orientations;
-                    
-                    if(whichWalls.equals("all"))
-                        orientations = Orientation.values();
-                    else
-                        orientations = new Orientation[]{ Orientation.valueOf(whichWalls) };
-                        
-                    uc = new WallConstraint(roomWidth, roomDepth, orientations);
-                }
-            }
-            if (uc != null) getWantedFurniture(furnitureID).addUnaryConstraint(type, uc);
-        }
+        addConstraint(furnitureId, new ColorConstraint(color));
+    }
+    
+    public void addMaterialConstraint(String furnitureId, String material)
+            throws NoRoomCreatedException
+    {
+        addConstraint(furnitureId, new MaterialConstraint(material));
+    }
+    
+    public void addModelConstraint(String furnitureId, String modelName)
+            throws NoRoomCreatedException
+    {
+        addConstraint(furnitureId, new ModelConstraint(modelName));
+    }
+    
+    public void addOrientationConstraint(String furnitureId, String orientation)
+            throws NoRoomCreatedException
+    {
+        addConstraint(furnitureId, new OrientationConstraint(orientation));
+    }
+    
+    public void addPriceConstraint(String furnitureId, float maxPrice)
+            throws NoRoomCreatedException
+    {
+        addConstraint(furnitureId, new PriceConstraint(maxPrice));
+    }
+    
+    public void addPositionConstraint(String furnitureId, List<Point> validPositions)
+            throws NoRoomCreatedException
+    {
+        addConstraint(furnitureId, new AreaConstraint(validPositions));
+    }
+    
+    public void addPositionAtConstraint(String furnitureId, int x, int y)
+            throws NoRoomCreatedException
+    {
+        List<Point> validPositions = new ArrayList();
+        validPositions.add(new Point(x, y));
         
+        addPositionConstraint(furnitureId, validPositions);
+    }
+    
+    public void addPositionRangeConstraint(String furnitureId, int x1, int y1, int x2, int y2)
+            throws NoRoomCreatedException
+    {
+        List<Point> validPositions = new ArrayList();
+        
+        for(int i = x1; i <= x2; ++i)
+            for(int j = y1; j <= y2; ++j)
+                validPositions.add(new Point(i, j));
+        
+        addPositionConstraint(furnitureId, validPositions);
+    }
+    
+    public void addWallConstraint(String furnitureId, Orientation[] whichWalls)
+            throws NoRoomCreatedException
+    {
+        Room room = getRoom();
+        
+        addConstraint(furnitureId, new WallConstraint(room.getWidth(), room.getDepth(), whichWalls));
+    }
+    
+    private void addConstraint(String furnitureId, UnaryConstraint unaryConstraint)
+            throws NoRoomCreatedException
+    {
+        getWantedFurniture(furnitureId).addUnaryConstraint(unaryConstraint);
     }
     
     /**
@@ -152,10 +175,25 @@ public class ConstraintController
      * @param furnitureID A valid ID of the piece of furniture whose constraint we want to remove
      * @throws NoRoomCreatedException
      */
-    public void remove(String ctype, String furnitureID)
+    public void remove(String ctype, String furnitureId)
+            throws NoRoomCreatedException, BusinessException
+    {
+        try {
+            Class unaryConstraintClass = Class.forName("interiores.business.models.constraints.unary." +
+                    Utils.capitalize(ctype) + "Constraint");
+            
+            remove(furnitureId, unaryConstraintClass);
+            
+        }
+        catch(ClassNotFoundException e) {
+            throw new BusinessException("The constraint type " + ctype + " does not exist");
+        }
+    }
+    
+    public void remove(String furnitureId, Class<UnaryConstraint> unaryConstraintClass)
             throws NoRoomCreatedException
     {
-        getWantedFurniture(furnitureID).removeUnaryConstraint(ctype);
+        getWantedFurniture(furnitureId).removeUnaryConstraint(unaryConstraintClass);
     }
     
     /**

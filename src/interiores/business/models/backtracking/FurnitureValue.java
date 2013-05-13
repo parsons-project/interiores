@@ -2,7 +2,6 @@ package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.OrientedRectangle;
-import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -53,14 +52,8 @@ public class FurnitureValue extends Value {
     
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
-
-        result.append("Model Name: " + model.getName());
-        result.append(" Location: (" + activeArea.x + "," + activeArea.y + ")");
-        result.append(" Orientation: " + activeArea.getOrientation() + ";");
-
-        return result.toString();
+        return "Model Name: " + model.getName() + " Location: (" + activeArea.x + "," + activeArea.y + ")" +
+                " Orientation: " + activeArea.getOrientation() + ";";
     }
 
     private Rectangle computePassiveArea() {
@@ -72,6 +65,4 @@ public class FurnitureValue extends Value {
                              activeArea.height + passiveOffsets[(2+o) % 4] + passiveOffsets[o]        );
     }
 
-
-    
 }

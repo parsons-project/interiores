@@ -32,7 +32,7 @@ public class FurnitureModel {
     private Dimension size;     // Size of the furniture model
     
     @XmlElement
-    private int[] passiveSpace = new int[4]; // Passive space requirements for the furniture model
+    private int[] passiveSpace; // Passive space requirements for the furniture model
     
     @XmlAttribute
     private float price;          // Market price of the furniture model
@@ -63,17 +63,17 @@ public class FurnitureModel {
     public FurnitureModel(String name, Dimension size, float price, Color color,
             String material)
     {
-        this.name = name;
-        this.size = size;
-        this.price = price;
-        this.color = color;
-        this.material = material;
+        this(name, size, price, color, material, new int[]{ 0, 0, 0, 0 });
     }
     
     public FurnitureModel(String name, Dimension size, float price, Color color,
             String material, int[] passiveSpace)
     {
-        this(name,size,price,color,material);
+        this.name = name;
+        this.size = size;
+        this.price = price;
+        this.color = color;
+        this.material = material;
         
         if (passiveSpace.length != 4)
             throw new IllegalArgumentException("Passive space must be defined for all four orientations");
@@ -144,10 +144,10 @@ public class FurnitureModel {
     @Override
     public String toString() {
         String colorString = "r=" + color.getRed() + ",g=" + color.getGreen() + ",b=" + color.getBlue();
-        String passive = "N: " + passiveSpace[0] + ", E: " + passiveSpace[1] +
-                         ", S: " + passiveSpace[2] + ", W: " + passiveSpace[3];
+        String passiveString = "N: " + passiveSpace[0] + ", E: " + passiveSpace[1] + ", S: " + 
+                passiveSpace[2] + ", W: " + passiveSpace[3];
         
         return Utils.padRight(name, 20) + "Size[" + size + "], Price[" + price + "], Color[" + colorString
-                + "], Material[" + material + "], PassiveSpace[" + passive + "]";
+                + "], Material[" + material + "], Passive space[" + passiveString + "]";
     }
 }

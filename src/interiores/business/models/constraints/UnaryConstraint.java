@@ -8,7 +8,7 @@ import interiores.business.models.constraints.unary.MaterialConstraint;
 import interiores.business.models.constraints.unary.ModelConstraint;
 import interiores.business.models.constraints.unary.OrientationConstraint;
 import interiores.business.models.constraints.unary.PriceConstraint;
-import interiores.business.models.constraints.unary.SizeConstraint;
+import interiores.business.models.constraints.unary.SizeRangeConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  */
 @XmlRootElement
 @XmlSeeAlso({AreaConstraint.class, ColorConstraint.class, MaterialConstraint.class, ModelConstraint.class,
-    OrientationConstraint.class, PriceConstraint.class, SizeConstraint.class})
+    OrientationConstraint.class, PriceConstraint.class, SizeRangeConstraint.class})
 public abstract class UnaryConstraint {
      /**
      * Eliminates all values from the variables' domain that do not fulfill the

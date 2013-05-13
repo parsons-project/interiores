@@ -64,9 +64,9 @@ public class DefaultFurnitureTypesCatalogFactory
         FurnitureType ft = new FurnitureType("armchair", new Range(40, 80), new Range(40, 80));
         
         ft.addFurnitureModel(new FurnitureModel("JOSSUN", new Dimension(60, 60), 38.99f, Color.BLUE,
-                "agglomerate",new int[]{40,0,0,0}));
+                "agglomerate", new int[]{40,0,0,0}));
         ft.addFurnitureModel(new FurnitureModel("SKATJA", new Dimension(70, 70), 59.99f, Color.GRAY,
-                "agglomerate",new int[]{40,0,0,0}));
+                "agglomerate", new int[]{40,0,0,0}));
         
         return ft;
     }

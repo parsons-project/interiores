@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package interiores.business.models;
 
 import interiores.business.models.constraints.UnaryConstraint;
@@ -59,7 +55,7 @@ public class WantedFurniture
      * Removes a unary constraint to the given wanted furniture
      * @param unaryConstraintClass The type of the constraint
      */
-    public void removeUnaryConstraint(Class unaryConstraintClass) {
+    public void removeUnaryConstraint(Class<? extends UnaryConstraint> unaryConstraintClass) {
         constraints.remove(unaryConstraintClass);
     }
     
@@ -68,7 +64,7 @@ public class WantedFurniture
      * @param unaryConstraintClass
      * @return the constraint of the given type
      */
-    public UnaryConstraint getUnaryConstraint(Class unaryConstraintClass) {
+    public UnaryConstraint getUnaryConstraint(Class<? extends UnaryConstraint> unaryConstraintClass) {
         return constraints.get(unaryConstraintClass);
     }
     
@@ -76,7 +72,7 @@ public class WantedFurniture
      * Returns all the unary constraints applied to the wanted piece of furniture.
      * @return the set of unary constraints
      */
-    public Collection getUnaryConstraints() {
+    public Collection<UnaryConstraint> getUnaryConstraints() {
         return constraints.values();
     } 
 }

@@ -1,11 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.BinaryConstraintController;
 import interiores.business.exceptions.NoRoomCreatedException;
+import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.core.Utils;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.AdvancedCommandGroup;
@@ -19,11 +16,12 @@ import java.util.Collection;
  * @author larribas
  */
 @CommandSubject(name = "bc", description = "Binary-constraint related commands")
-public class BinaryConstraintCommands extends AdvancedCommandGroup {
-        
+public class BinaryConstraintCommands
+    extends AdvancedCommandGroup
+{        
     private BinaryConstraintController constraintController;
     
-    public BinaryConstraintCommands (BinaryConstraintController constraintController) {
+    public BinaryConstraintCommands(BinaryConstraintController constraintController) {
         this.constraintController = constraintController;
     }
     
@@ -31,38 +29,54 @@ public class BinaryConstraintCommands extends AdvancedCommandGroup {
     public void add()
             throws Throwable
     {
-        String type = readString("Specify the kind of constraint you want to add");
+        String type = readChoice("Specify the alias of the constraint you want to add",
+                constraintController.getAvailableConstraints());
+        
+        String[] parts = type.split(constraintController.getConstraintTypeSeparator(), 2);
+        String methodName = "add" + Utils.capitalize(parts[1]) + Utils.capitalize(parts[0]) + "Constraint";
         
         try {
-            getClass().getMethod("add" + Utils.capitalize(type) + "Constraint").invoke(this);
+            getClass().getMethod(methodName).invoke(this);
         }
         catch(InvocationTargetException e) {
             throw e.getCause();
         }
     }
     
-    public void addDistanceConstraint()
+    public void addMaxDistanceConstraint()
             throws BusinessException
     {        
-        String parameter = readString("Enter <max> to set a maximum distance between two pieces of furniture."
-                        + " Enter <min> to set a minimum distance.");
-
-        int distance = readInt("Enter the distance measured in cm");
-        
+        int distance = readInt("Enter the maximum distance measured in cm");
         String[] furniture = selectFurniturePair();
-        constraintController.addDistanceConstraint(parameter,distance, furniture);
+        
+        constraintController.addMaxDistanceConstraint(furniture[0], furniture[1], distance);
     }
     
-    public void addFaceConstraint() throws BusinessException {
-        String parameter = readString("Enter the type of facing (partial or straight)");
+     public void addMinDistanceConstraint()
+            throws BusinessException
+    {        
+        int distance = readInt("Enter the minimum distance measured in cm");
         String[] furniture = selectFurniturePair();
-        constraintController.addFaceConstraint(parameter, furniture);
+        
+        constraintController.addMinDistanceConstraint(furniture[0], furniture[1], distance);
+    }
+    
+    public void addPartialFacingConstraint() throws BusinessException {
+        String[] furniture = selectFurniturePair();
+        constraintController.addPartialFacingConstraint(furniture[0], furniture[1]);
+    }
+    
+    public void addStraightFacingConstraint() throws BusinessException {
+        String[] furniture = selectFurniturePair();
+        constraintController.addStraightFacingConstraint(furniture[0], furniture[1]);
     }
     
     private String[] selectFurniturePair() {
         String[] furn = new String[2];
-        furn[0] = readString("Select the two pieces of furniture you want to apply the constraint to");
+        
+        furn[0] = readString("Enter the two pieces of furniture of the constraint:");
         furn[1] = readString("");
+        
         return furn;
     }
     
@@ -70,16 +84,17 @@ public class BinaryConstraintCommands extends AdvancedCommandGroup {
     public void remove()
             throws NoRoomCreatedException, BusinessException
     {
-        String kind = readString("Specify the kind of constraint you want to remove");
+        String alias = readChoice("Specify the alias of the constraint you want to remove",
+                constraintController.getAvailableConstraints());
         
         String[] furniture = selectFurniturePair();
-        constraintController.remove(kind, furniture);
         
+        constraintController.removeConstraint(furniture[0], furniture[1], alias);
     }
     
     @Command("List binary constraints applied to a piece of furniture")
     public void list()
-            throws NoRoomCreatedException
+            throws NoRoomCreatedException, WantedElementNotFoundException
     {
         String furn = readString("Select the furniture whose constraints you want to show");
         Collection constraints = constraintController.getConstraints(furn);
@@ -90,6 +105,4 @@ public class BinaryConstraintCommands extends AdvancedCommandGroup {
         if(constraints.isEmpty())
             println("There are no constraints defined for " + furn);
     }
-    
-    
 }

@@ -2,4 +2,3 @@ new room bedroom 300 300
 select ft chair
 add uc position walls E chair1
 solve design
-

@@ -39,9 +39,8 @@ abstract public class CatalogCommands
         println(String.format(LIST_MSG, catalogTypeName));
         
         for(String name : catalogNames) {
-            if(name.equals(activeCatalog)) name = "*" + name;
-            
-            println(name);
+            if(name.equals(activeCatalog)) println("* " + name);
+            else println("  " + name);
         }
     }
     

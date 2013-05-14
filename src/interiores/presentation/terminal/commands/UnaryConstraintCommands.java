@@ -2,6 +2,7 @@ package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.UnaryConstraintController;
 import interiores.business.exceptions.NoRoomCreatedException;
+import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.business.models.Orientation;
 import interiores.core.Utils;
 import interiores.core.business.BusinessException;
@@ -30,7 +31,8 @@ public class UnaryConstraintCommands extends AdvancedCommandGroup {
     public void add()
             throws Throwable
     {
-        String type = readString("Specify the kind of constraint you want to add");
+        String type = readChoice("Specify the alias of the constraint you want to add:",
+                constraintController.getAvailableConstraints());
         
         try {
             if(type.matches(PATTERN_SIMPLE_TYPE))
@@ -60,7 +62,7 @@ public class UnaryConstraintCommands extends AdvancedCommandGroup {
     }
     
     public void addSizeConstraint(String type)
-            throws NoRoomCreatedException
+            throws NoRoomCreatedException, WantedElementNotFoundException
     {
         int min = readInt("Enter the minimum " + type + " for this furniture:");
         int max = readInt("Enter the maximum " + type + " for this furniture:");
@@ -75,7 +77,7 @@ public class UnaryConstraintCommands extends AdvancedCommandGroup {
     
     
     public void addPriceConstraint()
-            throws NoRoomCreatedException
+            throws NoRoomCreatedException, WantedElementNotFoundException
     {
         float maxPrice = readFloat("Enter the maximum price you want to pay:");
         
@@ -83,7 +85,7 @@ public class UnaryConstraintCommands extends AdvancedCommandGroup {
     }
     
     public void addPositionConstraint()
-            throws NoRoomCreatedException
+            throws NoRoomCreatedException, WantedElementNotFoundException
     {
         String specific = readString("Enter <at> followed by two coordinates to indicate a certain position."
                 + " Enter <range> followed by four coordinates to indicate a range of positions."
@@ -125,14 +127,16 @@ public class UnaryConstraintCommands extends AdvancedCommandGroup {
     public void remove()
             throws NoRoomCreatedException, BusinessException
     {
-        String ctype = readString("Specify the kind of constraint you want to remove");
+        String ctype = readChoice("Specify the alias of the constraint you want to remove:",
+                constraintController.getAvailableConstraints());
         String furn = readString("Select the furniture piece from which to remove the constraint");
-        constraintController.remove(ctype,furn);
+        
+        constraintController.remove(ctype, furn);
     }
     
     @Command("List constraints applied to some selected furniture")
     public void list()
-            throws NoRoomCreatedException
+            throws NoRoomCreatedException, WantedElementNotFoundException
     {
         String furn = readString("Select the furniture whose constraints you want to show");
         Collection constraints = constraintController.getConstraints(furn);
@@ -143,5 +147,4 @@ public class UnaryConstraintCommands extends AdvancedCommandGroup {
         if(constraints.isEmpty())
             println("There are no constraints defined for " + furn);
     }
-    
 }

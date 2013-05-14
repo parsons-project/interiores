@@ -3,8 +3,8 @@ select ft chair
 select ft chair
 add uc orientation E chair1
 add uc position at 30 50 chair1
-add bc face straight chair1 chair2
+add bc facing-straight chair1 chair2
 
 select ft sofa
-add bc face partial chair1 sofa1
+add bc facing-partial chair1 sofa1
 solve design

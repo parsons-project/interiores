@@ -1,0 +1,103 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[utf8]{inputenc}
+
+\newcommand{\comando}[3]{%
+\subsubsection{ {#1} }
+  \begin{description}
+    \item[Sintaxis]: \texttt{\textbf{#1} {#2} }
+    \item[Descripción]: {#3}
+  \end{description}}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,       % false: links enquadrats; true: links en color
+    linkcolor=blue,        % color de links interns (peus de pàgina, seccions)
+    citecolor=blue,        % color de links a bibliografia (números en [])
+    filecolor=magenta,     % color dels links a arxius (externs al pdf)
+    urlcolor=blue          % color dels links a urls
+}
+
+\title{\textsc{PROP: Manual comandos interiores \\}}
+\author{\textbf{Grup 12.2 \hfill Entrega 2.0}}
+\date{}
+
+\begin{document}
+\vspace{5cm}
+\maketitle
+\thispagestyle{empty}
+\newpage
+\tableofcontents
+\newpage
+\section{Comandos}
+El programa tiene definido un conjunto de comandos que pueden usarse para probar su funcionamiento.
+\subsection{Ayuda}
+El programa ofrece un método para obtener ayuda sobre los comandos de los que dispone. La mayoria de los comandos cuando no reciben todos los parametros necesarios piden con un mensaje por pantalla que necesitan.
+
+\comando{help}{[<sujeto>]}{Muestra ayuda sobre el sujeto. Si no contiene un sujeto, muestra una ayuda general}
+\subsection{Comandos sobre el conjunto de catálogos}
+Los catálogos contienen elementos de un tipo determinado. Los tipos soportados
+son tipo de habitación (RoomTypeCatalog o 'rtc') y tipo de mueble (FurnitureTypeCatalog o 'ftc'). De todos los catálogos del conjunto, hay uno especial, el \emph{actual} que define los tipos de muebles y/o tipos de habitaciones que se pueden seleccionar. Hay un catálogo por defecto ('default') que siempre está en el conjunto y no se puede modificar.
+
+\comando{new}{<tipo> <nombre> [<nombre2> ...]}{Crea tantos catálogos nuevos del tipo \emph{tipo} con como nombres se especifiquen y los añade al conjunto. No modifica el apuntador al catálogo actual.}
+\comando{list}{<tipo>}{Muestra los catálogos de tipo \emph{tipo} marcando el actual con un asterisco '*' delante.}
+\comando{checkout}{<tipo> <nombre>}{Mueve el apuntador del catálogo actual de tipo \emph{tipo} al catálogo con nombre \emph{nombre}. El catálogo debe pertenecer al conjunto.}
+\comando{merge}{<tipo> <nombre> [<nombre2> ...]}{Fusiona tantos catálogos como nombres reciba con el catálogo actual. Si un elemento del tipo \emph{tipo} ya estaba dentro del catálogo actual, se mantiene la versión de éste; si no, se añade.}
+\comando{load}{<tipo> <ruta>}{Carga el catálogo guardado en la ruta \emph{tipo}. La ruta debe ser absoluta o relativa al directorio actual.}
+\comando{save}{<tipo> <ruta>}{Guarda el catálogo del tipo \emph{tipo} actual en la ruta \emph{ruta}. La ruta debe ser absoluta o relativa al directorio actual.}
+
+\subsection{Comandos sobre los catálogos}
+Los catálogos pueden contener elementos. Los elementos pueden ser habitaciones (Room) en el caso del catálogo de tipos de habitaciones y modelos de muebles (FurnitureModel) en el de tipos de muebles. Aquí los tipos son o bien 'ft' (FurnitureType) o bien 'rt' (RoomType).
+
+
+\comando{list}{<tipo>}{Lista los elementos del catálogo actual de tipo \emph{tipo}.}
+\comando{rm}{<tipo> <nombre> [<nombre2> ...]}{Elimina del catálogo de tipo \emph{tipo} los elementos con los nombres dados.}
+
+\subsection{Comandos sobre tipos de mueble}
+Los tipos de mueble aparte de tener comandos que se ejecutan sobre los catálogos que los contienen, tiene otros métodos.
+
+\comando{add}{ft <params>}{Añade al catálogo actual de tipos de muebles un nuevo mueble con propiedades definidas por \emph{tipo}. Si no se da ningún parámetro, el programa pedirá uno a uno los parámetros que necesite.}
+\comando{select}{ft <nombre> [<nombre2> ...]}{Selecciona el tipo de mueble con nombre \emph{nombre} que será tenido en cuenta a la hora de crear el diseño. Se pueden seleccionar más de un elemento de un mismo tipo.}
+\comando{unselect}{ft <nombre>}{Quita de la lista de los que se van a tener en cuenta pare el diseño uno de los elementos con tipo <nombre>.}
+\comando{selected}{ft}{Lista los tipos actualmente seleccionados que se tendrán en cuenta para la generación del diseño.}
+
+\subsection{Comandos sobre modelos de muebles}
+
+Un mismo tipo de mueble puede tener varios modelos. Este conjunto de operaciones trabaja sobre los modelos dado un tipo.
+
+\comando{add}{fm <tipo> <params>}{Añade un nuevo modelo de un tipo \emph{tipo} determinado.}
+\comando{rm}{fm <tipo> <nombre>}{Elimina un modelo de mueble con tipo con nombre <nombre>.}
+\comando{list}{fm <tipo>}{Lista los modelos de mueble del tipo dado.}
+
+\subsection{Comandos sobre los tipos de habitacion}
+\comando{add}{rt <nombre>}{Crea una nuevo tipo de habitación con nombre \emph{nombre}.}
+\comando{put}{rt <tipo> mandatory/forbidden <tipos>}{Añade al tipo de habitación \emph{tipo} los tipos de mueble \emph{tipos} que debe tener (mandatory) o no puede tener (forbidden).}
+\comando{release}{rt <tipo> mandatory/forbidden <tipos>}{Quita al tipo de habitación \emph{tipo} los tipos de mueble \emph{tipos} que debe tener (mandatory) o no puede tener (forbidden).}
+
+\subsection{Comandos sobre las habitaciones}
+
+La habitación es el elemento principal de un diseño.
+
+\comando{new}{room <tipo> <ancho> <profundo>}{Crea una nueva habitación de tipo \emph{tipo} y con dimensiones de \emph{ancho}x\emph{profundo}. La mayoría de comandos requieren que haya una habitación instanciada que usan como parámetro implícito.}
+\comando{save}{room <ruta>}{El objetivo es guardar el diseño actual, pero no está implementado completamente.}
+\comando{load}{room <ruta>}{El objetivo es cargar un diseño ya generado, pero no está implementado completamente.}
+
+\subsection{Comandos para gestionar restricciones}
+
+Estos comandos sirven para añadir restricciones al diseño. Tienen efectos sobre elementos seleccionados.
+
+\comando{add}{constraint <tipo> <params> <selected1> [<selected2>]}{Añade una restricción de tipo \emph{tipo} con los parametros \emph{params}. La restricción puede ser unaria o binaria. Las unarias incluyen: \texttt{'color'}, \texttt{'model'},  \texttt{'price'}, \texttt{'material'}, \texttt{'orientation'}, \texttt{'width'}, \texttt{'depth'} y \texttt{'position'}. La binarias pueden ser de distancia máxima o mínima. Las restricciones se aplican sobre elementos seleccionados (tienen la forma \emph{tiposNUMERO}.}
+\comando{list}{constraint}{Lista las restricciones añadidas hasta el momento.}
+
+\subsection{Comando para generar el diseño}
+
+\comando{solve}{design}{Dados la habitación creada, los tipos muebles elegidos y sus restricciones, ejecuta el algoritmo para intentar dar una solución. Si hay una solución posible dibujará la distribución de los muebles por pantalla.} 
+
+\section{Juegos de pruebas}
+Para ejecutar juegos de pruebas, se debe compilar el proyecto y ejecutar interiores/Interiores. Esté leerá de la entrada estándar por lo que o bien se puede escribir mediante teclado los comandos, o pueden almacenarse en un archivo de texto y redirigirlo.
+
+Con el proyecto se adjuntan varios juegos de pruebas en el directorio a modo de ejemplo. También se adjuntan dos \emph{scripts} en shell: compile.sh y run.sh. Para compilar el proyecto puede usarse compile.sh. Para ejecutar los juegos de pruebas puede usarse run.sh.
+
+Las pruebas acostrumban a empezar con: \texttt{new room <tipo> <ancho> <profundo>} ya que muchas de las operaciones requieren de una habitación instanciada.
+Luego se eligen tipos y sus restricciones (tanto unarias como binarias) y luego se llama a \texttt{solve design}.
+
+\end{document}

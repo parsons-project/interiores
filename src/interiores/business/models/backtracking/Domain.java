@@ -3,14 +3,12 @@ package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
-import interiores.business.models.OrientedRectangle;
-import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
-import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -71,7 +69,7 @@ public class Domain {
      */
     public void pushPositions(int iteration) {
         domain[iteration+1].setPositions(domain[iteration].getPositions());
-        domain[iteration].setPositions(new HashSet<Point>());
+        domain[iteration].setPositions(new ArrayList<Point>());
     }
     
     /**
@@ -79,7 +77,7 @@ public class Domain {
      * @param invalidArea
      * @param iteration 
      */
-    public void stripInvalidRectangle(OrientedRectangle invalidRectangle, int iteration) {
+    public void stripInvalidRectangle(Rectangle invalidRectangle, int iteration) {
         Collection<Point> trimedPositions = 
                 domain[iteration+1].trimInvalidRectangle(invalidRectangle);
         
@@ -98,7 +96,7 @@ public class Domain {
         return domain[iteration].getModels();
     }
     
-    public HashSet<Point> getPositions(int iteration) {
+    public List<Point> getPositions(int iteration) {
         return domain[iteration].getPositions();
     }
     

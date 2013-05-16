@@ -7,6 +7,7 @@ import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
+import java.awt.Rectangle;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -142,7 +143,7 @@ public class FurnitureVariable
                
         // 2) send the affected positions back
         FurnitureValue value = (FurnitureValue) variable.getAssignedValue();
-        OrientedRectangle invalidRectangle = value.getArea();
+        Rectangle invalidRectangle = value.getWholeArea();
         
         domain.stripInvalidRectangle(invalidRectangle, iteration);        
         

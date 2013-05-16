@@ -8,6 +8,7 @@ import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,7 +24,7 @@ import java.util.List;
 public class Stage {
 
     private List<FurnitureModel> models;
-    private HashSet<Point> positions;
+    private List<Point> positions;
     private List<Orientation> orientations;
 
     
@@ -46,7 +47,7 @@ public class Stage {
         this.models = models;
         
         // initialize positions
-        positions = new HashSet<Point>();
+        positions = new ArrayList<Point>();
         for (int i = 0; i < roomSize.width; i += resolution) {
             for (int j = 0; j < roomSize.depth; j += resolution)
                 positions.add(new Point(i,j));
@@ -71,7 +72,7 @@ public class Stage {
      */
     public Stage() {
         models = new ArrayList();
-        positions = new HashSet<Point>();
+        positions = new ArrayList<Point>();
         orientations = new ArrayList();
         
         //initialize iterators
@@ -155,7 +156,7 @@ public class Stage {
         return models;
     }
     
-    HashSet<Point> getPositions() {
+    List<Point> getPositions() {
         return positions;
     }
     
@@ -167,7 +168,7 @@ public class Stage {
         this.models = models;
     }
     
-    void setPositions(HashSet<Point> positions) {
+    void setPositions(List<Point> positions) {
         this.positions = positions;
     }
         
@@ -175,7 +176,7 @@ public class Stage {
         this.orientations = orientations;
     }
 
-    Collection<Point> trimInvalidRectangle(OrientedRectangle invalidRectangle) {
+    Collection<Point> trimInvalidRectangle(Rectangle invalidRectangle) {
         Collection<Point> trimedPositions = new ArrayList();
         int x = invalidRectangle.x;
         int y = invalidRectangle.y;
@@ -198,7 +199,7 @@ public class Stage {
     }
 
     void swapPositions(Stage stage) {
-        HashSet<Point> aux = this.positions;
+        List<Point> aux = this.positions;
         this.positions = stage.positions;
         stage.positions = aux;
         

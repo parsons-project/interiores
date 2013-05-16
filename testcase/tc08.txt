@@ -3,11 +3,12 @@ select ft chair chair chair chair
 select ft chair chair chair chair
 select ft chair chair chair chair
 select ft table table
-add bc distance-max 1 chair1 chair2
-add bc distance-max 1 chair2 chair4
-add bc distance-max 1 chair1 chair4
+add bc distance-max 50 chair1 chair2
+add bc distance-max 50 chair2 chair4
+add bc distance-max 50 chair1 chair4
 add bc distance-min 200 chair4 chair3
 add bc distance-min 100 chair9 chair8
 add bc distance-min 300 table1 chair12
 add bc distance-min 200 table1 table2
 solve design
+

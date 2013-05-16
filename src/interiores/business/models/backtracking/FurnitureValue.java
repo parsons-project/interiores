@@ -49,6 +49,10 @@ public class FurnitureValue extends Value {
         return model;
     }
     
+    public void changePosition(Point p) {
+        activeArea.setLocation(p);
+        passiveArea.setLocation(p);
+    }
     
     @Override
     public String toString() {

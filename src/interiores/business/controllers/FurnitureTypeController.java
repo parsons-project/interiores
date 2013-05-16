@@ -48,6 +48,10 @@ public class FurnitureTypeController
         super.add(toAdd);
     }
     
+    public boolean exists(String name) {
+        return getActiveCatalog().hasObject(name);
+    }
+    
     /**
      * Selects a type and includes it in the wish list (the list of wanted furniture)
      * @param name The name of the type
@@ -56,7 +60,7 @@ public class FurnitureTypeController
      */
     public void select(String name)
             throws ElementNotFoundBusinessException, NoRoomCreatedException, ForbiddenFurnitureException
-    {
+    {        
         getWishList().addWantedFurniture(name);
     }
     

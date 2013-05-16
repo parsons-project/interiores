@@ -47,8 +47,12 @@ public class FurnitureTypeCommands
     {
         Collection<String> names = readStrings("Enter the name of the furniture types you want to select");
         
-        for(String name : names)
+        for(String name : names) {
+            if(! fTypeController.exists(name))
+                println("Warning: The furniture type " + name + " does not exist in the current catalog.");
+            
             fTypeController.select(name);
+        }
     }
     
     @Command("Remove a furniture type from the list of wanted furniture")

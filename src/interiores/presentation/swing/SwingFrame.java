@@ -5,6 +5,7 @@
 package interiores.presentation.swing;
 
 import interiores.core.presentation.PresentationController;
+import interiores.core.presentation.SwingController;
 import interiores.core.presentation.View;
 import javax.swing.JFrame;
 
@@ -14,7 +15,7 @@ import javax.swing.JFrame;
  */
 abstract public class SwingFrame extends JFrame implements View
 {
-    protected PresentationController presentation;
+    protected SwingController presentation;
     
     @Override
     public void showView()
@@ -25,12 +26,12 @@ abstract public class SwingFrame extends JFrame implements View
     @Override
     public void setPresentation(PresentationController presentation)
     {
-        this.presentation = presentation;
+        this.presentation = (SwingController) presentation;
     }
     
     @Override
-    public String[] getEvents()
+    public void onLoad() throws Exception
     {
-        return new String[]{};
+        
     }
 }

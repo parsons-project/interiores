@@ -1,32 +1,27 @@
 package interiores.core.presentation;
 
-import interiores.core.Initiable;
 import interiores.core.Observer;
 import interiores.core.business.BusinessController;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- *
+ * Represents a controller of the application presentation layer.
  * @author hector
  */
-abstract public class PresentationController implements Initiable, Observer
+abstract public class PresentationController implements Observer
 {
-    private Map<String, BusinessController> controllers;
+    /**
+     * Initializes and runs the presentation controller.
+     * @throws Exception 
+     */
+    abstract public void init() throws Exception;
     
-    public PresentationController()
-    {
-        controllers = new HashMap();
-    }
-    
+    /**
+     * Adds a business controller on top of this presentation controller.
+     * @param name Name to identify the business controller
+     * @param controller The business controller to add
+     */
     public void addBusinessController(String name, BusinessController controller)
     {
         controller.addListener(this);
-        controllers.put(name, controller);
-    }
-    
-    public BusinessController getBusinessController(String name)
-    {
-        return controllers.get(name);
     }
 }

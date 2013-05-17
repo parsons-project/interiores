@@ -1,55 +1,78 @@
 package interiores.business.controllers;
 
+import interiores.business.controllers.abstracted.CatalogAccessController;
+import interiores.business.events.room.RoomCreatedEvent;
+import interiores.business.events.room.RoomLoadedEvent;
+import interiores.business.exceptions.ElementNotFoundBusinessException;
+import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Room;
-import interiores.core.business.BusinessController;
-import interiores.core.business.Model;
-import interiores.data.DataController;
+import interiores.business.models.RoomType;
+import interiores.business.models.WishList;
+import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.core.business.BusinessException;
+import interiores.core.data.JAXBDataController;
 import javax.xml.bind.JAXBException;
 
 /**
- * Controller for rooms!
+ * Business controller covering the operations performed over a room
  * @author hector
  */
-public class RoomController extends BusinessController
+public class RoomController
+    extends CatalogAccessController<RoomType>
 {
-    public RoomController(DataController data)
+    /**
+     * Creates a particular instance of the room controller
+     * @param data The data controller that will give access to the objects this controller will use
+     */
+    public RoomController(JAXBDataController data)
     {
-        super(data);
+        super(data, AvailableCatalog.ROOM_TYPES);
     }
     
-    public void newRoom(String type, int width, int height)
+    /**
+     * Creates a new room with a given type and measures
+     * @param typeName The type of room to create
+     * @param width The width of the new room
+     * @param depth The depth of the new room
+     * @throws ElementNotFoundBusinessException
+     * @throws BusinessException 
+     */
+    public void create(String typeName, int width, int depth)
+            throws ElementNotFoundBusinessException, BusinessException
     {
-       Room room = new Room(type, width, height);
-       
-       data.set("room", room);
-       notify("roomCreated", room.toMap());
+        RoomType type = get(typeName);
+        Room room = new Room(type, width, depth);
+
+        setRoom(room);
+        
+        WishList wishList = new WishList();
+        setWishList(wishList);
+        
+        notify(new RoomCreatedEvent(room));
     }
     
-    public void saveRoom(String path)
-    {
-        try
-        {
-            data.save(data.get("room"), path);
-            notify("roomSaved", (Model) data.get("room"));
-        }
-        catch(JAXBException e)
-        {
-            e.printStackTrace();
-        }
+    /**
+     * Stores the current room in disk, under a specific path
+     * @param path The path where we want to store the room
+     * @throws JAXBException
+     * @throws NoRoomCreatedException 
+     */
+    public void save(String path) throws JAXBException, NoRoomCreatedException
+    {   
+        data.save(getRoom(), path);
     }
     
-    public void loadRoom(String path)
+    /**
+     * Loads the current room from disk, out of a specified path
+     * @param path The path where the room we want to load is
+     * @throws JAXBException 
+     */
+    public void load(String path) throws JAXBException
     {
-        try
-        {
-            Room room = (Room) data.load(Room.class, path);
-            data.set("room", room);
-            
-            notify("roomLoaded", room.toMap());
-        }
-        catch(JAXBException e)
-        {
-            e.printStackTrace();
-        }
+        Room room = (Room) data.load(Room.class, path);
+        
+        setRoom(room);
+        
+        notify(new RoomLoadedEvent(room));
     }
 }

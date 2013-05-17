@@ -7,15 +7,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Model base class.
+ * A Model represents a domain model.
  * @author hector
  */
-abstract public class Model {
-    public Model()
-    {
-        
-    }
-    
+abstract public class Model
+{
+    /**
+     * Transforms the model instance into a map of data analyzing its attributes using reflection.
+     * @return Map of data with an entry for each attribute of the model and its value.
+     */
     public Map<String, Object> toMap()
     {
         Map<String, Object> result = new HashMap<String, Object>();

@@ -1,0 +1,3 @@
+new room kitchen 300 300
+select ft chair
+solve design

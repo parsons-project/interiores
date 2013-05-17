@@ -1,123 +1,243 @@
 package interiores.core.presentation;
 
+import interiores.core.Debug;
+import interiores.core.Event;
 import interiores.core.Utils;
 import interiores.core.business.BusinessController;
-import interiores.core.presentation.PresentationController;
-import interiores.core.terminal.CommandGroup;
-import interiores.core.terminal.IOStream;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
+import interiores.core.business.BusinessException;
+import interiores.core.presentation.terminal.AdvancedCommandGroup;
+import interiores.core.presentation.terminal.CommandGroup;
+import interiores.core.presentation.terminal.IOStream;
+import interiores.core.presentation.terminal.annotation.CommandSubject;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
+import javax.xml.bind.JAXBException;
 
 /**
- *
+ * Represents a terminal command line tool presentation controller.
  * @author hector
  */
 public class TerminalController extends PresentationController
 {
-    private String commandsPath;
-    private IOStream iostream;
-    private Map<String, CommandGroup> commands;
+    /**
+     * The padding for the commands name when showing the help
+     */
+    private static final int HELP_PADDING = 20;
     
-    public TerminalController(String commandsPath)
+    private static final String COMMENT_MARK = "#";
+    
+    /**
+     * The package where the commands are located
+     */
+    private String commandsPackage;
+    
+    /**
+     * The input/output stream that the terminal uses
+     */
+    private IOStream iostream;
+    
+    /**
+     * Map of command groups identified by subject name
+     */
+    private Map<String, CommandGroup> commandGroups;
+    
+    /**
+     * Map of available shortcuts for the commands subjects
+     */
+    private Map<String, String> shortcuts;
+    
+    /**
+     * The welcoming message that the terminal shows on initialization
+     */
+    private String welcomeMsg;
+    
+    /**
+     * Constructs a new TerminalController with the default System input/output.
+     * @param commandsPackage The package where the commands are located
+     */
+    public TerminalController(String commandsPackage)
     {
-        this.commandsPath = commandsPath;
-        iostream = new IOStream();
-        commands = new HashMap<String, CommandGroup>();
+        this.commandsPackage = commandsPackage;
+        iostream = new IOStream(System.in, System.out);
+        commandGroups = new TreeMap();
+        shortcuts = new HashMap();
     }
     
+    public void setWelcomeMessage(String welcomeMsg) {
+        this.welcomeMsg = welcomeMsg;
+    }
+    
+    /**
+     * Initializes and runs the terminal.
+     */
     @Override
     public void init()
     {
-        iostream.setInputStream(System.in);
-        iostream.setOutputStream(System.out);
+        iostream.println(welcomeMsg);
         
-        try
+        String line = iostream.readLine();
+        
+        while(line != null)
         {
-            String line = iostream.readLine();
-
-            while(line != null && !line.startsWith("quit"))
-            {
+            line = line.trim();
+            
+            if (! shouldLineBeIgnored(line)) {
+                // Set subcommand prompt
+                iostream.setPrompt(">>");
                 exec(line);
-                line = iostream.readLine();
             }
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
+            
+            // Set command prompt
+            iostream.setPrompt(">");
+            line = iostream.readLine();
         }
     }
     
-    @Override
-    public void notify(String name, Map<String, Object> data)
+    private boolean shouldLineBeIgnored(String line)
     {
-        System.out.println(name);
-        
-        for(Map.Entry<String, Object> e : data.entrySet())
-            iostream.println(e.getKey() + ": " + e.getValue().toString());
+        return line.isEmpty() || line.startsWith(COMMENT_MARK);
     }
     
+    /**
+     * Recieves events and, in debug mode, prints the information received.
+     * @param name Name of the event
+     * @param data Data related with the event
+     */
+    @Override
+    public void notify(Event event)
+    {
+        // @TODO Disable terminal notifications forever?
+        /*if(Debug.isEnabled()) {
+            System.out.println(name);
+        
+            for(Map.Entry<String, ?> e : data.entrySet())
+                iostream.println(e.getKey() + ": " + e.getValue().toString());
+        }*/
+    }
+    
+    /**
+     * Adds a business controller on top of the terminal creating a command subject of the same name and
+     * associating the business controller to it.
+     * These controllers are injected into the commands of the terminal using reflection.
+     * @param name Name of the business controller
+     * @param controller Business controller to add
+     */
     @Override
     public void addBusinessController(String name, BusinessController controller)
     {
         try
         {
-            Class comgroupClass = Class.forName(commandsPath + "." + Utils.capitalize(name) +
+            Class comGroupClass = Class.forName(commandsPackage + "." + Utils.capitalize(name) +
                     "Commands");
             
-            CommandGroup comgroup = (CommandGroup) comgroupClass.newInstance();
-            comgroup.setTerminal(this);
-            comgroup.setIOStream(iostream);
+            if(!comGroupClass.isAnnotationPresent(CommandSubject.class))
+                throw new Exception("There is no CommandSubject annotation in the " + name + " command "
+                        + "group.");
             
-            commands.put(name, comgroup);
+            CommandSubject commandSubject = (CommandSubject)comGroupClass.getAnnotation(CommandSubject.class);
+            String commandGroupName = commandSubject.name();
+            
+            if(! name.equals(commandGroupName))
+                shortcuts.put(name, commandGroupName);
+            
+            AdvancedCommandGroup commandGroup = (AdvancedCommandGroup) comGroupClass.getConstructor(
+                controller.getClass()).newInstance(controller);
+            
+            commandGroup.setName(commandGroupName);
+            commandGroup.setDescription(commandSubject.description());
+            commandGroup.setIOStream(iostream);
+            commandGroup.scanCommands();
+            
+            commandGroups.put(commandGroupName, commandGroup);
             super.addBusinessController(name, controller);
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            if(Debug.isEnabled())
+                e.printStackTrace();
         }
     }
     
-    public void exec(String line)
+    /**
+     * Executes a command line.
+     * @param line The command line.
+     */
+    private void exec(String line)
     {
+        iostream.putIntoInputBuffer(line);
+        
+        String actionName, commandName;
+        commandName = iostream.readString();
+        
+        if(commandName.equals("quit")) {
+            quit();
+            return;
+        }
+        
+        if(commandName.equals("help") && !iostream.hasNext()) {
+            showHelp();
+            return;
+        }
+        
+        String shortcut = iostream.readString();
+        String subjectName = getSubject(shortcut);
+        
+        Debug.println("Action is " + commandName + " on subject " + subjectName);
+        
         try
-        {
-            iostream.setInputBuffer(line);
+        {         
+            if(! commandGroups.containsKey(subjectName))
+                throw new BusinessException("There is no subject known as " + subjectName);
             
-            String action, method;
-            action = method = iostream.readString();
-            
-            if(isReserved(action))
-                method = "_" + action;
-            
-            String subject = iostream.readString();
-            
-            System.out.println("Action is " + action + " on subject " + subject);
-            
-            if(! commands.containsKey(subject))
-                throw new Exception("There is no subject known as " + subject);
-            
-            CommandGroup comgroup = commands.get(subject);
-            Class comgroupClass = comgroup.getClass();
-            
-            try
-            {
-                comgroupClass.getMethod(method).invoke(comgroup);
-            }
-            catch(InvocationTargetException e)
-            {
-                throw e.getCause();
-            }
+            commandGroups.get(subjectName).exec(commandName);
         }
-        catch(Throwable e)
-        {
-            e.printStackTrace(); // @TODO Improve exception handling
+        catch(BusinessException e) {
+            iostream.println("[Business error] " + e.getMessage());
+        }
+        catch(JAXBException e) {
+            iostream.println("[Storage error] " + e.getMessage());
+            
+            if(Debug.isEnabled())
+                e.printStackTrace();
+        }
+        catch(NoSuchMethodException e) {
+            iostream.println("[Terminal error] Command not found.");
+        }
+        catch(Throwable e) {
+            if(Debug.isEnabled())
+                e.printStackTrace();
         }
     }
     
-    private boolean isReserved(String s)
-    {
-        return (s.equals("new"));
+    public void showHelp() {
+        iostream.println("Available commands:");
+        
+        for(CommandGroup commandGroup : commandGroups.values())
+            iostream.println("    " + Utils.padRight(commandGroup.getName(), HELP_PADDING) +
+                    commandGroup.getDescription());
+        
+        iostream.println("    " + Utils.padRight("quit", HELP_PADDING) + "Closes the application");
+        iostream.println("Use 'help [command]' to show more information about the command.");
+    }
+    
+    public void quit() {
+        boolean isConfirmed = iostream.readBoolean("Are you sure do you really want to quit?");
+        
+        if(isConfirmed)
+            System.exit(0);
+    }
+    
+    /**
+     * Returns the full subject of the given shortcut, if the shortcut does not exist it returns the
+     * shortcut itself.
+     * @param shortcut The shortcut of the subject to get
+     * @return The full subject
+     */
+    private String getSubject(String shortcut) {
+        if(! shortcuts.containsKey(shortcut))
+            return shortcut;
+        
+        return shortcuts.get(shortcut);
     }
 }

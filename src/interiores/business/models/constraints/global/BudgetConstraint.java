@@ -5,9 +5,11 @@
 package interiores.business.models.constraints.global;
 
 
+import interiores.business.exceptions.ConstraintException;
 import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.constraints.GlobalConstraint;
+import interiores.core.business.BusinessException;
 import java.util.List;
 
 /**
@@ -30,13 +32,12 @@ public class BudgetConstraint extends GlobalConstraint {
     }
     
     @Override
-    public boolean isSatisfied() {
-        return current_budget <= max_budget;
-    }
-
-    @Override
-    public void notifyAssignment(FurnitureValue fv) {
-        current_budget += fv.getModel().getPrice();
+    public void notifyAssignment(FurnitureValue fv) throws ConstraintException {
+        if ( current_budget + fv.getModel().getPrice() <= max_budget )
+            current_budget += fv.getModel().getPrice();
+        else
+            throw new ConstraintException("Current budget (" + current_budget + "€) exceeds maximum budget ("
+                    + max_budget + "€)");
     }
 
     @Override

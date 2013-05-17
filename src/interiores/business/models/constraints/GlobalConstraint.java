@@ -4,6 +4,7 @@
  */
 package interiores.business.models.constraints;
 
+import interiores.business.exceptions.ConstraintException;
 import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureValue;
 import java.util.List;
@@ -15,16 +16,10 @@ import java.util.List;
 public abstract class GlobalConstraint {
     
     /**
-     * Checks whether the current state of the class satisfies the constraint
-     * @return 'true' if the constraint holds. 'false' otherwise
-     */
-    public abstract boolean isSatisfied();
-    
-    /**
      * Lets the constraint know of a value that's been assigned, so that it can update its information
      * @param fv The value that has been assigned
      */
-    public abstract void notifyAssignment(FurnitureValue fv);
+    public abstract void notifyAssignment(FurnitureValue fv) throws ConstraintException;
     
     /**
      * Lets the constraint know of a value that's been unassigned, so that it can update its information

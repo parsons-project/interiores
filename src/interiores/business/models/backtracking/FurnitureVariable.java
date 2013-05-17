@@ -1,9 +1,7 @@
 package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
-import interiores.business.models.OrientedRectangle;
 import interiores.business.models.constraints.UnaryConstraint;
-import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
@@ -82,7 +80,7 @@ public class FurnitureVariable
     
     /**
      * Resets the iterators so that they will iterate through all of the
-     * variables' domain, for the iteration "iteration" of the algorithm.
+     * variables' domains, for the iteration "iteration" of the algorithm.
      */
     public void resetIterators(int iteration) {
         domain.resetIterators(iteration);

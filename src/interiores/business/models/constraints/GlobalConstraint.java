@@ -4,7 +4,9 @@
  */
 package interiores.business.models.constraints;
 
+import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureValue;
+import java.util.List;
 
 /**
  * Represents a constraint imposed over a set of furniture (that is, the whole wishlist of a room)
@@ -30,5 +32,7 @@ public abstract class GlobalConstraint {
      */
     public abstract void notifyUnassignment(FurnitureValue fv);
     
+    
+    public abstract void eliminateInvalidValues(List<Domain> domains);
     
 }

@@ -72,8 +72,13 @@ public class StageAlt {
     private void initialize_iterators() {
         
         or_it = orientations.iterator();
+        mod_it = models.iterator();
         
-        positions = new ExtendedArea(room);
+        // If the initial list of orientations and models is not empty
+        if (or_it.hasNext() && mod_it.hasNext())
+            positions = new ExtendedArea(room,or_it.next(),mod_it.next());
+        else
+            positions = new ExtendedArea();
         
         
         

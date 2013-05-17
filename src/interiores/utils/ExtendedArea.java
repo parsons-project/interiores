@@ -4,7 +4,10 @@
  */
 package interiores.utils;
 
+import interiores.business.models.FurnitureModel;
+import interiores.business.models.Orientation;
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.util.Iterator;
 
@@ -21,8 +24,15 @@ public class ExtendedArea implements Iterable<Point> {
         area = new Area();
     }
     
-    public ExtendedArea(Area a) {
-        area = a;
+    public ExtendedArea(Area a, Orientation o, FurnitureModel m) {
+        Area x = a;
+        // x = x.intersect(a.);
+        
+        AffineTransform transformer = new AffineTransform();
+	transformer.translate(m.getSize().depth,5);
+        
+        
+        
     }
     
     public Area getArea() {

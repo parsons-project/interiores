@@ -1,0 +1,291 @@
+\subsubsection{Objetivo}
+`Diseño de interiores' es un software destinado al diseño de habitaciones
+y distribución de su mobiliario. La aplicación es capaz de generar diseños
+de habitaciones cumpliendo con una serie de restricciones, permitiendo
+al usuario definir cuáles y cómo deben ser estas restricciones.
+
+\subsubsection{Flujo de la aplicación}
+En este apartado se explica cuál es el flujo de la aplicación, es decir,
+cuáles son las posibilidades del usuario desde que abre el programa hasta que
+resuelve su problema. En los siguientes apartados se explica con mucho más
+detalle cada uno de los elementos más importantes que conforman el software.
+
+\newpar
+Al iniciar la aplicación se le pregunta al usuario si desea:
+\begin{description}
+  \item[Crear un nuevo diseño]
+    En este caso el usuario deberá especificar el tipo de habitación que
+    quiere crear y con qué dimensiones.
+
+  \item[Abrir un diseño ya existente]
+    El usuario podrá abrir diseños que haya guardado previamente. En este caso
+    se cargará la habitación en el mismo estado que cuando se guardó para que
+    el usuario pueda seguir trabajando en su diseño.
+\end{description}
+
+Una vez el usuario haya creado o abierto una habitación, la aplicación pasará
+a mostrarle diversos elementos para facilitarle el diseño de la habitación.
+Estos son:
+
+\begin{description}
+  \item[Mapa de la habitación]
+    Es una representación gráfica de la habitación, dibujando sus elementos
+    topológicos y su mobiliario.
+
+  \item[Menú de muebles disponibles]
+    Menú lateral que contendrá los muebles que se puedan añadir a la
+    habitación. Más detalles en \nameref{catalogo_muebles}.
+  
+  \item[Menú de elementos fijos]
+    Menú adyacente al catálogo de muebles disponibles. Mostrará
+    \nameref{fijos}, que se puedan añadir a la
+    habitación.
+\clearpage
+  \item[Barra de acciones]
+    Es la típica barra situada en la parte superior de la aplicación.
+    Permitirá al usuario realizar las siguientes acciones:
+    \begin{itemize}
+        \item Crear una nueva habitación
+        \item Abrir una habitación
+        \item Guardar la habitación
+        \item Modificar catálogo de muebles
+        \item Modificar restricciones
+        \item Acceder a la información Acerca de... de la aplicación.
+    \end{itemize}
+\end{description}
+
+El usuario podrá utilizar el catálogo de muebles y el menú de elementos fijos
+para añadir los objetos que desee a su habitación. Para ello solo deberá
+seleccionar el mueble o elemento fijo que desee añadir y hacer click en la
+posición del mapa donde quiere que se sitúe. La posición será considerada como
+correcta si al añadir el mueble en dicha posición se siguen cumpliendo todas
+las restricciones definidas en el momento de la inserción. En caso de que la
+posición sea incorrecta se le notificará al usuario en forma de mensaje la
+restricción que se ha visto comprometida.
+\newpar
+Sin embargo, el principal objetivo de la aplicación es la generación de
+diseños de manera automática. Por lo tanto, el usuario podrá especificar en el
+menú de muebles cuáles deberán incluirse en los diseños que genere la
+aplicación. Adicionalmente, el usuario podrá fijar la posición de los muebles
+en el mapa. Aquellos muebles que estén fijados no serán redistribuidos por la
+aplicación al generar los diseños. Por otra parte, los diseños generados deben
+cumplir ciertas restricciones  que el usuario podrá añadir y/o modificar a
+través del respectivo menú de la barra de acciones.
+\newpar
+Una vez el usuario haya especificado muebles, elementos fijos y restricciones
+podrá pedir que la aplicación genere o termine su diseño cumpliendo con todas
+las restricciones (más información en \nameref{restricciones}) que ha
+establecido anteriormente. Si no existe ninguna solución que satisfaga las
+restricciones se avisará al usuario con un mensaje informativo. Más
+información en \nameref{generacion}.
+
+\subsubsection{La habitación}
+Una habitación se caracteriza por tener:
+
+\begin{description}
+  \item[Dimensiones] Ancho, largo y alto, en centímetros.
+  \item[Tipo] Uno de los tipos de habitación presentes en el
+  catálogo de habitaciones. Más información en
+  \nameref{catalogo_habitaciones}.
+\end{description}
+
+\clearpage
+El usuario podrá añadir a la habitación:
+
+\begin{description}
+  \item[Muebles] Utilizando el menú de muebles disponibles.
+  \item[Elementos fijos] A través del menú de elementos fijos.
+  \item[Restricciones] Ya sean de la habitación en general o de muebles
+  específicos. Más información en \nameref{restricciones}.
+\end{description}
+
+\subsubsection{El catálogo de tipos habitaciones}
+\label{catalogo_habitaciones}
+El catálogo de tipos de habitaciones contiene los diferentes tipos de
+habitaciones que el usuario puede seleccionar para diseñar su habitación.
+\newpar
+Se incluye un catálogo de habitaciones por defecto (consultar
+\nameref{anexo_habitaciones}) que siempre estará disponible. Si el usuario
+realiza cambios sobre el catálogo por defecto y decide guardar los cambios se
+le preguntará dónde desea guardar el catálogo. Por ende, el usuario también
+podrá cargar catálogos desde un archivo que haya guardado previamente, o bien,
+volver al catálogo por defecto.
+\newpar
+Cada tipo de habitación tiene las siguientes características:
+
+\begin{description}
+  \item[Nombre] Por ejemplo: cocina, dormitorio, baño, etc.
+  \item[Dimensiones máximas y mínimas] Ancho, largo y alto máximos y mínimos
+  que una habitación de este tipo puede tener. En centímetros.
+  \item[Restricciones] Puede contener cualquier tipo de restricción aplicable
+  a la habitación o a modelos de muebles y sus tipos. Más información en
+  \nameref{restricciones}.
+\end{description}
+
+\subsubsection{Los elementos fijos}
+\label{fijos}
+Los elementos fijos son objetos que se pueden situar en la habitación y que
+nunca serán distribuidos por la aplicación en la generación de diseños.
+Son elementos fijos los accidentes, los radiadores, las ventanas, las
+puertas y las chimeneas.
+\newpar
+Los accidentes representan pilares o pilastros. Un pilastro es un pilar con
+almenos una de las caras pegadas a la pared. Se utilizan para definir de
+manera más exacta la forma de la habitación que se quiere diseñar.
+\newpar
+Los elementos fijos tienen unas dimensiones máximas y mínimas y restricciones
+propias. Al añadir elementos fijos el usuario debe determinar la posición del
+elemento y sus dimensiones.
+
+\subsubsection{Los modelos de muebles}
+\label{modelos}
+Los modelos de muebles son abstracciones de los muebles que pueden añadirse
+a la habitación. Los modelos de muebles están caracterizados por:
+
+\begin{description}
+  \item[Nombre] Identifica el modelo.
+  \item[Dimensiones] Las dimensiones del mueble: ancho, largo y altura.
+  La altura, aunque la habitación se represente en dos dimensiones, puede ser
+  utilizada por algunas restricciones.
+  \item[Espacio activo] Es el espacio que ocupa el mueble debido a sus
+  dimensiones. Este espacio no puede superponerse con el de otros muebles.
+  \item[Color]
+  \item[Material] El material principal del que está hecho el mueble.
+  \item[Precio] Precio del mueble.
+  \item[Tipo] Más información en \nameref{tipos}.
+\end{description}
+
+\subsubsection{Los tipos de muebles}
+\label{tipos}
+Los tipos muebles se utilizan para clasificar y definir los modelos más
+fácilmente. El tipo de un mueble especifica:
+\begin{description}
+  \item[Dimensiones máximas y mínimas] En centímetros.
+  \item[Utilidades] Define de qué funciones de propósito general dispondrá el
+  mueble. El modelo se especializará en función de las utilidades del tipo de
+  mueble, adquiriendo nuevas propiedades.
+  \item[Restricciones] Inherentes al propio tipo.
+\end{description}
+
+El usuario podrá modificar los tipos de muebles disponibles, así como
+definir nuevos tipos indicando sus propiedades.
+\newpar
+Las utilidades disponibles son:
+\begin{description}
+  \item[Contenedor] El mueble puede ser utilizado para almacenar cosas de
+  carácter general (por ejemplo, la papelera o la nevera no sirven para
+  guardar cualquier cosa). Añade la propiedad: capacidad, que se mide en
+  decimetros cúbicos o litros.
+  \item[Asiento] El mueble se puede utilizar para sentarse. Añade la
+  propiedad: número de plazas.
+  \item[Lugar para dormir] El mueble está diseñado para que las personas
+  duerman en él. Añade la propiedad: número de plazas.
+  \item[Soporte] Se pueden poner otros muebles encima.
+  \item[Trabajo/Comida] El mueble puede utilizarse para trabajar o para comer.
+  Se caracteriza porque el mueble se utiliza estando sentado.
+\end{description}
+
+Para una lista detallada de los tipos de muebles disponibles y sus propiedades
+consultar \nameref{anexo_tipos}.
+
+\subsubsection{El cátalogo de modelos de muebles}
+\label{catalogo_muebles}
+El catálogo de modelos de muebles representa el conjunto total de modelos de
+muebles que están disponibles en la aplicación. El usuario puede añadir y
+modificar modelos de muebles del catálogo.
+\newpar
+Se incluye un catálogo de modelos de muebles por defecto (consultar
+\nameref{anexo_muebles}) que siempre estará disponible. Si el usuario realiza
+cambios sobre el catálogo por defecto y decide guardar los cambios se le
+preguntará dónde desea guardar el catálogo. Por ende, el usuario también podrá
+cargar catálogos desde un archivo que haya guardado previamente, o bien,
+volver al catálogo por defecto.
+\newpar
+El menú de modelos de muebles disponibles es un menú lateral que contendrá
+todos los muebles que puedan añadirse a la habitación en función de las
+restricciones del tipo de habitación que se esté diseñando. En primera
+instancia aparecerán los muebles que obligatoriamente deban incluirse en el
+diseño (debe haber una cama en un dormitorio). Aparecerán también los muebles
+que puedan incluirse en la habitación. Este menú no contendrá los muebles que
+no puedan ser incluidos en la habitación (es ilógico tener un horno en un
+baño).
+
+\subsubsection{Las restricciones}
+\label{restricciones}
+Las restricciones son reglas que todo diseño de la habitación debe cumplir.
+\newpar
+Existen dos clases de restricciones. Las restricciones que introduzca el
+usuario según sus preferencias, y las restricciones implícitas que todo diseño
+de interiores debe cumplir. El usuario puede introducir tres tipos de
+restricciones:
+\begin{description}
+  \item[De utilidad] El usuario expone las funcionalidades que
+  requiere de la habitación. Por ejemplo, puede necesitar que quepan tres
+  personas para dormir, o que haya suficiente espacio para guardar toda su
+  ropa.
+  \item[De diseño] El usuario indica sus preferencias en cuanto
+  a materiales y colores, así como en cuanto a presupuesto.
+  \item[Espaciales] El usuario da indicaciones sobre la colocación de los
+  muebles. Puede imponer una relación entre un par de muebles, así como fijar
+  un cierto elemento a una posición.
+\end{description}
+
+Las restricciones implícitas funcionan a 3 niveles:
+\begin{description}
+  \item[A nivel global] Deben cumplirse siempre,   independientemente del
+  catálogo de tipos de muebles o del catálogo de   tipos de habitaciones
+  usado.
+  \item[A nivel de tipos de habitaciones] Se aplican cuando se diseña una
+  habitación del tipo en cuestión. Se pueden modificar al crear tipos de
+  habitaciones personalizados.
+  \item[A nivel de tipos de muebles] Se aplican cuando se usa un mueble del
+  tipo en cuestión. Se pueden modificar al crear nuevos tipos de muebles.
+\end{description}
+
+Para ver una lista completa de los tipos de restricciones disponibles
+consultar \nameref{anexo_restricciones}.
+
+\subsubsection{La generación de diseños}
+\label{generacion}
+La generación de diseños es la funcionalidad más importante de la aplicación.
+El usuario podrá requerir que se ejecute la generación de diseños en cualquier
+momento para que la aplicación ofrezca un diseño donde se satisfagan todas las
+restricciones que se hayan definido.
+\newpar
+El diseño generado se aplicará automáticamente al diseño actual del usuario
+y el mapa mostrará el nuevo diseño.
+
+\subsubsection{Línea de comandos}
+La aplicación podrá utilizarse en modo línea de comandos. En este modo el
+usuario utilizará comandos para comunicarse con la aplicación y diseñar su
+habitación.
+\newpar
+Esta funcionalidad será útil para testear toda la aplicación sin necesidad de
+una interfaz gráfica, redireccionando la entrada de la aplicación a un fichero
+que contenga los comandos y observando la salida generada.
+
+\subsubsection{Extras}
+Adicionalmente, si se dispone del tiempo suficiente se implementarán las
+siguientes funcionalidades:
+
+\begin{description}
+  \item[Enchufes e interruptores] El usuario podrá posicionar, además de
+  muebles y elementos fijos, enchufes e interruptores en la habitación. Los
+  muebles tendrán en cuenta estos elementos para no tapar los interruptores y
+  posicionarse relativamente cerca de los enchufes en caso de que necesiten
+  electricidad para funcionar.
+
+  \item[Deshacer/Rehacer] El usuario podrá deshacer/rehacer los cambios que
+  haya efectuado desde que ha empezado a diseñar la habitación, paso por paso.
+
+  \item[Generación de diseños alternativos] El usuario podrá obtener
+  diferentes distribuciones de su habitación ejecutando la generación de
+  diseños consecutivamente.
+
+  \item[Iluminación] Se añadirá el tipo de mueble iluminar, y se permitirá al
+  usuario definir restricciones respecto al nivel de iluminación que quiere en
+  su habitación.
+
+  \item[Medidas de calidad] Además de las restricciones la generación de
+  diseños tendrá en cuenta la calidad de la distribución generada.
+\end{description}

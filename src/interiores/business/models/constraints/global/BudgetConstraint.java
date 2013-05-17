@@ -5,8 +5,12 @@
 package interiores.business.models.constraints.global;
 
 
+import interiores.business.exceptions.ConstraintException;
+import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.constraints.GlobalConstraint;
+import interiores.core.business.BusinessException;
+import java.util.List;
 
 /**
  * Represents a constraint that imposes a maximum budget for the wanted elements in a room.
@@ -16,8 +20,8 @@ import interiores.business.models.constraints.GlobalConstraint;
  */
 public class BudgetConstraint extends GlobalConstraint {
     
-    private float max_budget;
-    private float current_budget;
+    private double max_budget;
+    private double current_budget;
     
     public BudgetConstraint() {
     }
@@ -28,18 +32,28 @@ public class BudgetConstraint extends GlobalConstraint {
     }
     
     @Override
-    public boolean isSatisfied() {
-        return current_budget <= max_budget;
-    }
-
-    @Override
-    public void notifyAssignment(FurnitureValue fv) {
-        current_budget += fv.getModel().getPrice();
+    public void notifyAssignment(FurnitureValue fv) throws ConstraintException {
+        if ( current_budget + fv.getModel().getPrice() <= max_budget )
+            current_budget += fv.getModel().getPrice();
+        else
+            throw new ConstraintException("Current budget (" + current_budget + "€) exceeds maximum budget ("
+                    + max_budget + "€)");
     }
 
     @Override
     public void notifyUnassignment(FurnitureValue fv) {
         current_budget -= fv.getModel().getPrice();
     }
-    
+
+    @Override
+    public void eliminateInvalidValues(List<Domain> domains) {
+        
+        // TODO Eliminate invalid values (due to the current budget)
+        // Pending implementation. This method is intended to, for instance,
+        // eliminate all the models of unassigned variables such that their
+        // price exceeds the remaining budget.
+        
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

@@ -119,6 +119,10 @@ public class OrientedRectangle extends Rectangle {
         return this.orientation;
     }
     
+    public Rectangle getWholeArea(SpaceAround spaceAround) {
+        return spaceAround.getWholeArea(this);
+    }
+    
     /**
      * Get the center of the rectangle
      * @return The point in the center of the rectangle (absolute respect its

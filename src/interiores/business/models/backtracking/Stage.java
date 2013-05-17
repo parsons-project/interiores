@@ -115,11 +115,7 @@ public class Stage {
         }
         
         //2) return the new current value
-        OrientedRectangle area = new OrientedRectangle(currentPosition,
-            currentModel.getSize(), Orientation.S);
-        area.setOrientation(currentOrientation);
-        
-        return new FurnitureValue(area, currentModel);
+        return new FurnitureValue(currentPosition, currentModel, currentOrientation);
     }
     
     

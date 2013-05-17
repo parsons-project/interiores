@@ -2,6 +2,7 @@ package interiores.business.models.catalogs.factories;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.FurnitureType;
+import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
@@ -50,23 +51,25 @@ public class DefaultFurnitureTypesCatalogFactory
     }
     
     private static FurnitureType chair() throws BusinessException {
-        FurnitureType ft = new FurnitureType("chair", new Range(40, 60), new Range(40, 60));
+        FurnitureType ft = new FurnitureType("chair", new Range(40, 60), new Range(40, 60),
+                new SpaceAround(30, 20, 0, 20));
         
         ft.addFurnitureModel(new FurnitureModel("ILLSA", new Dimension(45, 45), 16.99f, Color.WHITE,
-                "plastic", new int[]{30,20,0,20}));
+                "plastic"));
         ft.addFurnitureModel(new FurnitureModel("NADDA", new Dimension(50, 50), 22.99f, Color.GRAY,
-                "pine", new int[]{30,20,0,20}));
+                "pine"));
         
         return ft;
     }
     
     private static FurnitureType armchair() throws BusinessException {
-        FurnitureType ft = new FurnitureType("armchair", new Range(40, 80), new Range(40, 80));
+        FurnitureType ft = new FurnitureType("armchair", new Range(40, 80), new Range(40, 80),
+                new SpaceAround(40, 0, 0, 0));
         
         ft.addFurnitureModel(new FurnitureModel("JOSSUN", new Dimension(60, 60), 38.99f, Color.BLUE,
-                "agglomerate", new int[]{40,0,0,0}));
+                "agglomerate"));
         ft.addFurnitureModel(new FurnitureModel("SKATJA", new Dimension(70, 70), 59.99f, Color.GRAY,
-                "agglomerate", new int[]{40,0,0,0}));
+                "agglomerate"));
         
         return ft;
     }

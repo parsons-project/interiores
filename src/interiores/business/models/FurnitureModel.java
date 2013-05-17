@@ -1,13 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package interiores.business.models;
 
 import interiores.core.Utils;
 import interiores.data.adapters.ColorAdapter;
 import interiores.utils.Dimension;
 import java.awt.Color;
+import java.awt.Point;
+import java.awt.Rectangle;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -32,7 +30,7 @@ public class FurnitureModel {
     private Dimension size;     // Size of the furniture model
     
     @XmlElement
-    private int[] passiveSpace; // Passive space requirements for the furniture model
+    private SpaceAround passiveSpace; // Passive space requirements for the furniture model
     
     @XmlAttribute
     private float price;          // Market price of the furniture model
@@ -63,21 +61,17 @@ public class FurnitureModel {
     public FurnitureModel(String name, Dimension size, float price, Color color,
             String material)
     {
-        this(name, size, price, color, material, new int[]{ 0, 0, 0, 0 });
+        this(name, size, price, color, material, null);
     }
     
     public FurnitureModel(String name, Dimension size, float price, Color color,
-            String material, int[] passiveSpace)
+            String material, SpaceAround passiveSpace)
     {
         this.name = name;
         this.size = size;
         this.price = price;
         this.color = color;
         this.material = material;
-        
-        if (passiveSpace.length != 4)
-            throw new IllegalArgumentException("Passive space must be defined for all four orientations");
-        
         this.passiveSpace = passiveSpace;
     }
     
@@ -113,8 +107,23 @@ public class FurnitureModel {
         return size;
     }
     
-    public int[] getPassiveSpace() {
+    public OrientedRectangle getActiveArea(Point position, Orientation orientation) {
+        OrientedRectangle activeArea = new OrientedRectangle(position, getSize(), Orientation.S);
+        activeArea.setOrientation(orientation);
+        
+        return activeArea;
+    }
+    
+    public boolean hasPassiveSpace() {
+        return passiveSpace != null;
+    }
+    
+    public SpaceAround getPassiveSpace() {
         return passiveSpace;
+    }
+    
+    public void setPassiveSpace(SpaceAround passiveSpace) {
+        this.passiveSpace = passiveSpace;
     }
     
     /**
@@ -144,10 +153,8 @@ public class FurnitureModel {
     @Override
     public String toString() {
         String colorString = "r=" + color.getRed() + ",g=" + color.getGreen() + ",b=" + color.getBlue();
-        String passiveString = "N: " + passiveSpace[0] + ", E: " + passiveSpace[1] + ", S: " + 
-                passiveSpace[2] + ", W: " + passiveSpace[3];
         
         return Utils.padRight(name, 20) + "Size[" + size + "], Price[" + price + "], Color[" + colorString
-                + "], Material[" + material + "], Passive space[" + passiveString + "]";
+                + "], Material[" + material + "], Passive space[" + passiveSpace + "]";
     }
 }

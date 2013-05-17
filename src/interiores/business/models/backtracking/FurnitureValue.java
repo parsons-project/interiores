@@ -1,6 +1,7 @@
 package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
+import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
 import interiores.shared.backtracking.Value;
 import java.awt.Point;
@@ -15,7 +16,7 @@ public class FurnitureValue extends Value {
     // Represents a positioned-and-oriented area
     private OrientedRectangle activeArea;
     
-    private Rectangle passiveArea;
+    private Rectangle wholeArea;
         
     // Represents a specific model
     private FurnitureModel model;
@@ -26,10 +27,10 @@ public class FurnitureValue extends Value {
      * @param area
      * @param model 
      */
-    public FurnitureValue(OrientedRectangle area, FurnitureModel model) {
-        this.activeArea = area;
+    public FurnitureValue(Point position, FurnitureModel model, Orientation orientation) {
         this.model = model;
-        this.passiveArea = computePassiveArea();        
+        this.activeArea = model.getActiveArea(position, orientation);
+        this.wholeArea = activeArea.getWholeArea(model.getPassiveSpace());
     }
     
     
@@ -38,7 +39,7 @@ public class FurnitureValue extends Value {
     }
     
     public Rectangle getWholeArea() {
-        return passiveArea;
+        return wholeArea;
     }
     
     public Point getPosition() {
@@ -49,24 +50,9 @@ public class FurnitureValue extends Value {
         return model;
     }
     
-    public void changePosition(Point p) {
-        activeArea.setLocation(p);
-        passiveArea.setLocation(p);
-    }
-    
     @Override
     public String toString() {
         return "Model Name: " + model.getName() + " Location: (" + activeArea.x + "," + activeArea.y + ")" +
                 " Orientation: " + activeArea.getOrientation() + ";";
     }
-
-    private Rectangle computePassiveArea() {
-        int o = activeArea.getOrientation().ordinal();
-        int[] passiveOffsets = model.getPassiveSpace();
-        return new Rectangle(activeArea.x - passiveOffsets[3-o],
-                             activeArea.y - passiveOffsets[(4-o) % 4],
-                             activeArea.width + passiveOffsets[(3+o) % 4] + passiveOffsets[(1+o) % 4],
-                             activeArea.height + passiveOffsets[(2+o) % 4] + passiveOffsets[o]        );
-    }
-
 }

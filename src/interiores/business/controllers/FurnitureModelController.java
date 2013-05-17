@@ -5,6 +5,7 @@ import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.FurnitureType;
+import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
@@ -46,8 +47,11 @@ public class FurnitureModelController
         
         Dimension size = new Dimension(width, depth);
         Color modelColor = Color.decode(color);
+        SpaceAround passiveSpace = new SpaceAround(passiveOffsets[0], passiveOffsets[1], passiveOffsets[2],
+                passiveOffsets[3]);
         
-        FurnitureModel furnitureModel = new FurnitureModel(name, size, price, modelColor, material, passiveOffsets);
+        FurnitureModel furnitureModel = new FurnitureModel(name, size, price, modelColor, material,
+                passiveSpace);
         
         furnitureType.addFurnitureModel(furnitureModel);
     }

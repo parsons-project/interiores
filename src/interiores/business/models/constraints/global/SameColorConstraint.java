@@ -31,8 +31,8 @@ public class SameColorConstraint extends GlobalConstraint {
         
         if (assignments == 0) current_color = fv.getModel().getColor();
         else if ( current_color != fv.getModel().getColor() )
-            throw new ConstraintException("Trying to assign a " + fv.getModel().getColor().toString()
-                    + " furniture to a room which can only contain " + current_color.toString() + " ones.");
+            throw new ConstraintException("Trying to assign a " + fv.getModel().getColor()
+                    + " furniture to a room which can only contain " + current_color + " ones.");
         
         assignments++;
     }

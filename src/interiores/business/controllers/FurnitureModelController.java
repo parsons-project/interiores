@@ -46,11 +46,10 @@ public class FurnitureModelController
         FurnitureType furnitureType = getForWrite(furnitureTypeName);
         
         Dimension size = new Dimension(width, depth);
-        Color modelColor = Color.decode(color);
         SpaceAround passiveSpace = new SpaceAround(passiveOffsets[0], passiveOffsets[1], passiveOffsets[2],
                 passiveOffsets[3]);
         
-        FurnitureModel furnitureModel = new FurnitureModel(name, size, price, modelColor, material,
+        FurnitureModel furnitureModel = new FurnitureModel(name, size, price, color, material,
                 passiveSpace);
         
         furnitureType.addFurnitureModel(furnitureModel);

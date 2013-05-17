@@ -1,7 +1,9 @@
 package interiores.business.models;
 
 import interiores.core.Utils;
+import interiores.core.business.BusinessException;
 import interiores.data.adapters.ColorAdapter;
+import interiores.utils.CoolColor;
 import interiores.utils.Dimension;
 import java.awt.Color;
 import java.awt.Point;
@@ -36,7 +38,7 @@ public class FurnitureModel {
     
     @XmlAttribute
     @XmlJavaTypeAdapter(ColorAdapter.class)
-    private Color color;        // Color of the furniture model
+    private CoolColor color;        // Color of the furniture model
     
     @XmlAttribute
     private String material;    // Material the furniture model is made in
@@ -48,28 +50,20 @@ public class FurnitureModel {
         
     }
     
-    /**
-     * Full constructor that specifies all of the features of a furniture model.
-     * @param type Furniture model's type
-     * @param name Comercial name of the furniture model
-     * @param size Size of the furniture model
-     * @param price Market price of the furniture model
-     * @param color Color of the furniture model
-     * @param material Material the furniture model is made in
-     */
-    public FurnitureModel(String name, Dimension size, float price, Color color,
-            String material)
+    public FurnitureModel(String name, Dimension size, float price, String color, String material)
+            throws BusinessException
     {
         this(name, size, price, color, material, null);
     }
     
-    public FurnitureModel(String name, Dimension size, float price, Color color,
-            String material, SpaceAround passiveSpace)
+    public FurnitureModel(String name, Dimension size, float price, String color, String material,
+            SpaceAround passiveSpace)
+            throws BusinessException
     {
         this.name = name;
         this.size = size;
         this.price = price;
-        this.color = color;
+        this.color = CoolColor.getEnum(color);
         this.material = material;
         this.passiveSpace = passiveSpace;
     }
@@ -130,7 +124,7 @@ public class FurnitureModel {
      * @return Color object representing the color of the model
      */
     public Color getColor() {
-        return color;
+        return color.getColor();
     }
 
     /**
@@ -151,9 +145,7 @@ public class FurnitureModel {
     
     @Override
     public String toString() {
-        String colorString = "r=" + color.getRed() + ",g=" + color.getGreen() + ",b=" + color.getBlue();
-        
-        return Utils.padRight(name, 20) + "Size[" + size + "], Price[" + price + "], Color[" + colorString
+        return Utils.padRight(name, 20) + "Size[" + size + "], Price[" + price + "], Color[" + color
                 + "], Material[" + material + "], Passive space[" + passiveSpace + "]";
     }
 }

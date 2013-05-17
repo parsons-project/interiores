@@ -132,8 +132,9 @@ public class FurnitureType
         Dimension modelDimension = furnitureModel.getSize();
         
         if (! modelDimension.isBetween(widthRange, depthRange))
-            throw new BusinessException("The furniture model is not inside the range of the type "
-                    + "dimensions. Width range: " + widthRange + " Depth range: " + depthRange);
+            throw new BusinessException("The furniture model " + furnitureModel.getName() + " is not inside "
+                    + "the range of the " + getName() + " type dimensions. Width range: " + widthRange + " "
+                    + "Depth range: " + depthRange);
         
         furnitureModel.setType(identifier);
         

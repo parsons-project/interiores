@@ -35,22 +35,6 @@ abstract public class SizeRangeConstraint
     }
     
     /**
-     * Determines whether a piece of furniture (a model) satisfies the constraint.
-     * This occurs when the model size falls within the specified range.
-     * For flexibility matters, a height or width of 0 is considered not to be a constraint
-     * @param model The specific piece of furniture whose size will be checked.
-     * @return 'true' if the model satisfies the size constraint; 'false' otherwise
-     * @TODO DELETE THIS METHOD?
-     */
-    public boolean isSatisfied(FurnitureModel model) {
-        if(range.max == 0)
-            return true;
-        
-        return model.getSize().isBetween(component, range);  
-    }
-    
-    
-    /**
      * Eliminates models which do not satisfy the constraint.
      * @param variable The variable whose values have to be checked.
      */

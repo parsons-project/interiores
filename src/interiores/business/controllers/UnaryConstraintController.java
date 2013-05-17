@@ -54,7 +54,7 @@ public class UnaryConstraintController
     }
     
     public Collection<String> getAvailableConstraints() {
-        return UnaryConstraint.getConstraintClasses();
+        return UnaryConstraint.getConstraintNames();
     }
     
      /**

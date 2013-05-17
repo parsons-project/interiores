@@ -38,7 +38,7 @@ public abstract class UnaryConstraint
         return (Class<? extends UnaryConstraint>) getConstraintClass(availableConstraints, name, "unary");
     }
     
-    public static Collection<String> getConstraintClasses() {
+    public static Collection<String> getConstraintNames() {
         return availableConstraints.keySet();
     }
     

@@ -1,12 +1,15 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogController;
+import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.factories.DefaultFurnitureTypesCatalogFactory;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Business controller covering the operations performed over the catalog of furniture types
@@ -36,5 +39,11 @@ public class FurnitureTypesCatalogController
         
         loadedCatalogs.put(defaultCatalog.getName(), defaultCatalog);
         setActiveCatalog(defaultCatalog);
+    }
+    
+    public Collection<String> getSelectedFurnitureTypes()
+            throws NoRoomCreatedException
+    {
+        return getWishList().getFurnitureTypes();
     }
 }

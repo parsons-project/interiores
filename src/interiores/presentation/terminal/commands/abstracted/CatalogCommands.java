@@ -1,9 +1,11 @@
 package interiores.presentation.terminal.commands.abstracted;
 
 import interiores.business.controllers.abstracted.CatalogController;
+import interiores.core.Options;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.annotation.Command;
+import interiores.core.presentation.terminal.annotation.CommandOptions;
 import java.util.Collection;
 import javax.xml.bind.JAXBException;
 
@@ -23,7 +25,7 @@ abstract public class CatalogCommands
             + "current catalog:";
     
     
-    private CatalogController catalogController;
+    protected CatalogController catalogController;
     private String catalogTypeName;
 
     public CatalogCommands(CatalogController catalogController, String catalogTypeName) {
@@ -54,9 +56,15 @@ abstract public class CatalogCommands
     }
     
     @Command("Selects the catalog to be used")
-    public void checkout() throws BusinessException {
+    @CommandOptions("new")
+    public void checkout(Options options)
+            throws BusinessException
+    {
         String question = String.format(CHECKOUT_MSG, catalogTypeName);
         String catalogName = readString(question);
+        
+        if(options.isEnabled("new"))
+            catalogController.create(catalogName);
         
         catalogController.checkout(catalogName);
     }

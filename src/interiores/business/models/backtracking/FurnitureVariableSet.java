@@ -4,6 +4,7 @@ import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
+import interiores.business.models.WantedFixed;
 import interiores.business.models.WantedFurniture;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.NamedCatalog;
@@ -82,6 +83,13 @@ public class FurnitureVariableSet
         variables = new FurnitureVariable[variableCount];
         
         int i = 0;
+//        for(WantedFixed wantedFixed : wishList.getWantedFixed()) {
+//            String variableName = wantedFixed.getName();
+//            variables[i] = new FurnitureVariable(variableName, wantedFixed,
+//                    roomDimension, wantedFixed.getUnaryConstraints(), variableCount);
+//            ++i;
+//        }
+        
         for(WantedFurniture wantedFurniture : wishList.getWantedFurniture()) {
             String variableName = wantedFurniture.getName();
             FurnitureType furnitureType = furnitureCatalog.get(wantedFurniture.getTypeName());

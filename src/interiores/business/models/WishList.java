@@ -6,6 +6,8 @@ import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.utils.BinaryConstraintAssociation;
+import interiores.utils.Dimension;
+import java.awt.Point;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.TreeMap;
@@ -28,6 +30,9 @@ public class WishList
     private TreeMap<String, WantedFurniture> furniture;
     
     @XmlElementWrapper
+    private TreeMap<String, WantedFixed> fixed;
+    
+    @XmlElementWrapper
     private TreeMap<String, Integer> typesCount;
     
     @XmlElementWrapper
@@ -41,6 +46,7 @@ public class WishList
         this.room = room;
         
         furniture = new TreeMap();
+        fixed = new TreeMap();
         typesCount = new TreeMap();
         binaryConstraints = new TreeMap();
         
@@ -53,7 +59,7 @@ public class WishList
     }
     
     public boolean containsElement(String elementId) {
-        return furniture.containsKey(elementId);
+        return furniture.containsKey(elementId) || fixed.containsKey(elementId);
     }
     
     /**
@@ -69,26 +75,39 @@ public class WishList
         addWithoutChecking(typeName);
     }
     
+    public void addWantedFixed(String typeName, Point position, Dimension size) {
+        
+        String wantedFixedId = nextIdFor(typeName, fixed);
+        fixed.put(wantedFixedId, new WantedFixed(typeName, position, size));
+    
+    }
+    
     private void addWithoutChecking(String typeName) {
         if(typesCount.containsKey(typeName))
             typesCount.put(typeName, typesCount.get(typeName + 1));
         else
             typesCount.put(typeName, 1);
         
-        String wantedFurnitureId = nextIdFor(typeName);
+        String wantedFurnitureId = nextIdFor(typeName, furniture);
         furniture.put(wantedFurnitureId, new WantedFurniture(wantedFurnitureId, typeName));
     }
     
-    private String nextIdFor(String typeName) {
+    private String nextIdFor(String typeName, TreeMap map) {
         String nextId;
         int i = 1;
         
         do {
             nextId = typeName + String.valueOf(i);
             i++;
-        } while(furniture.containsKey(nextId));
+        } while(map.containsKey(nextId));
         
         return nextId;
+    }
+    
+    public void removeWantedFixed(String wantedFurnitureId) {
+        if (! fixed.containsKey(wantedFurnitureId)) 
+            return;
+        fixed.remove(wantedFurnitureId);
     }
     
     public void removeWantedFurniture(String wantedFurnitureId) throws MandatoryFurnitureException {
@@ -194,6 +213,10 @@ public class WishList
         return furniture.keySet();
     }
     
+    public Collection<String> getFixedNames() {
+        return fixed.keySet();
+    }
+    
     public Collection<String> getFurnitureTypes() {
         return typesCount.keySet();
     }
@@ -210,6 +233,14 @@ public class WishList
             throw new WantedElementNotFoundException(id);
                 
         return furniture.get(id);
+    }
+    
+    public WantedFixed getWantedFixed(String id) 
+            throws WantedElementNotFoundException {
+        if(!containsElement(id))
+            throw new WantedElementNotFoundException(id);
+                
+        return fixed.get(id);
     }
     
     public void addUnaryConstraint(String elementId, UnaryConstraint unaryConstraint)
@@ -250,5 +281,9 @@ public class WishList
             return key;
         
         return String.format(KEY_BINARY_CONSTRAINT, className, f2, f1);
+    }
+
+    public Collection<WantedFixed> getWantedFixed() {
+        return fixed.values();
     }
 }

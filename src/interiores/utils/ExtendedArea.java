@@ -32,20 +32,13 @@ public class ExtendedArea implements Iterable<Point> {
     }
     
     public ExtendedArea(Area a, FurnitureModel m) {
-        
-        // We create the translation scheme (both vertical and horizontal)
-        AffineTransform horizontal = new AffineTransform();
-	horizontal.translate(-m.getSize().width,0);
-        
-        AffineTransform vertical = new AffineTransform();
-	vertical.translate(0,-m.getSize().depth);
-        
-        // We intersect the area with the two areas resulting from applying
-        // the current one the vertical and horizontal translations
-        Area h = a.createTransformedArea(horizontal); a.intersect(h);
-        Area v = a.createTransformedArea(vertical); a.intersect(v);
-        
         area = a;
+        // applyIntersections(...) reduces the area of valid
+        // positions and saves the result in 'area'
+        applyIntersections(m.getSize().width,m.getSize().depth);
+        
+        // computeVerticalSegments() puts in 'vsegments' a list
+        // containing representations of all the vertical segments needed
         computeVerticalSegments();        
     }
     
@@ -73,14 +66,29 @@ public class ExtendedArea implements Iterable<Point> {
             int max_y = a.getBounds().y + a.getBounds().height;
             
             for (int i = p.x; i < max_x; i += RES)
-                for (int j = p.y; j < max_y; j += RES)
+                for (int j = p.y; j < max_y; j += RES) {
+                    if ( area.contains(i, j) ) return true;
+                    
+                }
                     
             return false;
         }
 
         @Override
         public Point next() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            
+            int max_x = a.getBounds().x + a.getBounds().width;
+            int max_y = a.getBounds().y + a.getBounds().height;
+            
+            for (int i = p.x; i < max_x; i += RES)
+                for (int j = p.y; j < max_y; j += RES) {
+                    if ( area.contains(i, j) ) return new Point(i,j);
+                    else {
+                        Collections.binarySearch(i, j, j);
+                    }
+                    
+                }
+            
         }
 
         @Override
@@ -95,19 +103,17 @@ public class ExtendedArea implements Iterable<Point> {
         return new AreaIterator(this);
     }
     
-    private Area applyIntersection(Area a, int h_offset, int v_offset) {
-        
+    private void applyIntersections(int h_offset, int v_offset) {
         // We create the translation scheme (both vertical and horizontal)
+        // and intersect the area with the two areas resulting from applying
+        // the current one the vertical and horizontal translations
         AffineTransform horizontal = new AffineTransform();
 	horizontal.translate(-h_offset,0);
+        area.intersect( area.createTransformedArea(horizontal) );
         
         AffineTransform vertical = new AffineTransform();
 	vertical.translate(0,-v_offset);
-        
-        // We intersect the area with the two areas resulting from applying
-        // the current one the vertical and horizontal translations
-        a.intersect( a.createTransformedArea(new AffineTransform().translate(0,-v_offset)) );
-        a.intersect( a.createTransformedArea(horizontal) );
+        area.intersect( area.createTransformedArea(vertical) );
     }
     
     private void computeVerticalSegments() {

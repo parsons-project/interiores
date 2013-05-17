@@ -17,7 +17,7 @@ import java.awt.Rectangle;
  * a certain orientation, and represents a model.
  * @author larribas
  */
-public class FurnitureArea extends Value {
+public class FurnitureValueAlt extends Value {
     
     private Rectangle active;
     private Rectangle passive;
@@ -32,7 +32,7 @@ public class FurnitureArea extends Value {
      * @param m The model of the furniture value
      * @param o The orientation of the furniture value
      */
-    public FurnitureArea(Point p, FurnitureModel m, Orientation o) {
+    public FurnitureValueAlt(Point p, FurnitureModel m, Orientation o) {
         orientation = o;
         model = m;
         active = computeActiveArea(p, m.getSize(), o);
@@ -67,7 +67,7 @@ public class FurnitureArea extends Value {
      * @return 'true' if the two rectangles collide. That is, if the active area
      * of the former intersects with the passive area of the latter, or vice versa.
      */
-    public boolean collidesWith(FurnitureArea other) {
+    public boolean collidesWith(FurnitureValueAlt other) {
         return this.active.intersects(other.passive) || this.passive.intersects(other.active);
     }
     

@@ -5,7 +5,6 @@ import interiores.data.adapters.ColorAdapter;
 import interiores.utils.Dimension;
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.Rectangle;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;

@@ -13,11 +13,11 @@ public class OrientedRectangle extends Rectangle {
     private Orientation orientation;
     
     public OrientedRectangle(int x, int y, int w, int h, Orientation orientation) {
-        super(x, y, w, h);
-        this.orientation = orientation; 
+        this(new Point(x, y), new Dimension(w, h), orientation);
     }
     
-    public OrientedRectangle(Point point, Dimension dimension, Orientation orientation) {
+    public OrientedRectangle(Point point, Dimension dimension, Orientation orientation)
+    {
         super(point);
         
         this.setSize(dimension.width, dimension.depth);
@@ -119,7 +119,7 @@ public class OrientedRectangle extends Rectangle {
         return this.orientation;
     }
     
-    public Rectangle getWholeArea(SpaceAround spaceAround) {
+    public Rectangle applySpaceAround(SpaceAround spaceAround) {
         return spaceAround.getWholeArea(this);
     }
     

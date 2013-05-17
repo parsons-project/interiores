@@ -6,6 +6,7 @@ import interiores.business.events.room.RoomDesignFinishedEvent;
 import interiores.business.events.room.RoomDesignStartedEvent;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
+import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
@@ -43,7 +44,7 @@ public class DesignController
      * case, returns the solution.
      */
     public void solve()
-            throws NoRoomCreatedException, ElementNotFoundBusinessException
+            throws NoRoomCreatedException, ElementNotFoundBusinessException, WantedElementNotFoundException
     {
         WishList wishList = getWishList();
         FurnitureVariableSet furVarSet = new FurnitureVariableSet(wishList, getActiveCatalog());
@@ -52,7 +53,7 @@ public class DesignController
     }
     
     public void debug()
-            throws NoRoomCreatedException, ElementNotFoundBusinessException
+            throws NoRoomCreatedException, ElementNotFoundBusinessException, WantedElementNotFoundException
     {     
         WishList wishList = getWishList();
         furVarSetDebug = new FurnitureVariableSetDebugger(wishList, getActiveCatalog());

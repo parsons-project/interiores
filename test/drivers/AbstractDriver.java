@@ -10,7 +10,7 @@ import interiores.business.models.RoomType;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.FurnitureVariableSet;
-import interiores.business.models.constraints.BinaryConstraintSet;
+import interiores.business.models.backtracking.VariableConstraintSet;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.business.models.constraints.unary.AreaConstraint;
 import interiores.business.models.constraints.unary.ColorConstraint;
@@ -293,7 +293,7 @@ public abstract class AbstractDriver {
         }
        
         
-        return new FurnitureVariableSet(room, metaModels, metaUC, new BinaryConstraintSet());
+        return new FurnitureVariableSet(room, metaModels, metaUC, new VariableConstraintSet());
         
     }
 }

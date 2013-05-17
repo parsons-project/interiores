@@ -4,6 +4,7 @@ import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.MandatoryFurnitureException;
 import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.business.models.constraints.BinaryConstraint;
+import interiores.business.models.constraints.BinaryConstraintSet;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.utils.BinaryConstraintAssociation;
 import interiores.utils.Dimension;
@@ -20,9 +21,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
  * @author larribas
  */
 public class WishList
-{
-    private static final String KEY_BINARY_CONSTRAINT = "%s-%s-%s";
-    
+{   
     @XmlElement
     private Room room;
     
@@ -36,7 +35,7 @@ public class WishList
     private TreeMap<String, Integer> typesCount;
     
     @XmlElementWrapper
-    private TreeMap<String, BinaryConstraintAssociation> binaryConstraints;
+    private BinaryConstraintSet binaryConstraints;
     
     /**
      * Default constructor.
@@ -48,7 +47,7 @@ public class WishList
         furniture = new TreeMap();
         fixed = new TreeMap();
         typesCount = new TreeMap();
-        binaryConstraints = new TreeMap();
+        binaryConstraints = new BinaryConstraintSet();
         
         for(String mandatoryType : room.getMandatoryFurniture())
             addWithoutChecking(mandatoryType);
@@ -148,10 +147,7 @@ public class WishList
         if(!containsElement(f2))
             throw new WantedElementNotFoundException(f2);
         
-        String key = getBinaryConstraintID(bc.getClass(), f1, f2);
-        BinaryConstraintAssociation bca = new BinaryConstraintAssociation(bc, f1, f2);
-        
-        binaryConstraints.put(key, bca);   
+        binaryConstraints.add(bc, f1, f2);
     }
     
     /**
@@ -164,10 +160,7 @@ public class WishList
     public void removeBinaryConstraint(Class<? extends BinaryConstraint> binaryConstraintClass, String f1,
             String f2)
     {
-        String key = getBinaryConstraintID(binaryConstraintClass, f1, f2);
-        
-        if(binaryConstraints.containsKey(key))
-            binaryConstraints.remove(key);
+        binaryConstraints.remove(binaryConstraintClass, f1, f2);
     }
     
     /**
@@ -186,15 +179,8 @@ public class WishList
     {
         if(!containsElement(furnitureId))
             throw new WantedElementNotFoundException(furnitureId);
-                
-        Collection<BinaryConstraintAssociation> result = new LinkedList();
         
-        Object[] keys = binaryConstraints.keySet().toArray();
-        for (int i = 0; i < keys.length; i++) {
-            String k = (String) keys[i];
-            if (k.contains(furnitureId)) result.add(binaryConstraints.get(k));
-        }
-        return result;
+        return binaryConstraints.getConstraints(furnitureId);
     }
     
     /**
@@ -202,7 +188,16 @@ public class WishList
      * @return List containing all the binary constraints.
      */
     public Collection<BinaryConstraintAssociation> getBinaryConstraints() {
-        return binaryConstraints.values();
+        return binaryConstraints.getConstraints();
+    }
+    
+    public int getBinaryConstraintCount(String furnitureId)
+            throws WantedElementNotFoundException
+    {
+        if(!containsElement(furnitureId))
+            throw new WantedElementNotFoundException(furnitureId);
+        
+        return binaryConstraints.getBinaryConstraintCount(furnitureId);
     }
     
     /**
@@ -261,26 +256,6 @@ public class WishList
      */
     public Collection<WantedFurniture> getWantedFurniture() {
         return furniture.values();
-    }
-    
-    /**
-     * Gets the identifier of the binary constraint of type ctype defined
-     * over the two specified pieces of furniture
-     * @param ctype The type of the constraint
-     * @param f1 The first piece of furniture
-     * @param f2 The second piece of furniture
-     * @return A String containing the identifier of such a constraint, or
-     * null if it doesn't exist
-     */
-    private String getBinaryConstraintID(Class binaryConstraintClass, String f1, String f2)
-    {
-        String className = binaryConstraintClass.getSimpleName();
-        String key = String.format(KEY_BINARY_CONSTRAINT, className, f1, f2);
-        
-        if(binaryConstraints.containsKey(key))
-            return key;
-        
-        return String.format(KEY_BINARY_CONSTRAINT, className, f2, f1);
     }
 
     public Collection<WantedFixed> getWantedFixed() {

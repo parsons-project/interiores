@@ -76,7 +76,7 @@ public class StageAlt {
         
         // If the initial list of orientations and models is not empty
         if (or_it.hasNext() && mod_it.hasNext())
-            positions = new ExtendedArea(room,or_it.next(),mod_it.next());
+            positions = new ExtendedArea(room,mod_it.next());
         else
             positions = new ExtendedArea();
         

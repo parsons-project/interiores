@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class Domain {
    
+    private static final int RESOLUTION = 5;
     
     /**
      * The domain has a stage for each iteration.
@@ -35,14 +36,14 @@ public class Domain {
     
     
     public Domain(List<FurnitureModel> models, Dimension roomSize,
-            int variableCount, int resolution) {
+            int variableCount) {
         
         domain = new Stage[variableCount];
         
-        domain[0] = new Stage(models, roomSize, resolution);
+        domain[0] = new Stage(models, roomSize, RESOLUTION);
         
         for (int i = 1; i < variableCount; ++i) {
-            domain[i] = new Stage();
+            domain[i] = new Stage(RESOLUTION);
         }
         
         

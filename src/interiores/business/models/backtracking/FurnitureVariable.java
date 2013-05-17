@@ -14,8 +14,6 @@ public class FurnitureVariable
 	implements Variable
 {
     private String identifier;
-    
-    private int resolution;
 
     /**
      * The domain of the variable.
@@ -52,23 +50,14 @@ public class FurnitureVariable
      * @pre the iteration of the variableSet is 0
      */
     public FurnitureVariable(String id, List<FurnitureModel> models, Dimension roomSize,
-            Collection<UnaryConstraint> unaryConstraints, int variableCount) {
-        
-        this(id, models, roomSize, unaryConstraints, variableCount, 5);
-    }
-    
-    
-    public FurnitureVariable(String id, List<FurnitureModel> models,
-            Dimension roomSize, Collection<UnaryConstraint> unaryConstraints,
-            int variableCount, int resolution) { 
-        
+            Collection<UnaryConstraint> unaryConstraints, int variableCount)
+    {
         identifier = id;
-        this.resolution = resolution;
         
         isAssigned = false;
         iteration = 0;
     
-        domain = new Domain(models, roomSize, variableCount, resolution);
+        domain = new Domain(models, roomSize, variableCount);
         
         this.unaryConstraints = unaryConstraints;
         

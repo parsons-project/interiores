@@ -1,4 +1,3 @@
-
 package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
@@ -20,7 +19,8 @@ import java.util.List;
  * @author nil.mamano
  */
 public class Stage {
-
+    private int resolution;
+    
     private List<FurnitureModel> models;
     private List<Point> positions;
     private List<Orientation> orientations;
@@ -39,7 +39,9 @@ public class Stage {
     private boolean firstValueIteration;
     
     public Stage(List<FurnitureModel> models, Dimension roomSize,
-            int resolution) {
+            int resolution)
+    {
+        this.resolution = resolution;
         
         // initialize models
         this.models = models;
@@ -68,7 +70,9 @@ public class Stage {
     /**
      * Default constructor. Empty stage.
      */
-    public Stage() {
+    public Stage(int resolution) {
+        this.resolution = resolution;
+        
         models = new ArrayList();
         positions = new ArrayList<Point>();
         orientations = new ArrayList();
@@ -180,8 +184,8 @@ public class Stage {
         int y = invalidRectangle.y;
         int x_max = x+invalidRectangle.width;
         int y_max = y+invalidRectangle.height;
-        for (int i = x; i < x_max; ++i) {
-            for (int j = y; j < y_max; ++j) {
+        for (int i = x; i < x_max; i += resolution) {
+            for (int j = y; j < y_max; j += resolution) {
                 Point p = new Point(i,j);
                 if (positions.contains(p)) {
                     trimedPositions.add(p);

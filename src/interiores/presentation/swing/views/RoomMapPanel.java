@@ -7,8 +7,8 @@ import interiores.business.events.room.RoomLoadedEvent;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.core.Debug;
+import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
-import interiores.presentation.swing.SwingPanel;
 import interiores.presentation.swing.views.map.RoomMap;
 import interiores.presentation.swing.views.map.RoomMapDebugger;
 import java.awt.Color;
@@ -16,28 +16,28 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Map.Entry;
+import javax.swing.JPanel;
 
 /**
  *
  * @author hector
  */
-public class RoomMapPanel extends SwingPanel
+public class RoomMapPanel extends JPanel
 {
     private RoomMap map;
+    private RoomMapDebuggerFrame debuggerGui;
 
     /**
      * Creates new form RoomMap
      */
-    public RoomMapPanel()
+    public RoomMapPanel(SwingController presentation) throws Exception
     {
-        map = null;
         initComponents();
-    }
-    
-    @Override
-    public void onLoad() throws Exception {
+                
+        map = null;
+        
         if(Debug.isEnabled())
-            presentation.load(RoomMapDebuggerFrame.class);
+            debuggerGui = presentation.get(RoomMapDebuggerFrame.class);
     }
 
     /**
@@ -74,11 +74,8 @@ public class RoomMapPanel extends SwingPanel
         int depth = event.getDepth();
         
         if(Debug.isEnabled()) {
-            // Debug mode! Let's load a debugger map!
-            map = new RoomMapDebugger(width, depth);
-            
-            RoomMapDebuggerFrame debuggerGui = presentation.get(RoomMapDebuggerFrame.class);
-            debuggerGui.setDebuggee(this); // Debug me please!
+            map = new RoomMapDebugger(width, depth); // Debug mode! Let's load a debuggable map!
+            debuggerGui.setDebuggee(this);
         }
         else
             map = new RoomMap(width, depth); // A simple room map on production

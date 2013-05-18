@@ -1,5 +1,15 @@
 package interiores;
 
+import interiores.business.controllers.BinaryConstraintController;
+import interiores.business.controllers.DesignController;
+import interiores.business.controllers.FixedElementController;
+import interiores.business.controllers.FurnitureModelController;
+import interiores.business.controllers.FurnitureTypeController;
+import interiores.business.controllers.FurnitureTypesCatalogController;
+import interiores.business.controllers.RoomController;
+import interiores.business.controllers.RoomTypeController;
+import interiores.business.controllers.RoomTypesCatalogController;
+import interiores.business.controllers.UnaryConstraintController;
 import interiores.core.Application;
 import interiores.core.Debug;
 import interiores.core.data.JAXBDataController;
@@ -25,7 +35,7 @@ public class Interiores
         Debug.enable();
         
         // Application for wiring
-        Application app = new Application("interiores");
+        Application app = new Application();
         
         // Application dependencies
         JAXBDataController dataController = new MappedDataController();
@@ -33,7 +43,7 @@ public class Interiores
         SwingController swingController = new SwingController(MainAppFrame.class);
         
         // Terminal welcome message
-        terminal.setWelcomeMessage("Welcome to Interiors design! Use 'help' to see the available commands.");
+        terminal.setWelcomeMessage("Welcome to Interior design! Use 'help' to see the available commands.");
         
         // Persistance layer
         app.setDataController(dataController);
@@ -43,16 +53,16 @@ public class Interiores
         app.addPresentation(terminal);
         
         // Business layer
-        app.addBusiness("room");
-        app.addBusiness("unaryConstraint");
-        app.addBusiness("binaryConstraint");
-        app.addBusiness("design");
-        app.addBusiness("furnitureModel");
-        app.addBusiness("furnitureType");
-        app.addBusiness("roomType");
-        app.addBusiness("furnitureTypesCatalog");
-        app.addBusiness("roomTypesCatalog");
-        app.addBusiness("fixedElement");
+        app.addBusiness(RoomController.class);
+        app.addBusiness(UnaryConstraintController.class);
+        app.addBusiness(BinaryConstraintController.class);
+        app.addBusiness(DesignController.class);
+        app.addBusiness(FurnitureModelController.class);
+        app.addBusiness(FurnitureTypeController.class);
+        app.addBusiness(RoomTypeController.class);
+        app.addBusiness(FurnitureTypesCatalogController.class);
+        app.addBusiness(RoomTypesCatalogController.class);
+        app.addBusiness(FixedElementController.class);
         
         // Run, run, run!!!
         app.init();

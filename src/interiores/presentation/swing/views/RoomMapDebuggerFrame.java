@@ -8,19 +8,21 @@ import interiores.business.events.backtracking.ValueUnassignedEvent;
 import interiores.business.events.room.DebugRoomDesignStartedEvent;
 import interiores.business.events.room.RoomDesignFinishedEvent;
 import interiores.business.models.Orientation;
+import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Business;
 import interiores.core.presentation.annotation.Listen;
-import interiores.presentation.swing.SwingFrame;
+import interiores.core.presentation.swing.SwingException;
 import interiores.presentation.swing.views.map.RoomMapDebugger;
 import java.awt.Point;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 
 /**
  *
  * @author hector
  */
 @Business(DesignController.class)
-public class RoomMapDebuggerFrame extends SwingFrame
+public class RoomMapDebuggerFrame extends JFrame
 {
     private DesignController designController;
     private RoomMapPanel debuggee;
@@ -35,9 +37,9 @@ public class RoomMapDebuggerFrame extends SwingFrame
     /**
      * Creates new form RoomMapDebugger
      */
-    public RoomMapDebuggerFrame(DesignController designController)
+    public RoomMapDebuggerFrame(SwingController presentation) throws SwingException
     {
-        this.designController = designController;
+        this.designController = presentation.getBusinessController(DesignController.class);
         initComponents();
     }
     
@@ -354,7 +356,7 @@ public class RoomMapDebuggerFrame extends SwingFrame
     @Listen(DebugRoomDesignStartedEvent.class)
     public void debugDesignStarted() {
         reset();
-        showView();
+        setVisible(true);
     }
     
     @Listen(ActualVariableSetEvent.class)

@@ -13,11 +13,6 @@ import java.util.List;
 public class Application
 {
     /**
-     * Application package used to find the business controllers
-     */
-    private String appPackage;
-    
-    /**
      * The controller of the application data layer
      */
     private JAXBDataController data;
@@ -31,9 +26,8 @@ public class Application
      * Application constructor.
      * @param appPkg Application package used to find the business controllers
      */
-    public Application(String appPackage)
+    public Application()
     {
-        this.appPackage = appPackage;
         presentations = new ArrayList();
     }
     
@@ -77,16 +71,14 @@ public class Application
      * Every controller is injected with the data controller when constructed.
      * @param name Name of the business controller (camel cased)
      */
-    public void addBusiness(String name)
+    public void addBusiness(Class<? extends BusinessController> controllerClass)
     {
         try
         {
-            Class controllerClass = Class.forName(appPackage + ".business.controllers." + Utils.capitalize(name) +
-                    "Controller");
+            BusinessController controller = (BusinessController) controllerClass.getConstructor(
+                    JAXBDataController.class).newInstance(data);
             
-            addBusiness(name,
-                    (BusinessController) controllerClass.getConstructor(JAXBDataController.class).newInstance(
-                    data));
+            addBusiness(controller);
         }
         catch(Exception e)
         {
@@ -99,9 +91,9 @@ public class Application
      * @param name Name to identify the controller
      * @param controller The business controller
      */
-    public void addBusiness(String name, BusinessController controller)
+    public void addBusiness(BusinessController controller)
     {
         for(PresentationController presentation : presentations)
-            presentation.addBusinessController(name, controller);
+            presentation.addBusinessController(controller);
     }
 }

@@ -1,18 +1,11 @@
 package interiores.core.presentation;
 
-import interiores.core.Debug;
 import interiores.core.Event;
 import interiores.core.business.BusinessController;
-import interiores.core.presentation.annotation.Listen;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
+import interiores.core.presentation.swing.SwingException;
+import java.awt.Component;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import javax.swing.SwingUtilities;
 
 /**
  * Represents a Swing graphical user interface presentation controller.
@@ -30,21 +23,19 @@ public class SwingController extends PresentationController
      */
     private ViewLoader vloader;
     
-    /**
-     * Map of events that the loaded views are listening
-     */
-    private Map<Class, List< Entry<View, Method> >> events;
+    private Map<Class, BusinessController> businessControllers;
     
     /**
      * Constructs a SwingController given the package where the views are located
      * @param viewsPackage The package where the views of this controller are located 
      */
-    public SwingController(Class<? extends View> mainView)
+    public SwingController(Class<? extends Component> mainView)
     {
         super();
+        
         this.mainView = mainView;
-        vloader = new ViewLoader();
-        events = new HashMap();
+        vloader = new ViewLoader(this);
+        businessControllers = new HashMap();
     }
     
     /**
@@ -65,54 +56,24 @@ public class SwingController extends PresentationController
     @Override
     public void notify(Event event)
     {
-        Class eventClass = event.getClass();
+        vloader.notify(event);
         
-        if(! events.containsKey(eventClass))
-            return;
-        
-        for(Entry e : events.get(eventClass))
-                invokeEvent(e, event);
     }
-    
-    /**
-     * Given a view, one of its methods and an event, calls the method passing the event as
-     * parameter using the AWT event queue to avoid thread race conditions.
-     * @param entry A view-method pair
-     * @param data Mapped data
-     */
-    private void invokeEvent(final Entry<View, Method> entry, final Event event) { 
-        Runnable callEvent = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Method method = entry.getValue();
 
-                try {
-                    if(method.getParameterTypes().length == 0)
-                        method.invoke(entry.getKey());
-                    else
-                        method.invoke(entry.getKey(), event);
-                }
-                catch(IllegalAccessException e) {
-                    if(Debug.isEnabled())
-                        e.printStackTrace();
-                }
-                catch(InvocationTargetException e) {
-                    if(Debug.isEnabled())
-                        e.printStackTrace();
-                }
-            }
-        };
-
-        SwingUtilities.invokeLater(callEvent);
-    }
-    
     @Override
-    public void addBusinessController(String name, BusinessController controller) {
-        vloader.addBusinessController(controller);
+    public void addBusinessController(BusinessController controller) {
+        businessControllers.put(controller.getClass(), controller);
         
-        super.addBusinessController(name, controller);
+        super.addBusinessController(controller);
+    }
+    
+    public <T extends BusinessController> T getBusinessController(Class<T> controllerClass)
+            throws SwingException
+    {
+        if(! businessControllers.containsKey(controllerClass))
+            throw new SwingException("Business controller not found: " + controllerClass.getName());
+        
+        return (T) businessControllers.get(controllerClass);
     }
     
     /**
@@ -120,83 +81,26 @@ public class SwingController extends PresentationController
      * @param viewClass The class of the view to load
      * @throws Exception 
      */
-    public void load(Class<? extends View> viewClass) throws Exception
+    public void load(Class<? extends Component> viewClass) throws SwingException
     {            
-        if(! vloader.isLoaded(viewClass))
-        {   
-            vloader.load(viewClass);
-            
-            View view = vloader.get(viewClass);
-            
-            view.setPresentation(this);
-            
-            try
-            {
-                view.onLoad();
-                
-                configureEvents(viewClass, view);
-            }
-            catch(Exception e)
-            {
-                vloader.unload(viewClass);
-                throw e;
-            }
-        }
-    }
-    
-        
-    /**
-     * Configures the events that listens a given view.
-     * @param viewClass Class of the view
-     * @param view Instance to which configure the events
-     */
-    private void configureEvents(Class viewClass, View view)
-    {
-        for(Method m : viewClass.getMethods()) {
-            if(m.isAnnotationPresent(Listen.class)) {
-                for(Class eventClass : m.getAnnotation(Listen.class).value())
-                    addEvent(eventClass, new SimpleEntry(view, m));
-            }
-        }
-    }
-        
-    /**
-     * Adds view listener to the given event.
-     * @param eventClass Class of the event
-     * @param entry Entry that contains the view and the method to be called when the event occurs
-     */
-    private void addEvent(Class eventClass, Entry<View, Method> entry)
-    {
-        if(! events.containsKey(eventClass))
-            events.put(eventClass, new ArrayList());
-        
-        events.get(eventClass).add(entry);
+        vloader.load(viewClass);
     }
     
     /**
      * Shows a loaded view.
      * @param viewClass The class of the view to show
      */
-    public void show(Class<? extends View> viewClass)
+    public void show(Class<? extends Component> viewClass) throws SwingException
     {
-        try {
-            if(! vloader.isLoaded(viewClass))
-                load(viewClass);
-        
-            get(viewClass).showView();
-        }
-        catch(Exception e) {
-            if(Debug.isEnabled())
-                e.printStackTrace();
-        }
+        get(viewClass).setVisible(true);
     }
     
     /**
      * Obtains a loaded view.
      * @param viewClass The class of the view to obtain
-     * @return The loaded view if the view was previously loaded, null otherwise
+     * @return The loaded view
      */
-    public <T extends View> T get(Class<T> viewClass)
+    public <T extends Component> T get(Class<T> viewClass) throws SwingException
     {
         return (T) vloader.get(viewClass);
     }
@@ -205,25 +109,8 @@ public class SwingController extends PresentationController
      * Unloads the view with the given name.
      * @param viewClass The name of the view to unload
      */
-    public void close(Class<? extends View> viewClass)
+    public void close(Class<? extends Component> viewClass)
     {
-        if(! vloader.isLoaded(viewClass))
-            return;
-        
-        View view = get(viewClass);
-        
-        // Remove assigned events
-        for(Method method : viewClass.getMethods()) {
-            if(method.isAnnotationPresent(Listen.class)) {
-                List< Entry<View, Method> > entries = events.get(method.getName());
-                
-                for(int i = 0; i < entries.size(); ++i) {
-                    if(entries.get(i).getKey().equals(view))
-                        entries.remove(i);
-                }
-            }
-        }
-        
         vloader.unload(viewClass);
     }
 }

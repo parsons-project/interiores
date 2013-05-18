@@ -36,6 +36,10 @@ public class BinaryConstraintAssociation
         this.furniture2 = furniture2;
     }
     
+    public BinaryConstraint getConstraint() {
+        return constraint;
+    }
+    
     @Override
     public String toString() {
         return constraint + " defined between " + furniture1 + " and " + furniture2;

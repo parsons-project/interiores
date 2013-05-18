@@ -38,8 +38,8 @@ public class BinaryConstraintSet
         if(! binaryConstraintCount.containsKey(f2))
             binaryConstraintCount.put(f2, 0);
         
-        binaryConstraintCount.put(f1, binaryConstraintCount.get(f1) + 1);
-        binaryConstraintCount.put(f2, binaryConstraintCount.get(f2) + 1);
+        binaryConstraintCount.put(f1, binaryConstraintCount.get(f1) + bc.getPriority());
+        binaryConstraintCount.put(f2, binaryConstraintCount.get(f2) + bc.getPriority());
         
         binaryConstraints.put(getKey(bc.getClass(), f1, f2), bca);
     }
@@ -50,13 +50,16 @@ public class BinaryConstraintSet
         if(!binaryConstraintCount.containsKey(f1) || !binaryConstraintCount.containsKey(f2))
             return;
         
-        binaryConstraintCount.put(f1, binaryConstraintCount.get(f1) - 1);
-        binaryConstraintCount.put(f2, binaryConstraintCount.get(f2) - 1);
+        String key = getKey(binaryConstraintClass, f1, f2);
+        BinaryConstraint bc = binaryConstraints.get(key).getConstraint();
         
-        binaryConstraints.remove(getKey(binaryConstraintClass, f1, f2));
+        binaryConstraintCount.put(f1, binaryConstraintCount.get(f1) - bc.getPriority());
+        binaryConstraintCount.put(f2, binaryConstraintCount.get(f2) - bc.getPriority());
+        
+        binaryConstraints.remove(key);
     }
     
-    public int getBinaryConstraintCount(String furnitureId) {
+    public int getPriority(String furnitureId) {
         if(! binaryConstraintCount.containsKey(furnitureId))
             return 0;
         

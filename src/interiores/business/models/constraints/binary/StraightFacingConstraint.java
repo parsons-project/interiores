@@ -36,4 +36,8 @@ public class StraightFacingConstraint extends BinaryConstraint {
         
     }
     
+    @Override
+    public int getPriority() {
+        return 5;
+    }
 }  

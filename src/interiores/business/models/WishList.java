@@ -191,13 +191,13 @@ public class WishList
         return binaryConstraints.getConstraints();
     }
     
-    public int getBinaryConstraintCount(String furnitureId)
+    public int getPriority(String furnitureId)
             throws WantedElementNotFoundException
     {
         if(!containsElement(furnitureId))
             throw new WantedElementNotFoundException(furnitureId);
         
-        return binaryConstraints.getBinaryConstraintCount(furnitureId);
+        return binaryConstraints.getPriority(furnitureId);
     }
     
     /**

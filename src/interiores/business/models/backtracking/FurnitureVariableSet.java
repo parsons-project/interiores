@@ -114,12 +114,12 @@ public class FurnitureVariableSet
             String variableName = wantedFurniture.getName();
             FurnitureType furnitureType = furnitureCatalog.get(wantedFurniture.getTypeName());
             
-            int constraintCount = wishList.getBinaryConstraintCount(variableName);
-            Debug.println("Adding variable " + variableName + " with " + constraintCount + " binary "
+            int priority = wishList.getPriority(variableName);
+            Debug.println("Adding variable " + variableName + " with " + priority + " binary "
                     + "constraints.");
             
             queue.add(new SimpleEntry(
-                    constraintCount,
+                    priority,
                     new FurnitureVariable(variableName, furnitureType.getFurnitureModels(), roomDimension,
                         wantedFurniture.getUnaryConstraints(), variableCount)
                     ));

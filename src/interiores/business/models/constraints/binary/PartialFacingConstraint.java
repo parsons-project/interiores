@@ -34,4 +34,8 @@ public class PartialFacingConstraint extends BinaryConstraint{
         
     }
     
+    @Override
+    public int getPriority() {
+        return 5;
+    }
 }

@@ -5,4 +5,3 @@ select ft chair chair
 add bc distance-max 30 table1 chair1
 add bc distance-max 30 table1 chair2
 solve design
-

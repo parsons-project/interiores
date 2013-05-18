@@ -37,4 +37,8 @@ public abstract class BinaryConstraint
     }
     
     public abstract boolean isSatisfied(FurnitureVariable fvariable1, FurnitureVariable fvariable2);
+    
+    public int getPriority() {
+        return 1;
+    }
 }

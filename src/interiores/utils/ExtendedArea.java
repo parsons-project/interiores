@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  *
@@ -52,48 +53,53 @@ public class ExtendedArea implements Iterable<Point> {
     {
         private Area a;
         private Point p;
+        
+        private int min_x, max_x;
+        private int min_y, max_y;
+        
         private static final int RES = 1;
         
         public AreaIterator(ExtendedArea ea) {
             a = ea.getArea();
-            p = new Point(0,0);
+            
+            min_x = a.getBounds().x; max_x = min_x + a.getBounds().width;
+            min_y = a.getBounds().y; max_y = min_y + a.getBounds().height;
+            
+            p = new Point(min_x - RES,min_y);
         }
 
         @Override
         public boolean hasNext() {
+            // First, we advance towards the next position
+            p.x += RES;
             
-            int max_x = a.getBounds().x + a.getBounds().width;
-            int max_y = a.getBounds().y + a.getBounds().height;
-            
-            for (int i = p.x; i < max_x; i += RES)
-                for (int j = p.y; j < max_y; j += RES) {
-                    if ( area.contains(i, j) ) return true;
-                    
+            while (p.y <= max_y) {
+                while (p.x <= max_x) {
+                    if ( area.contains(p) ) return true;
+                    else if ( area.contains(p.x+=RES,p.y) ) return true;
+                    else {
+                        int next_x = bin_search(vsegments, p.x, p.y);
+                        if (next_x > 0) p.x = next_x;
+                        else p.x = max_x + 1;
+                    }
                 }
-                    
-            return false;
+                p.y += RES;
+                p.x = min_x;
+            }
+            return false;            
         }
-
+    
         @Override
         public Point next() {
             
-            int max_x = a.getBounds().x + a.getBounds().width;
-            int max_y = a.getBounds().y + a.getBounds().height;
-            
-            for (int i = p.x; i < max_x; i += RES)
-                for (int j = p.y; j < max_y; j += RES) {
-                    if ( area.contains(i, j) ) return new Point(i,j);
-                    else {
-                        Collections.binarySearch(i, j, j);
-                    }
-                    
-                }
-            
+            if (area.contains(p)) return (Point) p.clone();
+            else
+                throw new NoSuchElementException();
         }
 
         @Override
         public void remove() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException("Removal of a particular element in the domain is not supported");
         }
         
     }
@@ -153,6 +159,15 @@ public class ExtendedArea implements Iterable<Point> {
         public int compare(int[] o1, int[] o2) {
             return (o1[0] > o2[0])? 1 : (o1[0] == o2[0])? 0 : -1;
         }
+    }
+    
+    // TODO think if the number of points deserves this search to become an actual binary search
+    private static int bin_search(List<int[]> l, int x, int y) {
+        for (int[] i : l)
+            if (i[0] > x && i[1] <= y && y <= i[2])
+                return i[0];
+        
+        return -1;
     }
     
 }

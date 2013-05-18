@@ -32,11 +32,11 @@ public class ExtendedArea implements Iterable<Point> {
         area = new Area();
     }
     
-    public ExtendedArea(Area a, FurnitureModel m) {
+    public ExtendedArea(Area a, Dimension d) {
         area = a;
         // applyIntersections(...) reduces the area of valid
         // positions and saves the result in 'area'
-        applyIntersections(m.getSize().width,m.getSize().depth);
+        applyIntersections(d.width,d.depth);
         
         // computeVerticalSegments() puts in 'vsegments' a list
         // containing representations of all the vertical segments needed
@@ -66,17 +66,39 @@ public class ExtendedArea implements Iterable<Point> {
             min_y = a.getBounds().y; max_y = min_y + a.getBounds().height;
             
             p = new Point(min_x - RES,min_y);
+            advance_to_next();
         }
 
         @Override
         public boolean hasNext() {
+            return area.contains(p);
+        }
+    
+        @Override
+        public Point next() {
+            
+            if (area.contains(p)) {
+                Point ret = (Point) p.clone();
+                advance_to_next();
+                return ret;
+            }
+            else
+                throw new NoSuchElementException();
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("Removal of a particular element in the domain is not supported");
+        }
+        
+        private void advance_to_next() {
             // First, we advance towards the next position
             p.x += RES;
             
             while (p.y <= max_y) {
                 while (p.x <= max_x) {
-                    if ( area.contains(p) ) return true;
-                    else if ( area.contains(p.x+=RES,p.y) ) return true;
+                    if ( area.contains(p) ) return;
+                    else if ( area.contains(p.x+=RES,p.y) ) return;
                     else {
                         int next_x = bin_search(vsegments, p.x, p.y);
                         if (next_x > 0) p.x = next_x;
@@ -85,21 +107,7 @@ public class ExtendedArea implements Iterable<Point> {
                 }
                 p.y += RES;
                 p.x = min_x;
-            }
-            return false;            
-        }
-    
-        @Override
-        public Point next() {
-            
-            if (area.contains(p)) return (Point) p.clone();
-            else
-                throw new NoSuchElementException();
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("Removal of a particular element in the domain is not supported");
+            } 
         }
         
     }

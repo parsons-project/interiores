@@ -7,6 +7,7 @@ package interiores.business.models.backtracking;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.shared.backtracking.Value;
+import interiores.utils.Dimension;
 import interiores.utils.ExtendedArea;
 import java.awt.Point;
 import java.awt.geom.Area;
@@ -50,10 +51,11 @@ public class StageAlt {
         initialize_iterators();
     }
     
-    public Value getNextDomainValue() {
-        
-        return null;
-    }
+//    public Value getNextDomainValue() {
+//        
+//        if (pos_it.hasNext())
+//        return null;
+//    }
     
     
     
@@ -72,13 +74,13 @@ public class StageAlt {
         mod_it = models.iterator();
         
         // If the initial list of orientations and models is not empty
-        if (or_it.hasNext() && mod_it.hasNext())
-            positions = new ExtendedArea(room,mod_it.next());
+        if (or_it.hasNext() && mod_it.hasNext()) {
+            Dimension d = mod_it.next().getSize();
+            positions = new ExtendedArea(room,d);
+            pos_it = positions.iterator();
+        }
         else
             positions = new ExtendedArea();
-        
-        
-        
     }
 
     

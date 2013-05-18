@@ -4,12 +4,10 @@
  */
 package interiores.utils;
 
-import interiores.business.models.FurnitureModel;
-import java.awt.Color;
+
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.geom.Area;
 import java.util.Iterator;
 import org.junit.AfterClass;
@@ -58,9 +56,9 @@ public class ExtendedAreaTest {
 //        
 //        System.out.print("\n\n\n\n\n\n\n");
         
-        FurnitureModel furn = new FurnitureModel("Yo", new Dimension(10, 10), 33, Color.yellow,"Yo");
+        Dimension dim = new Dimension(10, 10);
         
-        ExtendedArea instance = new ExtendedArea(area,furn);
+        ExtendedArea instance = new ExtendedArea(area,dim);
         
 //        UNCOMMENT THESE LINES TO PRINT THE AREA AFTER ITS TRANSFORMATION        
 //        for (int i = 0; i < 110; i++) {

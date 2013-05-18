@@ -28,6 +28,7 @@ public class FurnitureValue extends Value {
      * @param model 
      */
     public FurnitureValue(Point position, FurnitureModel model, Orientation orientation) {
+             
         this.model = model;
         this.activeArea = model.getActiveArea(position, orientation);
         this.wholeArea = activeArea.applySpaceAround(model.getPassiveSpace());

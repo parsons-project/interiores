@@ -65,6 +65,7 @@ public class Stage {
         orientationIterator = orientations.iterator();
         modelIterator = this.models.iterator();
         
+        resetIterators();
     }
     
     /**
@@ -100,14 +101,17 @@ public class Stage {
         }
         else if (orientationIterator.hasNext()) {
             positionIterator = positions.iterator();
-            currentPosition = (Point) positionIterator.next();
+            if (positionIterator.hasNext()) currentPosition = (Point) positionIterator.next();
+            else throw new UnsupportedOperationException("Position has no next and we are asking for it (at orientation's IF)");
             currentOrientation = (Orientation) orientationIterator.next();
         }
         else if (modelIterator.hasNext()) {
             positionIterator = positions.iterator();
-            currentPosition = (Point) positionIterator.next();
+            if (positionIterator.hasNext()) currentPosition = (Point) positionIterator.next();
+            else throw new UnsupportedOperationException("Position has no next and we are asking for it (at model's IF)");
             orientationIterator = orientations.iterator();
-            currentOrientation = (Orientation) orientationIterator.next();
+            if (orientationIterator.hasNext()) currentOrientation = (Orientation) orientationIterator.next();
+            else throw new UnsupportedOperationException("Orientation has no next and we are asking for it (at model's IF)");
             currentModel = (FurnitureModel) modelIterator.next();
         }
         else {

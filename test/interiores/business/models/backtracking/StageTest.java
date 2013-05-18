@@ -7,6 +7,7 @@ package interiores.business.models.backtracking;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
+import interiores.business.models.SpaceAround;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
@@ -49,7 +50,7 @@ public class StageTest {
        System.out.println("Testing has/get-NextDomainValue() for TIME .........");
         
         // PARAMETERS
-        int nb_models = 50; // The number of models
+        int nb_models = 10; // The number of models
         int resolution = 1; // The resolution
         Dimension dim = new Dimension(1000,1000); // The size of the room
         
@@ -61,29 +62,32 @@ public class StageTest {
         for (int i = 0; i < nb_models; i++) { 
             Random rand = new Random();
             Dimension d = new Dimension(20 + rand.nextInt(80),20 + rand.nextInt(80));
-            FurnitureModel fm = new FurnitureModel("m"+i,d,10,"white","wood");
+            SpaceAround sa = new SpaceAround(0, 0, 0, 0);
+            FurnitureModel fm = new FurnitureModel("m"+i,d,10,"white","wood",sa);
             l.add(fm);
             System.out.println("Added model " + fm.toString());
         }
-            
+        
         // We create the stage
         Stage instance = new Stage(l, dim, resolution);
-            
+        
         long startTime = System.nanoTime();
         
         // And start going through the values in the domain.
         // Now, note that even this simple example is complex in the current context.
         // This test, thus, only serves the purpose of verifying whether the methods
         // are consistent and do not throw any kind of exception
+        long values_obtained = 0;
         while(instance.hasMoreValues()) {
             FurnitureValue fv = (FurnitureValue) instance.getNextDomainValue();
+            values_obtained++;
         }
         
         long endTime = System.nanoTime();
-
         long duration = endTime - startTime;
                 
-        System.out.println("........... THE END ........ elapsed " + duration + "nanoseconds.");
+        System.out.println("........... THE END ........ elapsed " + duration + " nanoseconds.");
+        System.out.println("Values obtained = " + values_obtained);
     }
 
 }

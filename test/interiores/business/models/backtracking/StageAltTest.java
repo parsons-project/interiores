@@ -43,7 +43,7 @@ public class StageAltTest {
     /**
      * Test of getNextDomainValue method, of class StageAlt.
      */
-    @Test
+    //@Test
     public void testGetNextDomainValue() throws BusinessException {
         System.out.println("Testing has/get-NextDomainValue() .........");
         
@@ -88,7 +88,7 @@ public class StageAltTest {
         System.out.println("Testing has/get-NextDomainValue() for TIME .........");
         
         // PARAMETERS
-        int nb_models = 50; // The number of models
+        int nb_models = 10; // The number of models
         // The resolution (should be changed directly on ExtendedArea)
         Dimension dim = new Dimension(1000,1000); // The size of the room
         
@@ -115,15 +115,17 @@ public class StageAltTest {
         // Now, note that even this simple example is complex in the current context.
         // This test, thus, only serves the purpose of verifying whether the methods
         // are consistent and do not throw any kind of exception
+        long values_obtained = 0;
         while (instance.hasMoreValues()) {
             FurnitureValue fv = (FurnitureValue) instance.getNextDomainValue();
+            values_obtained++;
         }
         
         long endTime = System.nanoTime();
-
         long duration = endTime - startTime;
-                
-        System.out.println("........... THE END ........ elapsed " + duration + "nanoseconds.");
+        
+        System.out.println("........... THE END ........ elapsed " + duration + " nanoseconds.");
+        System.out.println("Values obtained = " + values_obtained);
     }
         
 }

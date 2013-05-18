@@ -27,11 +27,11 @@ class HorizontalEdge {
      * @return 
      */
     boolean contains(int x) {
-        return x <= xh && x >= xl;
+        return x < xh && x >= xl;
     }
 
     boolean intersects(VerticalEdge edge) {
-        return edge.x <= xh && edge.x >= xl && y <= edge.yh && y >= edge.yl;
+        return edge.x < xh && edge.x > xl && y < edge.yh && y > edge.yl;
     }
     
 }

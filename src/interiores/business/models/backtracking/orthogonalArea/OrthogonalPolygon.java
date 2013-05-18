@@ -12,7 +12,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -91,34 +90,34 @@ public class OrthogonalPolygon {
      * @param polygon the polygon which might be contained.
      * @return true if polygon is contained in the implicit parameter
      */
-    boolean contains(OrthogonalPolygon polygon) {
+    boolean contains(OrthogonalPolygon p) {
         
         //1) check whether at least one point is contained
-        if (! contains(polygon.points.get(0)))
+        if (! contains(p.points.get(0)))
             return false;
         
         //2) check that no edge of the polygon intersects with an edge of the
         //implicit parameter
         synchronizeEdges();
-        polygon.synchronizeEdges();
-        
-        for (VerticalEdge thisEdge : verticalEdges) {
-            for (HorizontalEdge edge : polygon.horizontalEdges) {
-                if (thisEdge.intersects(edge)) return false;
+
+        for (VerticalEdge myEdge : verticalEdges) {
+            for (HorizontalEdge pEdge : p.horizontalEdges) {
+                if (myEdge.intersects(pEdge)) return false;
             }
         }
         
-        for (HorizontalEdge thisEdge : horizontalEdges) {
-            for (VerticalEdge edge : polygon.verticalEdges) {
-                if (thisEdge.intersects(edge)) return false;
+        for (HorizontalEdge myEdge : horizontalEdges) {
+            for (VerticalEdge pEdge : p.verticalEdges) {
+                if (myEdge.intersects(pEdge)) return false;
             }
         }
         
         //3) check that no vertex of the implicit parameter is within the area
         //of the polygon
-        
-        //todo
-        
+        for (Point point : points)
+            if (p.contains(point)) return false;
+
+        //checking done: p is contained
         return true;
     }
         

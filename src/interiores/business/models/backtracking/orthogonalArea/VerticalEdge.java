@@ -9,8 +9,12 @@ package interiores.business.models.backtracking.orthogonalArea;
  * @author nil.mamano
  */
 class VerticalEdge {
+    
+    //the x coordinate shared by the 2 vertexs of the segment
     public int x;
+    //as the Y axis increases downwards, this is the bottom vertex of the segment
     public int yh;
+    //as the Y axis increases downwards, this is the top vertex of the segment
     public int yl;    
 
     public VerticalEdge(int x, int yh, int yl) {
@@ -23,16 +27,21 @@ class VerticalEdge {
     
     /**
      * Returns whether a horizontal line y=y intersects with the edge.
-     * Touching the line with an ending point of the edge is considered
-     * intersecting.
+     * The superior vertex is considered contained in the polygon, while the
+     * inferiore vertex is not.
      * @param y y
      * @return 
      */
     boolean contains(int y) {
-        return y <= yh && y >= yl;
+        return y < yh && y >= yl;
     }
 
+    /**
+     * Two edges intersect if they form a cross at some point in the plane.
+     * @param edge
+     * @return 
+     */
     boolean intersects(HorizontalEdge edge) {
-        return edge.y <= yh && edge.y >= yl && x <= edge.xh && x >= edge.xl;
+        return edge.y < yh && edge.y > yl && x < edge.xh && x > edge.xl;
     }
 }

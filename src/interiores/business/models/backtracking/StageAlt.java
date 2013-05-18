@@ -88,27 +88,21 @@ public class StageAlt {
     }
     
     
-    
-    
-    
-    // PRIVATE UTILS
+    // UTILS
     private List<Orientation> defaultOrientations() {
         return new ArrayList(Arrays.asList(Orientation.values()));
     }
 
     private void initialize_iterators() {
-        
-        or_it = orientations.iterator();
+        // In order to provide initialization right from the start, we initialize
+        // mod_it to the models list, and set (pos_it,or_it) to fictive values,
+        // so that the next .hasNext() returns false for both of them.
+        // This way, getNextDomainValue() can rectify on its own
         mod_it = models.iterator();
         
-        // If the initial list of orientations and models is not empty
-        if (or_it.hasNext() && mod_it.hasNext()) {
-            Dimension d = mod_it.next().getSize();
-            positions = new ExtendedArea(room,d);
-            pos_it = positions.iterator();
-        }
-        else
-            positions = new ExtendedArea();
+        List l = new ArrayList();
+        or_it = l.iterator();
+        pos_it = l.iterator();
     }
 
     private Dimension rotateModel(FurnitureModel m) {

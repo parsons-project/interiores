@@ -4,10 +4,17 @@
  */
 package interiores.business.models.backtracking;
 
+import interiores.business.models.FurnitureModel;
+import interiores.business.models.FurnitureType;
 import interiores.shared.backtracking.Value;
+import interiores.utils.Dimension;
+import interiores.utils.Range;
+import java.awt.Color;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,7 +42,7 @@ public class StageAltTest {
      */
     @Test
     public void testGetNextDomainValue() {
-        System.out.println("Testing getNextDomainValue() .........");
+        System.out.println("Testing has/get-NextDomainValue() .........");
         
         // Here we have a room with a complex topography
         int xPoly[] = {0,20,20,10,10,30,30,40,40,50,50,60,60,120,120,100,100,90,90,70,70,15,15,50,50,30,30,0};
@@ -44,25 +51,28 @@ public class StageAltTest {
         room.subtract(new Area(new Rectangle(70, 70, 30, 20)));
         room.subtract(new Area(new Rectangle(80, 50, 5, 40)));
         
-        StageAlt instance = new StageAlt();
-        Value expResult = null;
-        Value result = instance.getNextDomainValue();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of hasMoreValues method, of class StageAlt.
-     */
-    @Test
-    public void testHasMoreValues() {
-        System.out.println("hasMoreValues");
-        StageAlt instance = new StageAlt();
-        boolean expResult = false;
-        boolean result = instance.hasMoreValues();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        // Here, we have a simple topology
+        Area room2 = new Area(new Rectangle(0, 0, 100, 100));
+        
+        // And a basic list of furniture models
+        List<FurnitureModel> l = new ArrayList();
+        l.add(new FurnitureModel("A", new Dimension(10,10), 10, Color.WHITE, "plastic", new int[]{30,20,0,20}));
+        l.add(new FurnitureModel("B", new Dimension(20,10), 20, Color.BLACK, "wood", new int[]{0,0,0,40}));
+        l.add(new FurnitureModel("C", new Dimension(20,20), 30, Color.RED, "steel", new int[]{0,0,0,0}));
+            
+        // We create the stage
+        Area selectedRoom = room;
+        StageAlt instance = new StageAlt(l, selectedRoom);
+        
+        // And start going through the values in the domain.
+        // Now, note that even this simple example is complex in the current context.
+        // This test, thus, only serves the purpose of verifying whether the methods
+        // are consistent and do not throw any kind of exception
+        while (instance.hasMoreValues()) {
+            FurnitureValue fv = (FurnitureValue) instance.getNextDomainValue();
+            System.out.println(fv.toString());
+        }
+                
+        System.out.println("........... THE END");
     }
 }

@@ -56,7 +56,7 @@ public class StageAlt {
     }
         
     public Value getNextDomainValue() {
-                
+        
         if (pos_it.hasNext()) current_pos = pos_it.next();            
         else {
             if (or_it.hasNext()) current_or = or_it.next();
@@ -111,7 +111,7 @@ public class StageAlt {
 
     private void rebuild_positions() {
         Dimension d = (current_or.ordinal() % 2 == 0)? current_mod.getSize() : rotateModel(current_mod);
-        positions = new ExtendedArea(room,d);
+        positions = new ExtendedArea(new Area(room),d);
     }
 
     

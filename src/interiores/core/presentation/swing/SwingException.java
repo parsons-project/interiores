@@ -5,7 +5,7 @@ package interiores.core.presentation.swing;
  * @author hector
  */
 public class SwingException
-    extends Exception
+    extends RuntimeException
 {
     public SwingException(String msg) {
         super(msg);

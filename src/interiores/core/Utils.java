@@ -11,10 +11,16 @@ public class Utils
      * @param s The string to capitalize
      * @return The capitalized string
      */
-    public static String capitalize(String s)
-    {
+    public static String capitalize(String s) {
         char[] arrayString = s.toCharArray();
         arrayString[0] = Character.toUpperCase(arrayString[0]);
+        
+        return new String(arrayString);
+    }
+    
+    public static String decapitalize(String s) {
+        char[] arrayString = s.toCharArray();
+        arrayString[0] = Character.toLowerCase(arrayString[0]);
         
         return new String(arrayString);
     }

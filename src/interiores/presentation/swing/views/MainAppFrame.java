@@ -14,6 +14,7 @@ import javax.swing.JFrame;
  */
 public class MainAppFrame extends JFrame
 {
+    private SwingController presentation;
     private WelcomePanel welcome;
     private RoomMapPanel map;
     /**
@@ -24,6 +25,7 @@ public class MainAppFrame extends JFrame
         initComponents();
         setLayout(new BorderLayout());
         
+        this.presentation = presentation;
         welcome = presentation.get(WelcomePanel.class);
         map = presentation.get(RoomMapPanel.class);
         
@@ -44,7 +46,7 @@ public class MainAppFrame extends JFrame
 
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        newRoom = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -53,15 +55,15 @@ public class MainAppFrame extends JFrame
 
         jMenu1.setText("File");
 
-        jMenuItem1.setText("New room design...");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        newRoom.setText("New room design...");
+        newRoom.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                jMenuItem1ActionPerformed(evt);
+                newRoomActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu1.add(newRoom);
 
         jMenuBar1.add(jMenu1);
 
@@ -73,15 +75,15 @@ public class MainAppFrame extends JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
-    {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    private void newRoomActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_newRoomActionPerformed
+    {//GEN-HEADEREND:event_newRoomActionPerformed
+        presentation.showNew(NewDesignDialog.class);
+    }//GEN-LAST:event_newRoomActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem newRoom;
     // End of variables declaration//GEN-END:variables
 
     @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})

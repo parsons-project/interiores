@@ -374,7 +374,6 @@ public class RoomMapDebuggerFrame extends JFrame
     
     @Listen(NextValueEvent.class)
     synchronized public void nextValue(NextValueEvent event)
-            throws InterruptedException
     {
         updateCurrentIteration();
         updateValueInfo(event.getPosition(), event.getModelName(), event.getOrientation());

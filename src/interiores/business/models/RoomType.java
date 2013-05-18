@@ -1,6 +1,7 @@
 package interiores.business.models;
 
 import interiores.business.models.catalogs.PersistentIdObject;
+import interiores.core.Utils;
 import interiores.utils.Dimension;
 import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlElement;
@@ -75,6 +76,17 @@ public class RoomType
      */
     public String getName() {
         return identifier;        
+    }
+    
+    public String getFullName() {
+        String[] words = getName().split("(?=[A-Z])");
+        
+        String fullName = Utils.capitalize(words[0]);
+        
+        for(int i = 1; i < words.length; ++i)
+            fullName += " " + Utils.decapitalize(words[i]);
+        
+        return fullName;
     }
 
     public Dimension getMinimumDimension() {

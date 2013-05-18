@@ -81,7 +81,7 @@ public class SwingController extends PresentationController
      * @param viewClass The class of the view to load
      * @throws Exception 
      */
-    public void load(Class<? extends Component> viewClass) throws SwingException
+    public void load(Class<? extends Component> viewClass)
     {            
         vloader.load(viewClass);
     }
@@ -90,17 +90,32 @@ public class SwingController extends PresentationController
      * Shows a loaded view.
      * @param viewClass The class of the view to show
      */
-    public void show(Class<? extends Component> viewClass) throws SwingException
+    public void show(Class<? extends Component> viewClass)
     {
         get(viewClass).setVisible(true);
     }
     
+    public void showNew(Class<? extends Component> viewClass) {
+        getNew(viewClass).setVisible(true);
+    }
+    
     /**
-     * Obtains a loaded view.
+     * Creates and stores a new instance of the view.
+     * @param viewClass Class of the view to create
+     * @return 
+     */
+    public <T extends Component> T getNew(Class<T> viewClass) {
+        load(viewClass);
+        
+        return get(viewClass);
+    }
+    
+    /**
+     * Obtains a loaded view, or creates a new one if not loaded.
      * @param viewClass The class of the view to obtain
      * @return The loaded view
      */
-    public <T extends Component> T get(Class<T> viewClass) throws SwingException
+    public <T extends Component> T get(Class<T> viewClass)
     {
         return (T) vloader.get(viewClass);
     }

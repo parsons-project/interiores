@@ -5,7 +5,7 @@ package interiores.core.business;
  * @author hector
  */
 public class BusinessException
-    extends Exception
+    extends RuntimeException
 {
     /**
      * Constructs a BusinessException with a given message.

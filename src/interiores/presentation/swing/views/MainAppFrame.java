@@ -50,7 +50,7 @@ public class MainAppFrame extends JFrame
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Interiors design");
+        setTitle("Interior design");
         setAlwaysOnTop(true);
 
         jMenu1.setText("File");

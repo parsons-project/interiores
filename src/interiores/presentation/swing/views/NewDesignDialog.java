@@ -61,7 +61,7 @@ public class NewDesignDialog extends JDialog
         if(value < range.min) value = range.min;
         else if(value > range.max) value = range.max;
         
-        spinner.setModel(new SpinnerNumberModel(value, range.min, range.max, 5));
+        spinner.setModel(new SpinnerNumberModel(value, range.min, range.max, roomController.getResolution()));
     }
 
     /**

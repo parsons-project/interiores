@@ -2,7 +2,6 @@ package interiores.business.models;
 
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
-import interiores.utils.Range;
 import java.util.Collection;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,6 +14,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Room
 {
+    private static final int RESOLUTION = 5;
+    
     @XmlAttribute
     private RoomType type;
     
@@ -33,6 +34,9 @@ public class Room
      */
     public Room(RoomType type, Dimension size)
     {
+        size.width -= size.width % RESOLUTION;
+        size.depth -= size.depth % RESOLUTION;
+        
         if(! type.isSizeValid(size))
             throw new BusinessException("The room you are trying to create is not between the permitted "
                     + "dimension range. Width[" + type.getWidthRange() + "], Depth[" + type.getDepthRange()
@@ -53,6 +57,10 @@ public class Room
             throws BusinessException
     {
         this(type, new Dimension(width, depth));
+    }
+    
+    public static int getResolution() {
+        return RESOLUTION;
     }
     
     /**

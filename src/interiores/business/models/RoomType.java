@@ -3,6 +3,7 @@ package interiores.business.models;
 import interiores.business.models.catalogs.PersistentIdObject;
 import interiores.core.Utils;
 import interiores.utils.Dimension;
+import interiores.utils.Range;
 import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -17,6 +18,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class RoomType
     extends PersistentIdObject
 {
+    private static final int MAX_WIDTH = 1000;
+    private static final int MAX_DEPTH = 1000;
+    
     /**
      * Minimum dimensions that a room of this type must have
      */
@@ -89,8 +93,16 @@ public class RoomType
         return fullName;
     }
 
-    public Dimension getMinimumDimension() {
-        return minDimension;
+    public Range getWidthRange() {
+        return new Range(minDimension.width, MAX_WIDTH);
+    }
+    
+    public Range getDepthRange() {
+        return new Range(minDimension.depth, MAX_DEPTH);
+    }
+    
+    public boolean isSizeValid(Dimension size) {
+        return size.isBetween(getWidthRange(), getDepthRange());
     }
     
     /**

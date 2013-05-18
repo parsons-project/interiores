@@ -1,9 +1,13 @@
 package interiores.presentation.swing.views;
 
+import interiores.business.controllers.RoomController;
 import interiores.business.controllers.RoomTypeController;
 import interiores.core.presentation.SwingController;
-import javax.swing.SpinnerNumberModel;
+import interiores.utils.Range;
+import java.util.Map;
 import javax.swing.JDialog;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
@@ -12,7 +16,9 @@ import javax.swing.JDialog;
 public class NewDesignDialog extends JDialog
 {
     private SwingController swing;
+    private RoomController roomController;
     private RoomTypeController roomTypesController;
+    private Map<String, String> roomTypes;
     
     public NewDesignDialog(SwingController presentation) {
         initComponents();
@@ -20,7 +26,42 @@ public class NewDesignDialog extends JDialog
         this.setModalityType(ModalityType.APPLICATION_MODAL);
         this.swing = presentation;
         
+        roomController = swing.getBusinessController(RoomController.class);
         roomTypesController = swing.getBusinessController(RoomTypeController.class);
+        roomTypes = roomTypesController.getFullNamesMap();
+        
+        for(String fullName : roomTypes.keySet())
+            roomTypesList.addItem(fullName);
+        
+        updateSpinners();
+    }
+    
+    private void updateSpinners() {
+        String value = (String) roomTypesList.getSelectedItem();
+        
+        if(value == null)
+            return;
+        
+        widthField.setEnabled(true);
+        depthField.setEnabled(true);
+        newDesignButton.setEnabled(true);
+        
+        String typeId = roomTypes.get(value);
+        
+        Range widthRange = roomTypesController.getWidthRange(typeId);
+        Range depthRange = roomTypesController.getDepthRange(typeId);
+        
+        setSpinnerModel(widthField, widthRange);
+        setSpinnerModel(depthField, depthRange);
+    }
+    
+    private void setSpinnerModel(JSpinner spinner, Range range) {
+        int value = (Integer) spinner.getValue();
+        
+        if(value < range.min) value = range.min;
+        else if(value > range.max) value = range.max;
+        
+        spinner.setModel(new SpinnerNumberModel(value, range.min, range.max, 5));
     }
 
     /**
@@ -31,14 +72,13 @@ public class NewDesignDialog extends JDialog
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents()
     {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         roomTypesList = new javax.swing.JComboBox();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        newDesignButton = new javax.swing.JButton();
         widthField = new javax.swing.JSpinner();
         depthField = new javax.swing.JSpinner();
 
@@ -52,6 +92,14 @@ public class NewDesignDialog extends JDialog
 
         jLabel3.setText("Type:");
 
+        roomTypesList.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                roomTypesListActionPerformed(evt);
+            }
+        });
+
         jButton1.setText("Cancel");
         jButton1.addActionListener(new java.awt.event.ActionListener()
         {
@@ -61,8 +109,15 @@ public class NewDesignDialog extends JDialog
             }
         });
 
-        jButton2.setText("New design");
-        jButton2.setEnabled(false);
+        newDesignButton.setText("New design");
+        newDesignButton.setEnabled(false);
+        newDesignButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                newDesignButtonActionPerformed(evt);
+            }
+        });
 
         widthField.setEnabled(false);
 
@@ -88,7 +143,7 @@ public class NewDesignDialog extends JDialog
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
+                        .addComponent(newDesignButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -109,7 +164,7 @@ public class NewDesignDialog extends JDialog
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(newDesignButton))
                 .addContainerGap())
         );
 
@@ -121,13 +176,28 @@ public class NewDesignDialog extends JDialog
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void roomTypesListActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_roomTypesListActionPerformed
+    {//GEN-HEADEREND:event_roomTypesListActionPerformed
+        updateSpinners();
+    }//GEN-LAST:event_roomTypesListActionPerformed
+
+    private void newDesignButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_newDesignButtonActionPerformed
+    {//GEN-HEADEREND:event_newDesignButtonActionPerformed
+        String typeId = roomTypes.get((String)roomTypesList.getSelectedItem());
+        int width = (Integer) widthField.getValue();
+        int depth = (Integer) depthField.getValue();
+        
+        roomController.create(typeId, width, depth);
+        dispose();
+    }//GEN-LAST:event_newDesignButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSpinner depthField;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton newDesignButton;
     private javax.swing.JComboBox roomTypesList;
     private javax.swing.JSpinner widthField;
     // End of variables declaration//GEN-END:variables

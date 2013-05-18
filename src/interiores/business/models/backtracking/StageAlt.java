@@ -34,9 +34,6 @@ public class StageAlt {
     private Iterator<FurnitureModel> mod_it; // Iterator through the valid models
     
     
-    
-    
-    
     public StageAlt() {
         room = new Area();
         positions = new ExtendedArea();

@@ -47,6 +47,6 @@ public class FurnitureTypesCatalogController
     public Collection<String> getSelectedFurnitureTypes()
             throws NoRoomCreatedException
     {
-        return getWishList().getFurnitureTypes();
+        return getWishList().getElementTypes();
     }
 }

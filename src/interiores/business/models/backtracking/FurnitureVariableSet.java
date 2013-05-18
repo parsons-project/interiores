@@ -1,7 +1,5 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.exceptions.ElementNotFoundBusinessException;
-import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
@@ -91,13 +89,7 @@ public class FurnitureVariableSet
         variables = new FurnitureVariable[variableCount];
         
         int i = 0;
-        for(WantedFixed wantedFixed : wishList.getWantedFixed()) {
-            String variableName = wantedFixed.getName();
-            variables[i] = new FurnitureVariable(variableName, wantedFixed.getModels(),
-                    roomDimension, wantedFixed.getUnaryConstraints(), variableCount);
-            ++i;
-        }
-        
+                
         PriorityQueue<Entry<Integer, FurnitureVariable>> queue = new PriorityQueue(variableCount-i+1,
                 new Comparator<Entry<Integer, FurnitureVariable>>() {
                     @Override
@@ -111,6 +103,20 @@ public class FurnitureVariableSet
                     }
                 }
         );
+        
+        for(WantedFixed wantedFixed : wishList.getWantedFixed()) {
+            String variableName = wantedFixed.getName();
+            
+            int priority = wishList.getPriority(variableName);
+            Debug.println("Adding variable " + variableName + " with " + priority + " binary "
+                    + "constraints.");
+            queue.add(new SimpleEntry(
+                    priority,
+                    new FurnitureVariable(variableName, wantedFixed.getModels(), roomDimension,
+                        wantedFixed.getUnaryConstraints(), variableCount)
+                    ));
+            i++;
+        }
         
         for(WantedFurniture wantedFurniture : wishList.getWantedFurniture()) {
             String variableName = wantedFurniture.getName();

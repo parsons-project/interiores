@@ -10,6 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Dimension
 {
+    public static enum Component { WIDTH, DEPTH };
+    
     @XmlAttribute
     public int width;
     
@@ -33,6 +35,13 @@ public class Dimension
      */
     public boolean isBetween(Range widthRange, Range depthRange) {
         return isWidthBetween(widthRange) && isDepthBetween(depthRange);
+    }
+    
+    public boolean isBetween(Component component, Range componentRange) {
+        if(component == Component.WIDTH)
+            return isWidthBetween(componentRange);
+        
+        return isDepthBetween(componentRange);
     }
     
     public boolean isWidthBetween(Range widthRange) {

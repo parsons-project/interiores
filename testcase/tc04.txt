@@ -3,6 +3,6 @@ select ft chair
 select ft chair
 selected ft
 list fm chair
-add constraint price 500 chair1
+add uc price 500 chair1
 select ft chair
 solve design

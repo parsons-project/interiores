@@ -8,7 +8,11 @@ import interiores.business.models.constraints.unary.MaterialConstraint;
 import interiores.business.models.constraints.unary.ModelConstraint;
 import interiores.business.models.constraints.unary.OrientationConstraint;
 import interiores.business.models.constraints.unary.PriceConstraint;
-import interiores.business.models.constraints.unary.SizeConstraint;
+import interiores.business.models.constraints.unary.SizeRangeConstraint;
+import interiores.core.business.BusinessException;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
@@ -17,8 +21,27 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  */
 @XmlRootElement
 @XmlSeeAlso({AreaConstraint.class, ColorConstraint.class, MaterialConstraint.class, ModelConstraint.class,
-    OrientationConstraint.class, PriceConstraint.class, SizeConstraint.class})
-public abstract class UnaryConstraint {
+    OrientationConstraint.class, PriceConstraint.class, SizeRangeConstraint.class})
+public abstract class UnaryConstraint
+    extends Constraint
+{
+    private static Map<String, Class<? extends Constraint>> availableConstraints = new TreeMap();
+    
+    public static void addConstraintClass(String name, Class<? extends UnaryConstraint> constraintClass)
+    {
+        addConstraintClass(availableConstraints, name, constraintClass);
+    }
+    
+    public static Class<? extends UnaryConstraint> getConstraintClass(String name)
+            throws BusinessException
+    {
+        return (Class<? extends UnaryConstraint>) getConstraintClass(availableConstraints, name, "unary");
+    }
+    
+    public static Collection<String> getConstraintNames() {
+        return availableConstraints.keySet();
+    }
+    
      /**
      * Eliminates all values from the variables' domain that do not fulfill the
      * restriction.

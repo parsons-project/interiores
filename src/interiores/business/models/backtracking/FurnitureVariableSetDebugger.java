@@ -4,7 +4,6 @@ import interiores.business.events.backtracking.ActualVariableSetEvent;
 import interiores.business.events.backtracking.NextValueEvent;
 import interiores.business.events.backtracking.ValueAssignedEvent;
 import interiores.business.events.backtracking.ValueUnassignedEvent;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.NamedCatalog;
@@ -12,6 +11,7 @@ import interiores.core.Debug;
 import interiores.core.Event;
 import interiores.core.Observable;
 import interiores.core.Observer;
+import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class FurnitureVariableSetDebugger
     private List<Observer> debuggers;
     
     public FurnitureVariableSetDebugger(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog)
-            throws ElementNotFoundBusinessException
+            throws BusinessException
     {
         super(wishList, furnitureCatalog);
         

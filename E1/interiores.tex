@@ -1,6 +1,9 @@
 \documentclass[a4paper,11pt,oneside]{article}
 \usepackage[utf8]{inputenc}
-\usepackage[catalan]{babel}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{chngpage} % necessaris per les taules dels anexos
+\usepackage{array}    % necessaris per les taules dels anexos
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,       % false: links enquadrats; true: links en color
@@ -17,25 +20,22 @@
 \newcommand{\newpar}{\vskip 3mm}
 
 \begin{document}
-\input{./titol.tex}
+\input{./titulo.tex}
 \tableofcontents
 \clearpage
 \section{Análisis de requisitos}
 \subsection{Enunciado ampliado}
 % De momento es solo una traducción del enunciado original
-\input{./enunciado_am.tex}
+\input{./enunciado_ampliado.tex}
 
 \subsection{Diagrama de casos de uso}
-% Aqui iria la imagen o lo que sea de los casos de uso con sus descripciones
-% del estilo:
-% \subsubsection{Caso 1}
-% \begin{description}
-% \item[Nombre] Caso de Uso 1
-% \item[Actores] Jim Carrey
-% ...
-% \end{description}
+\includegraphics[trim=40mm 40mm 10mm 40mm, clip, height=0.9\textheight]{./usecase.pdf}
+\subsection{Descripción de los casos de uso}
+\label{descripcion_casos}
+\input{./usecase.tex}
+
 \section{Especificación}
 \subsection{Diagrama de clases del dominio}
-% Más o menos la misma idea que con el diagrama de casos de uso
-
+\appendix
+\input{./anexos.tex}
 \end{document}

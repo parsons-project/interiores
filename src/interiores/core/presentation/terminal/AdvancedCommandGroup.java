@@ -41,19 +41,30 @@ abstract public class AdvancedCommandGroup
     public String readChoice(String question, String ... choices) {
         List<String> list = Arrays.asList(choices);
         
-        String available = "Available choices are: ";
+        String available = "Available choices:";
         
         for(int i = 0; i < list.size(); ++i) {
-            if(i != 0) available += ", ";
+            available += "\n  ";
+            
+            if(i == 0) available += "* ";
+            else available += "  ";
+            
             available += list.get(i);
         }
         
-        String choice = readString(question + " (" + available + ")");
+        String choice = readString(question + "\n" + available);
         
         if(! list.contains(choice))
             choice = list.get(0);
         
         return choice;
+    }
+    
+    public String readChoice(String question, Collection<String> choices) {
+        String[] choicesArray = new String[choices.size()];
+        choices.toArray(choicesArray);
+        
+        return readChoice(question, choicesArray);
     }
     
     /**

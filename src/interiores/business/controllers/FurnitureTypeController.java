@@ -56,7 +56,7 @@ public class FurnitureTypeController
      */
     public void select(String name)
             throws ElementNotFoundBusinessException, NoRoomCreatedException, ForbiddenFurnitureException
-    {
+    {        
         getWishList().addWantedFurniture(name);
     }
     
@@ -76,7 +76,7 @@ public class FurnitureTypeController
      * @return A collection containing all the pieces of furniture in the wish list
      * @throws NoRoomCreatedException 
      */
-    public Collection getRoomFurniture()
+    public Collection<String> getRoomFurniture()
             throws NoRoomCreatedException
     {
         return getWishList().getFurnitureNames();

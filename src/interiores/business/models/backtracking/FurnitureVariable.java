@@ -1,12 +1,11 @@
 package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
-import interiores.business.models.OrientedRectangle;
 import interiores.business.models.constraints.UnaryConstraint;
-import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
+import java.awt.Rectangle;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -15,8 +14,6 @@ public class FurnitureVariable
 	implements Variable
 {
     private String identifier;
-    
-    private int resolution;
 
     /**
      * The domain of the variable.
@@ -53,23 +50,14 @@ public class FurnitureVariable
      * @pre the iteration of the variableSet is 0
      */
     public FurnitureVariable(String id, List<FurnitureModel> models, Dimension roomSize,
-            Collection<UnaryConstraint> unaryConstraints, int variableCount) {
-        
-        this(id, models, roomSize, unaryConstraints, variableCount, 5);
-    }
-    
-    
-    public FurnitureVariable(String id, List<FurnitureModel> models,
-            Dimension roomSize, Collection<UnaryConstraint> unaryConstraints,
-            int variableCount, int resolution) { 
-        
+            Collection<UnaryConstraint> unaryConstraints, int variableCount)
+    {
         identifier = id;
-        this.resolution = resolution;
         
         isAssigned = false;
         iteration = 0;
     
-        domain = new Domain(models, roomSize, variableCount, resolution);
+        domain = new Domain(models, roomSize, variableCount);
         
         this.unaryConstraints = unaryConstraints;
         
@@ -81,7 +69,7 @@ public class FurnitureVariable
     
     /**
      * Resets the iterators so that they will iterate through all of the
-     * variables' domain, for the iteration "iteration" of the algorithm.
+     * variables' domains, for the iteration "iteration" of the algorithm.
      */
     public void resetIterators(int iteration) {
         domain.resetIterators(iteration);
@@ -142,7 +130,7 @@ public class FurnitureVariable
                
         // 2) send the affected positions back
         FurnitureValue value = (FurnitureValue) variable.getAssignedValue();
-        OrientedRectangle invalidRectangle = value.getArea();
+        Rectangle invalidRectangle = value.getWholeArea();
         
         domain.stripInvalidRectangle(invalidRectangle, iteration);        
         

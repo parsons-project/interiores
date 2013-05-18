@@ -7,7 +7,6 @@ import interiores.presentation.swing.views.map.doors.LeftDoor;
 import interiores.presentation.swing.views.map.doors.RightDoor;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,6 +58,7 @@ public class RoomMap
     }
     
     public void addPillar(int x, int y, int width, int depth) {
+        // @TODO Pillars
         //elements.put(new Point(x, y), new RoomElement(x, y, width, depth));
     }
     
@@ -81,9 +81,9 @@ public class RoomMap
         g.setColor(Color.white);
         g.fillRect(0, 0, width, depth);
         
-        drawElements(g);
-        
         walls.draw(g);
+        
+        drawElements(g);
         
         g.setColor(Color.black);
         g.drawString(status, 10, 20);

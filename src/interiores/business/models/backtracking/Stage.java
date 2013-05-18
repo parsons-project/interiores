@@ -1,17 +1,15 @@
-
 package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
-import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,9 +19,10 @@ import java.util.List;
  * @author nil.mamano
  */
 public class Stage {
-
+    private int resolution;
+    
     private List<FurnitureModel> models;
-    private HashSet<Point> positions;
+    private List<Point> positions;
     private List<Orientation> orientations;
 
     
@@ -40,13 +39,15 @@ public class Stage {
     private boolean firstValueIteration;
     
     public Stage(List<FurnitureModel> models, Dimension roomSize,
-            int resolution) {
+            int resolution)
+    {
+        this.resolution = resolution;
         
         // initialize models
         this.models = models;
         
         // initialize positions
-        positions = new HashSet<Point>();
+        positions = new ArrayList<Point>();
         for (int i = 0; i < roomSize.width; i += resolution) {
             for (int j = 0; j < roomSize.depth; j += resolution)
                 positions.add(new Point(i,j));
@@ -69,9 +70,11 @@ public class Stage {
     /**
      * Default constructor. Empty stage.
      */
-    public Stage() {
+    public Stage(int resolution) {
+        this.resolution = resolution;
+        
         models = new ArrayList();
-        positions = new HashSet<Point>();
+        positions = new ArrayList<Point>();
         orientations = new ArrayList();
         
         //initialize iterators
@@ -112,11 +115,7 @@ public class Stage {
         }
         
         //2) return the new current value
-        OrientedRectangle area = new OrientedRectangle(currentPosition,
-            currentModel.getSize(), Orientation.S);
-        area.setOrientation(currentOrientation);
-        
-        return new FurnitureValue(area, currentModel);
+        return new FurnitureValue(currentPosition, currentModel, currentOrientation);
     }
     
     
@@ -155,7 +154,7 @@ public class Stage {
         return models;
     }
     
-    HashSet<Point> getPositions() {
+    List<Point> getPositions() {
         return positions;
     }
     
@@ -167,7 +166,7 @@ public class Stage {
         this.models = models;
     }
     
-    void setPositions(HashSet<Point> positions) {
+    void setPositions(List<Point> positions) {
         this.positions = positions;
     }
         
@@ -175,14 +174,14 @@ public class Stage {
         this.orientations = orientations;
     }
 
-    Collection<Point> trimInvalidRectangle(OrientedRectangle invalidRectangle) {
+    Collection<Point> trimInvalidRectangle(Rectangle invalidRectangle) {
         Collection<Point> trimedPositions = new ArrayList();
         int x = invalidRectangle.x;
         int y = invalidRectangle.y;
         int x_max = x+invalidRectangle.width;
         int y_max = y+invalidRectangle.height;
-        for (int i = x; i < x_max; ++i) {
-            for (int j = y; j < y_max; ++j) {
+        for (int i = x; i < x_max; i += resolution) {
+            for (int j = y; j < y_max; j += resolution) {
                 Point p = new Point(i,j);
                 if (positions.contains(p)) {
                     trimedPositions.add(p);
@@ -198,7 +197,7 @@ public class Stage {
     }
 
     void swapPositions(Stage stage) {
-        HashSet<Point> aux = this.positions;
+        List<Point> aux = this.positions;
         this.positions = stage.positions;
         stage.positions = aux;
         

@@ -45,4 +45,8 @@ abstract public class CatalogAccessController<I extends PersistentIdObject>
     {
         return getActiveCatalog().get(id);
     }
+    
+    public boolean exists(String name) {
+        return getActiveCatalog().hasObject(name);
+    }
 }

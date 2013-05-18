@@ -1,6 +1,6 @@
 new room kitchen 300 300
 select ft chair
 select ft chair
-add constraint model NADDA chair1
-add constraint material pine chair2
+add uc model NADDA chair1
+add uc material pine chair2
 solve design

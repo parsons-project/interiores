@@ -198,6 +198,7 @@ public class Stage {
     
     void addPositions(Collection<Point> newPositions) {
         positions.addAll(newPositions);
+        resetIterators();
     }
 
     void swapPositions(Stage stage) {

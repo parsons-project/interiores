@@ -43,7 +43,7 @@ public class StageAltTest {
     /**
      * Test of getNextDomainValue method, of class StageAlt.
      */
-    //@Test
+    @Test
     public void testGetNextDomainValue() throws BusinessException {
         System.out.println("Testing has/get-NextDomainValue() .........");
         
@@ -94,6 +94,54 @@ public class StageAltTest {
         
         // Quite the worst-case scenario for a single variable domain
         Area room = new Area(new Rectangle(0, 0, dim.width, dim.depth));
+        
+        // And a basic list of furniture models
+        List<FurnitureModel> l = new ArrayList();
+        for (int i = 0; i < nb_models; i++) { 
+            Random rand = new Random();
+            Dimension d = new Dimension(20 + rand.nextInt(80),20 + rand.nextInt(80));
+            SpaceAround sa = new SpaceAround(0, 0, 0, 0);
+            FurnitureModel fm = new FurnitureModel("m"+i,d,10,"white","wood",sa);
+            l.add(fm);
+            System.out.println("Added model " + fm.toString());
+        }
+            
+        // We create the stage
+        StageAlt instance = new StageAlt(l,room);
+            
+        long startTime = System.nanoTime();
+        
+        // And start going through the values in the domain.
+        // Now, note that even this simple example is complex in the current context.
+        // This test, thus, only serves the purpose of verifying whether the methods
+        // are consistent and do not throw any kind of exception
+        long values_obtained = 0;
+        while (instance.hasMoreValues()) {
+            FurnitureValue fv = (FurnitureValue) instance.getNextDomainValue();
+            values_obtained++;
+        }
+        
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        
+        System.out.println("........... THE END ........ elapsed " + duration + " nanoseconds.");
+        System.out.println("Values obtained = " + values_obtained);
+    }
+    
+    @Test
+    public void testGetNextDomainValueTimedComplex() throws BusinessException {
+        System.out.println("Testing has/get-NextDomainValue() for TIME WITH A COMPLEX SHAPE.........");
+        
+        // PARAMETERS
+        int nb_models = 30; // The number of models
+        // The resolution (should be changed directly on ExtendedArea)
+        
+        // Here we have a room with a complex topography
+        int xPoly[] = {0,20,20,10,10,30,30,40,40,50,50,60,60,120,120,100,100,90,90,70,70,15,15,50,50,30,30,0};
+        int yPoly[] = {60,60,70,70,90,90,75,75,100,100,75,75,110,110,60,60,30,30,15,15,0,0,20,20,50,50,40,40};
+        Area room = new Area(new Polygon(xPoly, yPoly, xPoly.length));
+        room.subtract(new Area(new Rectangle(70, 70, 30, 20)));
+        room.subtract(new Area(new Rectangle(80, 50, 5, 40)));
         
         // And a basic list of furniture models
         List<FurnitureModel> l = new ArrayList();

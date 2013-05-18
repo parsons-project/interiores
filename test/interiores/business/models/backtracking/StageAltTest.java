@@ -43,7 +43,7 @@ public class StageAltTest {
     /**
      * Test of getNextDomainValue method, of class StageAlt.
      */
-    @Test
+    //@Test
     public void testGetNextDomainValue() throws BusinessException {
         System.out.println("Testing has/get-NextDomainValue() .........");
         
@@ -83,12 +83,12 @@ public class StageAltTest {
     /**
      * Test of getNextDomainValue method, of class StageAlt.
      */
-    @Test
+    //@Test
     public void testGetNextDomainValueTimed() throws BusinessException {
         System.out.println("Testing has/get-NextDomainValue() for TIME .........");
         
         // PARAMETERS
-        int nb_models = 10; // The number of models
+        int nb_models = 50; // The number of models
         // The resolution (should be changed directly on ExtendedArea)
         Dimension dim = new Dimension(1000,1000); // The size of the room
         

@@ -52,6 +52,10 @@ public class Dimension
         return (depthRange.min <= depth && depthRange.max >= depth);
     }
     
+    public boolean equals(Dimension other) {
+        return this.width == other.width && this.depth == other.depth;
+    }
+    
     @Override
     public String toString() {
         return "(" + width + ", " + depth + ")";

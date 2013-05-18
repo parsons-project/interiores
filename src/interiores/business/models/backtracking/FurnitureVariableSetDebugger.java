@@ -13,6 +13,7 @@ import interiores.core.Debug;
 import interiores.core.Event;
 import interiores.core.Observable;
 import interiores.core.Observer;
+import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class FurnitureVariableSetDebugger
     private List<Observer> debuggers;
     
     public FurnitureVariableSetDebugger(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog)
-            throws ElementNotFoundBusinessException, WantedElementNotFoundException
+            throws ElementNotFoundBusinessException, WantedElementNotFoundException, BusinessException
     {
         super(wishList, furnitureCatalog);
         

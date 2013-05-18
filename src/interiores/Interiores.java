@@ -52,6 +52,7 @@ public class Interiores
         app.addBusiness("roomType");
         app.addBusiness("furnitureTypesCatalog");
         app.addBusiness("roomTypesCatalog");
+        app.addBusiness("fixedElement");
         
         // Run, run, run!!!
         app.init();

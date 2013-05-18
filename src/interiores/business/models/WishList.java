@@ -129,7 +129,7 @@ public class WishList
     }
     
     public int getSize() {
-        return furniture.size();
+        return furniture.size() + fixed.size();
     }
     
     /**

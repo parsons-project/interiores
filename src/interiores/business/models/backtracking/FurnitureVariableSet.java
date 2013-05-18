@@ -5,11 +5,13 @@ import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.business.models.FurnitureType;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
+import interiores.business.models.WantedFixed;
 import interiores.business.models.WantedFurniture;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.constraints.GlobalConstraint;
 import interiores.core.Debug;
+import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
 import interiores.utils.BinaryConstraintAssociation;
@@ -80,7 +82,7 @@ public class FurnitureVariableSet
      * Default Constructor.
      */
     public FurnitureVariableSet(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog)
-            throws ElementNotFoundBusinessException, WantedElementNotFoundException
+            throws ElementNotFoundBusinessException, WantedElementNotFoundException, BusinessException
     {
         Dimension roomDimension = wishList.getRoom().getDimension();
         roomArea = new OrientedRectangle(new Point(0, 0), roomDimension, Orientation.S);
@@ -89,12 +91,12 @@ public class FurnitureVariableSet
         variables = new FurnitureVariable[variableCount];
         
         int i = 0;
-//        for(WantedFixed wantedFixed : wishList.getWantedFixed()) {
-//            String variableName = wantedFixed.getName();
-//            variables[i] = new FurnitureVariable(variableName, wantedFixed,
-//                    roomDimension, wantedFixed.getUnaryConstraints(), variableCount);
-//            ++i;
-//        }
+        for(WantedFixed wantedFixed : wishList.getWantedFixed()) {
+            String variableName = wantedFixed.getName();
+            variables[i] = new FurnitureVariable(variableName, wantedFixed.getModels(),
+                    roomDimension, wantedFixed.getUnaryConstraints(), variableCount);
+            ++i;
+        }
         
         PriorityQueue<Entry<Integer, FurnitureVariable>> queue = new PriorityQueue(variableCount+1,
                 new Comparator<Entry<Integer, FurnitureVariable>>() {

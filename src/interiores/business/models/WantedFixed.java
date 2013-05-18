@@ -6,11 +6,13 @@ package interiores.business.models;
 
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.business.models.constraints.unary.PositionConstraint;
+import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -33,6 +35,14 @@ public class WantedFixed {
     
     public Collection<UnaryConstraint> getUnaryConstraints() {
         return new ArrayList(Arrays.asList(positionConstraint));
+    }
+    
+    public void setModel() {
+        
+    }
+    
+    public List<FurnitureModel> getModels() throws BusinessException {
+        return new ArrayList(Arrays.asList(new FurnitureModel(typeName, size, 0, "yellow", "wood", new SpaceAround(0,0,0,0))));
     }
     
 }

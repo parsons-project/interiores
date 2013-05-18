@@ -16,8 +16,11 @@ package interiores.business.models.backtracking.orthogonalArea;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -328,6 +331,31 @@ class OrthogonalPolygon {
                     
         return endingPoints;
         
+    }
+
+
+    List<OrthogonalPolygon> resultingPolygonsFromCut(OrthogonalPolygon p) {
+        List<OrthogonalPolygon> result = new ArrayList<OrthogonalPolygon>();
+
+        //A-B = (A+B)xor(B)
+        add(p);
+        Set<Point> resultingPoints = pointXor(p);
+        return dividePointsInDisjointPolygons(resultingPoints);
+    }
+
+    
+    private Set<Point> pointXor(OrthogonalPolygon p) {
+        Set<Point> pointSet = new HashSet<Point>();
+        
+        for (Point point: points) pointSet.add(point);
+        for (Point point: p.points) pointSet.add(point);
+        
+        return pointSet;
+    }
+
+    private List<OrthogonalPolygon> dividePointsInDisjointPolygons(Set<Point> resultingPoints) {
+        //TO DO: last operation needed to implement remove functionality
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
 }

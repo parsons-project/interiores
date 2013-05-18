@@ -4,6 +4,10 @@
  */
 package interiores.business.models.backtracking.orthogonalArea;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author nil.mamano
@@ -43,5 +47,67 @@ class VerticalEdge {
      */
     boolean intersects(HorizontalEdge edge) {
         return edge.y < yh && edge.y > yl && x < edge.xh && x > edge.xl;
+    }
+
+    /**
+     * Returns whether 2 verticalEdges share more than a single point.
+     * @param p the edge which might be disjoint.
+     * @return true if the edges are disjoints.
+     */
+    boolean disjoint(VerticalEdge p) {
+        return x == p.x && (
+                (p.yl >= yl && p.yl <  yh) ||
+                (p.yh >  yl && p.yh <= yh)
+               );
+    }
+
+    /**
+     * Returns whether a point is contained in the edge.
+     * A point over either of the edges is considered contained.
+     * @param p
+     * @return 
+     */
+    boolean strongContains(Point p) {
+        return x == p.x && p.y <= yh && p.y >= yl;
+    }
+
+    /**
+     * Given that the implicit parameter and p intersect, returns the
+     * point of the intersection.
+     * @param p
+     * @return 
+     */
+    Point getIntersection(HorizontalEdge p) {
+        return new Point(x, p.y);
+    }
+
+    /**
+     * Given that the implicit parameter and p share a common segment,
+     * returns the two ends of this segment.
+     * @param p
+     * @return 
+     */
+    List<Point> getEndingPointsOfSharedSegment(VerticalEdge p) {
+        
+        List<Point> endingPoints = new ArrayList<Point>();
+        
+        Point pTopPoint = p.topPoint();
+        if (strongContains(pTopPoint)) endingPoints.add(pTopPoint);
+        else endingPoints.add(topPoint());
+        
+        Point pBottomPoint = p.bottomPoint();
+        if (strongContains(pBottomPoint)) endingPoints.add(pBottomPoint);
+        else endingPoints.add(bottomPoint());
+        
+        return endingPoints;
+    }
+    
+
+    private Point topPoint() {
+        return new Point(x, yl);
+    }
+
+    private Point bottomPoint() {
+        return new Point(x, yh);
     }
 }

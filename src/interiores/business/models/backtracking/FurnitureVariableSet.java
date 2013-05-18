@@ -96,7 +96,7 @@ public class FurnitureVariableSet
 //            ++i;
 //        }
         
-        PriorityQueue<Entry<Integer, FurnitureVariable>> queue = new PriorityQueue(variableCount,
+        PriorityQueue<Entry<Integer, FurnitureVariable>> queue = new PriorityQueue(variableCount+1,
                 new Comparator<Entry<Integer, FurnitureVariable>>() {
                     @Override
                     public int compare(Entry<Integer, FurnitureVariable> e1,

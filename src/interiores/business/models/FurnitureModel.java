@@ -108,7 +108,7 @@ public class FurnitureModel {
     }
     
     public boolean hasPassiveSpace() {
-        return passiveSpace.isEmpty();
+        return !passiveSpace.isEmpty();
     }
     
     public SpaceAround getPassiveSpace() {

@@ -58,7 +58,11 @@ public class ExtendedAreaTest {
         
         Dimension dim = new Dimension(10, 10);
         
+        long startTime = System.nanoTime();
         ExtendedArea instance = new ExtendedArea(area,dim);
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        System.out.println("Time elapsed creating a complex extended area " + duration + " nanoseconds.");
         
 //        UNCOMMENT THESE LINES TO PRINT THE AREA AFTER ITS TRANSFORMATION        
 //        for (int i = 0; i < 110; i++) {
@@ -73,7 +77,7 @@ public class ExtendedAreaTest {
         while (it.hasNext()) {
             Point q = it.next();
             
-            System.out.println("Next point: (" + q.x + "," + q.y + ");");
+            //System.out.println("Next point: (" + q.x + "," + q.y + ");");
         }
         
     }
@@ -85,18 +89,23 @@ public class ExtendedAreaTest {
     public void testIterator2() {
         System.out.println("Testing the iterator interface.........");
         
-        Area area = new Area(new Rectangle(0, 0, 60, 80));
-        System.out.println("area contains (60,0)? : " + area.contains(60, 0));
+        Area area = new Area(new Rectangle(0, 0, 1000, 1000));
+        System.out.println("area contains (1000,0)? : " + area.contains(1000, 0));
 
         Dimension dim = new Dimension(10, 10);
         
+        long startTime = System.nanoTime();
         ExtendedArea instance = new ExtendedArea(area,dim);
-                
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+        System.out.println("Time elapsed creating a simple yet large extended area " + duration + " nanoseconds.");
+        
+        
         Iterator<Point> it = instance.iterator();
         while (it.hasNext()) {
             Point q = it.next();
             
-            System.out.println("Next point: (" + q.x + "," + q.y + ");");
+            //System.out.println("Next point: (" + q.x + "," + q.y + ");");
         }
         
     }

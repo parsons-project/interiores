@@ -147,7 +147,7 @@ public class StageAltTest {
         List<FurnitureModel> l = new ArrayList();
         for (int i = 0; i < nb_models; i++) { 
             Random rand = new Random();
-            Dimension d = new Dimension(20 + rand.nextInt(80),20 + rand.nextInt(80));
+            Dimension d = new Dimension(4 + rand.nextInt(10),4 + rand.nextInt(10));
             SpaceAround sa = new SpaceAround(0, 0, 0, 0);
             FurnitureModel fm = new FurnitureModel("m"+i,d,10,"white","wood",sa);
             l.add(fm);

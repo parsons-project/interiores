@@ -6,7 +6,6 @@ package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
-import interiores.business.models.OrientedRectangle;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
 import interiores.utils.ExtendedArea;
@@ -39,12 +38,7 @@ public class StageAlt {
     private FurnitureModel current_mod;
     
     
-    public StageAlt() {
-        room = new Area();
-        positions = new ExtendedArea();
-        orientations = new ArrayList();
-        models = new ArrayList();        
-    }
+    public StageAlt() {}
     
     public StageAlt(List<FurnitureModel> initial_models, Area current_room) {
         

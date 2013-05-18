@@ -47,6 +47,10 @@ public class ExtendedArea implements Iterable<Point> {
         return area;
     }
     
+    public boolean isEmpty() {
+        return area.isEmpty();
+    }
+    
     
     // ITERATOR
     private class AreaIterator implements Iterator<Point>

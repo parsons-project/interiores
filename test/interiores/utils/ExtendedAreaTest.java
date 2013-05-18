@@ -69,7 +69,29 @@ public class ExtendedAreaTest {
 //            System.out.print("\n");
 //        }
         
-        Area comp = new Area();
+        Iterator<Point> it = instance.iterator();
+        while (it.hasNext()) {
+            Point q = it.next();
+            
+            System.out.println("Next point: (" + q.x + "," + q.y + ");");
+        }
+        
+    }
+    
+    /**
+     * Test of iterator method, of class ExtendedArea.
+     */
+    @Test
+    public void testIterator2() {
+        System.out.println("Testing the iterator interface.........");
+        
+        Area area = new Area(new Rectangle(0, 0, 60, 80));
+        System.out.println("area contains (60,0)? : " + area.contains(60, 0));
+
+        Dimension dim = new Dimension(10, 10);
+        
+        ExtendedArea instance = new ExtendedArea(area,dim);
+                
         Iterator<Point> it = instance.iterator();
         while (it.hasNext()) {
             Point q = it.next();

@@ -82,7 +82,7 @@ public class FurnitureVariableSet
      * Default Constructor.
      */
     public FurnitureVariableSet(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog)
-            throws ElementNotFoundBusinessException, WantedElementNotFoundException, BusinessException
+            throws BusinessException
     {
         Dimension roomDimension = wishList.getRoom().getDimension();
         roomArea = new OrientedRectangle(new Point(0, 0), roomDimension, Orientation.S);
@@ -98,7 +98,7 @@ public class FurnitureVariableSet
             ++i;
         }
         
-        PriorityQueue<Entry<Integer, FurnitureVariable>> queue = new PriorityQueue(variableCount+1,
+        PriorityQueue<Entry<Integer, FurnitureVariable>> queue = new PriorityQueue(variableCount-i+1,
                 new Comparator<Entry<Integer, FurnitureVariable>>() {
                     @Override
                     public int compare(Entry<Integer, FurnitureVariable> e1,

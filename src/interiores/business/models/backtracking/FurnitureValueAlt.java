@@ -36,7 +36,7 @@ public class FurnitureValueAlt extends Value {
         orientation = o;
         model = m;
         active = computeActiveArea(p, m.getSize(), o);
-        passive = computePassiveArea();
+//        passive = computePassiveArea();
     }
     
     /**
@@ -118,15 +118,15 @@ public class FurnitureValueAlt extends Value {
      * PRE: 'model', 'active', and 'orientation' have already been given a value
      * @return A Rectangle representing the passive area of such a configuration
      */
-    private Rectangle computePassiveArea() {
-        // We get number that corresponds to the orientation value (N=0, E=1, S=2, W=3)
-        int o = orientation.ordinal();
-        int[] passiveOffsets = model.getPassiveSpace();
-        return new Rectangle(active.x - passiveOffsets[3-o],
-                             active.y - passiveOffsets[(4-o) % 4],
-                             active.width + passiveOffsets[(3+o) % 4] + passiveOffsets[(1+o) % 4],
-                             active.height + passiveOffsets[(2+o) % 4] + passiveOffsets[o]        );
-    }
+//    private Rectangle computePassiveArea() {
+//        // We get number that corresponds to the orientation value (N=0, E=1, S=2, W=3)
+//        int o = orientation.ordinal();
+//        SpaceAround sp = model.getPassiveSpace();
+//        return new Rectangle(active.x - passiveOffsets[3-o],
+//                             active.y - passiveOffsets[(4-o) % 4],
+//                             active.width + passiveOffsets[(3+o) % 4] + passiveOffsets[(1+o) % 4],
+//                             active.height + passiveOffsets[(2+o) % 4] + passiveOffsets[o]        );
+//    }
     
     
 }

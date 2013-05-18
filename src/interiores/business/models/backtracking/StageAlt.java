@@ -71,15 +71,9 @@ public class StageAlt {
             rebuild_positions(); // build new Extended Area
             pos_it = positions.iterator();
             return getNextDomainValue();
-        }        
+        }
         
-        // Now, we create the next furniture value
-        // TODO refactor the way Oriented rectangles and Furniture Values behave, it seems a bit akward
-        OrientedRectangle rect = new OrientedRectangle(current_pos,
-            current_mod.getSize(), Orientation.S);
-        rect.setOrientation(current_or);
-        
-        return new FurnitureValue(rect, current_mod);
+        return new FurnitureValue(current_pos, current_mod, current_or);
     }
     
     public boolean hasMoreValues() {

@@ -7,6 +7,7 @@ package interiores.business.models.backtracking;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
+import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
 import java.awt.Color;
@@ -44,7 +45,7 @@ public class StageTest {
      * Test of getNextDomainValue method, of class Stage.
      */
     @Test
-    public void testGetNextDomainValue() {
+    public void testGetNextDomainValue() throws BusinessException {
        System.out.println("Testing has/get-NextDomainValue() for TIME .........");
         
         // PARAMETERS
@@ -60,7 +61,7 @@ public class StageTest {
         for (int i = 0; i < nb_models; i++) { 
             Random rand = new Random();
             Dimension d = new Dimension(20 + rand.nextInt(80),20 + rand.nextInt(80));
-            FurnitureModel fm = new FurnitureModel("m"+i,d,10,Color.WHITE,"wood");
+            FurnitureModel fm = new FurnitureModel("m"+i,d,10,"white","wood");
             l.add(fm);
             System.out.println("Added model " + fm.toString());
         }

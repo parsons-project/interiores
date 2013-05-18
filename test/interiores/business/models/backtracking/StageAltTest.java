@@ -6,6 +6,8 @@ package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.FurnitureType;
+import interiores.business.models.SpaceAround;
+import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
@@ -42,7 +44,7 @@ public class StageAltTest {
      * Test of getNextDomainValue method, of class StageAlt.
      */
     @Test
-    public void testGetNextDomainValue() {
+    public void testGetNextDomainValue() throws BusinessException {
         System.out.println("Testing has/get-NextDomainValue() .........");
         
         // Here we have a room with a complex topography
@@ -57,9 +59,10 @@ public class StageAltTest {
         
         // And a basic list of furniture models
         List<FurnitureModel> l = new ArrayList();
-        l.add(new FurnitureModel("A", new Dimension(10,10), 10, Color.WHITE, "plastic", new int[]{30,20,0,20}));
-        l.add(new FurnitureModel("B", new Dimension(20,10), 20, Color.BLACK, "wood", new int[]{0,0,0,40}));
-        l.add(new FurnitureModel("C", new Dimension(20,20), 30, Color.RED, "steel", new int[]{0,0,0,0}));
+        SpaceAround sa = new SpaceAround(0, 0, 0, 0);
+        l.add(new FurnitureModel("A", new Dimension(10,10), 10, "white", "plastic",sa));
+        l.add(new FurnitureModel("B", new Dimension(20,10), 20, "black", "wood",sa));
+        l.add(new FurnitureModel("C", new Dimension(20,20), 30, "red", "steel",sa));
             
         // We create the stage
         Area selectedRoom = room;
@@ -81,7 +84,7 @@ public class StageAltTest {
      * Test of getNextDomainValue method, of class StageAlt.
      */
     @Test
-    public void testGetNextDomainValueTimed() {
+    public void testGetNextDomainValueTimed() throws BusinessException {
         System.out.println("Testing has/get-NextDomainValue() for TIME .........");
         
         // PARAMETERS
@@ -97,7 +100,8 @@ public class StageAltTest {
         for (int i = 0; i < nb_models; i++) { 
             Random rand = new Random();
             Dimension d = new Dimension(20 + rand.nextInt(80),20 + rand.nextInt(80));
-            FurnitureModel fm = new FurnitureModel("m"+i,d,10,Color.WHITE,"wood");
+            SpaceAround sa = new SpaceAround(0, 0, 0, 0);
+            FurnitureModel fm = new FurnitureModel("m"+i,d,10,"white","wood",sa);
             l.add(fm);
             System.out.println("Added model " + fm.toString());
         }

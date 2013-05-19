@@ -44,7 +44,7 @@ public class WishListPanel extends JPanel {
         }
 
     }    
-    private void updateSelected() {
+    public void updateSelected() {
         Collection<String> selectedFurniture = furnitureTypeController.getRoomFurniture();
         selected.setListData(selectedFurniture.toArray(new String[selectedFurniture.size()]));
     }

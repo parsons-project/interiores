@@ -96,6 +96,7 @@ public class MainAppFrame extends JFrame
         map.setVisible(true);
         wishListPanel.setVisible(true);
         wishListPanel.updateSelectable();
+        wishListPanel.updateSelected();
         validate();
         pack();
     }

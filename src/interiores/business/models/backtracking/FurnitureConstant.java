@@ -1,7 +1,10 @@
 package interiores.business.models.backtracking;
 
+import interiores.business.models.constraints.UnaryConstraint;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *
@@ -12,28 +15,26 @@ public class FurnitureConstant
 {
     public FurnitureConstant(String identifier, FurnitureValue value) {
         super(identifier);
-        
         assignValue(value);
+        
+        domain = Domain.empty();
     }
     
     @Override
     public void resetIterators(int iteration) {
-        
+        // IM CONSTANT :D
     }
     
-    //Pre: we have not iterated through all domain values yet.
     @Override
     public Value getNextDomainValue() {
         return getAssignedValue();
     }  
     
-    //Pre: the 3 iterators point to valid values
     @Override
     public boolean hasMoreValues() {
         return false;
     }
 
-    
     @Override
     public final void assignValue(Value value) {
         if(isAssigned())
@@ -61,5 +62,10 @@ public class FurnitureConstant
     @Override
     public boolean isAssigned() {
         return true;
+    }
+    
+    @Override
+    public Collection<UnaryConstraint> getUnaryConstraints() {
+        return new ArrayList(); // Empty :O
     }
 }

@@ -49,6 +49,10 @@ public class Domain {
         
     }
     
+    public static Domain empty() {
+        return new Domain(new ArrayList(), new Dimension(0, 0), 0);
+    }
+    
     public void resetIterators(int iteration) {
         domain[iteration].resetIterators();
     }

@@ -6,6 +6,7 @@ import interiores.business.models.OrientedRectangle;
 import interiores.business.models.WantedFixed;
 import interiores.business.models.WantedFurniture;
 import interiores.business.models.WishList;
+import interiores.business.models.backtracking.trimmers.PreliminarTrimmer;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.constraints.GlobalConstraint;
 import interiores.core.Debug;
@@ -16,8 +17,10 @@ import interiores.utils.BinaryConstraintAssociation;
 import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
@@ -72,6 +75,8 @@ public class FurnitureVariableSet
      * Indicates restrictions amongst all variables.
      */
     Map<String, GlobalConstraint> globalConstraints;
+    
+    private List<PreliminarTrimmer> preliminarTrimmers;
             
     /**
      * Default Constructor.
@@ -84,6 +89,8 @@ public class FurnitureVariableSet
         
         variableCount = wishList.getSize();
         variables = new FurnitureVariable[variableCount];
+        
+        preliminarTrimmers = new ArrayList();
         
         addConstants(wishList);
         addVariables(wishList, furnitureCatalog, roomSize);
@@ -259,18 +266,15 @@ public class FurnitureVariableSet
     }
     
     
+    public void addPreliminarTrimmer(PreliminarTrimmer preliminarTrimmer) {
+        preliminarTrimmers.add(preliminarTrimmer);
+    }
+    
     //note: trivial implementation. To be optimized.
     @Override
     protected void preliminarTrimDomains() {
-        
-        //1) remove values which do not fit some unary constraint
-        for (int i = 0; i < variableCount; ++i)
-            variables[i].applyUnaryConstraints();
-        
-        //2) remove pieces of furniture such that there is another piece
-        // smaller and cheaper
-        for (int i = 0; i < variableCount; ++i)
-            variables[i].trimUnfitModels();
+        for(PreliminarTrimmer preliminarTrimmer : preliminarTrimmers)
+            preliminarTrimmer.trim(variables);
         
         // @TODO Refactorize
         //3) remove furniture too expensive

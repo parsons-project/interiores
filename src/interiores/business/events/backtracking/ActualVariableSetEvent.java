@@ -1,6 +1,6 @@
 package interiores.business.events.backtracking;
 
-import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.InterioresVariable;
 import interiores.core.Event;
 
 /**
@@ -10,9 +10,9 @@ import interiores.core.Event;
 public class ActualVariableSetEvent
     implements Event
 {
-    private FurnitureVariable variable;
+    private InterioresVariable variable;
     
-    public ActualVariableSetEvent(FurnitureVariable variable)
+    public ActualVariableSetEvent(InterioresVariable variable)
     {
         this.variable = variable;
     }

@@ -28,10 +28,10 @@ public class WishListPanel extends JPanel {
     
     private void solveDesign() {
         if (debugCheckBox.isSelected()) {
-            designController.debug();
+            designController.debug(timeCheckBox.isSelected());
         }
         else {
-            designController.solve();
+            designController.solve(timeCheckBox.isSelected());
         }
     }
     

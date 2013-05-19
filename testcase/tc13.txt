@@ -1,0 +1,4 @@
+new room livingroom 500 600
+add fe pillar 0 0 400 400
+select ft chair chair
+solve design

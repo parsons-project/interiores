@@ -4,6 +4,7 @@
  */
 package interiores.business.models.backtracking.orthogonalArea2;
 
+import interiores.business.models.Orientation;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,25 +24,37 @@ class HorizontalEdge {
         this.xl = xl;
     }
     
-     /**
-     * Returns whether a vertical line x=x intersects with the edge.
-     * Touching the line with an ending point of the edge is considered
-     * intersecting.
-     * @param x x
-     * @return 
-     */
-    boolean contains(int x) {
-        return x < xh && x >= xl;
-    }
-
     /**
-     * Two edges intersect if they form a cross at some point in the plane.
-     * @param edge
+     * @param ray
      * @return 
      */
-    boolean intersects(VerticalEdge edge) {
-        return edge.x < xh && edge.x > xl && y < edge.yh && y > edge.yl;
+    boolean intersects(Ray ray) {
+        if (ray.direction == Orientation.E)
+            return y > ray.origin.y && xl <= ray.origin.x && xh > ray.origin.x;
+        else if (ray.direction == Orientation.W)
+            return y <= ray.origin.y && xl <= ray.origin.x && xh > ray.origin.x;
+        else return false;
     }
+    
+    /**
+     * 
+     * @param ray
+     * @return 
+     */
+    boolean intersects(GridRay ray) {
+        if (ray.direction == Orientation.E)
+            return y > ray.origin.y && xl < ray.origin.x && xh > ray.origin.x;
+        else if (ray.direction == Orientation.W)
+            return y < ray.origin.y && xl < ray.origin.x && xh > ray.origin.x;
+        else return false;
+    }
+    
+    boolean intersects(VerticalEdge edge) {
+        return y > edge.yl && y < edge.yh && edge.x > xl && edge.x < xh;
+    }
+    
+    //=========================================================================
+    
 
     /**
      * Returns whether 2 HorizontalEdges share more than a single point.
@@ -73,8 +86,8 @@ class HorizontalEdge {
      * @param pEdge
      * @return 
      */
-    Point getIntersection(VerticalEdge pEdge) {
-        return new Point(y, pEdge.x);
+    GridPoint getIntersection(VerticalEdge pEdge) {
+        return new GridPoint(y, pEdge.x);
     }
 
     /**

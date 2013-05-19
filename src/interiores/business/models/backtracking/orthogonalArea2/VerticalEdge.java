@@ -4,6 +4,7 @@
  */
 package interiores.business.models.backtracking.orthogonalArea2;
 
+import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.orthogonalArea.*;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -28,6 +29,36 @@ class VerticalEdge {
         this.yl = yl;
     }
 
+    /**
+     * @param ray
+     * @return 
+     */
+    boolean intersects(Ray ray) {
+        if (ray.direction == Orientation.E)
+            return x > ray.origin.x && yl <= ray.origin.y && yh > ray.origin.y;
+        else if (ray.direction == Orientation.W)
+            return x <= ray.origin.x && yl <= ray.origin.y && yh > ray.origin.y;
+        else return false;
+    }
+    
+    /**
+     * 
+     * @param ray
+     * @return 
+     */
+    boolean intersects(GridRay ray) {
+        if (ray.direction == Orientation.E)
+            return x > ray.origin.x && yl < ray.origin.y && yh > ray.origin.y;
+        else if (ray.direction == Orientation.W)
+            return x < ray.origin.x && yl < ray.origin.y && yh > ray.origin.y;
+        else return false;
+    }
+    
+    boolean intersects(HorizontalEdge edge) {
+        return x > edge.xl && x < edge.xh && edge.y > yl && edge.y < yh;
+    }
+    
+    //=========================================================================
     
     
     /**
@@ -41,14 +72,7 @@ class VerticalEdge {
         return y < yh && y >= yl;
     }
 
-    /**
-     * Two edges intersect if they form a cross at some point in the plane.
-     * @param edge
-     * @return 
-     */
-    boolean intersects(HorizontalEdge edge) {
-        return edge.y < yh && edge.y > yl && x < edge.xh && x > edge.xl;
-    }
+
 
     /**
      * Returns whether 2 verticalEdges share more than a single point.
@@ -78,8 +102,8 @@ class VerticalEdge {
      * @param p
      * @return 
      */
-    Point getIntersection(HorizontalEdge p) {
-        return new Point(x, p.y);
+    GridPoint getIntersection(HorizontalEdge p) {
+        return new GridPoint(x, p.y);
     }
 
     /**
@@ -122,4 +146,6 @@ class VerticalEdge {
         if (p.equals(topPoint())) return bottomPoint();
         else return topPoint();
     }
+
+
 }

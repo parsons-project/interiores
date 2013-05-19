@@ -245,108 +245,322 @@
  */
 package interiores.business.models.backtracking.orthogonalArea2;
 
+import interiores.business.models.Orientation;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
  * @author nil.mamano
  */
-public class OrthogonalArea {
-    private List<OrthogonalPolygon> polygons;
+public class OrthogonalArea
+        implements Iterable {
+    
+    List<GridPoint> vertexs;
+    private List<VerticalEdge> verticalEdges;
+    private List<HorizontalEdge> horizontalEdges;
+        
+    /**
+     * Given a x' value, permits fast access to all points of the polygon such
+     * that they are of the form (x,y), where x=x'.
+     */
+    private HashMap<Integer,List<GridPoint>> vertexsStoredByX;
+    /**
+     * Given a y' value, permits fast access to all points of the polygon such
+     * that they are of the form (x,y), where y=y'.
+     */
+    private HashMap<Integer,List<GridPoint>> vertexsStoredByY;
+    
     
     /**
      * Default constructor.
      */
-    public OrthogonalArea() {
-        polygons = new ArrayList<OrthogonalPolygon>();
+    private OrthogonalArea(List<GridPoint> vertexs) {
+        this.vertexs = vertexs;
+        
+        //initialize Maps of positions
+        vertexsStoredByX = new HashMap<Integer,List<GridPoint>>();
+        vertexsStoredByY = new HashMap<Integer,List<GridPoint>>();
+        
+        for (GridPoint p : vertexs) {
+            if (!vertexsStoredByX.containsKey(p.x))
+                vertexsStoredByX.put(p.x, new ArrayList<GridPoint>());
+            vertexsStoredByX.get(p.x).add(p);
+            
+            if (!vertexsStoredByY.containsKey(p.y))
+                vertexsStoredByY.put(p.y, new ArrayList<GridPoint>());
+            vertexsStoredByY.get(p.y).add(p);
+        }
+        
+        buildEdges();
     }
     
+    
     /**
-     * Returns whether a given point is within the area.
-     * A point over an edge or vertex of the area is considered within.
+     * Returns whether a given point is contained in the area.
+     * (operation 1 of the opening explanation)
+     * @param point the point which might be contained.
+     * @return true if point is contained in the polygon
      */
     public boolean contains(Point point) {
-        for (OrthogonalPolygon polygon : polygons)
-            if (polygon.contains(point)) return true;
-        return false;
-    }
-    
-    /**
-     * Returns whether a given orthogonal polygon is within the area.
-     * A point over an edge or vertex of the area is considered within.
-     */
-    public boolean contains(OrthogonalPolygon p) {
-        for (OrthogonalPolygon polygon : polygons)
-            if (polygon.contains(p)) return true;
-        return false;        
-    }
-    
-    public void add(OrthogonalArea area) {
-        for (OrthogonalPolygon p : area.polygons) add(p);
-    }
-    
-    public void remove(OrthogonalArea area) {
-        for (OrthogonalPolygon p : area.polygons) remove(p);
-    }
-    
-    /**
-     * Adds the polygon p to the area.
-     * Adding a polygon might result in less disjoint polygons.
-     * @param p 
-     */
-    private void add(OrthogonalPolygon p) {
-        Iterator<OrthogonalPolygon> it = polygons.iterator();
         
-        //we are going to move to a list all polygons that will be merged into one 
-        List<OrthogonalPolygon> mergedPolygons = new ArrayList<OrthogonalPolygon>();
-        while (it.hasNext()) {
-            OrthogonalPolygon myPolygon = it.next();
-            if (! myPolygon.disjoint(p)) {
-                it.remove();
-                mergedPolygons.add(myPolygon);
-            }
+        //apply ray-casting algorithm; direction: positive side of the x axis
+        int intersectionCount = 0;
+        Ray ray = new Ray(point,Orientation.E);
+        
+        for (VerticalEdge edge : verticalEdges)
+            if (edge.intersects(ray)) ++intersectionCount;
+        
+        //return result according to the odd-even rule
+        return (intersectionCount % 2) == 1;
+    }
+    
+    
+    /**
+     * Returns whether a given orthogonal area is within the area.
+     * (operation 2 of the opening explanation)
+     * @param a the area which might be contained.
+     */
+    public boolean contains(OrthogonalArea a) {
+        
+        //1) check whether at least one vertex is contained
+        if (! contains(a.vertexs.get(0)))
+            return false;
+        
+        //2) check that no edge of the the area intersects with an edge of this
+        //area
+        if (doEdgesIntersect(a)) return false;
+        
+        //3) check that no vertex of the implicit parameter is within the area
+        //of the polygon
+        for (GridPoint vertex : vertexs)
+            if (a.contains(vertex)) return false;
+
+        return true;       
+    }
+    
+    
+    /**
+     * (operation 3 of the opening explanation)
+     * @param a 
+     */
+    public void union(OrthogonalArea a) {
+        List<GridPoint> newAreaVertexs = new ArrayList<GridPoint>();
+        
+        //1) find vextexs that have an odd number of adjacent contained points
+        // in either area
+        
+        for (GridPoint v : vertexs) {
+            List<Point> adjacentPoints = adjacentPoints(v);
+            int count = 0; //count of adjacent points contained in either area
+            for (Point p : adjacentPoints)
+                if (contains(p) || a.contains(p)) ++count;
+            
+            if (count%2 == 1) newAreaVertexs.add(v);
         }
         
-        //now that we have all the polygons that will form a new one, we calculate
-        //this new polygon
-        for (OrthogonalPolygon myPolygon : mergedPolygons)
-            p.add(myPolygon);
-        
-        //add this new polygon to the list of polygons
-        polygons.add(p);
+        for (GridPoint v : a.vertexs) {
+            List<Point> adjacentPoints = adjacentPoints(v);
+            int count = 0; //count of adjacent points contained in either area
+            for (Point p : adjacentPoints)
+                if (a.contains(p) || contains(p)) ++count;
+            
+            if (count%2 == 1) newAreaVertexs.add(v);
+        }
+               
+        //2) find intersections between the i.p. and p
+        newAreaVertexs.addAll(getEdgesIntersect(a)); 
+
+        vertexs = newAreaVertexs;
+        buildEdges();
     }
+    
+    
+    /**
+     * (operation 4 of the opening explanation)
+     * @param area 
+     */
+    public void difference(OrthogonalArea a) {
+        union(a);
+        symmetricDifference(a);
+    }
+    
+    
+    /**
+     * (operation 5 of the opening explanation)
+     * @param a 
+     */
+    public void intersection(OrthogonalArea a) {
+        //A^B = (A XOR B) XOR A+B
+        OrthogonalArea union = new OrthogonalArea(vertexs);
+        union.union(a);
+        
+        symmetricDifference(a);
+        symmetricDifference(union);
+    }
+    
     
 
+    
     /**
-     * Removes the area of a polygon from the actual area.
-     * Removing a polygon might result in either more or less disjoint polygons.
-     * @param p 
+     * Synchronizes the edges with the vertexs.
+     * (operation 7 of the opening explanation)
      */
-    private void remove(OrthogonalPolygon p) {
-        Iterator<OrthogonalPolygon> it = polygons.iterator();
+    private void buildEdges() {
+        //restart edges
+        verticalEdges = new ArrayList<VerticalEdge>();
+        horizontalEdges = new ArrayList<HorizontalEdge>();
+
+        for(GridPoint vertex : vertexs) {
+
+            //vertical edge
+            int VerticalCount = 0;
+            GridPoint closestPoint = null;
+            //count how many vertexs with the same x value have a higher y value
+            //and store the closest vertex
+            for(GridPoint p : vertexsStoredByX.get(vertex.x)) {
+                if (p.y > vertex.y) {
+                    ++VerticalCount;
+                    //update the closest vertex, if apropiate
+                    if (closestPoint == null || closestPoint.y > p.y)
+                        closestPoint = p;
+                }
+            }
+            //if there was an odd number of vertexs, there is a vertical
+            //edge between vertex and closestPoint
+            verticalEdges.add(new VerticalEdge(vertex.x, closestPoint.y, vertex.y));
+
+            //horizontal edge
+            int HorizontalCount = 0;
+            closestPoint = null;
+            //count how many vertexs with the same y value have a higher x value
+            //and store the closest vertex
+            for(GridPoint p : vertexsStoredByY.get(vertex.y)) {
+                if (p.x > vertex.x) {
+                    ++HorizontalCount;
+                    //update the closest vertex, if apropiate
+                    if (closestPoint == null || closestPoint.x > p.x)
+                        closestPoint = p;
+                }
+            }
+            //if there was an odd number of vertexs, there is a horizontal
+            //edge between vertex and closestPoint
+            horizontalEdges.add(new HorizontalEdge(vertex.y, closestPoint.x, vertex.x));                
+        }
+    }
+    
+    
+    /**
+     * Returns whether a given gridPoint is contained in the area.
+     * @param point the grid point which might be contained.
+     * @return true if point is contained in the polygon
+     */
+    private boolean contains(GridPoint point) {
         
-        //we are going to move to a list all polygons that will be modified
-        //due to the remove opperation
-        List<OrthogonalPolygon> affectedPolygons = new ArrayList<OrthogonalPolygon>();
-        while (it.hasNext()) {
-            OrthogonalPolygon myPolygon = it.next();
-            if (p.contains(myPolygon)) {
-                //this polygon is entirely deleted
-                it.remove();
-            }
-            else if (! myPolygon.disjoint(p)) {
-                affectedPolygons.add(myPolygon);
-                it.remove();
-            }
+        //apply ray-casting algorithm; direction: positive side of the x axis
+        int intersectionCount = 0;
+        GridRay ray = new GridRay(point,Orientation.E);
+        
+        for (VerticalEdge edge : verticalEdges)
+            if (edge.intersects(ray)) ++intersectionCount;
+        
+        //return result according to the odd-even rule
+        return (intersectionCount % 2) == 1;
+    }
+    
+    private boolean disjoint(GridPoint p) {
+        if (contains(new Point(p.x, p.y))) return false;
+        if (p.x > 0) {
+            if (contains(new Point(p.x-1, p.y))) return false;
+            if (p.y > 0 && contains(new Point(p.x-1, p.y-1))) return false;
+        }
+        else if (p.y > 0 && contains(new Point(p.x, p.y-1))) return false;
+        
+        return true;
+    }
+
+    /**
+     * Returns whether 2 edges of different areas intersect somewhere in the
+     * plane.
+     * @param a
+     * @return 
+     */
+    private boolean doEdgesIntersect(OrthogonalArea a) {
+
+        for (VerticalEdge myEdge : verticalEdges)
+            for (HorizontalEdge aEdge : a.horizontalEdges)
+                if (myEdge.intersects(aEdge)) return true;
+        
+        for (HorizontalEdge myEdge : horizontalEdges)
+            for (VerticalEdge aEdge : a.verticalEdges)
+                if (myEdge.intersects(aEdge)) return true;
+        
+        return false;
+    
+    }
+    
+    
+    /**
+     * Returns all grid points where 2 edges of different areas intersect somewhere
+     * in the plane.
+     * @param a
+     * @return 
+     */
+    private List<GridPoint> getEdgesIntersect(OrthogonalArea a) {
+
+        List<GridPoint> intersectionPoints = new ArrayList<GridPoint>();
+        
+        for (VerticalEdge myEdge : verticalEdges)
+            for (HorizontalEdge aEdge : a.horizontalEdges)
+                if (myEdge.intersects(aEdge))
+                    intersectionPoints.add(myEdge.getIntersection(aEdge));
+
+        for (HorizontalEdge myEdge : horizontalEdges)
+            for (VerticalEdge aEdge : a.verticalEdges)
+                if (myEdge.intersects(aEdge))
+                    intersectionPoints.add(myEdge.getIntersection(aEdge));
+        
+        return intersectionPoints;
+    }
+
+    /**
+     * Returns the list of points adjacent to a given grid point.
+     * @param v
+     * @return 
+     */
+    private List<Point> adjacentPoints(GridPoint v) {
+        List<Point> adjacentPoints = new ArrayList<Point>();
+        adjacentPoints.add(new Point(v.x, v.y));
+        if (v.x > 0) adjacentPoints.add(new Point(v.x-1, v.y));
+        if (v.y > 0) adjacentPoints.add(new Point(v.x, v.y-1));
+        if (v.x > 0 && v.y > 0) adjacentPoints.add(new Point(v.x-1, v.y-1));
+        
+        return adjacentPoints;
+    }
+
+    private void symmetricDifference(OrthogonalArea a) {
+        Set<GridPoint> vertexSet = new HashSet<GridPoint>();
+        vertexSet.addAll(vertexs);
+        
+        for (GridPoint p : a.vertexs){
+            if (vertexSet.contains(p)) vertexSet.remove(p);
+            else vertexSet.add(p);
         }
         
-        //for each polygon in affectedPolygons, after the remove operations
-        //there might be 1..n polygons.
-        for (OrthogonalPolygon myPolygon : affectedPolygons)
-            polygons.addAll(myPolygon.resultingPolygonsFromCut(p));
-        
+        vertexs.clear();
+        vertexs.addAll(vertexSet);
+        buildEdges();
     }
+
+    @Override
+    public Iterator iterator() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
 }

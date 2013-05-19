@@ -180,61 +180,7 @@ class OrthogonalPolygon {
     }
     
         
-    /**
-     * Synchronizes the edges with the points.
-     */
-    private void synchronizeEdges() {
-        if (!edgesSynchronized) {
-            
-            //restart edges
-            verticalEdges = new ArrayList<VerticalEdge>();
-            horizontalEdges = new ArrayList<HorizontalEdge>();
-            
-            for(Point point : points) {
-                
-                //vertical edge
-                int VerticalCount = 0;
-                Point closestPoint = null;
-                //count how many points with the same x value how a higher y value
-                //and store the closest point
-                for(Point p : pointsStoredByX.get(point.x)) {
-                    if (p.y > point.y) {
-                        ++VerticalCount;
-                        //update the closest point, if apropiate
-                        if (closestPoint == null || closestPoint.y > p.y)
-                            closestPoint = p;
-                    }
-                }
-                //if there was an odd number of points, there is a vertical
-                //edge between point and closestPoint
-                verticalEdges.add(new VerticalEdge(point.x, closestPoint.y, point.y));
-                
-                //horizontal edge
-                int HorizontalCount = 0;
-                closestPoint = null;
-                //count how many points with the same x value how a higher y value
-                //and store the closest point
-                for(Point p : pointsStoredByY.get(point.y)) {
-                    if (p.x > point.x) {
-                        ++HorizontalCount;
-                        //update the closest point, if apropiate
-                        if (closestPoint == null || closestPoint.x > p.x)
-                            closestPoint = p;
-                    }
-                }
-                //if there was an odd number of points, there is a horizontal
-                //edge between point and closestPoint
-                horizontalEdges.add(new HorizontalEdge(point.y, closestPoint.x, point.x));                
-            }
-            
-            //we are done. Thus, edges are now synchronized
-            edgesSynchronized = true;
-        }
-    }
-
-
-
-    /**
+      /**
      * Two polygons are considered disjoint if one is not contained inside the
      * other and none of their edges intersect nor share more than one point.
      * @param p
@@ -269,29 +215,7 @@ class OrthogonalPolygon {
         return false;
     }
     
-    /**
-     * Returns all points where 2 edges of opposed kinds form a cross in the
-     * plane.
-     * @param p
-     * @return 
-     */
-    List<Point> getEdgesIntersect(OrthogonalPolygon p) {
-        synchronizeEdges();
-
-        List<Point> intersectionPoints = new ArrayList<Point>();
-        
-        for (VerticalEdge myEdge : verticalEdges)
-            for (HorizontalEdge pEdge : p.horizontalEdges)
-                if (myEdge.intersects(pEdge))
-                    intersectionPoints.add(myEdge.getIntersection(pEdge));
-
-        for (HorizontalEdge myEdge : horizontalEdges)
-            for (VerticalEdge pEdge : p.verticalEdges)
-                if (myEdge.intersects(pEdge))
-                    intersectionPoints.add(myEdge.getIntersection(pEdge));
-        
-        return intersectionPoints;
-    }
+  
     
     /**
      * Return whether 2 edges of the same kind share more than a point.

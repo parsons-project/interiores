@@ -156,8 +156,8 @@ private void selectableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:
 
         if (node != null) {
             String nodeInfo = (String) node.getUserObject();
-            Debug.println("Adding a: " + nodeInfo);
             if (node.isLeaf()) {
+                Debug.println("Adding a: " + nodeInfo);
                 furnitureTypeController.select(nodeInfo);
             }
             updateSelected();

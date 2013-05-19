@@ -112,6 +112,8 @@ public class RoomMapPanel extends SwingPanel
         else
             map.setStatus("Solution not found :(");
         
+        if (event.hasTime())
+            map.setTime(event.getTime());
         repaint();
     }
     

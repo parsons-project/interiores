@@ -25,6 +25,7 @@ public class DesignController
 {
     
     private boolean solutionFound = false;
+    private long time = -1;
     private String lastSolution;
     private FurnitureVariableSetDebugger furVarSetDebug;
     
@@ -41,16 +42,16 @@ public class DesignController
      * the automatic design generation algorithm. Then, it tries to solve this algorithm and it such
      * case, returns the solution.
      */
-    public void solve()
+    public void solve(boolean timeIt)
             throws BusinessException
     {
         WishList wishList = getWishList();
         FurnitureVariableSet furVarSet = new FurnitureVariableSet(wishList, getActiveCatalog());
         
-        computeSolution(furVarSet);
+        computeSolution(furVarSet, timeIt);
     }
     
-    public void debug()
+    public void debug(boolean timeIt)
             throws BusinessException
     {     
         WishList wishList = getWishList();
@@ -58,13 +59,14 @@ public class DesignController
         furVarSetDebug.addListener(this);
         
         notify(new DebugRoomDesignStartedEvent());
-        computeSolution(furVarSetDebug);
+        computeSolution(furVarSetDebug, timeIt);
     }
     
-    private void computeSolution(FurnitureVariableSet furVarSet)
+    private void computeSolution(FurnitureVariableSet furVarSet, boolean timeIt)
     {
         RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
-        
+
+        if (timeIt) time = System.nanoTime();
         // And try to solve it
         try {
             notify(new RoomDesignStartedEvent());
@@ -79,6 +81,7 @@ public class DesignController
             solutionFound = false;
         }
         
+        if (timeIt) roomDesigned.setTime(System.nanoTime() - time);
         notify(roomDesigned);
     }
     

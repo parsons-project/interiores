@@ -13,9 +13,12 @@ import java.awt.Point;
  * This class represents a solid block contained in the room.
  * @author alvaro
  */
-public class Pillar extends WantedFixed {
+public class Pillar
+    extends WantedFixed
+{
     public Pillar(Point position, Dimension dimension) {
-        super("pillar", "pillar", position, dimension, "gray",
-              "brick", new SpaceAround(0, 0, 0, 0));
+        super("pillar", dimension, "gray", "brick", new SpaceAround(0, 0, 0, 0));
+        
+        setPosition(position);
     }
 }

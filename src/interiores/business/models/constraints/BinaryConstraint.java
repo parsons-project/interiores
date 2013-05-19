@@ -1,6 +1,6 @@
 package interiores.business.models.constraints;
 
-import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.binary.MinDistanceConstraint;
 import interiores.core.business.BusinessException;
@@ -36,7 +36,7 @@ public abstract class BinaryConstraint
         return availableConstraints.keySet();
     }
     
-    public abstract boolean isSatisfied(FurnitureVariable fvariable1, FurnitureVariable fvariable2);
+    public abstract boolean isSatisfied(InterioresVariable fvariable1, InterioresVariable fvariable2);
     
     public int getPriority() {
         return 1;

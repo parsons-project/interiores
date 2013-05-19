@@ -42,7 +42,7 @@ public class FurnitureVariableSetDebugger
         super.setActualVariable();
         
         if(! allAssigned)
-            notify(new ActualVariableSetEvent(actual));
+            notify(new ActualVariableSetEvent((FurnitureVariable) actual));
     }
     
     @Override

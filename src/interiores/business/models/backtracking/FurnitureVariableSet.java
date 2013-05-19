@@ -16,14 +16,11 @@ import interiores.utils.BinaryConstraintAssociation;
 import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PriorityQueue;
-import java.util.TreeMap;
 
 public class FurnitureVariableSet
 	extends VariableSet
@@ -48,13 +45,13 @@ public class FurnitureVariableSet
      * (which is also the number of iterations of the algorithm), but their
      * elements might be reallocated.
      */
-    protected FurnitureVariable[] variables;
+    protected InterioresVariable[] variables;
     
     /**
      * This is the variable that the algorithm is trying to assign in the
      * current iteration.
      */
-    protected FurnitureVariable actual;
+    protected InterioresVariable actual;
     
     /**
      * Indicates whether all variables have an assigned value.
@@ -82,15 +79,39 @@ public class FurnitureVariableSet
     public FurnitureVariableSet(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog)
             throws BusinessException
     {
-        Dimension roomDimension = wishList.getRoom().getDimension();
-        roomArea = new OrientedRectangle(new Point(0, 0), roomDimension, Orientation.S);
+        Dimension roomSize = wishList.getRoom().getDimension();
+        roomArea = new OrientedRectangle(new Point(0, 0), roomSize, Orientation.S);
         
         variableCount = wishList.getSize();
         variables = new FurnitureVariable[variableCount];
         
+        addConstants(wishList);
+        addVariables(wishList, furnitureCatalog, roomSize);
+        addBinaryConstraints(wishList);
+        
+        allAssigned = false;
+        actual = null;
+    }
+    
+    private void addConstants(WishList wishList) {
         int i = 0;
-                
-        PriorityQueue<Entry<Integer, FurnitureVariable>> queue = new PriorityQueue(variableCount-i+1,
+        for(WantedFixed wantedFixed : wishList.getWantedFixed()) {
+            String constantName = wantedFixed.getName();
+            FurnitureValue value = new FurnitureValue(wantedFixed.getPosition(), wantedFixed.getModel(),
+                    wantedFixed.getOrientation());
+            
+            variables[i] = new FurnitureConstant(constantName, value);
+            i++;
+        }
+    }
+    
+    private void addVariables(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog,
+            Dimension roomSize)
+    {
+        int constantCount = wishList.getFixedSize();
+        
+        PriorityQueue<Entry<Integer, FurnitureVariable>> queue = new PriorityQueue(
+                variableCount - constantCount + 1,
                 new Comparator<Entry<Integer, FurnitureVariable>>() {
                     @Override
                     public int compare(Entry<Integer, FurnitureVariable> e1,
@@ -104,60 +125,41 @@ public class FurnitureVariableSet
                 }
         );
         
-        // We are considering the fixed elements as another type of furniture but very restricted
-        for(WantedFixed wantedFixed : wishList.getWantedFixed()) {
-            String variableName = wantedFixed.getName();
-            
-            int priority = wishList.getPriority(variableName);
-            Debug.println("Adding variable " + variableName + " with " + priority + " binary "
-                    + "constraints.");
-            queue.add(new SimpleEntry(
-                    priority,
-                    new FurnitureVariable(variableName, wantedFixed.getModels(), roomDimension,
-                        wantedFixed.getUnaryConstraints(), variableCount)
-                    ));
-            i++;
-        }
-        
         for(WantedFurniture wantedFurniture : wishList.getWantedFurniture()) {
             String variableName = wantedFurniture.getName();
             FurnitureType furnitureType = furnitureCatalog.get(wantedFurniture.getTypeName());
             
             int priority = wishList.getPriority(variableName);
-            Debug.println("Adding variable " + variableName + " with " + priority + " binary "
-                    + "constraints.");
+            Debug.println("Adding variable " + variableName + " with " + priority + " priority.");
             
             queue.add(new SimpleEntry(
                     priority,
-                    new FurnitureVariable(variableName, furnitureType.getFurnitureModels(), roomDimension,
-                        wantedFurniture.getUnaryConstraints(), variableCount)
+                    new FurnitureVariable(variableName, furnitureType.getFurnitureModels(),
+                        roomSize, wantedFurniture.getUnaryConstraints(), variableCount)
                     ));
-            i++;
         }
         
-        i = 0;
+        int i = 0;
         while(!queue.isEmpty()) {
-            variables[i] = queue.poll().getValue();
+            variables[constantCount+i] = queue.poll().getValue();
             i++;
         }
-        
+    }
+    
+    private void addBinaryConstraints(WishList wishList) {
         binaryConstraints = new VariableConstraintSet();
 
         for(BinaryConstraintAssociation bca : wishList.getBinaryConstraints()) {
             Debug.println("Adding Binary constraint " + bca.toString());
-            Debug.println("Furniture1 is " + getVariable(bca.furniture1).getID());
-            Debug.println("Furniture2 is " + getVariable(bca.furniture2).getID());
+            Debug.println("Element1 is " + getVariable(bca.furniture1).getID());
+            Debug.println("Element2 is " + getVariable(bca.furniture2).getID());
             Debug.println("Constraint is " + bca.constraint.toString());
 
             binaryConstraints.addConstraint(getVariable(bca.furniture1),
                     getVariable(bca.furniture2), bca.constraint);
         }
-        
-        allAssigned = false;
-        actual = null;
     }
-   
-
+    
     /**
      * Selects a variable from variables[depth..variableCount-1] and sets it
      * as actual variable.
@@ -292,10 +294,11 @@ public class FurnitureVariableSet
     }
     
     
-    private FurnitureVariable getVariable(String name) {
+    private InterioresVariable getVariable(String name) {
         for (int i = 0; i < variableCount; i++)
             if (variables[i].getID().equals(name)) return variables[i];
-        return null;
+        
+        throw new BusinessException(name + " variable not found.");
     }
    
     

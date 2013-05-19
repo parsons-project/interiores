@@ -15,6 +15,4 @@ public class WantedFurniture extends WantedElement
     public WantedFurniture(String name, String furnitureTypeName) {
         super(name, furnitureTypeName);
     }
-    
- 
 }

@@ -1,5 +1,6 @@
 package interiores.utils;
 
+import java.awt.Point;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -50,6 +51,14 @@ public class Dimension
     
     public boolean isDepthBetween(Range depthRange) {
         return (depthRange.min <= depth && depthRange.max >= depth);
+    }
+    
+    public boolean contains(Point p) {
+        return contains(p, 0);
+    }
+    
+    public boolean contains(Point p, int margin) {
+        return (-margin <= p.x && p.x <= (width + margin) && -margin <= p.y && p.y <= (depth + margin));
     }
     
     @Override

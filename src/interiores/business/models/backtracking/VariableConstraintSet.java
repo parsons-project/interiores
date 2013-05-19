@@ -1,11 +1,9 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.BinaryConstraint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 
 
 // FurnitureVariable hashCode and equals should be indepenedent of the value it has
@@ -22,11 +20,11 @@ public class VariableConstraintSet {
      * <f1,f2> equals <f2,f1> and also has the same hashCode. It's useful to not duplicate restrictions
      * and being able to access it from <f1,f2> and also <f2,f1>
      */
-    public class UnorderedFurnitureVariablePair {
+    public class UnorderedInterioresVariablePair {
         
-        private final FurnitureVariable first, second;
+        private final InterioresVariable first, second;
      
-        public UnorderedFurnitureVariablePair(FurnitureVariable first, FurnitureVariable second) {
+        public UnorderedInterioresVariablePair(InterioresVariable first, InterioresVariable second) {
             super();
             this.first = first;
             this.second = second;
@@ -43,8 +41,8 @@ public class VariableConstraintSet {
         @Override
         public boolean equals(Object other) {
             // To be consistent with the hashCode we have to assure that <f1,f2> == <f2,f1>
-            if (other instanceof UnorderedFurnitureVariablePair) {
-                    UnorderedFurnitureVariablePair otherPair = (UnorderedFurnitureVariablePair) other;
+            if (other instanceof UnorderedInterioresVariablePair) {
+                    UnorderedInterioresVariablePair otherPair = (UnorderedInterioresVariablePair) other;
                     return ( (this.first.equals(otherPair.first) && this.second.equals(otherPair.second)) ||
                              (this.first.equals(otherPair.second) && this.second.equals(otherPair.first)) );
             }
@@ -60,13 +58,13 @@ public class VariableConstraintSet {
     }
     
     // The set itself. A pair of variable can have multilple restrictions
-    private HashMap<UnorderedFurnitureVariablePair, List<BinaryConstraint>>binConstraintsSet;
+    private HashMap<UnorderedInterioresVariablePair, List<BinaryConstraint>>binConstraintsSet;
     
     /**
      * Void constructor
      */
     public VariableConstraintSet() {
-        this.binConstraintsSet = new HashMap<UnorderedFurnitureVariablePair, List<BinaryConstraint>>();
+        this.binConstraintsSet = new HashMap<UnorderedInterioresVariablePair, List<BinaryConstraint>>();
     }
     
     /**
@@ -84,9 +82,10 @@ public class VariableConstraintSet {
      * @param bc The binary constraint that associates fvariable1 with fvariable2
      * @return True if everything went correctly
      */
-    public boolean addConstraint(FurnitureVariable fvariable1, FurnitureVariable fvariable2, BinaryConstraint bc) {
+    public boolean addConstraint(InterioresVariable fvariable1, InterioresVariable fvariable2,
+            BinaryConstraint bc) {
         
-        UnorderedFurnitureVariablePair pair = new UnorderedFurnitureVariablePair(fvariable1,fvariable2);
+        UnorderedInterioresVariablePair pair = new UnorderedInterioresVariablePair(fvariable1,fvariable2);
         
         if (binConstraintsSet.get(pair) == null) {
             List<BinaryConstraint> list = new ArrayList<BinaryConstraint>();
@@ -105,9 +104,9 @@ public class VariableConstraintSet {
      * @param fvariable2 Another furniture variable
      * @return True if no constraint is violated, false otherwise
      */
-    public boolean isSatisfied(FurnitureVariable fvariable1, FurnitureVariable fvariable2) {
+    public boolean isSatisfied(InterioresVariable fvariable1, InterioresVariable fvariable2) {
         
-        UnorderedFurnitureVariablePair pair = new UnorderedFurnitureVariablePair(fvariable1, fvariable2);
+        UnorderedInterioresVariablePair pair = new UnorderedInterioresVariablePair(fvariable1, fvariable2);
         
         // If the list is void we should return true
         if (binConstraintsSet.containsKey(pair)) {

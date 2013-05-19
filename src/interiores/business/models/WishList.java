@@ -169,6 +169,10 @@ public class WishList
         return furniture.size() + fixed.size();
     }
     
+    public int getFixedSize() {
+        return fixed.size();
+    }
+    
     /**
      * Adds a new binary constraint.
      * @param binaryConstraintClass The type of the constraint

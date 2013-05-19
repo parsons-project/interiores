@@ -2,7 +2,7 @@ package interiores.business.models.constraints.binary;
 
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.backtracking.FurnitureValue;
-import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.core.Debug;
 import interiores.utils.Dimension;
@@ -35,7 +35,7 @@ public class MinDistanceConstraint
      * @return 'true' if the two variables are separated by, at least, 'distance' cm. 'false' otherwise
      */
     @Override
-    public boolean isSatisfied(FurnitureVariable fvariable1, FurnitureVariable fvariable2) {
+    public boolean isSatisfied(InterioresVariable fvariable1, InterioresVariable fvariable2) {
         
 //        Debug.println("F1: " + fvariable1.getID());
 //        Debug.println("F2: " + fvariable2.getID());

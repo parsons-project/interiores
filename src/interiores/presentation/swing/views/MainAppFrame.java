@@ -17,6 +17,7 @@ public class MainAppFrame extends JFrame
     private SwingController presentation;
     private WelcomePanel welcome;
     private RoomMapPanel map;
+    private WishListPanel wishListPanel;
     /**
      * Creates new form MainView
      */
@@ -28,8 +29,9 @@ public class MainAppFrame extends JFrame
         this.presentation = presentation;
         welcome = presentation.get(WelcomePanel.class);
         map = presentation.get(RoomMapPanel.class);
+        wishListPanel = presentation.get(WishListPanel.class);
         
-        add(welcome, BorderLayout.CENTER);
+        add(welcome, BorderLayout.CENTER);       
         welcome.setVisible(true);
         pack();
     }
@@ -90,7 +92,10 @@ public class MainAppFrame extends JFrame
     public void showMap() {
         remove(welcome);
         add(map, BorderLayout.CENTER);
+        add(wishListPanel, BorderLayout.LINE_END);
         map.setVisible(true);
+        wishListPanel.setVisible(true);
+        wishListPanel.updateSelectable();
         validate();
         pack();
     }

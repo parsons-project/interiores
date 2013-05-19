@@ -109,6 +109,8 @@ public class RoomMapPanel extends JPanel
         else
             map.setStatus("Solution not found :(");
         
+        if (event.hasTime())
+            map.setTime(event.getTime());
         repaint();
     }
     

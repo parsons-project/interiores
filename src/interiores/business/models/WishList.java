@@ -7,17 +7,14 @@ import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.BinaryConstraintSet;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.utils.BinaryConstraintAssociation;
-import interiores.utils.Dimension;
-import java.awt.Point;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
 /**
- * This class represents the bag of furniture types that the user wants to
- * include in the room and the constraints required upon them.
+ * This class represents the bag of furniture types and fixed elements
+ * that the user wants to include in the room and the constraints required upon them.
  * @author larribas
  */
 public class WishList
@@ -74,16 +71,9 @@ public class WishList
         addWithoutChecking(typeName);
     }
     
-    public void addWantedFixed(String typeName, Point position, Dimension size) {
-        
-        String wantedFixedId = nextIdFor(typeName, fixed);
-        fixed.put(wantedFixedId, new WantedFixed(typeName, position, size));
-    
-    }
-    
     private void addWithoutChecking(String typeName) {
         if(typesCount.containsKey(typeName))
-            typesCount.put(typeName, typesCount.get(typeName + 1));
+            typesCount.put(typeName, typesCount.get(typeName) + 1);
         else
             typesCount.put(typeName, 1);
         
@@ -91,11 +81,31 @@ public class WishList
         furniture.put(wantedFurnitureId, new WantedFurniture(wantedFurnitureId, typeName));
     }
     
+    /**
+     * Adds the given wanted fixed element to the set. The name of the
+     * wanted fixed is updated to fix the identifier
+     * @param wfixed The wanted fixed element to be added. It's name will be overriden.
+     */
+    public void addWantedFixed(WantedFixed wfixed) {
+        
+        String typeName = wfixed.getTypeName();
+        
+        if(typesCount.containsKey(typeName))
+            typesCount.put(typeName, typesCount.get(typeName) + 1);
+        else
+            typesCount.put(typeName, 1);
+        
+        String wantedFixedId = nextIdFor(typeName, fixed);
+        wfixed.setName(wantedFixedId);
+        fixed.put(wantedFixedId, wfixed);   
+    }
+      
     private String nextIdFor(String typeName, TreeMap map) {
         String nextId;
         int i = 1;
         
         do {
+            // find the first free identifier for the given typename
             nextId = typeName + String.valueOf(i);
             i++;
         } while(map.containsKey(nextId));
@@ -103,31 +113,58 @@ public class WishList
         return nextId;
     }
     
-    public void removeWantedFixed(String wantedFurnitureId) {
-        if (! fixed.containsKey(wantedFurnitureId)) 
-            return;
-        fixed.remove(wantedFurnitureId);
-    }
-    
-    public void removeWantedFurniture(String wantedFurnitureId) throws MandatoryFurnitureException {
-        if(! furniture.containsKey(wantedFurnitureId))
-            return;
-        
-        String typeName = furniture.get(wantedFurnitureId).getTypeName();
+    // This is an abstraction for both furnitures and fixed elements
+    private boolean removeWantedElement(String elementId, TreeMap map) 
+            throws MandatoryFurnitureException {
+        String typeName = ((WantedElement) map.get(elementId)).getTypeName();
         int typeCount = typesCount.get(typeName);
         
-        if(typeCount <= 1) {
-            if(room.isMandatory(typeName))
+        // if only one is remaining...
+        if(typeCount == 1) {
+            // if it's mandatory, you can't remove it
+            if (room.isMandatory(typeName))
                 throw new MandatoryFurnitureException(typeName, room.getTypeName());
             
+            //otherwise, we clean the tree (not storing entries with value 0)
             typesCount.remove(typeName);
         }
+        // else we can remove it normally
         else
             typesCount.put(typeName, typeCount - 1);
         
-        furniture.remove(wantedFurnitureId);
+        if (! map.containsKey(elementId)) 
+            return false;
+        map.remove(elementId);
+        return true;
     }
     
+    /**
+     * Removes the wanted element with wantedFixedId from the wishlist
+     * @param wantedFixedId The id of the element to be removed
+     * @return A boolean representing if the operation went ok.
+     * @throws MandatoryFurnitureException 
+     */
+    public boolean removeWantedFixed(String wantedFixedId)
+            throws MandatoryFurnitureException {
+        return removeWantedElement(wantedFixedId, fixed);
+    }
+    
+    /**
+     * Removes the wanted furniture with wantedFurnitureId from the wishlist
+     * @param wantedFixedId The id of the element to be removed
+     * @return A boolean representing if the operation went ok.
+     * @throws MandatoryFurnitureException If it can't be removed because it's 
+     *         mandatory for the room
+     */
+    public boolean removeWantedFurniture(String wantedFurnitureId)
+            throws MandatoryFurnitureException {
+        return removeWantedElement(wantedFurnitureId, furniture);
+    }
+    
+    /**
+     * Gets the size of the full wishlist
+     * @return The number of wantedElements contained in the wishlist
+     */
     public int getSize() {
         return furniture.size() + fixed.size();
     }
@@ -168,19 +205,19 @@ public class WishList
      * @param furnitureID the identifier of the WantedFurniture
      * @return the set of constraints
      */
-    public Collection<UnaryConstraint> getUnaryConstraints(String furnitureID)
+    public Collection<UnaryConstraint> getUnaryConstraints(String elementId)
             throws WantedElementNotFoundException
     {
-        return getWantedFurniture(furnitureID).getUnaryConstraints();
+        return getWantedElement(elementId).getUnaryConstraints();
     }
     
-    public Collection<BinaryConstraintAssociation> getBinaryConstraints(String furnitureId)
+    public Collection<BinaryConstraintAssociation> getBinaryConstraints(String elementId)
             throws WantedElementNotFoundException
     {
-        if(!containsElement(furnitureId))
-            throw new WantedElementNotFoundException(furnitureId);
+        if(!containsElement(elementId))
+            throw new WantedElementNotFoundException(elementId);
         
-        return binaryConstraints.getConstraints(furnitureId);
+        return binaryConstraints.getConstraints(elementId);
     }
     
     /**
@@ -208,46 +245,76 @@ public class WishList
         return furniture.keySet();
     }
     
+    /**
+     * Returns the identifiers of the WantedFixed elements
+     * @return the string identifying the WantedFixed
+     */
     public Collection<String> getFixedNames() {
         return fixed.keySet();
     }
     
-    public Collection<String> getFurnitureTypes() {
+    public Collection<String> getElementTypes() {
         return typesCount.keySet();
+    }
+    
+    /**
+     * This is and abstraction to get an element that can be a wantedFurniture
+     * or a wantedFixed.
+     * @param id The identifier of the element
+     * @return The wanted element in the wishList with identifier id
+     * @throws WantedElementNotFoundException 
+     */
+    private WantedElement getWantedElement(String id) 
+            throws WantedElementNotFoundException {
+        if(!furniture.containsKey(id)) {
+            if (!fixed.containsKey(id))
+                throw new WantedElementNotFoundException(id);
+            return (WantedElement) fixed.get(id);
+        }
+                   
+        return (WantedElement) furniture.get(id);
+    }
+    
+    /**
+     * This is and abstraction to get an element from a given TreeMap
+     * @param id The identifier of the element
+     * @param map The TreeMap where to search for the element
+     * @return The wanted element in the map with identifier id
+     * @throws WantedElementNotFoundException 
+     */
+    private WantedElement getWantedElement(String id, TreeMap map) 
+            throws WantedElementNotFoundException {
+        if(!map.containsKey(id))
+            throw new WantedElementNotFoundException(id);
+                
+        return (WantedElement) map.get(id);
     }
     
     /**
      * Returns a particular WantedFurniture.
      * @param id the identifier 
      * @return the WantedFurniture with the identifier id
-     */
+     */    
     public WantedFurniture getWantedFurniture(String id)
-            throws WantedElementNotFoundException
-    {
-        if(!containsElement(id))
-            throw new WantedElementNotFoundException(id);
-                
-        return furniture.get(id);
+            throws WantedElementNotFoundException {
+        return (WantedFurniture) getWantedElement(id, furniture);
     }
     
     public WantedFixed getWantedFixed(String id) 
             throws WantedElementNotFoundException {
-        if(!containsElement(id))
-            throw new WantedElementNotFoundException(id);
-                
-        return fixed.get(id);
+        return (WantedFixed) getWantedElement(id, fixed);
     }
     
     public void addUnaryConstraint(String elementId, UnaryConstraint unaryConstraint)
             throws WantedElementNotFoundException
     {
-        getWantedFurniture(elementId).addUnaryConstraint(unaryConstraint);
+        getWantedElement(elementId).addUnaryConstraint(unaryConstraint);
     }
     
     public void removeUnaryConstraint(String elementId, Class<? extends UnaryConstraint> unaryConstriantClass)
             throws WantedElementNotFoundException
     {
-        getWantedFurniture(elementId).removeUnaryConstraint(unaryConstriantClass);
+        getWantedElement(elementId).removeUnaryConstraint(unaryConstriantClass);
     }
     
     /**
@@ -258,7 +325,12 @@ public class WishList
         return furniture.values();
     }
 
+    /**
+     * Returns the set of WantedFixed
+     * @return the collection of WantedFixed elements
+     */
     public Collection<WantedFixed> getWantedFixed() {
         return fixed.values();
     }
+    
 }

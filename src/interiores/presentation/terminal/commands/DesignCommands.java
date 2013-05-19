@@ -28,16 +28,16 @@ public class DesignCommands extends AdvancedCommandGroup {
    }
    
    @Command("Generate a valid design for the room")
-   @CommandOptions("debug")
+   @CommandOptions({"debug", "time"})
    public void solve(Options options)
            throws BusinessException
    {
        if(options.isEnabled("debug")) {
            println("Solving in debug mode");
-           designController.debug();
+           designController.debug(options.isEnabled("time"));
        }
        else {
-           designController.solve();
+           designController.solve(options.isEnabled("time"));
        }
        
        if (designController.hasSolution()) {

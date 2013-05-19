@@ -1,48 +1,44 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package interiores.business.models;
 
-import interiores.business.models.constraints.UnaryConstraint;
 import interiores.business.models.constraints.unary.PositionConstraint;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 /**
- *
+ * This class represents a given FixedElement wanted by the user
  * @author alvaro
  */
-public class WantedFixed {
-    String typeName;
-    PositionConstraint positionConstraint;
+public class WantedFixed extends WantedElement {
+    
     Dimension size;
+    SpaceAround space;
+    String color;
+    String material;
 
-    WantedFixed(String typeName, Point position, Dimension size) {
-        this.typeName = typeName;
-        this.positionConstraint = new PositionConstraint(position);
+    public WantedFixed(String name, String typeName, Point position, Dimension size,
+                String color, String material, SpaceAround space) {
+        super(name, typeName);
+        super.addUnaryConstraint(new PositionConstraint(position));
         this.size = size;
-    }
-
-    public String getName() {
-        return typeName;
-    }
-    
-    public Collection<UnaryConstraint> getUnaryConstraints() {
-        return new ArrayList(Arrays.asList(positionConstraint));
+        this.color = color;
+        this.material = material;
+        this.space = space;
     }
     
-    public void setModel() {
-        
+    public void setName(String name) {
+        this.name = name;
     }
     
+    /**
+     * For compatibility with a furnitureType wich has furnitureModels
+     * @return A list with one FurnitureModel with the attributes of this wantedFixed element
+     * @throws BusinessException 
+     */
     public List<FurnitureModel> getModels() throws BusinessException {
-        return new ArrayList(Arrays.asList(new FurnitureModel(typeName, size, 0, "yellow", "wood", new SpaceAround(0,0,0,0))));
+        return Arrays.asList(new FurnitureModel(name, size, 0, color, material, space));
     }
     
 }

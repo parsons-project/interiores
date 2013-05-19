@@ -1,19 +1,17 @@
-
+/**
+ * Represents a wide ray that propagates to the right.
+ */
 package interiores.business.models.backtracking.orthogonalArea;
 
-import interiores.business.models.Orientation;
 import java.awt.Point;
 
 /**
- *
  * @author nil.mamano
  */
-class Ray {
+class RightRay {
     public Point origin;
-    public Orientation direction;
 
-    public Ray(Point origin, Orientation direction) {
+    public RightRay(Point origin) {
         this.origin = origin;
-        this.direction = direction;
     }
 }

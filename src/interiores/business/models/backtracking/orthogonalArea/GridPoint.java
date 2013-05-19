@@ -1,7 +1,5 @@
-/*
- */
-package interiores.business.models.backtracking.orthogonalArea;
 
+package interiores.business.models.backtracking.orthogonalArea;
 
 /**
  *

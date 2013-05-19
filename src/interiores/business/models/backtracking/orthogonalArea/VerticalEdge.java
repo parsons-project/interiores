@@ -4,11 +4,6 @@
  */
 package interiores.business.models.backtracking.orthogonalArea;
 
-import interiores.business.models.Orientation;
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author nil.mamano
@@ -32,25 +27,8 @@ class VerticalEdge {
      * @param ray
      * @return 
      */
-    boolean intersects(Ray ray) {
-        if (ray.direction == Orientation.E)
-            return x > ray.origin.x && yl <= ray.origin.y && yh > ray.origin.y;
-        else if (ray.direction == Orientation.W)
-            return x <= ray.origin.x && yl <= ray.origin.y && yh > ray.origin.y;
-        else return false;
-    }
-    
-    /**
-     * 
-     * @param ray
-     * @return 
-     */
-    boolean intersects(GridRay ray) {
-        if (ray.direction == Orientation.E)
-            return x > ray.origin.x && yl < ray.origin.y && yh > ray.origin.y;
-        else if (ray.direction == Orientation.W)
-            return x < ray.origin.x && yl < ray.origin.y && yh > ray.origin.y;
-        else return false;
+    boolean intersects(RightRay ray) {
+        return x > ray.origin.x && yl <= ray.origin.y && yh > ray.origin.y;
     }
     
     boolean intersects(HorizontalEdge edge) {

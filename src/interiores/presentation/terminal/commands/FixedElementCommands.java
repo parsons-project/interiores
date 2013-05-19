@@ -21,7 +21,12 @@ import java.util.Collection;
  */
 @CommandSubject(name = "fe", description = "Fixed Elements related commands")
 public class FixedElementCommands extends AdvancedCommandGroup {
+    
+    private static final String PATTERN_LEN_TYPE = "^(window|door)$";
+    private static final String PATTERN_AREA_TYPE = "^(pillar)$";
+    
     private FixedElementController fixedElementController;
+
     
     public FixedElementCommands(FixedElementController fixedElementController) {
         super();
@@ -32,13 +37,39 @@ public class FixedElementCommands extends AdvancedCommandGroup {
     @Command("Add a fixed element to the current selection")
     public void add() throws NoRoomCreatedException, BusinessException {
         
-        String typeName = readString("Enter the name of the type of the fixed element:");
+         String type = readChoice("Specify the type of the fixed element you want to add:",
+                fixedElementController.getSelectable());
+        
+            if(type.matches(PATTERN_LEN_TYPE))
+                addLengthFixed(type);
+
+            else if(type.matches(PATTERN_AREA_TYPE))
+                addAreaFixed(type);
+
+            else
+                throw new BusinessException(type + " is not a fixed type");        
+        
+    }
+    
+    private void addLengthFixed(String typeName)
+            throws NoRoomCreatedException {
+        int x = readInt("Enter x coordinate:");
+        int y = readInt("Enter y coordinate:");
+        int length = readInt("Enter the length of the element in centimeters:");
+        if (typeName.equals("door"))
+            fixedElementController.addDoor(new Point(x,y), length);
+        else if (typeName.equals("window"))
+            fixedElementController.addWindow(new Point(x,y), length);
+    }
+    
+    private void addAreaFixed(String typeName) throws NoRoomCreatedException {
         int x = readInt("Enter x coordinate:");
         int y = readInt("Enter y coordinate:");
         int width = readInt("Enter the width of the element in centimeters:");
         int depth = readInt("Enter the depth of the element in centimeters:");
         
-        fixedElementController.add(typeName, new Point(x,y), new Dimension(width, depth));
+        if (typeName.equals("pillar"))
+            fixedElementController.addPillar(new Point(x,y), new Dimension(width, depth));
     }
     
     @Command("Removes a fixed element from the current selection")

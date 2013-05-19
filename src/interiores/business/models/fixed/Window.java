@@ -13,8 +13,10 @@ import java.awt.Point;
  */
 public class Window extends WantedFixed {
     
-    public Window(Point position, Dimension dimension, Dimension roomDimension) {
-        super("window", "window", position, dimension, "white",
+    private static final int WIND_DEPTH = 5;
+    
+    public Window(Point position, int length, Dimension roomDimension) {
+        super("window", "window", position, new Dimension(length, WIND_DEPTH), "white",
               "glass", new SpaceAround(0, 0, 0, 0));
         
         // A window must always be in a wall

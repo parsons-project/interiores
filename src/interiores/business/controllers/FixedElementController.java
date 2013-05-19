@@ -30,19 +30,20 @@ public class FixedElementController extends InterioresController{
     }
     
     
-    public void add(String type, Point point, Dimension dimension) 
-            throws NoRoomCreatedException, BusinessException  {
-        if (type.equals("door")) {
-            getWishList().addWantedFixed(new Door(point, dimension, getRoom().getDimension()));
-        }
-        else if (type.equals("window")) {
-            getWishList().addWantedFixed(new Window(point, dimension, getRoom().getDimension()));
-        }
-        else if (type.equals("pillar")) {
-            getWishList().addWantedFixed(new Pillar(point, dimension));
-        }
-        else
-            throw new BusinessException(type + " is not a fixed element");
+    public void addDoor(Point point, int length) 
+            throws NoRoomCreatedException {
+        getWishList().addWantedFixed(new Door(point, length, getRoom().getDimension()));
+
+    }
+    
+    public void addWindow(Point point, int length) 
+            throws NoRoomCreatedException {
+        getWishList().addWantedFixed(new Window(point, length, getRoom().getDimension()));
+    }
+    
+    public void addPillar(Point point, Dimension dimension) 
+            throws NoRoomCreatedException {
+        getWishList().addWantedFixed(new Pillar(point, dimension));
     }
     
     public void remove(String name) 
@@ -58,6 +59,6 @@ public class FixedElementController extends InterioresController{
     public Collection<String> getSelectable() {
         return selectable;
     }
-    
+
 }
 

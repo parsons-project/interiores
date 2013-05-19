@@ -13,9 +13,11 @@ import java.awt.Point;
  */
 public class Door extends WantedFixed {
     
-    public Door(Point position, Dimension dimension, Dimension roomDimension) {
-        super("door", "door", position, dimension, "brown",
-              "wood", new SpaceAround(dimension.depth, 0, 0, 0));
+    private static final int DOOR_DEPTH = 5;
+    
+    public Door(Point position, int length, Dimension roomDimension) {
+        super("door", "door", position, new Dimension(length, DOOR_DEPTH), "brown",
+              "wood", new SpaceAround(length, 0, 0, 0));
         
         // A door must always be in a wall
         this.addUnaryConstraint(new WallConstraint(roomDimension.width,

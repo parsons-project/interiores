@@ -1,21 +1,20 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package interiores.business.models.constraints.unary;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- *
+ * This constraint forces the furniture to be positioned in an exact point
  * @author alvaro
  */
 public class PositionConstraint extends AreaConstraint {
-    
+      
+    /**
+     * Creator of the constraint
+     * @param point The point where the furniture must be placed 
+     */
     public PositionConstraint(Point point) {
-        super(new ArrayList(Arrays.asList(point)));
+        super(Arrays.asList(point));
     }
     
 }

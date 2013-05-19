@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package interiores.business.models;
 
 import interiores.business.models.constraints.unary.PositionConstraint;
@@ -12,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- *
+ * This class represents a given FixedElement wanted by the user
  * @author alvaro
  */
 public class WantedFixed extends WantedElement {
@@ -36,6 +32,11 @@ public class WantedFixed extends WantedElement {
         this.name = name;
     }
     
+    /**
+     * For compatibility with a furnitureType wich has furnitureModels
+     * @return A list with one FurnitureModel with the attributes of this wantedFixed element
+     * @throws BusinessException 
+     */
     public List<FurnitureModel> getModels() throws BusinessException {
         return Arrays.asList(new FurnitureModel(name, size, 0, color, material, space));
     }

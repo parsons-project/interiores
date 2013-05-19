@@ -10,7 +10,7 @@ import interiores.utils.Dimension;
 import java.awt.Point;
 
 /**
- *
+ * This class represents a solid block contained in the room.
  * @author alvaro
  */
 public class Pillar extends WantedFixed {

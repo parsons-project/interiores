@@ -13,8 +13,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
 /**
- * This class represents the bag of furniture types that the user wants to
- * include in the room and the constraints required upon them.
+ * This class represents the bag of furniture types and fixed elements
+ * that the user wants to include in the room and the constraints required upon them.
  * @author larribas
  */
 public class WishList
@@ -81,6 +81,11 @@ public class WishList
         furniture.put(wantedFurnitureId, new WantedFurniture(wantedFurnitureId, typeName));
     }
     
+    /**
+     * Adds the given wanted fixed element to the set. The name of the
+     * wanted fixed is updated to fix the identifier
+     * @param wfixed The wanted fixed element to be added. It's name will be overriden.
+     */
     public void addWantedFixed(WantedFixed wfixed) {
         
         String typeName = wfixed.getTypeName();
@@ -95,12 +100,12 @@ public class WishList
         fixed.put(wantedFixedId, wfixed);   
     }
       
-    
     private String nextIdFor(String typeName, TreeMap map) {
         String nextId;
         int i = 1;
         
         do {
+            // find the first free identifier for the given typename
             nextId = typeName + String.valueOf(i);
             i++;
         } while(map.containsKey(nextId));
@@ -108,17 +113,22 @@ public class WishList
         return nextId;
     }
     
+    // This is an abstraction for both furnitures and fixed elements
     private boolean removeWantedElement(String elementId, TreeMap map) 
             throws MandatoryFurnitureException {
-        String typeName = furniture.get(elementId).getTypeName();
+        String typeName = ((WantedElement) map.get(elementId)).getTypeName();
         int typeCount = typesCount.get(typeName);
         
+        // if only one is remaining...
         if(typeCount == 1) {
+            // if it's mandatory, you can't remove it
             if (room.isMandatory(typeName))
                 throw new MandatoryFurnitureException(typeName, room.getTypeName());
             
+            //otherwise, we clean the tree (not storing entries with value 0)
             typesCount.remove(typeName);
         }
+        // else we can remove it normally
         else
             typesCount.put(typeName, typeCount - 1);
         
@@ -128,16 +138,33 @@ public class WishList
         return true;
     }
     
+    /**
+     * Removes the wanted element with wantedFixedId from the wishlist
+     * @param wantedFixedId The id of the element to be removed
+     * @return A boolean representing if the operation went ok.
+     * @throws MandatoryFurnitureException 
+     */
     public boolean removeWantedFixed(String wantedFixedId)
             throws MandatoryFurnitureException {
         return removeWantedElement(wantedFixedId, fixed);
     }
     
+    /**
+     * Removes the wanted furniture with wantedFurnitureId from the wishlist
+     * @param wantedFixedId The id of the element to be removed
+     * @return A boolean representing if the operation went ok.
+     * @throws MandatoryFurnitureException If it can't be removed because it's 
+     *         mandatory for the room
+     */
     public boolean removeWantedFurniture(String wantedFurnitureId)
             throws MandatoryFurnitureException {
         return removeWantedElement(wantedFurnitureId, furniture);
     }
     
+    /**
+     * Gets the size of the full wishlist
+     * @return The number of wantedElements contained in the wishlist
+     */
     public int getSize() {
         return furniture.size() + fixed.size();
     }
@@ -218,6 +245,10 @@ public class WishList
         return furniture.keySet();
     }
     
+    /**
+     * Returns the identifiers of the WantedFixed elements
+     * @return the string identifying the WantedFixed
+     */
     public Collection<String> getFixedNames() {
         return fixed.keySet();
     }
@@ -226,6 +257,13 @@ public class WishList
         return typesCount.keySet();
     }
     
+    /**
+     * This is and abstraction to get an element that can be a wantedFurniture
+     * or a wantedFixed.
+     * @param id The identifier of the element
+     * @return The wanted element in the wishList with identifier id
+     * @throws WantedElementNotFoundException 
+     */
     private WantedElement getWantedElement(String id) 
             throws WantedElementNotFoundException {
         if(!furniture.containsKey(id)) {
@@ -237,6 +275,13 @@ public class WishList
         return (WantedElement) furniture.get(id);
     }
     
+    /**
+     * This is and abstraction to get an element from a given TreeMap
+     * @param id The identifier of the element
+     * @param map The TreeMap where to search for the element
+     * @return The wanted element in the map with identifier id
+     * @throws WantedElementNotFoundException 
+     */
     private WantedElement getWantedElement(String id, TreeMap map) 
             throws WantedElementNotFoundException {
         if(!map.containsKey(id))
@@ -280,6 +325,10 @@ public class WishList
         return furniture.values();
     }
 
+    /**
+     * Returns the set of WantedFixed
+     * @return the collection of WantedFixed elements
+     */
     public Collection<WantedFixed> getWantedFixed() {
         return fixed.values();
     }

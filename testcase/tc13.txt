@@ -1,4 +1,6 @@
 new room livingroom 500 600
+# We are putting a pillar at (0,0) with (400,400) dimension
 add fe pillar 0 0 400 400
-select ft chair chair
+# adding more furniture to make it cooler
+select ft chair chair chair chair
 solve design

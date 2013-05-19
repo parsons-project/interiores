@@ -8,11 +8,13 @@ import interiores.utils.Dimension;
 import java.awt.Point;
 
 /**
- *
+ * This class represents a door that the user wants to put in the room
  * @author alvaro
  */
 public class Door extends WantedFixed {
     
+    // All the doors will have the same depth so
+    // only the width it's needed to create it
     private static final int DOOR_DEPTH = 5;
     
     public Door(Point position, int length, Dimension roomDimension) {

@@ -104,6 +104,7 @@ public class FurnitureVariableSet
                 }
         );
         
+        // We are considering the fixed elements as another type of furniture but very restricted
         for(WantedFixed wantedFixed : wishList.getWantedFixed()) {
             String variableName = wantedFixed.getName();
             

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package interiores.business.models;
 
 import interiores.business.models.constraints.UnaryConstraint;
@@ -11,7 +7,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementWrapper;
 
 /**
- *
+ * This class is the abstraction of a wanted element for the room
  * @author alvaro
  */
 public abstract class WantedElement {
@@ -22,14 +18,14 @@ public abstract class WantedElement {
     protected String typeName;
     
     /*
-     * The unary constraints related to this furniture
+     * The unary constraints related to this element
      */
     @XmlElementWrapper
     protected HashMap<Class, UnaryConstraint> constraints;
     
     /**
-     * Simple creator. Creates a wanted furniture given its type
-     * @param ft The funiture type of this wanted furniture
+     * Simple creator. Creates a wanted element given its type
+     * @param ft The funiture type of this wanted element
      */
     public WantedElement(String name, String typeName) {
         this.name = name;
@@ -46,7 +42,7 @@ public abstract class WantedElement {
     }
     
     /**
-     * Adds a unary constraint to the given wanted furniture
+     * Adds a unary constraint to the given wanted element
      * @param type The type of the constraint
      * @param unaryConstraint The unary constraint itself
      */
@@ -55,7 +51,7 @@ public abstract class WantedElement {
     }
     
     /**
-     * Removes a unary constraint to the given wanted furniture
+     * Removes a unary constraint to the given wanted element
      * @param unaryConstraintClass The type of the constraint
      */
     public void removeUnaryConstraint(Class<? extends UnaryConstraint> unaryConstraintClass) {
@@ -72,7 +68,7 @@ public abstract class WantedElement {
     }
     
     /**
-     * Returns all the unary constraints applied to the wanted piece of furniture.
+     * Returns all the unary constraints applied to the wanted element.
      * @return the set of unary constraints
      */
     public Collection<UnaryConstraint> getUnaryConstraints() {

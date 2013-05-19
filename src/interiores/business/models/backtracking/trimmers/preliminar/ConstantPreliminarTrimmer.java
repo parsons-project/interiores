@@ -3,7 +3,6 @@ package interiores.business.models.backtracking.trimmers.preliminar;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.trimmers.PreliminarTrimmer;
-import interiores.core.Debug;
 import java.awt.Rectangle;
 
 /**
@@ -21,7 +20,6 @@ public class ConstantPreliminarTrimmer
     
     private void trimArea(FurnitureConstant constant, FurnitureVariable[] variables) {
         Rectangle area = constant.getAssignedValue().getWholeArea();
-        Debug.println(area.width + " " + area.height);
         
         for(FurnitureVariable variable : variables)
             variable.getDomain().trimInvalidRectangle(area, 0);

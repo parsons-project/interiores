@@ -1,4 +1,4 @@
-new room livingroom 500 600
+new room livingRoom 500 600
 select ft sofa tv
 add bc facing-straight sofa1 tv1
 select ft chair chair

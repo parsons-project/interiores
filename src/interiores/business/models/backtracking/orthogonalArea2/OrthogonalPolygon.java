@@ -12,8 +12,9 @@
  * within the polygon. Similarly for points over a vertex which unites a bottom
  * and a left edge. 
  */
-package interiores.business.models.backtracking.orthogonalArea;
+package interiores.business.models.backtracking.orthogonalArea2;
 
+import interiores.business.models.backtracking.orthogonalArea.*;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;

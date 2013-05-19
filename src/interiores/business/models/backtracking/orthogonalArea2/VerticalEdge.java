@@ -2,8 +2,9 @@
  * VerticalEdge represents a vertical segment which unites two vertexs of an
  * orthogonal Polygon.
  */
-package interiores.business.models.backtracking.orthogonalArea;
+package interiores.business.models.backtracking.orthogonalArea2;
 
+import interiores.business.models.backtracking.orthogonalArea.*;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,7 @@
  * HorizontalEdge represents a horizonal segment which unites two vertexs of an
  * orthogonal Polygon.
  */
-package interiores.business.models.backtracking.orthogonalArea;
+package interiores.business.models.backtracking.orthogonalArea2;
 
 import java.awt.Point;
 import java.util.ArrayList;

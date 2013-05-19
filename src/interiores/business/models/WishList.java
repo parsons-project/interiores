@@ -165,8 +165,8 @@ public class WishList
      * Gets the size of the full wishlist
      * @return The number of wantedElements contained in the wishlist
      */
-    public int getSize() {
-        return furniture.size() + fixed.size();
+    public int getUnfixedSize() {
+        return furniture.size();
     }
     
     public int getFixedSize() {

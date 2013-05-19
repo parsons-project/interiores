@@ -4,7 +4,8 @@
  */
 package interiores.business.models.backtracking.trimmers;
 
-import interiores.business.models.backtracking.InterioresVariable;
+import interiores.business.models.backtracking.FurnitureConstant;
+import interiores.business.models.backtracking.FurnitureVariable;
 
 /**
  *
@@ -12,5 +13,5 @@ import interiores.business.models.backtracking.InterioresVariable;
  */
 public interface PreliminarTrimmer
 {
-    public void trim(InterioresVariable[] variables);
+    public void preliminarTrim(FurnitureConstant[] constants, FurnitureVariable[] variables);
 }

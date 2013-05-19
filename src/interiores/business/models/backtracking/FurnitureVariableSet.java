@@ -33,6 +33,7 @@ public class FurnitureVariableSet
      * Represents the number of variables.
      */
     private int variableCount;
+    private int constantCount;
     
     /**
      * Contains all the variables of the variable set.
@@ -48,13 +49,14 @@ public class FurnitureVariableSet
      * (which is also the number of iterations of the algorithm), but their
      * elements might be reallocated.
      */
-    protected InterioresVariable[] variables;
+    protected FurnitureVariable[] variables;
+    private FurnitureConstant[] constants;
     
     /**
      * This is the variable that the algorithm is trying to assign in the
      * current iteration.
      */
-    protected InterioresVariable actual;
+    protected FurnitureVariable actual;
     
     /**
      * Indicates whether all variables have an assigned value.
@@ -87,8 +89,11 @@ public class FurnitureVariableSet
         Dimension roomSize = wishList.getRoom().getDimension();
         roomArea = new OrientedRectangle(new Point(0, 0), roomSize, Orientation.S);
         
-        variableCount = wishList.getSize();
+        variableCount = wishList.getUnfixedSize();
+        constantCount = wishList.getFixedSize();
+        
         variables = new FurnitureVariable[variableCount];
+        constants = new FurnitureConstant[constantCount];
         
         preliminarTrimmers = new ArrayList();
         
@@ -107,18 +112,16 @@ public class FurnitureVariableSet
             FurnitureValue value = new FurnitureValue(wantedFixed.getPosition(), wantedFixed.getModel(),
                     wantedFixed.getOrientation());
             
-            variables[i] = new FurnitureConstant(constantName, value);
+            constants[i] = new FurnitureConstant(constantName, value);
             i++;
         }
     }
     
     private void addVariables(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog,
             Dimension roomSize)
-    {
-        int constantCount = wishList.getFixedSize();
-        
+    {   
         PriorityQueue<Entry<Integer, FurnitureVariable>> queue = new PriorityQueue(
-                variableCount - constantCount + 1,
+                variableCount + 1,
                 new Comparator<Entry<Integer, FurnitureVariable>>() {
                     @Override
                     public int compare(Entry<Integer, FurnitureVariable> e1,
@@ -148,7 +151,7 @@ public class FurnitureVariableSet
         
         int i = 0;
         while(!queue.isEmpty()) {
-            variables[constantCount+i] = queue.poll().getValue();
+            variables[i] = queue.poll().getValue();
             i++;
         }
     }
@@ -226,6 +229,12 @@ public class FurnitureVariableSet
     //things into consideration (e.g., not blocking paths)
     @Override
     protected boolean canAssignToActual(Value value) {
+        // Check constant constraints!
+        // @TODO Transform to preliminar trims?
+        for(FurnitureConstant constant : constants) {
+            if(! binaryConstraints.isSatisfied(actual, constant))
+                return false;
+        }
         
         FurnitureValue actual_fv = (FurnitureValue) value;
         // A little explanation: fv.getArea() gets the ACTIVE area of actual_fv
@@ -235,7 +244,7 @@ public class FurnitureVariableSet
 
         actual.assignValue(value);
         for (int i = 0; i < depth; ++i) {
-            FurnitureValue other_fv = (FurnitureValue) variables[i].getAssignedValue();
+            FurnitureValue other_fv = variables[i].getAssignedValue();
             
             if (!binaryConstraints.isSatisfied(actual, variables[i])
                 || actual_fv.getArea().intersects(other_fv.getWholeArea())
@@ -274,7 +283,7 @@ public class FurnitureVariableSet
     @Override
     protected void preliminarTrimDomains() {
         for(PreliminarTrimmer preliminarTrimmer : preliminarTrimmers)
-            preliminarTrimmer.trim(variables);
+            preliminarTrimmer.preliminarTrim(constants, variables);
         
         // @TODO Refactorize
         //3) remove furniture too expensive
@@ -309,8 +318,11 @@ public class FurnitureVariableSet
     public Map<String, FurnitureValue> getValues() {
         Map<String, FurnitureValue> values = new HashMap();
         
+        for(FurnitureConstant constant : constants)
+            values.put(constant.getID(), constant.getAssignedValue());
+        
         for(int i = 0; i < variables.length; ++i)
-            values.put(variables[i].getID(), (FurnitureValue) variables[i].getAssignedValue());
+            values.put(variables[i].getID(), variables[i].getAssignedValue());
         
         return values;
     }

@@ -82,11 +82,14 @@ public class Domain {
      * @param invalidArea
      * @param iteration 
      */
-    public void stripInvalidRectangle(Rectangle invalidRectangle, int iteration) {
-        Collection<Point> trimedPositions = 
-                domain[iteration+1].trimInvalidRectangle(invalidRectangle);
+    public void trimAndPushInvalidRectangle(Rectangle invalidRectangle, int iteration) {
+        Collection<Point> trimedPositions = trimInvalidRectangle(invalidRectangle, iteration + 1);
         
         domain[iteration].addPositions(trimedPositions);
+    }
+    
+    public Collection<Point> trimInvalidRectangle(Rectangle invalidRectangle, int iteration) {
+        return domain[iteration].trimInvalidRectangle(invalidRectangle);
     }
     
     /**

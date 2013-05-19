@@ -3,6 +3,7 @@ package interiores.business.models.backtracking;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
+import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
 import java.awt.Point;
@@ -182,6 +183,7 @@ public class Stage {
         int y_max = y+invalidRectangle.height;
         for (int i = x; i < x_max; i += resolution) {
             for (int j = y; j < y_max; j += resolution) {
+                Debug.println(i + ", " + j);
                 Point p = new Point(i,j);
                 if (positions.contains(p)) {
                     trimedPositions.add(p);
@@ -189,6 +191,8 @@ public class Stage {
                 }
             }
         }
+        
+        Debug.println(trimedPositions.size() + " trimmed");
         return trimedPositions;
     }
     

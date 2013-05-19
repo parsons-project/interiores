@@ -19,6 +19,10 @@ public class FurnitureVariable
     */
     public int iteration;
     
+    
+    protected Collection<UnaryConstraint> unaryConstraints;
+    protected Domain domain;
+    
     /**
      * Value of the cheapest model
      */
@@ -56,7 +60,6 @@ public class FurnitureVariable
      * Resets the iterators so that they will iterate through all of the
      * variables' domains, for the iteration "iteration" of the algorithm.
      */
-    @Override
     public void resetIterators(int iteration) {
         domain.resetIterators(iteration);
     }
@@ -104,7 +107,7 @@ public class FurnitureVariable
         FurnitureValue value = (FurnitureValue) variable.getAssignedValue();
         Rectangle invalidRectangle = value.getWholeArea();
         
-        domain.stripInvalidRectangle(invalidRectangle, iteration);        
+        domain.trimAndPushInvalidRectangle(invalidRectangle, iteration);        
         
         // 3) move all models
         domain.saveAllModels(iteration);
@@ -126,6 +129,14 @@ public class FurnitureVariable
     @Override
     public void undoTrimDomain(Variable variable, Value value, int iteration) {
         domain.undoTrimDomain(iteration);       
+    }
+        
+    public Collection<UnaryConstraint> getUnaryConstraints() {
+        return unaryConstraints;
+    }
+    
+    public Domain getDomain() {
+        return domain;
     }
     
     /**

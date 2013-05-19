@@ -1,9 +1,7 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.constraints.UnaryConstraint;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
-import java.util.Collection;
 
 /**
  *
@@ -12,14 +10,12 @@ import java.util.Collection;
 abstract public class InterioresVariable implements Variable
 {
     private String identifier;
-    protected Collection<UnaryConstraint> unaryConstraints;
-    protected Domain domain;
     
     /**
     * Represents the value taken by the variable, in case it is assigned.
     * Only valid when isAssigned is true.
     */
-    public Value assignedValue;
+    public FurnitureValue assignedValue;
     private boolean isAssigned;
     
     public InterioresVariable(String idenitifer) {
@@ -38,14 +34,14 @@ abstract public class InterioresVariable implements Variable
     }
     
     @Override
-    public Value getAssignedValue() {
+    public FurnitureValue getAssignedValue() {
         return assignedValue;
     }
        
     @Override
     public void assignValue(Value value) {
         isAssigned = true;
-        assignedValue = value;
+        assignedValue = (FurnitureValue) value;
     }
 
     
@@ -54,14 +50,4 @@ abstract public class InterioresVariable implements Variable
         isAssigned = false;
         assignedValue = null;        
     }
-    
-    public Collection<UnaryConstraint> getUnaryConstraints() {
-        return unaryConstraints;
-    }
-    
-    public Domain getDomain() {
-        return domain;
-    }
-    
-    abstract public void resetIterators(int iteration);
 }

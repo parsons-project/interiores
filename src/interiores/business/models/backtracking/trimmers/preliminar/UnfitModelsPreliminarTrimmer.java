@@ -5,7 +5,8 @@
 package interiores.business.models.backtracking.trimmers.preliminar;
 
 import interiores.business.models.FurnitureModel;
-import interiores.business.models.backtracking.InterioresVariable;
+import interiores.business.models.backtracking.FurnitureConstant;
+import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.trimmers.PreliminarTrimmer;
 import java.util.Iterator;
 
@@ -17,13 +18,13 @@ public class UnfitModelsPreliminarTrimmer
     implements PreliminarTrimmer
 {
     @Override
-    public void trim(InterioresVariable[] variables)
+    public void preliminarTrim(FurnitureConstant constants[], FurnitureVariable[] variables)
     {
-        for(InterioresVariable variable : variables)
+        for(FurnitureVariable variable : variables)
             trimUnfitModels(variable);
     }
     
-    private void trimUnfitModels(InterioresVariable variable)
+    private void trimUnfitModels(FurnitureVariable variable)
     {
         Iterator<FurnitureModel> evaluatedModelIterator = variable.getDomain().getModels(0).iterator();
         while (evaluatedModelIterator.hasNext()) {

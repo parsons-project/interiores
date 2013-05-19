@@ -8,6 +8,7 @@ import interiores.business.models.FurnitureType;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
+import interiores.business.models.backtracking.trimmers.preliminar.ConstantPreliminarTrimmer;
 import interiores.business.models.backtracking.trimmers.preliminar.UnaryConstraintsPreliminarTrimmer;
 import interiores.business.models.backtracking.trimmers.preliminar.UnfitModelsPreliminarTrimmer;
 import interiores.business.models.catalogs.AvailableCatalog;
@@ -25,7 +26,6 @@ public class DesignController
     extends CatalogAccessController<FurnitureType>
     implements Observer
 {
-    
     private boolean solutionFound = false;
     private long time = -1;
     private String lastSolution;
@@ -67,6 +67,7 @@ public class DesignController
     private void computeSolution(FurnitureVariableSet furVarSet, boolean timeIt)
     {
         // @TODO Refactorize. Create a FurnitureVariableSetFactory
+        furVarSet.addPreliminarTrimmer(new ConstantPreliminarTrimmer());
         furVarSet.addPreliminarTrimmer(new UnaryConstraintsPreliminarTrimmer());
         furVarSet.addPreliminarTrimmer(new UnfitModelsPreliminarTrimmer());
         

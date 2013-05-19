@@ -247,6 +247,7 @@ package interiores.business.models.backtracking.orthogonalArea2;
 
 import interiores.business.models.Orientation;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -258,8 +259,7 @@ import java.util.Set;
  *
  * @author nil.mamano
  */
-public class OrthogonalArea
-        implements Iterable {
+public class OrthogonalArea {
     
     List<GridPoint> vertexs;
     private List<VerticalEdge> verticalEdges;
@@ -280,24 +280,34 @@ public class OrthogonalArea
     /**
      * Default constructor.
      */
+    public OrthogonalArea() {
+        vertexs = new ArrayList<GridPoint>();
+    }
+    
+    /**
+     * Constructor from a rectangle.
+     */
+    public OrthogonalArea(Rectangle r) {
+        this.vertexs = new ArrayList<GridPoint>();
+        if (r.x < 0 || r.y < 0)
+            throw new UnsupportedOperationException("Not valid");
+        
+        vertexs.add(new GridPoint(r.x, r.y));
+        vertexs.add(new GridPoint(r.x+r.width, r.y));
+        vertexs.add(new GridPoint(r.x+r.width, r.y+r.height));
+        vertexs.add(new GridPoint(r.x, r.y+r.height));
+        
+        initializeAreaFromPoints();
+    }
+    
+    
+    /**
+     * Private constructor.
+     */
     private OrthogonalArea(List<GridPoint> vertexs) {
         this.vertexs = vertexs;
-        
-        //initialize Maps of positions
-        vertexsStoredByX = new HashMap<Integer,List<GridPoint>>();
-        vertexsStoredByY = new HashMap<Integer,List<GridPoint>>();
-        
-        for (GridPoint p : vertexs) {
-            if (!vertexsStoredByX.containsKey(p.x))
-                vertexsStoredByX.put(p.x, new ArrayList<GridPoint>());
-            vertexsStoredByX.get(p.x).add(p);
-            
-            if (!vertexsStoredByY.containsKey(p.y))
-                vertexsStoredByY.put(p.y, new ArrayList<GridPoint>());
-            vertexsStoredByY.get(p.y).add(p);
-        }
-        
-        buildEdges();
+
+        initializeAreaFromPoints();
     }
     
     
@@ -377,7 +387,7 @@ public class OrthogonalArea
         newAreaVertexs.addAll(getEdgesIntersect(a)); 
 
         vertexs = newAreaVertexs;
-        buildEdges();
+        initializeAreaFromPoints();
     }
     
     
@@ -405,6 +415,22 @@ public class OrthogonalArea
     }
     
     
+    private void initializeAreaFromPoints() {
+        vertexsStoredByX = new HashMap<Integer,List<GridPoint>>();
+        vertexsStoredByY = new HashMap<Integer,List<GridPoint>>();
+        
+        for (GridPoint p : vertexs) {
+            if (!vertexsStoredByX.containsKey(p.x))
+                vertexsStoredByX.put(p.x, new ArrayList<GridPoint>());
+            vertexsStoredByX.get(p.x).add(p);
+            
+            if (!vertexsStoredByY.containsKey(p.y))
+                vertexsStoredByY.put(p.y, new ArrayList<GridPoint>());
+            vertexsStoredByY.get(p.y).add(p);
+        }
+        
+        buildEdges();
+    }
 
     
     /**
@@ -554,13 +580,94 @@ public class OrthogonalArea
         
         vertexs.clear();
         vertexs.addAll(vertexSet);
-        buildEdges();
+        initializeAreaFromPoints();
     }
 
-    @Override
-    public Iterator iterator() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    
+
+    /**
+     * Operations to support iteration
+     */
+    
+    
+    /**
+     * Returns whether the area is empty.
+     * @return 
+     */
+    public boolean isEmpty() {
+        return vertexs.size() > 0;
     }
+    
+    /**
+     * Returns the smallest rectangle that contains this area.
+     * @return 
+     */
+    public Rectangle getBoundingRectangle() {
+        int maxX, minX, maxY, minY;
+        
+        Iterator<GridPoint> it = vertexs.iterator();
+        GridPoint v;
+        if (! it.hasNext()) return new Rectangle();
 
-
+        v = it.next();
+        maxX = minX = v.x;
+        maxY = minY = v.y;
+        while (it.hasNext()) {
+            v = it.next();
+            if (v.x > maxX) maxX = v.x;
+            else if (v.x < minX) minX = v.x;
+            if (v.y > maxY) maxY = v.y;
+            else if (v.y < minY) minY = v.y;
+        }
+        return new Rectangle(minX, minY, maxX-minX, maxY-minY);
+    }
+    
+    /**
+     * Returns an Orthogonal Area that contains the same geometry as this Area,
+     * but shifted 'distance' units to 'orientation'.
+     * @param distance
+     * @param orientation
+     * @return 
+     */
+    public OrthogonalArea shiftedArea(int distance, Orientation orientation) {
+    
+        Rectangle boundingRectangle = getBoundingRectangle();
+        
+        OrthogonalArea newArea = new OrthogonalArea(vertexs);
+        //case in which we go out of the grid plane (negative X coodinates)
+        if (orientation == Orientation.W && distance > boundingRectangle.x) {
+            Rectangle deadZone = new Rectangle(
+                    boundingRectangle.x, boundingRectangle.y,
+                    distance - boundingRectangle.x, boundingRectangle.height);
+            //remove dead zone
+            newArea.difference(new OrthogonalArea(deadZone));
+        }
+        
+        //case in which we go out of the grid plane (negative Y coordinates)
+        if (orientation == Orientation.N && distance > boundingRectangle.y) {
+            Rectangle deadZone = new Rectangle(
+                    boundingRectangle.x, boundingRectangle.y,
+                    boundingRectangle.width, distance - boundingRectangle.y);
+            //remove dead zone
+            newArea.difference(new OrthogonalArea(deadZone));
+        }
+        
+        //make the shift
+        List<GridPoint> newVertexs = new ArrayList<GridPoint>();
+        if (orientation == Orientation.N)
+            for (GridPoint v : newArea.vertexs)
+                newVertexs.add(new GridPoint(v.x, v.y-distance));
+        if (orientation == Orientation.S)
+            for (GridPoint v : newArea.vertexs)
+                newVertexs.add(new GridPoint(v.x, v.y+distance));
+        if (orientation == Orientation.W)
+            for (GridPoint v : newArea.vertexs)
+                newVertexs.add(new GridPoint(v.x-distance, v.y));
+        if (orientation == Orientation.E)
+            for (GridPoint v : newArea.vertexs)
+                newVertexs.add(new GridPoint(v.x+distance, v.y));
+        
+        return new OrthogonalArea(newVertexs);
+    }
+    
 }

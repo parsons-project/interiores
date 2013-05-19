@@ -11,7 +11,7 @@ import java.awt.Point;
  *
  * @author nil.mamano
  */
-public class Ray {
+class Ray {
     public Point origin;
     public Orientation direction;
 

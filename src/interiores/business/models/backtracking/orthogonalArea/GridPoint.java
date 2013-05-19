@@ -1,6 +1,6 @@
 /*
  */
-package interiores.business.models.backtracking.orthogonalArea2;
+package interiores.business.models.backtracking.orthogonalArea;
 
 import java.awt.Point;
 

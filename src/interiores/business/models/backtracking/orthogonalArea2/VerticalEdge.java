@@ -2,7 +2,7 @@
  * VerticalEdge represents a vertical segment which unites two vertexs of an
  * orthogonal Polygon.
  */
-package interiores.business.models.backtracking.orthogonalArea2;
+package interiores.business.models.backtracking.orthogonalArea;
 
 import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.orthogonalArea.*;

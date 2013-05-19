@@ -243,7 +243,7 @@
  * This way, each edge is added exactly once. Similarly for horizontal edges.
  * 
  */
-package interiores.business.models.backtracking.orthogonalArea2;
+package interiores.business.models.backtracking.orthogonalArea;
 
 import interiores.business.models.Orientation;
 import java.awt.Point;

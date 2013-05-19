@@ -1,0 +1,70 @@
+/*
+ * VerticalEdge represents a vertical segment which unites two vertexs of an
+ * orthogonal Polygon.
+ */
+package interiores.business.models.backtracking.orthogonalArea;
+
+import interiores.business.models.Orientation;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author nil.mamano
+ */
+class VerticalEdge {
+    
+    //the x coordinate shared by the 2 vertexs of the segment
+    public int x;
+    //as the Y axis increases downwards, this is the bottom vertex of the segment
+    public int yh;
+    //as the Y axis increases downwards, this is the top vertex of the segment
+    public int yl;    
+
+    public VerticalEdge(int x, int yh, int yl) {
+        this.x = x;
+        this.yh = yh;
+        this.yl = yl;
+    }
+
+    /**
+     * @param ray
+     * @return 
+     */
+    boolean intersects(Ray ray) {
+        if (ray.direction == Orientation.E)
+            return x > ray.origin.x && yl <= ray.origin.y && yh > ray.origin.y;
+        else if (ray.direction == Orientation.W)
+            return x <= ray.origin.x && yl <= ray.origin.y && yh > ray.origin.y;
+        else return false;
+    }
+    
+    /**
+     * 
+     * @param ray
+     * @return 
+     */
+    boolean intersects(GridRay ray) {
+        if (ray.direction == Orientation.E)
+            return x > ray.origin.x && yl < ray.origin.y && yh > ray.origin.y;
+        else if (ray.direction == Orientation.W)
+            return x < ray.origin.x && yl < ray.origin.y && yh > ray.origin.y;
+        else return false;
+    }
+    
+    boolean intersects(HorizontalEdge edge) {
+        return x > edge.xl && x < edge.xh && edge.y > yl && edge.y < yh;
+    }
+    
+    /**
+     * Given that the implicit parameter and p intersect, returns the
+     * point of the intersection.
+     * @param p
+     * @return 
+     */
+    GridPoint getIntersection(HorizontalEdge p) {
+        return new GridPoint(x, p.y);
+    }
+    
+}

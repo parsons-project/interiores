@@ -20,4 +20,13 @@ class HorizontalEdge {
         this.xl = xl;
     } 
     
+    /**
+     * returns whether e is part of this edge, assuming they have
+     * the same y coordinate.
+     * @param e
+     * @return 
+     */
+    boolean contain(HorizontalEdge e) {
+        return xh >= e.xh && xl <= e.xl;
+    }
 }

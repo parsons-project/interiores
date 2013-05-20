@@ -44,5 +44,15 @@ class VerticalEdge {
     GridPoint getIntersection(HorizontalEdge p) {
         return new GridPoint(x, p.y);
     }
+
+    /**
+     * returns whether e is part of this edge, assuming they have
+     * the same x coordinate.
+     * @param e
+     * @return 
+     */
+    boolean contain(VerticalEdge e) {
+        return yh >= e.yh && yl <= e.yl;
+    }
     
 }

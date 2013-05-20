@@ -252,15 +252,19 @@ public class Area {
     private List<HorizontalEdge> horizontalEdges;
         
     /**
-     * Given a x' value, permits fast access to all vertexs of the polygon such
-     * that they are of the form (x,y), where x=x'.
+     * Given a x' value, permits fast access to all vertexs of the area
+     * of the form (x,y), where x=x'.
      */
     private HashMap<Integer,List<GridPoint>> vertexsStoredByX;
     /**
-     * Given a y' value, permits fast access to all vertexs of the polygon such
-     * that they are of the form (x,y), where y=y'.
+     * Given a y' value, permits fast access to all vertexs of the area
+     * of the form (x,y), where y=y'.
      */
     private HashMap<Integer,List<GridPoint>> vertexsStoredByY;
+    
+    
+    private HashMap<Integer,List<VerticalEdge>> verticalEdgesStoredByX;
+    private HashMap<Integer,List<HorizontalEdge>> horizontalEdgesStoredByY;
     
     
     /**
@@ -268,6 +272,7 @@ public class Area {
      */
     public Area() {
         vertexs = new ArrayList<GridPoint>();
+        initializeAreaFromVertexs();
     }
     
     /**
@@ -319,7 +324,7 @@ public class Area {
     
     
     /**
-     * Returns whether a given orthogonal area is within the area.
+     * Returns whether a given area is within the area.
      * (operation 2 of the opening explanation)
      * @param a the area which might be contained.
      */
@@ -347,7 +352,7 @@ public class Area {
      * @param a 
      */
     public void union(Area a) {
-        List<GridPoint> newAreaVertexs = new ArrayList<GridPoint>();    
+        Set<GridPoint> newAreaVertexs = new HashSet<GridPoint>();    
         
         //1) add intersections between this area and a, except double
         // intersections
@@ -361,24 +366,29 @@ public class Area {
         //2) find vextexs that have an odd number of adjacent contained squares
         // in either area
         for (GridPoint v : vertexs) {
-            List<Square> adjacentSquares = adjacentSquares(v);
-            int count = 0; //count of adjacent squares contained in either area
-            for (Square sq : adjacentSquares)
-                if (contains(sq) || a.contains(sq)) ++count;
-            
+            List<Boolean> thisAdjSqs = areAdjacentSquaresContained(v);
+            List<Boolean> aAdjSqs = a.areAdjacentSquaresContained(v);
+            int count = 0;
+            if (thisAdjSqs.get(0) || aAdjSqs.get(0)) ++count;
+            if (thisAdjSqs.get(1) || aAdjSqs.get(1)) ++count;
+            if (thisAdjSqs.get(2) || aAdjSqs.get(2)) ++count;
+            if (thisAdjSqs.get(3) || aAdjSqs.get(3)) ++count;
             if (count%2 == 1) newAreaVertexs.add(v);
         }
-        
         for (GridPoint v : a.vertexs) {
-            List<Square> adjacentSquares = adjacentSquares(v);
-            int count = 0; //count of adjacent squares contained in either area
-            for (Square sq : adjacentSquares)
-                if (a.contains(sq) || contains(sq)) ++count;
-            
+            List<Boolean> thisAdjSqs = areAdjacentSquaresContained(v);
+            List<Boolean> aAdjSqs = a.areAdjacentSquaresContained(v);
+            int count = 0;
+            if (thisAdjSqs.get(0) || aAdjSqs.get(0)) ++count;
+            if (thisAdjSqs.get(1) || aAdjSqs.get(1)) ++count;
+            if (thisAdjSqs.get(2) || aAdjSqs.get(2)) ++count;
+            if (thisAdjSqs.get(3) || aAdjSqs.get(3)) ++count;
             if (count%2 == 1) newAreaVertexs.add(v);
         }
 
-        vertexs = newAreaVertexs;
+        List<GridPoint> newAreaVertexsList = new ArrayList<GridPoint>();
+        newAreaVertexsList.addAll(newAreaVertexs);
+        vertexs = newAreaVertexsList;
         initializeAreaFromVertexs();
     }
     
@@ -408,6 +418,8 @@ public class Area {
     
     
     private void initializeAreaFromVertexs() {
+        
+        //initialize maps of vertexs
         vertexsStoredByX = new HashMap<Integer,List<GridPoint>>();
         vertexsStoredByY = new HashMap<Integer,List<GridPoint>>();
         
@@ -420,8 +432,23 @@ public class Area {
                 vertexsStoredByY.put(p.y, new ArrayList<GridPoint>());
             vertexsStoredByY.get(p.y).add(p);
         }
-        
+
         buildEdges();
+        
+        //initialize maps of edges
+        verticalEdgesStoredByX = new HashMap<Integer,List<VerticalEdge>>();
+        horizontalEdgesStoredByY = new HashMap<Integer,List<HorizontalEdge>>();
+        
+        for (VerticalEdge e : verticalEdges) {
+            if (!verticalEdgesStoredByX.containsKey(e.x))
+                verticalEdgesStoredByX.put(e.x, new ArrayList<VerticalEdge>());
+            verticalEdgesStoredByX.get(e.x).add(e);
+        }
+        for (HorizontalEdge e : horizontalEdges) {
+            if (!horizontalEdgesStoredByY.containsKey(e.y))
+                horizontalEdgesStoredByY.put(e.y, new ArrayList<HorizontalEdge>());
+            horizontalEdgesStoredByY.get(e.y).add(e);
+        }
     }
 
     
@@ -489,16 +516,90 @@ public class Area {
      * @return true if point is contained in the polygon
      */
     private boolean contains(GridPoint point) {
-        //This could be optimized acording to the following observation:
-        //to see if a square is contained, if it is known whether an adjacent
-        //square is contained or not, it must only be checked whether there
-        //is a edge between them.
         List<Square> adjacentSquares = adjacentSquares(point);
         for (Square sq : adjacentSquares)
             if (! contains(sq)) return false;
         
         return true;
-    }    
+    }
+    
+    /**
+     * Given a Grid Point, returns whether each of the adjacent squares is
+     * contained.
+     * This is optimized acording to the following observation:
+     * to see if a square is contained, if it is known whether an adjacent
+     * square is contained or not, it must only be checked whether there
+     * is an edge between them.
+     * @param p
+     * @return list with exactly 4 booleans. Each one indicates whether a
+     * certain adjacent square is contained, in this order: top left square,
+     * top right square, bottom left square and bottom right square.
+     */
+    private List<Boolean> areAdjacentSquaresContained(GridPoint p) {
+        
+        // +-------------+-------------+
+        // |             |             |
+        // |             |             |
+        // |             u             |
+        // | topLeftSq   p  topRightSq |
+        // |             E             |
+        // |             |             |
+        // |             |             |
+        // +----leftE----p---rightE----+
+        // |             |             |
+        // |             d             |
+        // | bottomLeft  o bottomRight |
+        // | Sq          w Sq          |
+        // |             n             |
+        // |             E             |
+        // |             |             |
+        // +-------------+-------------+
+             
+        //one boolean for each adjacent square: true if they are contained,
+        //false otherwise
+        boolean topLeftSq, topRightSq, bottomRightSq, bottomLeftSq;
+        //one boolean for each adjacent line segment: true if they are part
+        //of an edge, false otherwise
+        //upE is not needed: we will reach topLeftSq through bottomLeftSq
+        boolean rightE, downE, leftE;
+        rightE = downE = leftE = false;
+        
+        //find which line segments are vertexs
+        for (VerticalEdge v : verticalEdgesStoredByX.get(p.x)) {
+            if (v.contain(new VerticalEdge(p.x, p.y+1, p.y)))
+                downE = true;
+        }
+        for (HorizontalEdge v : horizontalEdgesStoredByY.get(p.y)) {
+            if (v.contain(new HorizontalEdge(p.y, p.x+1, p.x)))
+                rightE = true;
+            if (v.contain(new HorizontalEdge(p.y, p.x, p.x-1)))
+                leftE = true;
+        }
+        
+        //check if bottomRight is contained with usual method
+        bottomRightSq = contains(new Square(p.x, p.y));
+        
+        //bottomLeftSq will be the same as bottomRightSq unless downE is true
+        if (downE) bottomLeftSq = ! bottomRightSq;
+        else bottomLeftSq = bottomRightSq;
+        
+        //topRightSq will be the same as bottomRightSq unless rightE is true
+        if (rightE) topRightSq = ! bottomRightSq;
+        else topRightSq = bottomRightSq;
+        
+        //topLeftSq will be the same as bottomLeftSq unless leftE is true
+        if (leftE) topLeftSq = ! bottomLeftSq;
+        else topLeftSq = bottomLeftSq;
+        
+        List<Boolean> result = new ArrayList<Boolean>();
+        result.add(topLeftSq);
+        result.add(topRightSq);
+        result.add(bottomLeftSq);
+        result.add(bottomRightSq);
+        
+        return result;
+        
+    }
 
     /**
      * Returns whether 2 edges of different areas intersect somewhere in the

@@ -25,15 +25,12 @@ public class FurnitureVariableSetDebugger
     extends FurnitureVariableSet
     implements Observable
 {
-    private boolean shouldStop;
     private List<Observer> debuggers;
     
     public FurnitureVariableSetDebugger(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog)
             throws BusinessException
     {
         super(wishList, furnitureCatalog);
-        
-        shouldStop = false;
         debuggers = new ArrayList();
     }
     
@@ -47,25 +44,30 @@ public class FurnitureVariableSetDebugger
     
     @Override
     protected boolean actualHasMoreValues() {
-        if(shouldStop)
+        if(shouldStop())
             return false; // Force to stop checking current variable
         
         return super.actualHasMoreValues();
     }
     
     @Override
-    synchronized protected Value getNextActualDomainValue() {
+    protected Value getNextActualDomainValue() {
         Value value = super.getNextActualDomainValue();
-        
         notify(new NextValueEvent((FurnitureValue) value));
         
-        try {
-            Debug.println("Pausing solver...");
-            wait();
-            Debug.println("Solver resumed!");
-        }
-        catch(Exception e) {
-            e.printStackTrace();
+        Thread current = Thread.currentThread();
+        
+        synchronized (current) {
+            if(!shouldStop()) { 
+                try {
+                    Debug.println("Pausing solver...");
+                    current.wait();
+                    Debug.println("Solver resumed!");
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
         
         return value;
@@ -88,7 +90,7 @@ public class FurnitureVariableSetDebugger
     @Override
     public void backtracking() throws NoSolutionException
     {
-        if(shouldStop)
+        if(shouldStop())
             throw new NoSolutionException("Solver stopped manually");
         
         super.backtracking();
@@ -104,14 +106,14 @@ public class FurnitureVariableSetDebugger
     
     @Override
     public void notify(Event event) {
-        if(shouldStop)
+        if(shouldStop())
             return; // Stop notifying
         
         for(Observer debugger : debuggers)
             debugger.notify(event);
     }
     
-    public void stop() {
-        shouldStop = true;
+    public boolean shouldStop() {
+        return Thread.currentThread().isInterrupted();
     }
 }

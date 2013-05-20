@@ -7,6 +7,7 @@ import interiores.business.events.backtracking.ValueAssignedEvent;
 import interiores.business.events.backtracking.ValueUnassignedEvent;
 import interiores.business.events.room.DebugRoomDesignStartedEvent;
 import interiores.business.events.room.RoomDesignFinishedEvent;
+import interiores.business.events.room.RoomDesignStartedEvent;
 import interiores.business.models.Orientation;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Business;
@@ -329,16 +330,18 @@ public class RoomMapDebuggerFrame extends JFrame
             
             resume();
         }
-        else {
-            skipForever = false;
-            skipIterations = 1;
-        }
+        else
+            tryPause();
     }//GEN-LAST:event_resumePauseButtonActionPerformed
 
     private void stopButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_stopButtonActionPerformed
     {//GEN-HEADEREND:event_stopButtonActionPerformed
+        tryPause();
+        
+        while(! designController.isSolverPaused())
+            ;
+        
         designController.stop();
-        resume();
         map.clearFurniture();
     }//GEN-LAST:event_stopButtonActionPerformed
 
@@ -373,8 +376,7 @@ public class RoomMapDebuggerFrame extends JFrame
     // End of variables declaration//GEN-END:variables
 
     @Listen(DebugRoomDesignStartedEvent.class)
-    public void debugDesignStarted() {
-        reset();
+    public void showDebug() {
         setVisible(true);
     }
     
@@ -392,7 +394,7 @@ public class RoomMapDebuggerFrame extends JFrame
     }
     
     @Listen(NextValueEvent.class)
-    synchronized public void nextValue(NextValueEvent event)
+    public void nextValue(NextValueEvent event)
     {
         updateCurrentIteration();
         updateValueInfo(event.getPosition(), event.getModelName(), event.getOrientation());
@@ -402,7 +404,10 @@ public class RoomMapDebuggerFrame extends JFrame
         if(skipForever || skipIterations > 1)
         {
             --skipIterations;
-                        
+            
+            while(! designController.isSolverPaused())
+                ;
+            
             designController.resumeSolver();
             
             if(skipIterations % drawIterations == 0)
@@ -448,7 +453,8 @@ public class RoomMapDebuggerFrame extends JFrame
         iterateButton.setEnabled(true);
     }
     
-    private void reset()
+    @Listen(RoomDesignStartedEvent.class)
+    public void reset()
     {
         map.clear();
         
@@ -503,6 +509,11 @@ public class RoomMapDebuggerFrame extends JFrame
     
     private void pause() {
         setIsPaused(true);
+    }
+    
+    private void tryPause() {
+        skipForever = false;
+        skipIterations = 1;
     }
     
     private void resume() {

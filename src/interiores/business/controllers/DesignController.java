@@ -29,7 +29,7 @@ public class DesignController
     private boolean solutionFound = false;
     private long time = -1;
     private String lastSolution;
-    private FurnitureVariableSetDebugger furVarSetDebug;
+    private Thread solver;
     
     /**
      * Creates a particular instance of the design controller
@@ -44,52 +44,61 @@ public class DesignController
      * the automatic design generation algorithm. Then, it tries to solve this algorithm and it such
      * case, returns the solution.
      */
-    public void solve(boolean timeIt)
-            throws BusinessException
-    {
+    public void solve(boolean timeIt) {
         WishList wishList = getWishList();
         FurnitureVariableSet furVarSet = new FurnitureVariableSet(wishList, getActiveCatalog());
         
         computeSolution(furVarSet, timeIt);
     }
     
-    public void debug(boolean timeIt)
-            throws BusinessException
-    {     
+    public void debug(boolean timeIt) {
         WishList wishList = getWishList();
-        furVarSetDebug = new FurnitureVariableSetDebugger(wishList, getActiveCatalog());
+        FurnitureVariableSetDebugger furVarSetDebug = new FurnitureVariableSetDebugger(wishList,
+                getActiveCatalog());
         furVarSetDebug.addListener(this);
         
         notify(new DebugRoomDesignStartedEvent());
         computeSolution(furVarSetDebug, timeIt);
     }
     
-    private void computeSolution(FurnitureVariableSet furVarSet, boolean timeIt)
+    private void computeSolution(final FurnitureVariableSet furVarSet, final boolean timeIt)
     {
-        // @TODO Refactorize. Create a FurnitureVariableSetFactory
-        furVarSet.addPreliminarTrimmer(new ConstantPreliminarTrimmer());
-        furVarSet.addPreliminarTrimmer(new UnaryConstraintsPreliminarTrimmer());
-        furVarSet.addPreliminarTrimmer(new UnfitModelsPreliminarTrimmer());
+        if(isSolving())
+            throw new BusinessException("There is already a search in progress!");
         
-        RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
+        final DesignController me = this;
+        
+        solver = new Thread(){
+            @Override
+            public void run() {
+                // @TODO Refactorize. Create a FurnitureVariableSetFactory
+                furVarSet.addPreliminarTrimmer(new ConstantPreliminarTrimmer());
+                furVarSet.addPreliminarTrimmer(new UnaryConstraintsPreliminarTrimmer());
+                furVarSet.addPreliminarTrimmer(new UnfitModelsPreliminarTrimmer());
 
-        if (timeIt) time = System.nanoTime();
-        // And try to solve it
-        try {
-            notify(new RoomDesignStartedEvent());
-            furVarSet.solve();
-            solutionFound = true;
-            lastSolution = furVarSet.toString();
-            
-            
-            roomDesigned.setDesign(furVarSet.getValues());
-        }
-        catch (NoSolutionException nse) {
-            solutionFound = false;
-        }
+                final RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
+
+                if (timeIt) time = System.nanoTime();
+                // And try to solve it
+                try {
+                    me.notify(new RoomDesignStartedEvent());
+                    furVarSet.solve();
+                    solutionFound = true;
+                    lastSolution = furVarSet.toString();
+
+
+                    roomDesigned.setDesign(furVarSet.getValues());
+                }
+                catch (NoSolutionException nse) {
+                    solutionFound = false;
+                }
+
+                if (timeIt) roomDesigned.setTime(System.nanoTime() - time);
+                me.notify(roomDesigned);
+            }
+        };
         
-        if (timeIt) roomDesigned.setTime(System.nanoTime() - time);
-        notify(roomDesigned);
+        solver.start();
     }
     
     /**
@@ -110,13 +119,24 @@ public class DesignController
     
     public void resumeSolver()
     {
-        synchronized (furVarSetDebug) {
-            furVarSetDebug.notify();
+        synchronized (solver) {
+            solver.notify();
         }
     }
     
     public void stop()
     {
-        furVarSetDebug.stop();
+        resumeSolver();
+        
+        solver.interrupt();
+    }
+    
+    public boolean isSolverPaused() {
+        return (solver.getState() == Thread.State.WAITING);
+    }
+    
+    private boolean isSolving()
+    {
+        return (solver != null && solver.isAlive());
     }
 }

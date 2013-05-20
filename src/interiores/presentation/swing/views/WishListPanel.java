@@ -133,12 +133,7 @@ public class WishListPanel extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 private void solveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_solveButtonActionPerformed
-    new Thread() {
-        @Override
-        public void run() {
-            solveDesign();
-        }
-    }.start();  
+    solveDesign();
 }//GEN-LAST:event_solveButtonActionPerformed
 
 private void selectedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_selectedMouseClicked

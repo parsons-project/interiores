@@ -53,17 +53,16 @@ public class Dimension
         return (depthRange.min <= depth && depthRange.max >= depth);
     }
     
-<<<<<<< HEAD
     public boolean equals(Dimension other) {
         return this.width == other.width && this.depth == other.depth;
-=======
+    }
+
     public boolean contains(Point p) {
         return contains(p, 0);
     }
     
     public boolean contains(Point p, int margin) {
         return (-margin <= p.x && p.x <= (width + margin) && -margin <= p.y && p.y <= (depth + margin));
->>>>>>> gui
     }
     
     @Override

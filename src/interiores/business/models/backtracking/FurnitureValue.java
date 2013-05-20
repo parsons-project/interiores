@@ -1,9 +1,11 @@
 package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
+import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
 import interiores.shared.backtracking.Value;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 /**
  * Represents a specific furniture model on a specific position and a determined orientation.
@@ -12,8 +14,10 @@ import java.awt.Point;
 public class FurnitureValue extends Value {
     
     // Represents a positioned-and-oriented area
-    private OrientedRectangle area;
+    private OrientedRectangle activeArea;
     
+    private Rectangle wholeArea;
+        
     // Represents a specific model
     private FurnitureModel model;
     
@@ -23,36 +27,33 @@ public class FurnitureValue extends Value {
      * @param area
      * @param model 
      */
-    public FurnitureValue(OrientedRectangle area, FurnitureModel model) {
-        this.area = area;
+    public FurnitureValue(Point position, FurnitureModel model, Orientation orientation) {
+             
         this.model = model;
+        this.activeArea = model.getActiveArea(position, orientation);
+        this.wholeArea = activeArea.applySpaceAround(model.getPassiveSpace());
     }
     
     
     public OrientedRectangle getArea() {
-        return area;
+        return activeArea;
+    }
+    
+    public Rectangle getWholeArea() {
+        return wholeArea;
     }
     
     public Point getPosition() {
-        return area.getLocation();
+        return activeArea.getLocation();
     }
     
     public FurnitureModel getModel() {
         return model;
     }
     
-    
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
-
-        result.append("Model Name: " + model.getName());
-        result.append(" Location: (" + area.x + "," + area.y + ")");
-        result.append(" Orientation: " + area.getOrientation() + ";");
-
-        return result.toString();
+        return "Model Name: " + model.getName() + " Location: (" + activeArea.x + "," + activeArea.y + ")" +
+                " Orientation: " + activeArea.getOrientation() + ";";
     }
-
-    
 }

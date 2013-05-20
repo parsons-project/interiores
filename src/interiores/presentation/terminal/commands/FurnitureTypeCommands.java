@@ -5,6 +5,7 @@ import horarios.shared.ElementNotFoundException;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
+import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.annotation.Command;
@@ -42,20 +43,22 @@ public class FurnitureTypeCommands
     
     @Command("Select a furniture type you want for your room")
     public void select()
-            throws ElementNotFoundBusinessException, NoRoomCreatedException, ElementNotFoundException
+            throws ElementNotFoundBusinessException, NoRoomCreatedException, ElementNotFoundException, ForbiddenFurnitureException
     {
         Collection<String> names = readStrings("Enter the name of the furniture types you want to select");
         
-        for(String name : names)
+        for(String name : names) {
+            if(! fTypeController.exists(name))
+                println("Warning: The furniture type " + name + " does not exist in the current catalog.");
+            
             fTypeController.select(name);
+        }
     }
     
     @Command("Remove a furniture type from the list of wanted furniture")
     public void unselect()
             throws NoRoomCreatedException, BusinessException, ElementNotFoundException
-    {
-        selected();
-        
+    {        
         String name = readString("Please, enter the name of the furniture type you want to unselect");
         fTypeController.unselect(name);
     }
@@ -73,4 +76,19 @@ public class FurnitureTypeCommands
             print(types);
         }
     }
+    
+    @Command("List all the types of furniture you can place in the current room")
+    public void selectable()
+            throws NoRoomCreatedException
+    {
+        Collection types = fTypeController.getSelectableFurniture();
+        
+        if(types.isEmpty())
+            println("You have not selected any furniture yet");
+        else {
+            println("These are the furniture types you can select for your room: ");
+            print(types);
+        }
+    }
+    
 }

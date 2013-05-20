@@ -5,8 +5,11 @@
 package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.DesignController;
+import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.NoRoomCreatedException;
+import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.core.Options;
+import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandOptions;
@@ -26,7 +29,9 @@ public class DesignCommands extends AdvancedCommandGroup {
    
    @Command("Generate a valid design for the room")
    @CommandOptions("debug")
-   public void solve(Options options) throws NoRoomCreatedException {
+   public void solve(Options options)
+           throws BusinessException
+   {
        if(options.isEnabled("debug")) {
            println("Solving in debug mode");
            designController.debug();

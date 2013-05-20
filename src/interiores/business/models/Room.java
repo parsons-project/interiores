@@ -3,8 +3,7 @@ package interiores.business.models;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -73,6 +72,26 @@ public class Room
         return type;
     }
     
+    public String getTypeName() {
+        return type.getName();
+    }
+    
+    public Collection<String> getMandatoryFurniture() {
+        return type.getMandatory();
+    }
+    
+    public Collection<String> getForbiddenFurniture() {
+        return type.getForbidden();
+    }
+    
+    public boolean isMandatory(String typeName) {
+        return type.isMandatory(typeName);
+    }
+    
+    public boolean isForbidden(String typeName) {
+        return type.isForbidden(typeName);
+    }
+    
     /**
      * Gets the dimension or size of the room
      * @return Dimension object representing the size of this room
@@ -87,19 +106,5 @@ public class Room
     
     public int getDepth() {
         return size.depth;
-    }
-    
-    /**
-     * Converts the characteristics of the room into a map
-     * @return A Map containing the features that define the room
-     */
-    public Map<String, Object> toMap() {
-        Map<String, Object> map = new HashMap();
-        
-        map.put("type", type.getName());
-        map.put("width", (int) size.width);
-        map.put("depth", (int) size.depth);
-        
-        return map;
     }
 }

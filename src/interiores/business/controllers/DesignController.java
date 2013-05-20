@@ -1,16 +1,16 @@
 package interiores.business.controllers;
 
-import interiores.business.controllers.abstracted.InterioresController;
+import interiores.business.controllers.abstracted.CatalogAccessController;
 import interiores.business.events.room.DebugRoomDesignStartedEvent;
 import interiores.business.events.room.RoomDesignFinishedEvent;
 import interiores.business.events.room.RoomDesignStartedEvent;
-import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.models.Room;
+import interiores.business.models.FurnitureType;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
-import interiores.core.Debug;
+import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.core.Observer;
+import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
 
@@ -20,7 +20,7 @@ import interiores.shared.backtracking.NoSolutionException;
  * @author alvaro
  */
 public class DesignController
-    extends InterioresController
+    extends CatalogAccessController<FurnitureType>
     implements Observer
 {
     
@@ -33,7 +33,7 @@ public class DesignController
      * @param data The data controller that will give access to the objects this controller will use
      */
     public DesignController(JAXBDataController data) {
-        super(data);
+        super(data, AvailableCatalog.FURNITURE_TYPES);
     }
     
     /**
@@ -42,23 +42,19 @@ public class DesignController
      * case, returns the solution.
      */
     public void solve()
-            throws NoRoomCreatedException
+            throws BusinessException
     {
         WishList wishList = getWishList();
-        Room room = getRoom();
-        
-        FurnitureVariableSet furVarSet = new FurnitureVariableSet(room, wishList);
+        FurnitureVariableSet furVarSet = new FurnitureVariableSet(wishList, getActiveCatalog());
         
         computeSolution(furVarSet);
     }
     
     public void debug()
-            throws NoRoomCreatedException
+            throws BusinessException
     {     
         WishList wishList = getWishList();
-        Room room = getRoom();
-        
-        furVarSetDebug = new FurnitureVariableSetDebugger(room, wishList);
+        furVarSetDebug = new FurnitureVariableSetDebugger(wishList, getActiveCatalog());
         furVarSetDebug.addListener(this);
         
         notify(new DebugRoomDesignStartedEvent());

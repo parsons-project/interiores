@@ -5,6 +5,7 @@ import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.FurnitureType;
+import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
@@ -39,15 +40,17 @@ public class FurnitureModelController
      * @param material The material the specific model is made from
      */
     public void add(String furnitureTypeName, String name, int width, int depth, float price,
-            String color, String material)
+            String color, String material, int[] passiveOffsets)
             throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException, BusinessException
     {
         FurnitureType furnitureType = getForWrite(furnitureTypeName);
         
         Dimension size = new Dimension(width, depth);
-        Color modelColor = Color.decode(color);
+        SpaceAround passiveSpace = new SpaceAround(passiveOffsets[0], passiveOffsets[1], passiveOffsets[2],
+                passiveOffsets[3]);
         
-        FurnitureModel furnitureModel = new FurnitureModel(name, size, price, modelColor, material);
+        FurnitureModel furnitureModel = new FurnitureModel(name, size, price, color, material,
+                passiveSpace);
         
         furnitureType.addFurnitureModel(furnitureModel);
     }
@@ -80,5 +83,13 @@ public class FurnitureModelController
         FurnitureType furnitureType = get(furnitureTypeName);
         
         return furnitureType.getFurnitureModels();
+    }
+    
+    private Color decodeColor(String color) throws Exception {
+        try {
+            return (Color) Class.forName("java.awt.Color").getField(color).get(null);
+        } catch (Exception e) {
+            throw new Exception("The color " + color + " is not available.");
+        }
     }
 }

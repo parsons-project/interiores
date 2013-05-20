@@ -1,13 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package interiores.business.models;
 
 import interiores.core.Utils;
+import interiores.core.business.BusinessException;
 import interiores.data.adapters.ColorAdapter;
+import interiores.utils.CoolColor;
 import interiores.utils.Dimension;
 import java.awt.Color;
+import java.awt.Point;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -31,12 +30,15 @@ public class FurnitureModel {
     @XmlElement
     private Dimension size;     // Size of the furniture model
     
+    @XmlElement
+    private SpaceAround passiveSpace; // Passive space requirements for the furniture model
+    
     @XmlAttribute
     private float price;          // Market price of the furniture model
     
     @XmlAttribute
     @XmlJavaTypeAdapter(ColorAdapter.class)
-    private Color color;        // Color of the furniture model
+    private CoolColor color;        // Color of the furniture model
     
     @XmlAttribute
     private String material;    // Material the furniture model is made in
@@ -48,23 +50,22 @@ public class FurnitureModel {
         
     }
     
-    /**
-     * Full constructor that specifies all of the features of a furniture model.
-     * @param type Furniture model's type
-     * @param name Comercial name of the furniture model
-     * @param size Size of the furniture model
-     * @param price Market price of the furniture model
-     * @param color Color of the furniture model
-     * @param material Material the furniture model is made in
-     */
-    public FurnitureModel(String name, Dimension size, float price, Color color,
-            String material)
+    public FurnitureModel(String name, Dimension size, float price, String color, String material)
+            throws BusinessException
+    {
+        this(name, size, price, color, material, null);
+    }
+    
+    public FurnitureModel(String name, Dimension size, float price, String color, String material,
+            SpaceAround passiveSpace)
+            throws BusinessException
     {
         this.name = name;
         this.size = size;
         this.price = price;
-        this.color = color;
+        this.color = CoolColor.getEnum(color);
         this.material = material;
+        this.passiveSpace = passiveSpace;
     }
     
     /**
@@ -99,12 +100,31 @@ public class FurnitureModel {
         return size;
     }
     
+    public OrientedRectangle getActiveArea(Point position, Orientation orientation) {
+        OrientedRectangle activeArea = new OrientedRectangle(position, getSize(), Orientation.S);
+        activeArea.setOrientation(orientation);
+        
+        return activeArea;
+    }
+    
+    public boolean hasPassiveSpace() {
+        return passiveSpace != null;
+    }
+    
+    public SpaceAround getPassiveSpace() {
+        return passiveSpace;
+    }
+    
+    public void setPassiveSpace(SpaceAround passiveSpace) {
+        this.passiveSpace = passiveSpace;
+    }
+    
     /**
      * Gets the color of the furniture model
      * @return Color object representing the color of the model
      */
     public Color getColor() {
-        return color;
+        return color.getColor();
     }
 
     /**
@@ -125,9 +145,7 @@ public class FurnitureModel {
     
     @Override
     public String toString() {
-        String colorString = "r=" + color.getRed() + ",g=" + color.getGreen() + ",b=" + color.getBlue();
-        
-        return Utils.padRight(name, 20) + "Size[" + size + "], Price[" + price + "], Color[" + colorString
-                + "], [Material: " + material + "]";
+        return Utils.padRight(name, 20) + "Size[" + size + "], Price[" + price + "], Color[" + color
+                + "], Material[" + material + "], Passive space[" + passiveSpace + "]";
     }
 }

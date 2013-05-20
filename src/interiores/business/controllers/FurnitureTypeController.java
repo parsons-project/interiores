@@ -3,13 +3,14 @@ package interiores.business.controllers;
 import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
+import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.FurnitureType;
-import interiores.business.models.WantedFurniture;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Range;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -54,10 +55,9 @@ public class FurnitureTypeController
      * @throws NoRoomCreatedException 
      */
     public void select(String name)
-            throws ElementNotFoundBusinessException, NoRoomCreatedException
-    {
-        WantedFurniture wf = new WantedFurniture(get(name));
-        getWishList().addWantedFurniture(wf);
+            throws ElementNotFoundBusinessException, NoRoomCreatedException, ForbiddenFurnitureException
+    {        
+        getWishList().addWantedFurniture(name);
     }
     
     /**
@@ -76,9 +76,25 @@ public class FurnitureTypeController
      * @return A collection containing all the pieces of furniture in the wish list
      * @throws NoRoomCreatedException 
      */
-    public Collection getRoomFurniture()
+    public Collection<String> getRoomFurniture()
             throws NoRoomCreatedException
     {
         return getWishList().getFurnitureNames();
+    }
+
+    /**
+     * Gets all the furniture types that can be placed within the current room.
+     * That is, the set of all furniture types in the catalog save for those marked
+     * as forbidden for the current room type
+     * @return A collection of strings containing the names of the mentioned furniture types
+     * @throws NoRoomCreatedException 
+     */
+    public Collection getSelectableFurniture() throws NoRoomCreatedException {
+        Collection<String> selectable = new ArrayList();
+        for (FurnitureType ft : getCatalogObjects()) selectable.add(ft.getName());
+        
+        Collection<String> forbidden = getRoom().getType().getForbidden();
+        selectable.removeAll(forbidden);
+        return selectable;
     }
 }

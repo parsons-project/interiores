@@ -3,6 +3,8 @@ package interiores.business.controllers.abstracted;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Room;
 import interiores.business.models.WishList;
+import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessController;
 import interiores.core.data.JAXBDataController;
 
@@ -13,16 +15,19 @@ import interiores.core.data.JAXBDataController;
 public class InterioresController
     extends BusinessController
 {
-    protected static final String KEY_ROOM = "room";
     protected static final String KEY_WISH_LIST = "wishList";
     
     public InterioresController(JAXBDataController data) {
         super(data);
     }
     
-    protected WishList getWishList()
+    protected Room getRoom()
             throws NoRoomCreatedException
     {
+        return getWishList().getRoom();
+    }
+    
+    protected WishList getWishList() throws NoRoomCreatedException {
         if(! data.has(KEY_WISH_LIST))
             throw new NoRoomCreatedException();
         
@@ -33,16 +38,11 @@ public class InterioresController
         data.set(KEY_WISH_LIST, wishList);
     }
     
-    protected Room getRoom()
-            throws NoRoomCreatedException
-    {
-        if(! data.has(KEY_ROOM))
-            throw new NoRoomCreatedException();
-        
-        return (Room) data.get(KEY_ROOM);
+    protected NamedCatalog getCatalog(AvailableCatalog catalog) {
+        return (NamedCatalog) data.get(getCatalogKeyData(catalog));
     }
     
-    protected void setRoom(Room room) {
-        data.set(KEY_ROOM, room);
+    protected String getCatalogKeyData(AvailableCatalog catalog) {
+        return catalog.toString() + "Catalog";
     }
 }

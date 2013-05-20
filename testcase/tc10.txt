@@ -1,6 +1,6 @@
 # Create a 300x300 cm Bedroom
 new room bedroom 300 300
 # Select some furniture
-select ft chair bedSingle bedDouble bedSingle
+select ft chair bedSingle
 # Solve in debug mode
 solve design --debug

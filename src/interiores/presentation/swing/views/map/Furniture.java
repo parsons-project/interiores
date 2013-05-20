@@ -34,9 +34,6 @@ public class Furniture
     {
         super.draw(g);
         
-        g.setColor(Color.black);
-        g.draw(rectangle);
-        
         Rectangle2D l = getOrientationMark();
         g.setColor(Color.black);
         g.fill(l);
@@ -54,6 +51,7 @@ public class Furniture
             textColor = Color.white;
         
         g.setColor(textColor);
+        g.draw(rectangle);
         g.drawString(name, (int)rectangle.getX() + startW, (int)rectangle.getY() + startH);
     }
     

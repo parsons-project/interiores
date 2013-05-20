@@ -2,12 +2,10 @@ package interiores.business.models.constraints.unary;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.Domain;
-import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.core.business.BusinessException;
 import interiores.data.adapters.ColorAdapter;
-import java.awt.Color;
-import java.lang.reflect.Field;
+import interiores.utils.CoolColor;
 import java.util.Iterator;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,7 +25,7 @@ public class ColorConstraint
      */
     @XmlAttribute
     @XmlJavaTypeAdapter(ColorAdapter.class)
-    private Color color;
+    private CoolColor color;
     
     public ColorConstraint() {
         
@@ -37,16 +35,14 @@ public class ColorConstraint
      * Creates a color constraint such that only those pieces of furniture matching "color" will satisfy it
      * @param color The color that will define the constraint
      */
-    public ColorConstraint(Color color) {
+    public ColorConstraint(CoolColor color) {
         this.color = color;
     }
     
-    public ColorConstraint(String color) throws BusinessException {
-        try {
-            this.color = (Color) Class.forName("java.awt.Color").getField(color).get(null);
-        } catch (Exception e) {
-            throw new BusinessException("The color " + color + " is not available.");
-        }
+    public ColorConstraint(String color)
+            throws BusinessException
+    {
+        this(CoolColor.getEnum(color));
     }
     
     /**
@@ -58,28 +54,14 @@ public class ColorConstraint
         Iterator it = domain.getModels(0).iterator();
         while (it.hasNext()) {
             FurnitureModel model = (FurnitureModel) it.next();
-            if (!model.getColor().equals(color))
+            if (!model.getColor().equals(color.getColor()))
                 it.remove();
         }
-    }
-    
-    /**
-     * Modifies the color defined for the constraint.
-     * @param newColor The color that will override the previous one
-     */
-    public void changeColor(Color newColor) {
-        color = newColor;
     }
     
     
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
-
-        result.append(this.getClass().getName() + NEW_LINE);
-
-        result.append("Color: " + color + NEW_LINE);
-        return result.toString();
+        return this.getClass().getName() + " Color: " + color;
     }
 }

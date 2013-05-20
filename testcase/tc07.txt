@@ -4,15 +4,15 @@ select ft chair
 select ft chair
 select ft chair
 select ft chair
-add constraint orientation S chair2
-add constraint orientation S chair1
-add constraint orientation S chair4
-add constraint orientation S chair3
-add constraint model ILLSA  chair1
-add constraint model ILLSA  chair2
-add constraint model ILLSA  chair3
-add constraint model ILLSA  chair4
-add constraint distance min 300 chair2 chair4
-add constraint distance min 300 chair3 chair2
-add constraint distance min 300 chair2 chair1
+add uc orientation S chair2
+add uc orientation S chair1
+add uc orientation S chair4
+add uc orientation S chair3
+add uc model ILLSA  chair1
+add uc model ILLSA  chair2
+add uc model ILLSA  chair3
+add uc model ILLSA  chair4
+add bc distance-min 300 chair2 chair4
+add bc distance-min 300 chair3 chair2
+add bc distance-min 300 chair2 chair1
 solve design

@@ -310,7 +310,7 @@ public class RoomMapDebuggerFrame extends SwingFrame
     {//GEN-HEADEREND:event_resumePauseButtonActionPerformed
         if(isPaused) {
             skipForever = true;
-            drawIterations = 100;
+            drawIterations = 1000;
             
             resume();
         }

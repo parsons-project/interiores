@@ -149,6 +149,10 @@ public class RoomType
         cantHave.remove(fTypename);
     }
     
+    public boolean isMandatory(String fTypeName) {
+        return mustHave.contains(fTypeName);
+    }
+    
     /**
      * Checks if a fueniture type is mandatory or not
      * @param ftype The furniture type to be checked
@@ -156,6 +160,10 @@ public class RoomType
      */
     public boolean isMandatory(FurnitureType ftype) {
         return mustHave.contains(ftype.getId());
+    }
+    
+    public boolean isForbidden(String fTypeName) {
+        return cantHave.contains(fTypeName);
     }
     
      /**

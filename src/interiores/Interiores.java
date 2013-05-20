@@ -44,13 +44,15 @@ public class Interiores
         
         // Business layer
         app.addBusiness("room");
-        app.addBusiness("constraint");
+        app.addBusiness("unaryConstraint");
+        app.addBusiness("binaryConstraint");
         app.addBusiness("design");
         app.addBusiness("furnitureModel");
         app.addBusiness("furnitureType");
         app.addBusiness("roomType");
         app.addBusiness("furnitureTypesCatalog");
         app.addBusiness("roomTypesCatalog");
+        app.addBusiness("fixedElement");
         
         // Run, run, run!!!
         app.init();

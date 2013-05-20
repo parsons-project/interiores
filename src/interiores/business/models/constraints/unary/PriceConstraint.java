@@ -2,7 +2,6 @@ package interiores.business.models.constraints.unary;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.Domain;
-import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.UnaryConstraint;
 import java.util.Iterator;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -36,7 +35,6 @@ public class PriceConstraint
     public PriceConstraint(float maxPrice) {
         this.maxPrice = maxPrice;
     }
-   
     
     /**
      * Eliminates models which do not satisfy the constraint.
@@ -52,25 +50,8 @@ public class PriceConstraint
         }
     }
     
-    
-    /**
-     * Modifies the maximum price defined for the constraint
-     * @param newMaxPrice 
-     */
-    public void changePrice(float newMaxPrice) {
-        maxPrice = newMaxPrice;
-    }
-    
-    
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
-
-        result.append(this.getClass().getName() + NEW_LINE);
-
-        result.append("Price: " + maxPrice + NEW_LINE);
-        return result.toString();
+        return this.getClass().getName() + " Max price[" + maxPrice + "]";
     }
-        
 }

@@ -19,7 +19,7 @@ abstract public class CatalogAccessController<I extends PersistentIdObject>
     public CatalogAccessController(JAXBDataController data, AvailableCatalog catalog) {
         super(data);
         
-        this.keyData = getKeyData(catalog);
+        this.keyData = getCatalogKeyData(catalog);
     }
     
     public void setActiveCatalog(NamedCatalog<I> catalog) {
@@ -34,10 +34,6 @@ abstract public class CatalogAccessController<I extends PersistentIdObject>
         return (NamedCatalog<I>) data.get(keyData);
     }
     
-    protected NamedCatalog getCatalog(AvailableCatalog catalog) {
-        return (NamedCatalog) data.get(getKeyData(catalog));
-    }
-    
     protected I getForWrite(String id)
             throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException
     {
@@ -50,7 +46,7 @@ abstract public class CatalogAccessController<I extends PersistentIdObject>
         return getActiveCatalog().get(id);
     }
     
-    private String getKeyData(AvailableCatalog catalog) {
-        return catalog.toString() + "Catalog";
+    public boolean exists(String name) {
+        return getActiveCatalog().hasObject(name);
     }
 }

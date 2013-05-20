@@ -42,10 +42,8 @@ public class RoomController
     {
         RoomType type = get(typeName);
         Room room = new Room(type, width, depth);
-
-        setRoom(room);
+        WishList wishList = new WishList(room);
         
-        WishList wishList = new WishList();
         setWishList(wishList);
         
         notify(new RoomCreatedEvent(room));
@@ -69,10 +67,10 @@ public class RoomController
      */
     public void load(String path) throws JAXBException
     {
-        Room room = (Room) data.load(Room.class, path);
+        WishList wishList = (WishList) data.load(WishList.class, path);
         
-        setRoom(room);
+        setWishList(wishList);
         
-        notify(new RoomLoadedEvent(room));
+        notify(new RoomLoadedEvent(wishList.getRoom()));
     }
 }

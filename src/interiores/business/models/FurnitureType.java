@@ -46,10 +46,16 @@ public class FurnitureType
     @XmlElementWrapper
     private TreeMap<String, FurnitureModel> models;
     
+    @XmlElement
+    private SpaceAround defaultPassiveSpace;
+    
     public FurnitureType() {
         super();
     }
     
+    public FurnitureType(String name, Range widthRange, Range depthRange) {
+        this(name, widthRange, depthRange, new SpaceAround(0, 0, 0, 0));
+    }
     
     /**
      * Creates a new furniture type
@@ -57,11 +63,12 @@ public class FurnitureType
      * @param widthRange A range of valid widths
      * @param depthRange A range of valid depths
      */
-    public FurnitureType(String name, Range widthRange, Range depthRange) {
+    public FurnitureType(String name, Range widthRange, Range depthRange, SpaceAround defaultPassiveSpace) {
         super(name);
         
         this.widthRange = widthRange;
         this.depthRange = depthRange;
+        this.defaultPassiveSpace = defaultPassiveSpace;
         
         unaryConstraints = new ArrayList();
         binaryConstraints = new HashMap();
@@ -125,10 +132,15 @@ public class FurnitureType
         Dimension modelDimension = furnitureModel.getSize();
         
         if (! modelDimension.isBetween(widthRange, depthRange))
-            throw new BusinessException("The furniture model is not inside the range of the type "
-                    + "dimensions. Width range: " + widthRange + " Depth range: " + depthRange);
+            throw new BusinessException("The furniture model " + furnitureModel.getName() + " is not inside "
+                    + "the range of the " + getName() + " type dimensions. Width range: " + widthRange + " "
+                    + "Depth range: " + depthRange);
         
         furnitureModel.setType(identifier);
+        
+        if(! furnitureModel.hasPassiveSpace())
+            furnitureModel.setPassiveSpace(defaultPassiveSpace);
+        
         models.put(furnitureModel.getName(), furnitureModel);
     }
     

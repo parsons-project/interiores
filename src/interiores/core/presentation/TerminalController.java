@@ -124,11 +124,12 @@ public class TerminalController extends PresentationController
      * @param controller Business controller to add
      */
     @Override
-    public void addBusinessController(String name, BusinessController controller)
+    public void addBusinessController(BusinessController controller)
     {
         try
         {
-            Class comGroupClass = Class.forName(commandsPackage + "." + Utils.capitalize(name) +
+            String name = controller.getClass().getSimpleName().replace("Controller", "");
+            Class comGroupClass = Class.forName(commandsPackage + "." + name +
                     "Commands");
             
             if(!comGroupClass.isAnnotationPresent(CommandSubject.class))
@@ -150,7 +151,7 @@ public class TerminalController extends PresentationController
             commandGroup.scanCommands();
             
             commandGroups.put(commandGroupName, commandGroup);
-            super.addBusinessController(name, controller);
+            super.addBusinessController(controller);
         }
         catch(Exception e)
         {

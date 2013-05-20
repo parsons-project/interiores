@@ -73,4 +73,8 @@ public class RoomController
         
         notify(new RoomLoadedEvent(wishList.getRoom()));
     }
+    
+    public int getResolution() {
+        return Room.getResolution();
+    }
 }

@@ -42,7 +42,7 @@ public class DefaultRoomTypesCatalogFactory {
                 new String[]{}
         ));
         
-        catalog.add(new RoomType("livingroom",
+        catalog.add(new RoomType("livingRoom",
                 new Dimension(270, 270),
                 new String[]{"table"},
                 new String[]{"bedSingle", "bedDouble"}

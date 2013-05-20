@@ -25,6 +25,13 @@ public class SpaceAround
                 );
     }
     
+    public boolean isEmpty() {
+        for(int i = 0; i < passiveOffsets.length; ++i)
+            if(passiveOffsets[i] != 0) return false;
+        
+        return true;
+    }
+    
     @Override
     public String toString() {
         return "N: " + passiveOffsets[0] + ", E: " + passiveOffsets[1] + ", S: " + 

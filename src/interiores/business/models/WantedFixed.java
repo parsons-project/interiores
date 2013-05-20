@@ -1,48 +1,50 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package interiores.business.models;
 
-import interiores.business.models.constraints.UnaryConstraint;
-import interiores.business.models.constraints.unary.PositionConstraint;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 /**
- *
+ * This class represents a given FixedElement wanted by the user
  * @author alvaro
  */
-public class WantedFixed {
-    String typeName;
-    PositionConstraint positionConstraint;
-    Dimension size;
+public class WantedFixed extends WantedElement
+{
+    protected Point position;
+    protected Orientation orientation;
+    protected FurnitureModel model;
 
-    WantedFixed(String typeName, Point position, Dimension size) {
-        this.typeName = typeName;
-        this.positionConstraint = new PositionConstraint(position);
-        this.size = size;
-    }
-
-    public String getName() {
-        return typeName;
+    public WantedFixed(String typeName, Dimension size, String color, String material, SpaceAround space) {
+        super(typeName, typeName);
+        model = new FurnitureModel(name, size, 0, color, material, space);
     }
     
-    public Collection<UnaryConstraint> getUnaryConstraints() {
-        return new ArrayList(Arrays.asList(positionConstraint));
+    public void setName(String name) {
+        this.name = name;
     }
     
-    public void setModel() {
-        
+    public Point getPosition() {
+        return position;
     }
     
-    public List<FurnitureModel> getModels() throws BusinessException {
-        return new ArrayList(Arrays.asList(new FurnitureModel(typeName, size, 0, "yellow", "wood", new SpaceAround(0,0,0,0))));
+    public void setPosition(Point position) {
+        this.position = position;
     }
     
+    public Orientation getOrientation() {
+        return orientation;
+    }
+    
+    public void setOrientation(Orientation orientation) {
+        this.orientation = orientation;
+    }
+    
+    /**
+     * For compatibility with a furnitureType wich has furnitureModels
+     * @return A list with one FurnitureModel with the attributes of this wantedFixed element
+     * @throws BusinessException 
+     */
+    public FurnitureModel getModel() {
+        return model;
+    }
 }

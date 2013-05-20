@@ -36,7 +36,7 @@ public class OrientationConstraint
     }
     
     public OrientationConstraint(String orientation) {
-        this(Orientation.valueOf(orientation));
+        this(Orientation.getEnum(orientation));
     }
     
     /**

@@ -1,6 +1,6 @@
 usage() {
-	echo "$0 <testFileName>"
-	exit 1
+        echo "$0 <testFileName>"
+        exit 1
 }
 
 

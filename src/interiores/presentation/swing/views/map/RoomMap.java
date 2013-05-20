@@ -27,6 +27,7 @@ public class RoomMap
     private Map<String, Drawable> elements;
     private Walls walls;
     private String status;
+    private String time;
     
     public RoomMap(int roomWidth, int roomDepth) {
         width = roomWidth + getPadding() * 2;
@@ -34,6 +35,7 @@ public class RoomMap
         elements = new HashMap();
         walls = new Walls(roomWidth, roomDepth);
         status = "";
+        time = "";
     }
     
     public void clearFurniture() {
@@ -87,6 +89,7 @@ public class RoomMap
         
         g.setColor(Color.black);
         g.drawString(status, 10, 20);
+        g.drawString(time, 10, depth - 20);
     }
     
     protected void drawElements(Graphics2D g)
@@ -113,5 +116,28 @@ public class RoomMap
     
     public void setStatus(String status) {
         this.status = status;
+    }
+    
+    public void setTime(long time) {
+        // This might be ugly
+        String[] scale = {"ns", "us", "ms", "s"};
+        int iters = 0;
+        float d_time = time;
+        while (d_time > 100 && iters < 3) {
+            d_time /= 1000.0;
+            ++iters;
+        }
+        String timeString;
+        if (d_time > 100) {
+            //we are in the minutes range
+            int min = (int)d_time / 60;
+            d_time %= 60;
+            timeString = String.valueOf(min) + "m" + String.valueOf(d_time) + "s";
+        }
+        else {
+            timeString = String.valueOf(d_time) + scale[iters];
+        }
+         
+        this.time = "Took: " + timeString;
     }
 }

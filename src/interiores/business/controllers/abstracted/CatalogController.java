@@ -6,7 +6,6 @@ import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.PersistentIdObject;
 import interiores.core.Debug;
-import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import java.util.Collection;
 import java.util.Map;
@@ -34,21 +33,21 @@ abstract public class CatalogController<I extends PersistentIdObject>
         setActiveCatalog(defaultCatalog);
     }
     
-    public void create(String catalogName) throws BusinessException {
+    public void create(String catalogName) {
         if(catalogName.equals(NamedCatalog.getDefaultName()))
             throw new DefaultCatalogOverwriteException();
         
         loadedCatalogs.put(catalogName, new NamedCatalog(catalogName, getActiveCatalog()));
     }
     
-    public void checkout(String catalogName) throws BusinessException {
+    public void checkout(String catalogName) {
         if(! loadedCatalogs.containsKey(catalogName))
             throw new CatalogNotFoundException(catalogName);
         
         setActiveCatalog(loadedCatalogs.get(catalogName));
     }
     
-    public void merge(String catalogName) throws BusinessException {
+    public void merge(String catalogName) {
         NamedCatalog<I> currentCatalog = getActiveCatalog();
         
         if(currentCatalog.isDefault())
@@ -66,7 +65,7 @@ abstract public class CatalogController<I extends PersistentIdObject>
         }
     }
     
-    public void load(String path) throws JAXBException, BusinessException {
+    public void load(String path) throws JAXBException {
         // Bound PersistentIdObject to load all data
         Class[] classes = { NamedCatalog.class, PersistentIdObject.class };
         

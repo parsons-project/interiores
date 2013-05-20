@@ -2,30 +2,40 @@ package interiores.presentation.swing.views;
 
 import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomLoadedEvent;
+import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
-import interiores.presentation.swing.SwingFrame;
+import interiores.core.presentation.swing.SwingException;
+import java.awt.BorderLayout;
+import javax.swing.JFrame;
 
 /**
  *
- * @author hector0193
+ * @author hector
  */
-public class MainAppFrame extends SwingFrame
+public class MainAppFrame extends JFrame
 {
-
+    private SwingController presentation;
+    private WelcomePanel welcome;
+    private RoomMapPanel map;
+    private WishListPanel wishListPanel;
     /**
      * Creates new form MainView
      */
-    public MainAppFrame()
+    public MainAppFrame(SwingController presentation) throws SwingException
     {
         initComponents();
+        setLayout(new BorderLayout());
+        
+        this.presentation = presentation;
+        welcome = presentation.get(WelcomePanel.class);
+        map = presentation.get(RoomMapPanel.class);
+        wishListPanel = presentation.get(WishListPanel.class);
+        
+        add(welcome, BorderLayout.CENTER);       
+        welcome.setVisible(true);
+        pack();
     }
-    
-    @Override
-    public void onLoad() throws Exception
-    {
-        presentation.load(RoomMapFrame.class);
-    }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,120 +46,58 @@ public class MainAppFrame extends SwingFrame
     private void initComponents()
     {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        roomSize = new javax.swing.JLabel();
-        roomType = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        newRoom = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Interiors design");
+        setTitle("Interior design");
         setAlwaysOnTop(true);
 
-        jLabel1.setText("Type:");
+        jMenu1.setText("File");
 
-        jLabel2.setText("Info about the last room created/loaded:");
+        newRoom.setText("New room design...");
+        newRoom.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                newRoomActionPerformed(evt);
+            }
+        });
+        jMenu1.add(newRoom);
 
-        jLabel3.setText("Dimensions:");
+        jMenuBar1.add(jMenu1);
 
-        roomSize.setText("Unknown");
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
 
-        roomType.setText("Unknown");
-
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel2)
-                    .add(layout.createSequentialGroup()
-                        .add(6, 6, 6)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabel3)
-                            .add(jLabel1))
-                        .add(18, 18, 18)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(roomType)
-                            .add(roomSize))))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(jLabel2)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel1)
-                    .add(roomType))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel3)
-                    .add(roomSize))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[])
-    {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(MainAppFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(MainAppFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(MainAppFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(MainAppFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new MainAppFrame().setVisible(true);
-            }
-        });
-    }
+    private void newRoomActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_newRoomActionPerformed
+    {//GEN-HEADEREND:event_newRoomActionPerformed
+        presentation.showNew(NewDesignDialog.class);
+    }//GEN-LAST:event_newRoomActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel roomSize;
-    private javax.swing.JLabel roomType;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem newRoom;
     // End of variables declaration//GEN-END:variables
-    
+
     @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
-    public void updateText(RoomCreatedEvent event)
-    {
-        roomType.setText(event.getType());
-        roomSize.setText(event.getWidth() + " x " + event.getDepth() + " (cm)");
+    public void showMap() {
+        remove(welcome);
+        add(map, BorderLayout.CENTER);
+        add(wishListPanel, BorderLayout.LINE_END);
+        map.setVisible(true);
+        wishListPanel.setVisible(true);
+        wishListPanel.updateSelectable();
+        wishListPanel.updateSelected();
+        validate();
+        pack();
     }
 }

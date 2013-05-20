@@ -8,7 +8,11 @@ import interiores.business.models.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.data.JAXBDataController;
+import interiores.utils.Dimension;
+import interiores.utils.Range;
 import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Business controller covering the operations performed over a type of room
@@ -125,6 +129,23 @@ public class RoomTypeController
         RoomType roomType = get(roomTypeName);
         
         return roomType.getForbidden();
+    }
+    
+    public Map<String, String> getFullNamesMap() {
+        Map<String, String> fullNames = new TreeMap();
+        
+        for(RoomType rt : getCatalogObjects())
+            fullNames.put(rt.getFullName(), rt.getName());
+        
+        return fullNames;
+    }
+    
+    public Range getWidthRange(String roomTypeName) {
+        return get(roomTypeName).getWidthRange();
+    }
+    
+    public Range getDepthRange(String roomTypeName) {
+        return get(roomTypeName).getDepthRange();
     }
     
     /**

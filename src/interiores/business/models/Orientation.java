@@ -1,5 +1,7 @@
 package interiores.business.models;
 
+import interiores.core.business.BusinessException;
+
 
 /**
  * This enumeration class encapsulates orientations. It has 4 possible values
@@ -88,6 +90,14 @@ public enum Orientation {
             default:
                 return "Error"; // This should never happen.
         }
+    }
+    
+    public static Orientation getEnum(String name) {
+        for(Orientation o : values())
+            if(o.name().equalsIgnoreCase(name))
+                return o;
+        
+        throw new BusinessException("There is no orientation known as: " + name);
     }
 
 }

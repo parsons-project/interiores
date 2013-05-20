@@ -3,6 +3,7 @@ package interiores.business.models.backtracking;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
+import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
 import java.awt.Point;
@@ -193,6 +194,7 @@ public class Stage {
                 }
             }
         }
+        
         return trimedPositions;
     }
     

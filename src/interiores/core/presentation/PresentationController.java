@@ -20,7 +20,7 @@ abstract public class PresentationController implements Observer
      * @param name Name to identify the business controller
      * @param controller The business controller to add
      */
-    public void addBusinessController(String name, BusinessController controller)
+    public void addBusinessController(BusinessController controller)
     {
         controller.addListener(this);
     }

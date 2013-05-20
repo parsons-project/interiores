@@ -8,6 +8,9 @@ import interiores.business.models.FurnitureType;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
+import interiores.business.models.backtracking.trimmers.preliminar.ConstantPreliminarTrimmer;
+import interiores.business.models.backtracking.trimmers.preliminar.UnaryConstraintsPreliminarTrimmer;
+import interiores.business.models.backtracking.trimmers.preliminar.UnfitModelsPreliminarTrimmer;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.core.Observer;
 import interiores.core.business.BusinessException;
@@ -23,10 +26,10 @@ public class DesignController
     extends CatalogAccessController<FurnitureType>
     implements Observer
 {
-    
     private boolean solutionFound = false;
+    private long time = -1;
     private String lastSolution;
-    private FurnitureVariableSetDebugger furVarSetDebug;
+    private Thread solver;
     
     /**
      * Creates a particular instance of the design controller
@@ -41,45 +44,61 @@ public class DesignController
      * the automatic design generation algorithm. Then, it tries to solve this algorithm and it such
      * case, returns the solution.
      */
-    public void solve()
-            throws BusinessException
-    {
+    public void solve(boolean timeIt) {
         WishList wishList = getWishList();
         FurnitureVariableSet furVarSet = new FurnitureVariableSet(wishList, getActiveCatalog());
         
-        computeSolution(furVarSet);
+        computeSolution(furVarSet, timeIt);
     }
     
-    public void debug()
-            throws BusinessException
-    {     
+    public void debug(boolean timeIt) {
         WishList wishList = getWishList();
-        furVarSetDebug = new FurnitureVariableSetDebugger(wishList, getActiveCatalog());
+        FurnitureVariableSetDebugger furVarSetDebug = new FurnitureVariableSetDebugger(wishList,
+                getActiveCatalog());
         furVarSetDebug.addListener(this);
         
         notify(new DebugRoomDesignStartedEvent());
-        computeSolution(furVarSetDebug);
+        computeSolution(furVarSetDebug, timeIt);
     }
     
-    private void computeSolution(FurnitureVariableSet furVarSet)
+    private void computeSolution(final FurnitureVariableSet furVarSet, final boolean timeIt)
     {
-        RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
+        if(isSolving())
+            throw new BusinessException("There is already a search in progress!");
         
-        // And try to solve it
-        try {
-            notify(new RoomDesignStartedEvent());
-            furVarSet.solve();
-            solutionFound = true;
-            lastSolution = furVarSet.toString();
-            
-            
-            roomDesigned.setDesign(furVarSet.getValues());
-        }
-        catch (NoSolutionException nse) {
-            solutionFound = false;
-        }
+        final DesignController me = this;
         
-        notify(roomDesigned);
+        solver = new Thread(){
+            @Override
+            public void run() {
+                // @TODO Refactorize. Create a FurnitureVariableSetFactory
+                furVarSet.addPreliminarTrimmer(new ConstantPreliminarTrimmer());
+                furVarSet.addPreliminarTrimmer(new UnaryConstraintsPreliminarTrimmer());
+                furVarSet.addPreliminarTrimmer(new UnfitModelsPreliminarTrimmer());
+
+                final RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
+
+                if (timeIt) time = System.nanoTime();
+                // And try to solve it
+                try {
+                    me.notify(new RoomDesignStartedEvent());
+                    furVarSet.solve();
+                    solutionFound = true;
+                    lastSolution = furVarSet.toString();
+
+
+                    roomDesigned.setDesign(furVarSet.getValues());
+                }
+                catch (NoSolutionException nse) {
+                    solutionFound = false;
+                }
+
+                if (timeIt) roomDesigned.setTime(System.nanoTime() - time);
+                me.notify(roomDesigned);
+            }
+        };
+        
+        solver.start();
     }
     
     /**
@@ -100,13 +119,24 @@ public class DesignController
     
     public void resumeSolver()
     {
-        synchronized (furVarSetDebug) {
-            furVarSetDebug.notify();
+        synchronized (solver) {
+            solver.notify();
         }
     }
     
     public void stop()
     {
-        furVarSetDebug.stop();
+        resumeSolver();
+        
+        solver.interrupt();
+    }
+    
+    public boolean isSolverPaused() {
+        return (solver.getState() == Thread.State.WAITING);
+    }
+    
+    private boolean isSolving()
+    {
+        return (solver != null && solver.isAlive());
     }
 }

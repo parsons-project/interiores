@@ -6,36 +6,22 @@ import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 public class FurnitureVariable
-	implements Variable
+	extends InterioresVariable
 {
-    private String identifier;
-
-    /**
-     * The domain of the variable.
-     */
-    private Domain domain;
-    
-    /**
-     * This list contains the constraints regarding the variable.
-     */
-    public Collection<UnaryConstraint> unaryConstraints;
-
-    /**
-    * Represents the value taken by the variable, in case it is assigned.
-    * Only valid when isAssigned is true.
-    */
-    public Value assignedValue;
-    private boolean isAssigned;
-    
     /**
     * Represents the iteration of the algorithm.
     */
     public int iteration;
+    
+    
+    protected Collection<UnaryConstraint> unaryConstraints;
+    protected Domain domain;
     
     /**
      * Value of the cheapest model
@@ -52,9 +38,8 @@ public class FurnitureVariable
     public FurnitureVariable(String id, List<FurnitureModel> models, Dimension roomSize,
             Collection<UnaryConstraint> unaryConstraints, int variableCount)
     {
-        identifier = id;
+        super(id);
         
-        isAssigned = false;
         iteration = 0;
     
         domain = new Domain(models, roomSize, variableCount);
@@ -64,8 +49,12 @@ public class FurnitureVariable
         //minPrice not calculated yet
         minPrice = -1;
     }
-
     
+    public FurnitureVariable(String id, int variableCount, FurnitureValue value) {
+        this(id, new ArrayList(), new Dimension(0, 0), new ArrayList(), variableCount);
+        
+        assignValue(value);
+    }
     
     /**
      * Resets the iterators so that they will iterate through all of the
@@ -85,20 +74,6 @@ public class FurnitureVariable
     @Override
     public boolean hasMoreValues() {
         return domain.hasMoreValues(iteration);
-    }
-
-    
-    @Override
-    public void assignValue(Value value) {
-        isAssigned = true;
-        assignedValue = value;
-    }
-
-    
-    @Override
-    public void undoAssignValue() {
-        isAssigned = false;
-        assignedValue = null;        
     }
   
     /**
@@ -132,7 +107,7 @@ public class FurnitureVariable
         FurnitureValue value = (FurnitureValue) variable.getAssignedValue();
         Rectangle invalidRectangle = value.getWholeArea();
         
-        domain.stripInvalidRectangle(invalidRectangle, iteration);        
+        domain.trimAndPushInvalidRectangle(invalidRectangle, iteration);        
         
         // 3) move all models
         domain.saveAllModels(iteration);
@@ -155,27 +130,14 @@ public class FurnitureVariable
     public void undoTrimDomain(Variable variable, Value value, int iteration) {
         domain.undoTrimDomain(iteration);       
     }
-
-    
-    @Override
-    public boolean isAssigned() {
-        return isAssigned;
+        
+    public Collection<UnaryConstraint> getUnaryConstraints() {
+        return unaryConstraints;
     }
-
     
-    @Override
-    public Value getAssignedValue() {
-        return assignedValue;
+    public Domain getDomain() {
+        return domain;
     }
-
-    public String getID() {
-        return identifier;
-    }	
-
-    void applyUnaryConstraints() {
-        for (UnaryConstraint constraint : unaryConstraints)
-            constraint.eliminateInvalidValues(domain);
-    }	
     
     /**
      * Returns the price of the cheapest model.
@@ -206,33 +168,6 @@ public class FurnitureVariable
         }
     }
     
-    
-    /**
-     * Eliminates models from the domain such that exists another model
-     * smaller and cheaper.
-     */
-    //pre: iteration == 0
-    void trimUnfitModels() {
-        Iterator<FurnitureModel> evaluatedModelIterator = domain.getModels(0).iterator();
-        while (evaluatedModelIterator.hasNext()) {
-            FurnitureModel evaluatedModel = evaluatedModelIterator.next();
-            boolean hasBeenRemoved = false;
-            Iterator<FurnitureModel> it = evaluatedModelIterator;
-            while (! hasBeenRemoved && it.hasNext()) {
-                FurnitureModel model = it.next();
-                boolean evaluatedModelIsLessFit = (
-                        evaluatedModel.getPrice() >= model.getPrice() &&
-                        evaluatedModel.getSize().depth >= model.getSize().depth &&
-                        evaluatedModel.getSize().width >= model.getSize().width);
-                if (evaluatedModelIsLessFit) {
-                    evaluatedModelIterator.remove();
-                    hasBeenRemoved = true;
-                }
-            }
-        }
-    }
-    
-    
     void trimTooExpensiveModels(float maxPrice) {
         Iterator<FurnitureModel> it = domain.getModels(0).iterator();        
         while (it.hasNext()) {
@@ -249,7 +184,7 @@ public class FurnitureVariable
 
         result.append(this.getClass().getName() + ":" + NEW_LINE);
         result.append("Assigned value: ");
-        if (isAssigned) result.append(assignedValue.toString() + NEW_LINE);
+        if (isAssigned()) result.append(assignedValue.toString() + NEW_LINE);
         else result.append("none" + NEW_LINE);
         
         //result.append(" Models available" + NEW_LINE);

@@ -15,6 +15,7 @@ public class RoomDesignFinishedEvent
 {
     private Map<String, FurnitureValue> design;
     private boolean hasDesign = false;
+    private long time = -1;
     
     public void setDesign(Map<String, FurnitureValue> design)
     {
@@ -22,13 +23,25 @@ public class RoomDesignFinishedEvent
         this.hasDesign = true;
     }
     
+    public void setTime(long time) {
+        this.time = time;
+    }
+    
     public Set<Entry<String, FurnitureValue>> getDesign()
     {
         return design.entrySet();
     }
     
+    public long getTime() {
+        return time;
+    }
+    
     public boolean hasDesign()
     {
         return hasDesign;
+    }
+    
+    public boolean hasTime() {
+        return time > 0;
     }
 }

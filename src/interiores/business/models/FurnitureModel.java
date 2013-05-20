@@ -53,7 +53,7 @@ public class FurnitureModel {
     public FurnitureModel(String name, Dimension size, float price, String color, String material)
             throws BusinessException
     {
-        this(name, size, price, color, material, null);
+        this(name, size, price, color, material, new SpaceAround(0, 0, 0, 0));
     }
     
     public FurnitureModel(String name, Dimension size, float price, String color, String material,
@@ -108,7 +108,7 @@ public class FurnitureModel {
     }
     
     public boolean hasPassiveSpace() {
-        return passiveSpace != null;
+        return !passiveSpace.isEmpty();
     }
     
     public SpaceAround getPassiveSpace() {

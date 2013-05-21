@@ -3,10 +3,8 @@ package interiores.presentation.swing.views;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.RoomController;
 import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
-import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomDesignFinishedEvent;
 import interiores.business.events.room.RoomDesignStartedEvent;
-import interiores.business.events.room.RoomLoadedEvent;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.core.Debug;
@@ -95,7 +93,10 @@ public class RoomMapPanel extends JPanel
     private void formMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseClicked
     {//GEN-HEADEREND:event_formMouseClicked
         requestFocus();
-        map.unselectAll();
+        
+        if(!evt.isControlDown())
+            map.unselectAll();
+        
         map.select(evt.getX(), evt.getY());
         
         repaint();

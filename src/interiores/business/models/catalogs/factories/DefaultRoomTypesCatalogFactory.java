@@ -15,37 +15,45 @@ public class DefaultRoomTypesCatalogFactory {
         catalog.add(new RoomType("bedroom",
                 new Dimension(180, 240),
                 new String[]{},
-                new String[]{"worktop"}
+                new String[]{"sink", "oven", "microwave", "hob", "stove", "extractor", "fridge", "dishwasher", "washer",
+                             "bidet", "washbasin", "toilet", "bathtub", "shower", "dryer", "worktop", "wringer"}
         ));
         
         catalog.add(new RoomType("kitchen",
                 new Dimension(120, 240),
-                new String[]{},
-                new String[]{"bedSingle", "bedDouble"}
+                new String[]{"sink", "fridge", "wringer"},
+                new String[]{"bedSingle", "bedDouble", "tableBedside", "washer", "bidet", "washbasin", "toilet", 
+                             "bathtub", "shower", "dryer"}
         ));
         
         catalog.add(new RoomType("bathroom",
                 new Dimension(100, 210),
-                new String[]{},
-                new String[]{"bedSingle", "bedDouble", "armchair", "sofa", "worktop"}
+                new String[]{"mirror", "bidet", "washbasin", "toilet"},
+                new String[]{"bedSingle", "bedDouble", "tableBedside", "sink", "oven", "microwave", "hob", "stove",
+                             "extractor", "fridge", "dishwasher", "armchair", "worktop", "wringer","armchair", "sofa"}
         ));
         
         catalog.add(new RoomType("lounge",
                 new Dimension(270, 270),
                 new String[]{},
-                new String[]{"bedSingle", "bedDouble", "worktop"}
+                new String[]{"bedSingle", "bedDouble", "sink", "oven", "microwave", "hob", "stove", "extractor",
+                             "fridge", "dishwasher", "washer", "bidet", "washbasin", "toilet", "bathtub", "shower",
+                             "dryer", "worktop", "wringer"}
         ));
         
-        catalog.add(new RoomType("study",
+        catalog.add(new RoomType("studio",
                 new Dimension(180, 200),
                 new String[]{},
-                new String[]{}
+                new String[]{"sink", "oven", "microwave", "hob", "stove", "extractor", "fridge", "dishwasher", "washer",
+                             "bidet", "washbasin", "toilet", "bathtub", "shower", "dryer", "worktop", "wringer"}
         ));
         
         catalog.add(new RoomType("livingRoom",
                 new Dimension(270, 270),
-                new String[]{"table"},
-                new String[]{"bedSingle", "bedDouble"}
+                new String[]{"table", "chair"},
+                new String[]{"bedSingle", "bedDouble", "tableBedside", "cabinet", "sink", "oven", "hob", "stove",
+                             "extractor", "fridge", "dishwasher", "washer", "bidet", "washbasin", "toilet", "bathtub",
+                             "shower", "dryer", "wringer"  }
         ));
         
         return catalog;

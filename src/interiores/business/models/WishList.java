@@ -134,7 +134,12 @@ public class WishList
         
         if (! map.containsKey(elementId)) 
             return false;
+        
         map.remove(elementId);
+        
+        // Remove binary constraints!
+        binaryConstraints.removeConstraints(elementId);
+        
         return true;
     }
     

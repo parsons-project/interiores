@@ -79,6 +79,15 @@ public class BinaryConstraintSet
         return bcaSet;
     }
     
+    public void removeConstraints(String furnitureId) {
+        String keyToken = String.format(KEY_TOKEN_FORMAT, furnitureId);
+        
+        for(String key : binaryConstraints.keySet()) {
+            if(key.contains(keyToken))
+                binaryConstraints.remove(key);
+        }
+    }
+    
     public Collection<BinaryConstraintAssociation> getConstraints() {
         return binaryConstraints.values();
     }

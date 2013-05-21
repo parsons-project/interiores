@@ -77,4 +77,12 @@ public class RoomController
     public int getResolution() {
         return Room.getResolution();
     }
+    
+    public int getWidth() {
+        return getRoom().getWidth();
+    }
+    
+    public int getDepth() {
+        return getRoom().getDepth();
+    }
 }

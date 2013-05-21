@@ -31,7 +31,13 @@ public class WishListPanel extends JPanel {
         furnitureTypeController = presentation.getBusinessController(FurnitureTypeController.class);
         listModel = new DefaultListModel();
         
+        initLists();
+    }
+    
+    private void initLists() {
         selected.setModel(listModel);
+        updateSelectable();
+        updateSelected();
     }
     
     private void solveDesign() {
@@ -50,8 +56,8 @@ public class WishListPanel extends JPanel {
         for (String sf: selectableFurniture) {
             root.add(new DefaultMutableTreeNode(sf));
         }
-
-    }    
+    }
+    
     public void updateSelected() {
         listModel.clear();
         

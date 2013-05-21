@@ -18,6 +18,9 @@ public class MainAppFrame extends JFrame
     private WelcomePanel welcome;
     private RoomMapPanel map;
     private WishListPanel wishListPanel;
+    private RoomTypeCatalogPanel rtCatalogPanel;
+    
+    
     /**
      * Creates new form MainView
      */
@@ -30,6 +33,7 @@ public class MainAppFrame extends JFrame
         welcome = presentation.get(WelcomePanel.class);
         map = presentation.get(RoomMapPanel.class);
         wishListPanel = presentation.get(WishListPanel.class);
+        rtCatalogPanel = presentation.get(RoomTypeCatalogPanel.class);
         
         add(welcome, BorderLayout.CENTER);       
         welcome.setVisible(true);
@@ -43,13 +47,13 @@ public class MainAppFrame extends JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         newRoom = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        rtCatalog = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Interior design");
@@ -58,10 +62,8 @@ public class MainAppFrame extends JFrame
         jMenu1.setText("File");
 
         newRoom.setText("New room design...");
-        newRoom.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        newRoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 newRoomActionPerformed(evt);
             }
         });
@@ -70,6 +72,15 @@ public class MainAppFrame extends JFrame
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
+
+        rtCatalog.setText("Room type catalog");
+        rtCatalog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rtCatalogActionPerformed(evt);
+            }
+        });
+        jMenu2.add(rtCatalog);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -81,13 +92,25 @@ public class MainAppFrame extends JFrame
     {//GEN-HEADEREND:event_newRoomActionPerformed
         presentation.showNew(NewDesignDialog.class);
     }//GEN-LAST:event_newRoomActionPerformed
+
+    private void rtCatalogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rtCatalogActionPerformed
+        //remove(welcome);
+        add(rtCatalogPanel);
+        rtCatalogPanel.setVisible(true);
+        validate();
+        pack();
+    }//GEN-LAST:event_rtCatalogActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem newRoom;
+    private javax.swing.JMenuItem rtCatalog;
     // End of variables declaration//GEN-END:variables
 
+    
+    
     @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
     public void showMap() {
         remove(welcome);

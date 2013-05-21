@@ -49,7 +49,7 @@ public class SwingController extends PresentationController
     }
     
     /**
-     * Recieves an event and notifies it to the views that are listening to that event.
+     * Receives an event and notifies it to the views that are listening to that event.
      * @param name Name of the event
      * @param data Data related with the event
      */

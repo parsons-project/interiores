@@ -2,7 +2,6 @@ package interiores.presentation.swing.views;
 
 import interiores.core.presentation.SwingController;
 import javax.swing.JPanel;
-
 /**
  *
  * @author hector
@@ -26,8 +25,7 @@ public class WelcomePanel extends JPanel
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel1 = new javax.swing.JLabel();
@@ -46,10 +44,8 @@ public class WelcomePanel extends JPanel
         add(jLabel1, gridBagConstraints);
 
         jButton1.setText("Create a new room design...");
-        jButton1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });

@@ -3,6 +3,7 @@ package interiores.presentation.swing.views.map;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
+import interiores.utils.CoolColor;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -15,13 +16,12 @@ import java.awt.geom.Rectangle2D;
 public class Furniture
     extends RoomElement
 {
-    private String name;
+    private static final Color COLOR_UNSELECTED = CoolColor.BLACK.getColor();
+    private static final Color COLOR_SELECTED = CoolColor.BLUE.getColor();
     
     public Furniture(String name, OrientedRectangle area, Color color)
     {
-        super(area, color);
-        
-        this.name = name;
+        super(name, area, color);
     }
     
     public void setOrientation(Orientation o)
@@ -45,14 +45,17 @@ public class Furniture
         int startW = ((int)rectangle.getWidth())/2 - stringW/2;
         int startH = ((int)rectangle.getHeight())/2 + stringH/2;
         
-        Color textColor = Color.black;
+        Color drawColor = (isSelected()) ? COLOR_SELECTED : COLOR_UNSELECTED;
         
-        if(color == textColor)
-            textColor = Color.white;
+        if(color == drawColor)
+            drawColor = Color.white;
+              
+        g.setColor(drawColor);
         
-        g.setColor(textColor);
         g.draw(rectangle);
         g.drawString(name, (int)rectangle.getX() + startW, (int)rectangle.getY() + startH);
+        
+        Debug.println(name + " drawn at " + rectangle.getLocation());
     }
     
     private Rectangle2D getOrientationMark()
@@ -84,7 +87,7 @@ public class Furniture
                 rW = 1;
                 rH = 6;
         }
-        Debug.println(rX + " " + rY);
+        
         return new Rectangle((int) rX, (int) rY, rW, rH);
     }
 }

@@ -1,6 +1,5 @@
 package interiores.presentation.swing.views.map;
 
-import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -15,7 +14,7 @@ import java.util.Map;
  * @author hector
  */
 public class RoomMapDebugger
-    extends RoomMap
+    extends InteractiveRoomMap
 {
     private static final Color COLOR_GRID = Color.decode("#EEEEEE");
     private static final String[] COLOR_POINTS = new String[]{

@@ -4,8 +4,11 @@ import interiores.business.controllers.RoomController;
 import interiores.business.controllers.RoomTypeController;
 import interiores.core.presentation.SwingController;
 import interiores.utils.Range;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import javax.swing.JDialog;
+import javax.swing.JList;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
@@ -33,7 +36,53 @@ public class NewDesignDialog extends JDialog
         for(String fullName : roomTypes.keySet())
             roomTypesList.addItem(fullName);
         
+        setCatalogNameLabel(roomTypesController.getNameActiveCatalog());
+        
+        updateDialog();
+    }
+    
+    private void updateDialog() {
         updateSpinners();
+        updateMandatoryList();
+        updateForbiddenList();
+    }
+    
+    private void setCatalogNameLabel(String string) {
+        catalogNameLabel.setText(string);
+    }
+    
+    private void updateMandatoryList() {
+        String value = (String) roomTypesList.getSelectedItem();
+        
+        if(value != null) {        
+            String typeId = roomTypes.get(value);
+     
+            Collection<String> mandatory = roomTypesController.getMandatory(typeId);
+            setListValues(mandatoryList, mandatory);
+        }
+        else {
+            setListValues(mandatoryList, new ArrayList());
+        }
+  
+    }
+
+    private void updateForbiddenList() {
+        String value = (String) roomTypesList.getSelectedItem();
+        
+        if(value != null) {
+            String typeId = roomTypes.get(value);
+     
+            Collection<String> forbidden = roomTypesController.getForbidden(typeId);
+            setListValues(forbiddenList, forbidden);
+        }    
+        else {
+            setListValues(forbiddenList, new ArrayList());
+        }
+        
+    }
+    
+    private void setListValues(JList jlist, Collection<String> strings) {
+        jlist.setListData(strings.toArray(new String[strings.size()]));
     }
     
     private void updateSpinners() {
@@ -53,6 +102,7 @@ public class NewDesignDialog extends JDialog
         
         setSpinnerModel(widthField, widthRange);
         setSpinnerModel(depthField, depthRange);
+        
     }
     
     private void setSpinnerModel(JSpinner spinner, Range range) {
@@ -70,8 +120,7 @@ public class NewDesignDialog extends JDialog
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -81,6 +130,14 @@ public class NewDesignDialog extends JDialog
         newDesignButton = new javax.swing.JButton();
         widthField = new javax.swing.JSpinner();
         depthField = new javax.swing.JSpinner();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        forbiddenList = new javax.swing.JList();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        mandatoryList = new javax.swing.JList();
+        jLabel6 = new javax.swing.JLabel();
+        catalogNameLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Create a new room design...");
@@ -92,29 +149,23 @@ public class NewDesignDialog extends JDialog
 
         jLabel3.setText("Type:");
 
-        roomTypesList.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        roomTypesList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 roomTypesListActionPerformed(evt);
             }
         });
 
         jButton1.setText("Cancel");
-        jButton1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
         newDesignButton.setText("New design");
         newDesignButton.setEnabled(false);
-        newDesignButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        newDesignButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 newDesignButtonActionPerformed(evt);
             }
         });
@@ -123,6 +174,18 @@ public class NewDesignDialog extends JDialog
 
         depthField.setEnabled(false);
 
+        jLabel4.setText("Mandatory:");
+
+        jLabel5.setText("Forbidden:");
+
+        forbiddenList.setFocusable(false);
+        jScrollPane1.setViewportView(forbiddenList);
+
+        mandatoryList.setFocusable(false);
+        jScrollPane2.setViewportView(mandatoryList);
+
+        jLabel6.setText("Active catalog:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -130,38 +193,65 @@ public class NewDesignDialog extends JDialog
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel1))
+                        .addGap(17, 17, 17)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(depthField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                            .addComponent(widthField, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                            .addComponent(roomTypesList, 0, 300, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(catalogNameLabel))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel4)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(roomTypesList, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(widthField)
-                            .addComponent(depthField)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
-                        .addComponent(newDesignButton)))
+                            .addComponent(jLabel5)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(newDesignButton)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(catalogNameLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(roomTypesList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(widthField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(widthField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(depthField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(depthField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, 0, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(newDesignButton))
@@ -178,7 +268,7 @@ public class NewDesignDialog extends JDialog
 
     private void roomTypesListActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_roomTypesListActionPerformed
     {//GEN-HEADEREND:event_roomTypesListActionPerformed
-        updateSpinners();
+        updateDialog();
     }//GEN-LAST:event_roomTypesListActionPerformed
 
     private void newDesignButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_newDesignButtonActionPerformed
@@ -192,13 +282,22 @@ public class NewDesignDialog extends JDialog
     }//GEN-LAST:event_newDesignButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel catalogNameLabel;
     private javax.swing.JSpinner depthField;
+    private javax.swing.JList forbiddenList;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JList mandatoryList;
     private javax.swing.JButton newDesignButton;
     private javax.swing.JComboBox roomTypesList;
     private javax.swing.JSpinner widthField;
     // End of variables declaration//GEN-END:variables
+
 }

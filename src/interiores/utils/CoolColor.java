@@ -30,10 +30,7 @@ public enum CoolColor {
     private Color color;
     
     private CoolColor(String hexColor) {
-        if(hexColor.equals(BLACK_HEX))
-            color = Color.black;
-        else
-            this.color = Color.decode(hexColor);
+        this.color = Color.decode(hexColor);
     }
     
     public Color getColor() {

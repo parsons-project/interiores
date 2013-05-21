@@ -19,7 +19,6 @@ public class SwingExceptionHandler
         });
     }
     
-    
     public static void handleException(Throwable e) {
         Debug.println("Handling uncaught exception with SwingExceptionHandler");
         JOptionPane exceptionPane = new JOptionPane(e.getMessage(), JOptionPane.ERROR_MESSAGE);

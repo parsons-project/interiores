@@ -104,7 +104,6 @@ public class RoomMapPanel extends JPanel
 
     private void formKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_formKeyReleased
     {//GEN-HEADEREND:event_formKeyReleased
-        Debug.println("Key event");
         if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
             for(String id : map.getSelected())
                 ftController.unselect(id);
@@ -154,6 +153,7 @@ public class RoomMapPanel extends JPanel
         
         if (event.hasTime())
             map.setTime(event.getTime());
+        
         repaint();
     }
     

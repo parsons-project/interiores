@@ -2,9 +2,13 @@ package interiores.presentation.swing.views;
 
 import interiores.business.controllers.DesignController;
 import interiores.business.controllers.FurnitureTypeController;
+import interiores.business.events.furniture.FurnitureTypeSelectedEvent;
+import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
+import interiores.core.presentation.annotation.Listen;
 import java.util.Collection;
+import javax.swing.DefaultListModel;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -17,6 +21,7 @@ public class WishListPanel extends JPanel {
 
     private DesignController designController;
     private FurnitureTypeController furnitureTypeController;
+    private DefaultListModel listModel;
     
     /** Creates new form WishListPanel */
     public WishListPanel(SwingController presentation) {
@@ -24,6 +29,9 @@ public class WishListPanel extends JPanel {
         
         designController = presentation.getBusinessController(DesignController.class);
         furnitureTypeController = presentation.getBusinessController(FurnitureTypeController.class);
+        listModel = new DefaultListModel();
+        
+        selected.setModel(listModel);
     }
     
     private void solveDesign() {
@@ -45,8 +53,20 @@ public class WishListPanel extends JPanel {
 
     }    
     public void updateSelected() {
-        Collection<String> selectedFurniture = furnitureTypeController.getRoomFurniture();
-        selected.setListData(selectedFurniture.toArray(new String[selectedFurniture.size()]));
+        listModel.clear();
+        
+        for(String element : furnitureTypeController.getRoomFurniture())
+             listModel.addElement(element);
+    }
+    
+    @Listen(FurnitureTypeSelectedEvent.class)
+    public void addSelected(FurnitureTypeSelectedEvent evt) {
+        listModel.addElement(evt.getName());
+    }
+    
+    @Listen(FurnitureTypeUnselectedEvent.class)
+    public void removeSelected(FurnitureTypeUnselectedEvent evt) {
+        listModel.removeElement(evt.getName());
     }
     /** This method is called from within the constructor to
      * initialize the form.
@@ -143,7 +163,6 @@ private void selectedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
             String type = (String) selected.getModel().getElementAt(index);
             Debug.println("Removing: " + type);
             furnitureTypeController.unselect(type);
-            updateSelected();
         }
     }
 }//GEN-LAST:event_selectedMouseClicked
@@ -160,7 +179,6 @@ private void selectableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:
                 Debug.println("Adding a: " + nodeInfo);
                 furnitureTypeController.select(nodeInfo);
             }
-            updateSelected();
         }
     }
 }//GEN-LAST:event_selectableMouseClicked

@@ -3,7 +3,9 @@ package interiores.presentation.swing.views.map;
 import interiores.core.Debug;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  *
@@ -38,6 +40,15 @@ public class InteractiveRoomMap
             element.unselect();
         
         selected.clear();
+    }
+    
+    public Collection<String> getSelected() {
+        Collection<String> names = new TreeSet();
+        
+        for(RoomElement element : selected)
+            names.add(element.getName());
+        
+        return names;
     }
     
     public Point normalize(int x, int y) {

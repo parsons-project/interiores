@@ -1,5 +1,7 @@
 package interiores.presentation.swing.views;
 
+import interiores.business.controllers.FurnitureTypeController;
+import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
 import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomDesignFinishedEvent;
 import interiores.business.events.room.RoomDesignStartedEvent;
@@ -16,6 +18,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.util.Map.Entry;
 import javax.swing.JPanel;
 
@@ -25,6 +28,7 @@ import javax.swing.JPanel;
  */
 public class RoomMapPanel extends JPanel
 {
+    private FurnitureTypeController ftController;
     private InteractiveRoomMap map;
     private RoomMapDebuggerFrame debuggerGui;
 
@@ -34,7 +38,8 @@ public class RoomMapPanel extends JPanel
     public RoomMapPanel(SwingController presentation) throws Exception
     {
         initComponents();
-                
+        
+        ftController = presentation.getBusinessController(FurnitureTypeController.class);
         map = null;
         
         if(Debug.isEnabled())
@@ -57,16 +62,33 @@ public class RoomMapPanel extends JPanel
                 formMouseClicked(evt);
             }
         });
+        addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyReleased(java.awt.event.KeyEvent evt)
+            {
+                formKeyReleased(evt);
+            }
+        });
         setLayout(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseClicked
     {//GEN-HEADEREND:event_formMouseClicked
+        requestFocus();
         map.unselectAll();
         map.select(evt.getX(), evt.getY());
         
         repaint();
     }//GEN-LAST:event_formMouseClicked
+
+    private void formKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_formKeyReleased
+    {//GEN-HEADEREND:event_formKeyReleased
+        Debug.println("Key event");
+        if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            for(String id : map.getSelected())
+                ftController.unselect(id);
+        }
+    }//GEN-LAST:event_formKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
@@ -133,5 +155,11 @@ public class RoomMapPanel extends JPanel
     
     public void addFurniture(String name, OrientedRectangle area, Color color) {
         map.addFurniture(name, area, color);
+    }
+    
+    @Listen(FurnitureTypeUnselectedEvent.class)
+    public void removeFurniture(FurnitureTypeUnselectedEvent evt) {
+        map.removeFurniture(evt.getName());
+        repaint();
     }
 }

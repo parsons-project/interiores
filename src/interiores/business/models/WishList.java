@@ -62,16 +62,16 @@ public class WishList
      * Add a new WantedFurniture 
      * @param f the WantedFurniture to add
      */
-    public void addWantedFurniture(String typeName)
+    public String addWantedFurniture(String typeName)
             throws ForbiddenFurnitureException
     {
         if(room.isForbidden(typeName))
             throw new ForbiddenFurnitureException(typeName, room.getTypeName());
         
-        addWithoutChecking(typeName);
+        return addWithoutChecking(typeName);
     }
     
-    private void addWithoutChecking(String typeName) {
+    private String addWithoutChecking(String typeName) {
         if(typesCount.containsKey(typeName))
             typesCount.put(typeName, typesCount.get(typeName) + 1);
         else
@@ -79,6 +79,8 @@ public class WishList
         
         String wantedFurnitureId = nextIdFor(typeName, furniture);
         furniture.put(wantedFurnitureId, new WantedFurniture(wantedFurnitureId, typeName));
+        
+        return wantedFurnitureId;
     }
     
     /**

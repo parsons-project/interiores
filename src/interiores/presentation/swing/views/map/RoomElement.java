@@ -14,20 +14,26 @@ public class RoomElement
 {
     private static final Color DEFAULT_COLOR = Walls.getColor();
     
+    protected String name;
     protected OrientedRectangle rectangle;
     protected Color color;
     private boolean isSelected;
     
-    public RoomElement(OrientedRectangle area) {
-        this(area, DEFAULT_COLOR);
+    public RoomElement(String name, OrientedRectangle area) {
+        this(name, area, DEFAULT_COLOR);
     }
     
-    public RoomElement(OrientedRectangle area, Color color) {
+    public RoomElement(String name, OrientedRectangle area, Color color) {
+        this.name = name;
         rectangle = (OrientedRectangle) area.clone();
         
         rectangle.translate(RoomMap.getPadding(), RoomMap.getPadding());
         this.color = color;
         isSelected = false;
+    }
+    
+    public String getName() {
+        return name;
     }
     
     public void setColor(String c)

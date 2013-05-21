@@ -19,13 +19,9 @@ public class Furniture
     private static final Color COLOR_UNSELECTED = CoolColor.BLACK.getColor();
     private static final Color COLOR_SELECTED = CoolColor.BLUE.getColor();
     
-    private String name;
-    
     public Furniture(String name, OrientedRectangle area, Color color)
     {
-        super(area, color);
-        
-        this.name = name;
+        super(name, area, color);
     }
     
     public void setOrientation(Orientation o)

@@ -1,6 +1,8 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogElementController;
+import interiores.business.events.furniture.FurnitureTypeSelectedEvent;
+import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.ForbiddenFurnitureException;
@@ -57,7 +59,9 @@ public class FurnitureTypeController
     public void select(String name)
             throws ElementNotFoundBusinessException, NoRoomCreatedException, ForbiddenFurnitureException
     {        
-        getWishList().addWantedFurniture(name);
+        String id = getWishList().addWantedFurniture(name);
+        
+        notify(new FurnitureTypeSelectedEvent(id));
     }
     
     /**
@@ -69,6 +73,8 @@ public class FurnitureTypeController
             throws BusinessException
     {
         getWishList().removeWantedFurniture(name);
+        
+        notify(new FurnitureTypeUnselectedEvent(name));
     }
     
     /**

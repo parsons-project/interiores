@@ -9,6 +9,7 @@ import interiores.business.models.backtracking.FurnitureValue;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
+import interiores.presentation.swing.views.map.InteractiveRoomMap;
 import interiores.presentation.swing.views.map.RoomMap;
 import interiores.presentation.swing.views.map.RoomMapDebugger;
 import java.awt.Color;
@@ -24,7 +25,7 @@ import javax.swing.JPanel;
  */
 public class RoomMapPanel extends JPanel
 {
-    private RoomMap map;
+    private InteractiveRoomMap map;
     private RoomMapDebuggerFrame debuggerGui;
 
     /**
@@ -49,8 +50,24 @@ public class RoomMapPanel extends JPanel
     private void initComponents()
     {
 
+        addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                formMouseClicked(evt);
+            }
+        });
         setLayout(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseClicked
+    {//GEN-HEADEREND:event_formMouseClicked
+        map.unselectAll();
+        map.select(evt.getX(), evt.getY());
+        
+        repaint();
+    }//GEN-LAST:event_formMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 
@@ -78,7 +95,7 @@ public class RoomMapPanel extends JPanel
             debuggerGui.setDebuggee(this);
         }
         else
-            map = new RoomMap(width, depth); // A simple room map on production
+            map = new InteractiveRoomMap(width, depth); // A simple room map on production
         
         setPreferredSize(new Dimension(map.getWidth(), map.getHeight()));
         repaint();

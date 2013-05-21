@@ -7,6 +7,7 @@ import interiores.presentation.swing.views.map.doors.LeftDoor;
 import interiores.presentation.swing.views.map.doors.RightDoor;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,14 +18,13 @@ import java.util.Map;
 public class RoomMap
     implements Drawable
 {
-
     protected static final int RESOLUTION = 5;
     protected static final int PADDING = 10;
     protected static final double SCALE = 1.4;
     
     protected int width;
     protected int depth;
-    private Map<String, Drawable> elements;
+    private Map<String, RoomElement> elements;
     private Walls walls;
     private String status;
     private String time;
@@ -72,6 +72,15 @@ public class RoomMap
     
     public void removeFurniture(String name) {
         elements.remove(name);
+    }
+    
+    public RoomElement getElementAt(int x, int y) {
+        for(RoomElement element : elements.values()) {
+            if(element.contains(new Point(x, y)))
+                return element;
+        }
+        
+        return null;
     }
     
     @Override

@@ -4,6 +4,7 @@
  */
 package interiores.presentation.swing.views;
 
+import interiores.business.controllers.RoomTypeController;
 import interiores.core.presentation.SwingController;
 
 /**
@@ -12,11 +13,19 @@ import interiores.core.presentation.SwingController;
  */
 public class RoomTypeCatalogPanel extends javax.swing.JPanel {
 
+     private SwingController swing;
+     private RoomTypeController roomTypesController;
+    
+    
     /**
      * Creates new form RoomTypeCatalogPanel
      */
     public RoomTypeCatalogPanel(SwingController presentation) {
         initComponents();
+        
+        this.swing = presentation;
+        roomTypesController = swing.getBusinessController(RoomTypeController.class);
+        
     }
 
     /**
@@ -27,28 +36,157 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        title1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel8 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
 
-        jLabel1.setText("Room Type Catalog");
+        title1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
+        title1.setText("Room types catalog");
+        title1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        jPanel1.setAutoscrolls(true);
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0))));
+        jPanel6.setMaximumSize(new java.awt.Dimension(300, 100));
+        jPanel6.setMinimumSize(new java.awt.Dimension(300, 100));
+
+        jLabel5.setText("jLabel1");
+
+        org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(129, Short.MAX_VALUE)
+                .add(jLabel5)
+                .add(120, 120, 120))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(34, Short.MAX_VALUE)
+                .add(jLabel5)
+                .add(44, 44, 44))
+        );
+
+        jPanel1.add(jPanel6);
+
+        jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0))));
+        jPanel7.setMaximumSize(new java.awt.Dimension(300, 100));
+        jPanel7.setMinimumSize(new java.awt.Dimension(300, 100));
+
+        jLabel6.setText("jLabel1");
+
+        org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap(129, Short.MAX_VALUE)
+                .add(jLabel6)
+                .add(120, 120, 120))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap(34, Short.MAX_VALUE)
+                .add(jLabel6)
+                .add(44, 44, 44))
+        );
+
+        jPanel1.add(jPanel7);
+
+        jPanel8.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0))));
+        jPanel8.setMaximumSize(new java.awt.Dimension(300, 100));
+        jPanel8.setMinimumSize(new java.awt.Dimension(300, 100));
+
+        jLabel7.setText("jLabel1");
+
+        org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap(129, Short.MAX_VALUE)
+                .add(jLabel7)
+                .add(120, 120, 120))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap(34, Short.MAX_VALUE)
+                .add(jLabel7)
+                .add(44, 44, 44))
+        );
+
+        jPanel1.add(jPanel8);
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0))));
+        jPanel5.setMaximumSize(new java.awt.Dimension(300, 100));
+        jPanel5.setMinimumSize(new java.awt.Dimension(300, 100));
+
+        jLabel4.setText("jLabel1");
+
+        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(129, Short.MAX_VALUE)
+                .add(jLabel4)
+                .add(120, 120, 120))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(34, Short.MAX_VALUE)
+                .add(jLabel4)
+                .add(44, 44, 44))
+        );
+
+        jPanel1.add(jPanel5);
+
+        jScrollPane1.setViewportView(jPanel1);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(129, 129, 129)
-                .add(jLabel1)
-                .addContainerGap(149, Short.MAX_VALUE))
+                .add(68, 68, 68)
+                .add(title1)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(139, 139, 139)
-                .add(jLabel1)
-                .addContainerGap(145, Short.MAX_VALUE))
+                .add(56, 56, 56)
+                .add(title1)
+                .add(18, 18, 18)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
 }

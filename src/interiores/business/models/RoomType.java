@@ -118,6 +118,7 @@ public class RoomType
      * @param fType The furniture type to add to the mandatory set 
      */
     public void addToMandatory(FurnitureType fType) {
+        
         mustHave.add(fType.getId());
     }
     

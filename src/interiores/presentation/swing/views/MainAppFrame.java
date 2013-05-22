@@ -21,7 +21,7 @@ public class MainAppFrame extends JFrame
 {
     private SwingController presentation;
     private WelcomePanel welcome;
-    private RoomTypeCatalogFrame rtCatalogPanel;
+    private RoomTypeCatalogPanel rtCatalogPanel;
     
     private List<Component> previousViews, currentViews;
     
@@ -37,7 +37,7 @@ public class MainAppFrame extends JFrame
         previousViews = new ArrayList();
         currentViews = new ArrayList();
         welcome = presentation.get(WelcomePanel.class);
-        rtCatalogPanel = presentation.get(RoomTypeCatalogFrame.class);
+        rtCatalogPanel = presentation.get(RoomTypeCatalogPanel.class);
         
         loadComponent(welcome, BorderLayout.CENTER);
         pack();
@@ -103,7 +103,10 @@ public class MainAppFrame extends JFrame
     }//GEN-LAST:event_newRoomActionPerformed
 
     private void rtCatalogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rtCatalogActionPerformed
-        rtCatalogPanel.setVisible(true);
+        unloadCurrentView();
+        loadComponent(rtCatalogPanel,BorderLayout.CENTER);
+        validate();
+        pack();        
     }//GEN-LAST:event_rtCatalogActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

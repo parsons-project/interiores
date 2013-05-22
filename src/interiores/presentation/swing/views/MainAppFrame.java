@@ -2,11 +2,16 @@ package interiores.presentation.swing.views;
 
 import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomLoadedEvent;
+import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.core.presentation.swing.SwingException;
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  *
@@ -20,6 +25,7 @@ public class MainAppFrame extends JFrame
     private WishListPanel wishListPanel;
     private RoomTypeCatalogPanel rtCatalogPanel;
     
+    private List<Component> previousViews;
     
     /**
      * Creates new form MainView
@@ -30,13 +36,13 @@ public class MainAppFrame extends JFrame
         setLayout(new BorderLayout());
         
         this.presentation = presentation;
+        previousViews = new ArrayList();
         welcome = presentation.get(WelcomePanel.class);
         map = presentation.get(RoomMapPanel.class);
         wishListPanel = presentation.get(WishListPanel.class);
         rtCatalogPanel = presentation.get(RoomTypeCatalogPanel.class);
         
-        add(welcome, BorderLayout.CENTER);       
-        welcome.setVisible(true);
+        loadComponent(welcome, BorderLayout.CENTER);
         pack();
     }
 
@@ -110,17 +116,47 @@ public class MainAppFrame extends JFrame
     // End of variables declaration//GEN-END:variables
 
     
+    // PANEL LOADING. Event listeners
+    // showTopology() :  Shows the topology view
+    // showFurnitureAndMap() :  Shows the dual furniture-selection + map view
+    // showDesigns() :  Shows the designs view (all the generated designs)
+    // showAlternate(view) : Shows an alternate view (that is, a view whose meaning
+    //                       is independent from from the main use case, and from which,
+    //                       therefore, we should return to the previous view
+    
+    
+    
+    
     
     @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
-    public void showMap() {
-        remove(welcome);
-        add(map, BorderLayout.CENTER);
-        add(wishListPanel, BorderLayout.LINE_END);
-        map.setVisible(true);
-        wishListPanel.setVisible(true);
+    public void showFurnitureAndMap() {
+        unloadCurrentView(false);
+        loadComponent(map, BorderLayout.CENTER);
+        loadComponent(wishListPanel, BorderLayout.LINE_END);
         wishListPanel.updateSelectable();
         wishListPanel.updateSelected();
         validate();
         pack();
+        printComponents();
+    }
+    
+    private void unloadCurrentView(boolean thoroughly) {
+        for (Component c : previousViews) {
+            if (thoroughly) remove(c);
+            else c.setVisible(false);
+        }
+    }
+    
+    private void loadComponent(Component comp, Object constraints) {
+        add(comp, constraints);
+        previousViews.add(comp);
+        comp.setVisible(true);
+    }
+    
+    
+    private void printComponents() {
+        Debug.println("Components in the container: " + getComponentCount());
+        for (Component c : getComponents())
+            Debug.println("Component: " + c.toString());
     }
 }

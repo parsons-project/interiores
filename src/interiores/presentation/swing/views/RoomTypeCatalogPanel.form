@@ -34,15 +34,19 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
-              <Component id="title1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="currentCatalogSelect" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="547" max="32767" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
               <Component id="jScrollPane1" max="-2" attributes="0"/>
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
+              <Component id="title1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="97" max="-2" attributes="0"/>
+              <Component id="currentCatalogLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="currentCatalogSelect" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="newCatalogButton" min="-2" pref="147" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -53,6 +57,8 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="title1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="currentCatalogSelect" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="currentCatalogLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="newCatalogButton" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jScrollPane1" max="-2" attributes="0"/>
@@ -74,6 +80,9 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="null"/>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[900, 600]"/>
         </Property>
       </Properties>
 
@@ -107,6 +116,27 @@
           </StringArray>
         </Property>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="currentCatalogLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Current catalog:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="newCatalogButton">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ea" green="ea" red="ea" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Create new catalog"/>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+            <LineBorder/>
+          </Border>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="newCatalogButton.setBorder(BorderFactory.createEmptyBorder());&#xa;newCatalogButton.setContentAreaFilled(false);"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

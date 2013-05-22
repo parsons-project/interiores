@@ -9,6 +9,7 @@ import interiores.business.controllers.RoomTypesCatalogController;
 import interiores.business.models.RoomType;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
+import interiores.core.presentation.annotation.Listen;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -59,6 +60,10 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         currentCatalogSelect = new javax.swing.JComboBox();
+        currentCatalogLabel = new javax.swing.JLabel();
+        newCatalogButton = new javax.swing.JButton();
+        newCatalogButton.setBorder(BorderFactory.createEmptyBorder());
+        newCatalogButton.setContentAreaFilled(false);
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBounds(new java.awt.Rectangle(0, 0, 900, 600));
@@ -71,6 +76,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         title1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         jScrollPane1.setBorder(null);
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(900, 600));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setAutoscrolls(true);
@@ -80,19 +86,29 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         currentCatalogSelect.setBackground(new java.awt.Color(255, 255, 255));
         currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        currentCatalogLabel.setText("Current catalog:");
+
+        newCatalogButton.setBackground(new java.awt.Color(234, 234, 234));
+        newCatalogButton.setText("Create new catalog");
+        newCatalogButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(68, 68, 68)
-                .add(title1)
-                .add(18, 18, 18)
-                .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(547, Short.MAX_VALUE))
-            .add(layout.createSequentialGroup()
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 0, Short.MAX_VALUE))
+            .add(layout.createSequentialGroup()
+                .add(68, 68, 68)
+                .add(title1)
+                .add(97, 97, 97)
+                .add(currentCatalogLabel)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(newCatalogButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 147, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -100,16 +116,20 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
                 .add(56, 56, 56)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(title1)
-                    .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(currentCatalogLabel)
+                    .add(newCatalogButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 43, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(18, 18, 18)
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel currentCatalogLabel;
     private javax.swing.JComboBox currentCatalogSelect;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton newCatalogButton;
     private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
 
@@ -149,6 +169,8 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(s) );
     }
 
+    @Listen({})
+    public void updateCatalogList(Event evt)
     
 
     // This class represents a catalog element

@@ -13,7 +13,7 @@ import interiores.core.business.BusinessException;
 public class ActiveCatalogRemovalException extends BusinessException {
     
     public ActiveCatalogRemovalException() {
-        super("The currently active catalog cannot be removed");
+        super("The active catalog cannot be removed");
     }
     
 }

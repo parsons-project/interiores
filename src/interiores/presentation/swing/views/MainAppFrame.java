@@ -9,9 +9,9 @@ import interiores.core.presentation.swing.SwingException;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 /**
  *
@@ -23,7 +23,7 @@ public class MainAppFrame extends JFrame
     private WelcomePanel welcome;
     private RoomTypeCatalogFrame rtCatalogPanel;
     
-    private List<Component> previousViews;
+    private List<Component> previousViews, currentViews;
     
     /**
      * Creates new form MainView
@@ -35,6 +35,7 @@ public class MainAppFrame extends JFrame
         
         this.presentation = presentation;
         previousViews = new ArrayList();
+        currentViews = new ArrayList();
         welcome = presentation.get(WelcomePanel.class);
         rtCatalogPanel = presentation.get(RoomTypeCatalogFrame.class);
         
@@ -128,7 +129,7 @@ public class MainAppFrame extends JFrame
     
     @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
     public void showFurnitureAndMap() {
-        unloadCurrentView(true);
+        unloadCurrentView();
         
         RoomMapPanel map = presentation.getNew(RoomMapPanel.class);
         WishListPanel wishListPanel = presentation.getNew(WishListPanel.class);
@@ -140,19 +141,19 @@ public class MainAppFrame extends JFrame
         
         validate();
         pack();
-        printComponents();
     }
     
-    private void unloadCurrentView(boolean thoroughly) {
-        for (Component c : previousViews) {
-            if (thoroughly) remove(c);
-            else c.setVisible(false);
+    private void unloadCurrentView() {
+        for (Component c : currentViews) {
+            c.setVisible(false);
+            previousViews.add(c);
         }
+        currentViews.clear();
     }
     
     private void loadComponent(Component comp, Object constraints) {
         add(comp, constraints);
-        previousViews.add(comp);
+        currentViews.add(comp);
         comp.setVisible(true);
     }
     

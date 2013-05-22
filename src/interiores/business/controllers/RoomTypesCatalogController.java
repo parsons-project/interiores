@@ -45,9 +45,9 @@ public class RoomTypesCatalogController
         notify(new RTCatalogChangedEvent(catalogName, false));
     }
     
-//    @Override
-//    public void load(String path) throws JAXBException {
-//        super.load(path);
-//        notify(new RTCatalogChangedEvent("dummy", false));
-//    }
+    @Override
+    public void load(String path) throws JAXBException {
+        super.load(path);
+        notify(new RTCatalogChangedEvent(lastLoaded, true));
+    }
 }

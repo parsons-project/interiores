@@ -23,6 +23,7 @@ abstract public class CatalogController<I extends PersistentIdObject>
     extends CatalogAccessController<I>
 {
     protected Map<String, NamedCatalog<I>> loadedCatalogs;
+    protected String lastLoaded = "";
     
     public CatalogController(JAXBDataController data, AvailableCatalog catalog) {
         super(data, catalog);
@@ -77,14 +78,17 @@ abstract public class CatalogController<I extends PersistentIdObject>
         if(!path.startsWith("/"))
             path = getAbsolutePath(path);
         
+        
         Debug.println("Loading from " + path);
         
         NamedCatalog loadedCatalog = (NamedCatalog<I>) data.load(classes, path);
         
         if(loadedCatalog.isDefault())
             throw new DefaultCatalogOverwriteException();
-            
+        
+        lastLoaded = loadedCatalog.getName();
         loadedCatalogs.put(loadedCatalog.getName(), loadedCatalog);
+        
     }
     
     public void save(String path) throws JAXBException {
@@ -118,5 +122,9 @@ abstract public class CatalogController<I extends PersistentIdObject>
     
     private String getAbsolutePath(String path) {
         return System.getProperty("user.dir") + System.getProperty("file.separator") + path;
+    }
+
+    public String getLastLoaded() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

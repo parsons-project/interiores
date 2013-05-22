@@ -13,7 +13,7 @@ import interiores.core.business.BusinessException;
 public class CatalogAlreadyExistsException extends BusinessException {
     
     public CatalogAlreadyExistsException(String c) {
-        super("The catalog " + c + " already exists.");
+        super("A catalog named '" + c + "' already exists.");
     }
     
 }

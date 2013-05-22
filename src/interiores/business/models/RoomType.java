@@ -1,5 +1,7 @@
 package interiores.business.models;
 
+import interiores.business.exceptions.ForbiddenFurnitureException;
+import interiores.business.exceptions.MandatoryFurnitureException;
 import interiores.business.models.catalogs.PersistentIdObject;
 import interiores.core.Utils;
 import interiores.utils.Dimension;
@@ -106,8 +108,8 @@ public class RoomType
     }
     
     /**
-     * Get a tree set of the names of the funiture types that this type of room must contain. 
-     * @return A tree set of the names of the funiture types that this type of room must contain.
+     * Get a tree set of the names of the furniture types that this type of room must contain. 
+     * @return A tree set of the names of the furniture types that this type of room must contain.
      */    
     public TreeSet<String> getMandatory() {
         return mustHave;
@@ -118,6 +120,8 @@ public class RoomType
      * @param fType The furniture type to add to the mandatory set 
      */
     public void addToMandatory(FurnitureType fType) {
+        String fId = fType.getId();
+        if (cantHave.contains(fId)) throw new ForbiddenFurnitureException(fId, getName());
         
         mustHave.add(fType.getId());
     }
@@ -141,8 +145,8 @@ public class RoomType
     }
     
     /**
-     * Get a tree set of the names of the funiture types that this type of room can't contain. 
-     * @return A tree set of the names of the funiture types that this type of room can't contain.
+     * Get a tree set of the names of the furniture types that this type of room can't contain. 
+     * @return A tree set of the names of the furniture types that this type of room can't contain.
      */
     public TreeSet<String> getForbidden() {
         return cantHave;
@@ -153,6 +157,9 @@ public class RoomType
      * @param fType The furniture type to add to the forbidden set
      */
     public void addToForbidden(FurnitureType fType) {
+        String fId = fType.getId();
+        if (mustHave.contains(fId)) throw new MandatoryFurnitureException(fId);
+        
         cantHave.add(fType.getId());
     }
     
@@ -179,7 +186,7 @@ public class RoomType
     }
     
     /**
-     * Checks if a fueniture type is mandatory or not
+     * Checks if a furniture type is mandatory or not
      * @param ftype The furniture type to be checked
      * @return true if ftype is in the mandatory set, false otherwise
      */
@@ -192,7 +199,7 @@ public class RoomType
     }
     
      /**
-     * Checks if a fueniture type is forbidden or not
+     * Checks if a furniture type is forbidden or not
      * @param ftype The furniture type to be checked
      * @return true if ftype is in the forbidden set, false otherwise
      */

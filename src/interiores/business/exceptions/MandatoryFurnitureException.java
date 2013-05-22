@@ -16,7 +16,11 @@ public class MandatoryFurnitureException
     extends BusinessException {
     
     public MandatoryFurnitureException(String fname, String rtype) {
-        super("A " + rtype + " must have at least one " + fname);
+        super("A " + rtype + " must contain at least one " + fname + ".");
+    }
+    
+    public MandatoryFurnitureException(String fname) {
+        super(fname + " is in the list of mandatory furniture.");
     }
     
 }

@@ -85,7 +85,10 @@ public class SwingController extends PresentationController
      * @throws Exception 
      */
     public void load(Class<? extends Component> viewClass)
-    {            
+    {
+        if(vloader.isLoaded(viewClass))
+            vloader.get(viewClass).setVisible(false);
+        
         vloader.load(viewClass);
     }
     

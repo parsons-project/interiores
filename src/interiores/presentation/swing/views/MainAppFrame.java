@@ -9,7 +9,6 @@ import interiores.core.presentation.swing.SwingException;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.JFrame;
 
@@ -40,7 +39,6 @@ public class MainAppFrame extends JFrame
         rtCatalogPanel = presentation.get(RoomTypeCatalogPanel.class);
         
         loadComponent(welcome, BorderLayout.CENTER);
-        pack();
     }
 
     /**
@@ -104,9 +102,7 @@ public class MainAppFrame extends JFrame
 
     private void rtCatalogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rtCatalogActionPerformed
         unloadCurrentView();
-        loadComponent(rtCatalogPanel,BorderLayout.CENTER);
-        validate();
-        pack();        
+        loadComponent(rtCatalogPanel,BorderLayout.CENTER);      
     }//GEN-LAST:event_rtCatalogActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -125,10 +121,7 @@ public class MainAppFrame extends JFrame
     // showAlternate(view) : Shows an alternate view (that is, a view whose meaning
     //                       is independent from from the main use case, and from which,
     //                       therefore, we should return to the previous view
-    
-    
-    
-    
+
     
     @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
     public void showFurnitureAndMap() {
@@ -139,15 +132,11 @@ public class MainAppFrame extends JFrame
         
         loadComponent(map, BorderLayout.CENTER);
         loadComponent(wishListPanel, BorderLayout.LINE_END);
-        wishListPanel.updateSelectable();
-        wishListPanel.updateSelected();
-        
-        validate();
-        pack();
     }
     
     private void unloadCurrentView() {
         for (Component c : currentViews) {
+            remove(c);
             c.setVisible(false);
             previousViews.add(c);
         }
@@ -158,6 +147,10 @@ public class MainAppFrame extends JFrame
         add(comp, constraints);
         currentViews.add(comp);
         comp.setVisible(true);
+        
+        invalidate();
+        validate();
+        pack();
     }
     
     

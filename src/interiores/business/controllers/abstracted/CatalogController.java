@@ -1,5 +1,7 @@
 package interiores.business.controllers.abstracted;
 
+import interiores.business.events.catalogs.CatalogChangedEvent;
+import interiores.business.exceptions.ActiveCatalogRemovalException;
 import interiores.business.exceptions.CatalogNotFoundException;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.catalogs.AvailableCatalog;
@@ -94,6 +96,17 @@ abstract public class CatalogController<I extends PersistentIdObject>
         Debug.println("Saving to " + path);
         
         data.save(getActiveCatalog(), path, classes);
+    }
+    
+    public void remove(String catalogName) {
+        if(! loadedCatalogs.containsKey(catalogName))
+            throw new CatalogNotFoundException(catalogName);
+        else if(catalogName.equals(NamedCatalog.getDefaultName()))
+            throw new DefaultCatalogOverwriteException();
+        else if (catalogName.equals(getActiveCatalog().getName()))
+            throw new ActiveCatalogRemovalException();
+        
+        loadedCatalogs.remove(catalogName);
     }
     
     public Collection<String> getNamesLoadedCatalogs() {

@@ -3,6 +3,7 @@ package interiores.core.presentation;
 import interiores.core.Event;
 import interiores.core.business.BusinessController;
 import interiores.core.presentation.swing.SwingException;
+import interiores.core.presentation.swing.SwingExceptionHandler;
 import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,8 @@ public class SwingController extends PresentationController
         this.mainView = mainView;
         vloader = new ViewLoader(this);
         businessControllers = new HashMap();
+        
+        SwingExceptionHandler.enable();
     }
     
     /**

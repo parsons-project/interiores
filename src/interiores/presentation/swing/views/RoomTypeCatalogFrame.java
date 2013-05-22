@@ -4,19 +4,20 @@
  */
 package interiores.presentation.swing.views;
 import interiores.core.presentation.SwingController;
-import javax.swing.JPanel;
+import javax.swing.JFrame;
 
 /**
  *
  * @author larribas
  */
-public class RoomTypeCatalogPanel extends JPanel {
+public class RoomTypeCatalogFrame extends JFrame {
 
     /**
      * Creates new form RoomTypeCatalogPanel
      */
-    public RoomTypeCatalogPanel(SwingController presentation) {
+    public RoomTypeCatalogFrame(SwingController presentation) {
         initComponents();
+        pack();
     }
 
     /**
@@ -25,30 +26,33 @@ public class RoomTypeCatalogPanel extends JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
-        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
-        jLabel1.setText("RoomTypeCatalogPanel");
+        setTitle("Room type catalog");
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
-        this.setLayout(layout);
+        jLabel2.setText("Room type catalog");
+
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(126, 126, 126)
-                .add(jLabel1)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addContainerGap()
+                .add(jLabel2)
+                .addContainerGap(282, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(125, 125, 125)
-                .add(jLabel1)
-                .addContainerGap(159, Short.MAX_VALUE))
+                .addContainerGap()
+                .add(jLabel2)
+                .addContainerGap(301, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }

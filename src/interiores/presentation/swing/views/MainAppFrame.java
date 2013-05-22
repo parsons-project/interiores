@@ -21,9 +21,7 @@ public class MainAppFrame extends JFrame
 {
     private SwingController presentation;
     private WelcomePanel welcome;
-    private RoomMapPanel map;
-    private WishListPanel wishListPanel;
-    private RoomTypeCatalogPanel rtCatalogPanel;
+    private RoomTypeCatalogFrame rtCatalogPanel;
     
     private List<Component> previousViews;
     
@@ -38,9 +36,7 @@ public class MainAppFrame extends JFrame
         this.presentation = presentation;
         previousViews = new ArrayList();
         welcome = presentation.get(WelcomePanel.class);
-        map = presentation.get(RoomMapPanel.class);
-        wishListPanel = presentation.get(WishListPanel.class);
-        rtCatalogPanel = presentation.get(RoomTypeCatalogPanel.class);
+        rtCatalogPanel = presentation.get(RoomTypeCatalogFrame.class);
         
         loadComponent(welcome, BorderLayout.CENTER);
         pack();
@@ -53,7 +49,8 @@ public class MainAppFrame extends JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -64,12 +61,15 @@ public class MainAppFrame extends JFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Interior design");
         setAlwaysOnTop(true);
+        setResizable(false);
 
         jMenu1.setText("File");
 
         newRoom.setText("New room design...");
-        newRoom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        newRoom.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 newRoomActionPerformed(evt);
             }
         });
@@ -80,8 +80,10 @@ public class MainAppFrame extends JFrame
         jMenu2.setText("Edit");
 
         rtCatalog.setText("Room type catalog");
-        rtCatalog.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        rtCatalog.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 rtCatalogActionPerformed(evt);
             }
         });
@@ -100,11 +102,7 @@ public class MainAppFrame extends JFrame
     }//GEN-LAST:event_newRoomActionPerformed
 
     private void rtCatalogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rtCatalogActionPerformed
-        //remove(welcome);
-        add(rtCatalogPanel);
         rtCatalogPanel.setVisible(true);
-        validate();
-        pack();
     }//GEN-LAST:event_rtCatalogActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -130,11 +128,16 @@ public class MainAppFrame extends JFrame
     
     @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
     public void showFurnitureAndMap() {
-        unloadCurrentView(false);
+        unloadCurrentView(true);
+        
+        RoomMapPanel map = presentation.getNew(RoomMapPanel.class);
+        WishListPanel wishListPanel = presentation.getNew(WishListPanel.class);
+        
         loadComponent(map, BorderLayout.CENTER);
         loadComponent(wishListPanel, BorderLayout.LINE_END);
         wishListPanel.updateSelectable();
         wishListPanel.updateSelected();
+        
         validate();
         pack();
         printComponents();

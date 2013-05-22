@@ -1,9 +1,6 @@
 package interiores.presentation.swing.views;
 
-import interiores.business.events.room.RoomCreatedEvent;
-import interiores.business.events.room.RoomLoadedEvent;
 import interiores.core.presentation.SwingController;
-import interiores.core.presentation.annotation.Listen;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
@@ -22,13 +19,7 @@ public class RoomMapFrame extends JFrame
         setLayout(new BorderLayout());
         
         add(presentation.get(RoomMapPanel.class), BorderLayout.CENTER);
-    }
-    
-    @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
-    public void showView()
-    {
-        pack();   
-        setVisible(true);
+        pack();
     }
 
     /**

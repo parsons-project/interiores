@@ -1,11 +1,10 @@
 package interiores.presentation.swing.views;
 
 import interiores.business.controllers.FurnitureTypeController;
+import interiores.business.controllers.RoomController;
 import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
-import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomDesignFinishedEvent;
 import interiores.business.events.room.RoomDesignStartedEvent;
-import interiores.business.events.room.RoomLoadedEvent;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.core.Debug;
@@ -28,6 +27,7 @@ import javax.swing.JPanel;
  */
 public class RoomMapPanel extends JPanel
 {
+    private RoomController roomController;
     private FurnitureTypeController ftController;
     private InteractiveRoomMap map;
     private RoomMapDebuggerFrame debuggerGui;
@@ -39,11 +39,29 @@ public class RoomMapPanel extends JPanel
     {
         initComponents();
         
+        roomController = presentation.getBusinessController(RoomController.class);
         ftController = presentation.getBusinessController(FurnitureTypeController.class);
-        map = null;
         
         if(Debug.isEnabled())
             debuggerGui = presentation.get(RoomMapDebuggerFrame.class);
+        
+        initMap();
+    }
+        
+    private void initMap()
+    {
+        int width = roomController.getWidth();
+        int depth = roomController.getDepth();
+        
+        if(Debug.isEnabled()) {
+            map = new RoomMapDebugger(width, depth); // Debug mode! Let's load a debuggable map!
+            debuggerGui.setDebuggee(this);
+        }
+        else
+            map = new InteractiveRoomMap(width, depth); // A simple room map on production
+        
+        setPreferredSize(new Dimension(map.getWidth(), map.getHeight()));
+        repaint();
     }
 
     /**
@@ -75,7 +93,10 @@ public class RoomMapPanel extends JPanel
     private void formMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseClicked
     {//GEN-HEADEREND:event_formMouseClicked
         requestFocus();
-        map.unselectAll();
+        
+        if(!evt.isControlDown())
+            map.unselectAll();
+        
         map.select(evt.getX(), evt.getY());
         
         repaint();
@@ -83,7 +104,6 @@ public class RoomMapPanel extends JPanel
 
     private void formKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_formKeyReleased
     {//GEN-HEADEREND:event_formKeyReleased
-        Debug.println("Key event");
         if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
             for(String id : map.getSelected())
                 ftController.unselect(id);
@@ -104,23 +124,6 @@ public class RoomMapPanel extends JPanel
     
     public RoomMap getRoomMap() {
         return map;
-    }
-    
-    @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
-    public void createMap(RoomCreatedEvent event)
-    {
-        int width = event.getWidth();
-        int depth = event.getDepth();
-        
-        if(Debug.isEnabled()) {
-            map = new RoomMapDebugger(width, depth); // Debug mode! Let's load a debuggable map!
-            debuggerGui.setDebuggee(this);
-        }
-        else
-            map = new InteractiveRoomMap(width, depth); // A simple room map on production
-        
-        setPreferredSize(new Dimension(map.getWidth(), map.getHeight()));
-        repaint();
     }
       
     @Listen(RoomDesignStartedEvent.class)
@@ -150,6 +153,7 @@ public class RoomMapPanel extends JPanel
         
         if (event.hasTime())
             map.setTime(event.getTime());
+        
         repaint();
     }
     

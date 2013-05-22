@@ -4,25 +4,30 @@
  */
 package interiores.business.events.catalogs;
 
-import interiores.business.models.catalogs.PersistentIdObject;
 import interiores.core.Event;
 
 /**
  *
  * @author larribas
  */
-public class CatalogCreatedEvent<I extends PersistentIdObject>
+public abstract class CatalogChangedEvent
 implements Event
 {
     
     private String name;
+    private boolean added;
     
-    public CatalogCreatedEvent(String name) {
+    public CatalogChangedEvent(String name, boolean added) {
         this.name = name;
+        this.added = added;
     }
     
     public String getName() {
         return name;
+    }
+    
+    public boolean isAdded() {
+        return added;
     }
     
 }

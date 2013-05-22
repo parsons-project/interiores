@@ -6,8 +6,11 @@ package interiores.presentation.swing.views;
 
 import interiores.business.controllers.RoomTypeController;
 import interiores.business.controllers.RoomTypesCatalogController;
+import interiores.business.events.catalogs.CatalogChangedEvent;
+import interiores.business.events.catalogs.RTCatalogChangedEvent;
 import interiores.business.models.RoomType;
 import interiores.core.Debug;
+import interiores.core.Event;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import java.awt.Dimension;
@@ -169,8 +172,11 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(s) );
     }
 
-    @Listen({})
-    public void updateCatalogList(Event evt)
+    @Listen({RTCatalogChangedEvent.class})
+    public void updateCatalogList(CatalogChangedEvent evt) {
+        if (evt.isAdded()) currentCatalogSelect.addItem(evt.getName());
+        else currentCatalogSelect.removeItem(evt.getName());
+    }
     
 
     // This class represents a catalog element

@@ -40,4 +40,9 @@ public class StraightFacingConstraint extends BinaryConstraint {
     public int getPriority() {
         return 5;
     }
+    
+    @Override
+    public String toString() {
+        return "Straight facing constraint";
+    }
 }  

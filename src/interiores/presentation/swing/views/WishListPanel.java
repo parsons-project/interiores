@@ -7,6 +7,7 @@ import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
+import java.awt.event.KeyEvent;
 import java.util.Collection;
 import javax.swing.DefaultListModel;
 import javax.swing.JPanel;
@@ -22,11 +23,13 @@ public class WishListPanel extends JPanel {
     private DesignController designController;
     private FurnitureTypeController furnitureTypeController;
     private DefaultListModel listModel;
+    private SwingController swing;
     
     /** Creates new form WishListPanel */
     public WishListPanel(SwingController presentation) {
         initComponents();
         
+        swing = presentation;
         designController = presentation.getBusinessController(DesignController.class);
         furnitureTypeController = presentation.getBusinessController(FurnitureTypeController.class);
         listModel = new DefaultListModel();
@@ -74,6 +77,13 @@ public class WishListPanel extends JPanel {
     public void removeSelected(FurnitureTypeUnselectedEvent evt) {
         listModel.removeElement(evt.getName());
     }
+    
+    private void launchConstraintEditor(String selectedId) {
+        ConstraintEditorFrame cef = swing.getNew(ConstraintEditorFrame.class);
+        cef.setSelectedId(selectedId);
+        cef.setVisible(true);
+    }
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -95,10 +105,9 @@ public class WishListPanel extends JPanel {
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Selectable Types");
         selectable.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         selectable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        selectable.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        selectable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+
                 selectableMouseClicked(evt);
             }
         });
@@ -109,6 +118,11 @@ public class WishListPanel extends JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt)
             {
                 selectedMouseClicked(evt);
+            }
+        });
+        selected.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                selectedKeyPressed(evt);
             }
         });
         scrollSelected.setViewportView(selected);
@@ -169,8 +183,7 @@ private void selectedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
         int index = selected.getSelectedIndex();
         if (index >= 0) {
             String type = (String) selected.getModel().getElementAt(index);
-            Debug.println("Removing: " + type);
-            furnitureTypeController.unselect(type);
+            launchConstraintEditor(type);
         }
     }
 }//GEN-LAST:event_selectedMouseClicked
@@ -191,6 +204,25 @@ private void selectableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:
     }
 }//GEN-LAST:event_selectableMouseClicked
 
+private void selectedKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_selectedKeyPressed
+ 
+    int index = selected.getSelectedIndex();
+    if (index >= 0) {
+        String type = (String) selected.getModel().getElementAt(index);
+        switch (evt.getKeyCode()) {
+            case KeyEvent.VK_DELETE:  // press delete
+                
+                Debug.println("Removing: " + type);
+                furnitureTypeController.unselect(type);
+                break;
+                
+            case KeyEvent.VK_ENTER:
+                launchConstraintEditor(type);
+                break;
+        }
+   }
+}//GEN-LAST:event_selectedKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox debugCheckBox;
     private javax.swing.JScrollPane scrollSelectable;
@@ -200,4 +232,5 @@ private void selectableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:
     private javax.swing.JButton solveButton;
     private javax.swing.JCheckBox timeCheckBox;
     // End of variables declaration//GEN-END:variables
+
 }

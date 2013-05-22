@@ -1,8 +1,6 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.InterioresController;
-import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.business.models.Orientation;
 import interiores.business.models.Room;
 import interiores.business.models.constraints.UnaryConstraint;
@@ -15,7 +13,6 @@ import interiores.business.models.constraints.unary.OrientationConstraint;
 import interiores.business.models.constraints.unary.PriceConstraint;
 import interiores.business.models.constraints.unary.WallConstraint;
 import interiores.business.models.constraints.unary.WidthConstraint;
-import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -27,14 +24,13 @@ import java.util.List;
  * @author larribas
  */
 public class UnaryConstraintController
-    extends InterioresController {
-    
+    extends InterioresController
+{
     /**
      * Creates a particular instance of the unary constraint controller
      * @param data The data controller that will give access to the objects this controller will use
      */
-    public UnaryConstraintController(JAXBDataController data)
-    {
+    public UnaryConstraintController(JAXBDataController data) {
         super(data);
         
         // Define aliases for unary constraints
@@ -61,74 +57,51 @@ public class UnaryConstraintController
      * Gets all all the unary and binary constraints related to the specified wanted furniture
      * @param id Identifier of the furniture
      * @return A collection of both unary and binary constraints
-     * @throws NoRoomCreatedException 
      */
-    public Collection<UnaryConstraint> getConstraints(String id)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public Collection<UnaryConstraint> getConstraints(String id) {
         return getWishList().getUnaryConstraints(id);
     }
     
-    public void addWidthConstraint(String furnitureId, int minWidth, int maxWidth)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public void addWidthConstraint(String furnitureId, int minWidth, int maxWidth) {
         addConstraint(furnitureId, new WidthConstraint(minWidth, maxWidth));
     }
     
-    public void addDepthConstraint(String furnitureId, int minWidth, int maxWidth)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public void addDepthConstraint(String furnitureId, int minWidth, int maxWidth) {
         addConstraint(furnitureId, new DepthConstraint(minWidth, maxWidth));
     }
     
-    public void addColorConstraint(String furnitureId, String color)
-            throws NoRoomCreatedException, BusinessException
-    {
+    public void addColorConstraint(String furnitureId, String color) {
         addConstraint(furnitureId, new ColorConstraint(color));
     }
     
-    public void addMaterialConstraint(String furnitureId, String material)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public void addMaterialConstraint(String furnitureId, String material) {
         addConstraint(furnitureId, new MaterialConstraint(material));
     }
     
-    public void addModelConstraint(String furnitureId, String modelName)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public void addModelConstraint(String furnitureId, String modelName) {
         addConstraint(furnitureId, new ModelConstraint(modelName));
     }
     
-    public void addOrientationConstraint(String furnitureId, String orientation)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public void addOrientationConstraint(String furnitureId, String orientation) {
         addConstraint(furnitureId, new OrientationConstraint(orientation));
     }
     
-    public void addPriceConstraint(String furnitureId, float maxPrice)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public void addPriceConstraint(String furnitureId, float maxPrice) {
         addConstraint(furnitureId, new PriceConstraint(maxPrice));
     }
     
-    public void addPositionConstraint(String furnitureId, List<Point> validPositions)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public void addPositionConstraint(String furnitureId, List<Point> validPositions) {
         addConstraint(furnitureId, new AreaConstraint(validPositions));
     }
     
-    public void addPositionAtConstraint(String furnitureId, int x, int y)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public void addPositionAtConstraint(String furnitureId, int x, int y) {
         List<Point> validPositions = new ArrayList();
         validPositions.add(new Point(x, y));
         
         addPositionConstraint(furnitureId, validPositions);
     }
     
-    public void addPositionRangeConstraint(String furnitureId, int x1, int y1, int x2, int y2)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public void addPositionRangeConstraint(String furnitureId, int x1, int y1, int x2, int y2) {
         List<Point> validPositions = new ArrayList();
         
         for(int i = x1; i <= x2; ++i)
@@ -138,32 +111,24 @@ public class UnaryConstraintController
         addPositionConstraint(furnitureId, validPositions);
     }
     
-    public void addWallConstraint(String furnitureId, Orientation[] whichWalls)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public void addWallConstraint(String furnitureId, Orientation[] whichWalls) {
         Room room = getRoom();
         
         addConstraint(furnitureId, new WallConstraint(room.getWidth(), room.getDepth(), whichWalls));
     }
     
-    private void addConstraint(String furnitureId, UnaryConstraint unaryConstraint)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    private void addConstraint(String furnitureId, UnaryConstraint unaryConstraint) {
         getWishList().addUnaryConstraint(furnitureId, unaryConstraint);
     }
     
-    public void remove(String furnitureId, String unaryConstraintAlias)
-            throws NoRoomCreatedException, BusinessException
-    {
+    public void remove(String furnitureId, String unaryConstraintAlias) {
         Class<? extends UnaryConstraint> unaryConstraintClass;
         unaryConstraintClass = UnaryConstraint.getConstraintClass(unaryConstraintAlias);
         
         remove(furnitureId, unaryConstraintClass);
     }
     
-    public void remove(String furnitureId, Class<? extends UnaryConstraint> unaryConstraintClass)
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public void remove(String furnitureId, Class<? extends UnaryConstraint> unaryConstraintClass) {
         getWishList().removeUnaryConstraint(furnitureId, unaryConstraintClass);
     }
 }

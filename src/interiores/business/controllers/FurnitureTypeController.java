@@ -3,12 +3,8 @@ package interiores.business.controllers;
 import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.business.events.furniture.FurnitureTypeSelectedEvent;
 import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
-import interiores.business.exceptions.DefaultCatalogOverwriteException;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
-import interiores.business.exceptions.ForbiddenFurnitureException;
-import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.models.room.FurnitureType;
 import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.business.models.room.FurnitureType;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Range;
@@ -37,10 +33,8 @@ public class FurnitureTypeController
      * @param maxWidth The maximum width of the type
      * @param minDepth The minimum depth of the type
      * @param maxDepth The maximum depth of the type
-     * @throws DefaultCatalogOverwriteException 
      */
     public void add(String name, int minWidth, int maxWidth, int minDepth, int maxDepth)
-            throws DefaultCatalogOverwriteException
     {
         Range widthRange = new Range(minWidth, maxWidth);
         Range depthRange = new Range(minDepth, maxDepth);
@@ -53,11 +47,8 @@ public class FurnitureTypeController
     /**
      * Selects a type and includes it in the wish list (the list of wanted furniture)
      * @param name The name of the type
-     * @throws ElementNotFoundBusinessException
-     * @throws NoRoomCreatedException 
      */
     public void select(String name)
-            throws ElementNotFoundBusinessException, NoRoomCreatedException, ForbiddenFurnitureException
     {        
         String id = getWishList().addWantedFurniture(name);
         
@@ -67,7 +58,6 @@ public class FurnitureTypeController
     /**
      * Removes an element from the list of wanted furniture
      * @param name The identifier of the element to remove
-     * @throws BusinessException 
      */
     public void unselect(String name)
             throws BusinessException
@@ -80,10 +70,8 @@ public class FurnitureTypeController
     /**
      * Gets all the furniture in the wish list, that is, all the wanted furniture for the room being designed
      * @return A collection containing all the pieces of furniture in the wish list
-     * @throws NoRoomCreatedException 
      */
     public Collection<String> getRoomFurniture()
-            throws NoRoomCreatedException
     {
         return getWishList().getFurnitureNames();
     }
@@ -93,9 +81,8 @@ public class FurnitureTypeController
      * That is, the set of all furniture types in the catalog save for those marked
      * as forbidden for the current room type
      * @return A collection of strings containing the names of the mentioned furniture types
-     * @throws NoRoomCreatedException 
      */
-    public Collection getSelectableFurniture() throws NoRoomCreatedException {
+    public Collection getSelectableFurniture() {
         Collection<String> selectable = new ArrayList();
         for (FurnitureType ft : getCatalogObjects()) selectable.add(ft.getName());
         

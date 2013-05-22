@@ -1,11 +1,10 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogController;
-import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.models.room.FurnitureType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.factories.DefaultFurnitureTypesCatalogFactory;
+import interiores.business.models.room.FurnitureType;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
@@ -25,7 +24,6 @@ public class FurnitureTypesCatalogController
      * @param data The data controller that will give access to the objects this controller will use
      */
     public FurnitureTypesCatalogController(JAXBDataController data)
-            throws BusinessException
     {
         super(data, AvailableCatalog.FURNITURE_TYPES);
         
@@ -45,7 +43,6 @@ public class FurnitureTypesCatalogController
     }
     
     public Collection<String> getSelectedFurnitureTypes()
-            throws NoRoomCreatedException
     {
         return getWishList().getElementTypes();
     }

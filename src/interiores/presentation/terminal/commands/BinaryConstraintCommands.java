@@ -1,10 +1,7 @@
 package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.BinaryConstraintController;
-import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.core.Utils;
-import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
@@ -43,30 +40,26 @@ public class BinaryConstraintCommands
         }
     }
     
-    public void addMaxDistanceConstraint()
-            throws BusinessException
-    {        
+    public void addMaxDistanceConstraint() {        
         int distance = readInt("Enter the maximum distance measured in cm");
         String[] furniture = selectFurniturePair();
         
         constraintController.addMaxDistanceConstraint(furniture[0], furniture[1], distance);
     }
     
-     public void addMinDistanceConstraint()
-            throws BusinessException
-    {        
+     public void addMinDistanceConstraint() {        
         int distance = readInt("Enter the minimum distance measured in cm");
         String[] furniture = selectFurniturePair();
         
         constraintController.addMinDistanceConstraint(furniture[0], furniture[1], distance);
     }
     
-    public void addPartialFacingConstraint() throws BusinessException {
+    public void addPartialFacingConstraint() {
         String[] furniture = selectFurniturePair();
         constraintController.addPartialFacingConstraint(furniture[0], furniture[1]);
     }
     
-    public void addStraightFacingConstraint() throws BusinessException {
+    public void addStraightFacingConstraint() {
         String[] furniture = selectFurniturePair();
         constraintController.addStraightFacingConstraint(furniture[0], furniture[1]);
     }
@@ -81,9 +74,7 @@ public class BinaryConstraintCommands
     }
     
     @Command("Remove an applied constraint")
-    public void remove()
-            throws NoRoomCreatedException, BusinessException
-    {
+    public void remove() {
         String alias = readChoice("Specify the alias of the constraint you want to remove",
                 constraintController.getAvailableConstraints());
         
@@ -93,9 +84,7 @@ public class BinaryConstraintCommands
     }
     
     @Command("List binary constraints applied to a piece of furniture")
-    public void list()
-            throws NoRoomCreatedException, WantedElementNotFoundException
-    {
+    public void list() {
         String furn = readString("Select the furniture whose constraints you want to show");
         Collection constraints = constraintController.getConstraints(furn);
         

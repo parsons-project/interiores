@@ -1,13 +1,12 @@
 package interiores.presentation.terminal.commands;
 
-import interiores.presentation.terminal.commands.abstracted.CatalogCommands;
 import interiores.business.controllers.FurnitureTypesCatalogController;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.core.Options;
-import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandOptions;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
+import interiores.presentation.terminal.commands.abstracted.CatalogCommands;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -34,9 +33,7 @@ public class FurnitureTypesCatalogCommands
     @Override
     @Command("Selects the catalog to be used")
     @CommandOptions("new")
-    public void checkout(Options options)
-            throws BusinessException
-    {
+    public void checkout(Options options) {
         super.checkout(options);
 
         Collection<String> fNames;

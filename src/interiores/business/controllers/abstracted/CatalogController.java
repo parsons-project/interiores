@@ -103,5 +103,4 @@ abstract public class CatalogController<I extends PersistentIdObject>
     private String getAbsolutePath(String path) {
         return System.getProperty("user.dir") + System.getProperty("file.separator") + path;
     }
-    
 }

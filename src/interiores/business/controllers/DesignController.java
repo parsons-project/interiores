@@ -5,7 +5,6 @@ import interiores.business.events.room.DebugRoomDesignStartedEvent;
 import interiores.business.events.room.RoomDesignFinishedEvent;
 import interiores.business.events.room.RoomDesignStartedEvent;
 import interiores.business.exceptions.SolverNotFinishedException;
-import interiores.business.models.room.FurnitureType;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
@@ -13,8 +12,8 @@ import interiores.business.models.backtracking.trimmers.preliminar.ConstantPreli
 import interiores.business.models.backtracking.trimmers.preliminar.UnaryConstraintsPreliminarTrimmer;
 import interiores.business.models.backtracking.trimmers.preliminar.UnfitModelsPreliminarTrimmer;
 import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.business.models.room.FurnitureType;
 import interiores.core.Observer;
-import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
 

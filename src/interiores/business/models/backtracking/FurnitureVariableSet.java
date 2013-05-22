@@ -1,14 +1,14 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.room.FurnitureType;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
-import interiores.business.models.room.elements.WantedFixed;
-import interiores.business.models.room.elements.WantedFurniture;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.trimmers.PreliminarTrimmer;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.constraints.GlobalConstraint;
+import interiores.business.models.room.FurnitureType;
+import interiores.business.models.room.elements.WantedFixed;
+import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.Value;
@@ -318,9 +318,6 @@ public class FurnitureVariableSet
     
     public Map<String, FurnitureValue> getVariableValues() {
         Map<String, FurnitureValue> values = new HashMap();
-        
-        for(FurnitureConstant constant : constants)
-            values.put(constant.getID(), constant.getAssignedValue());
         
         for(int i = 0; i < variables.length; ++i)
             values.put(variables[i].getID(), variables[i].getAssignedValue());

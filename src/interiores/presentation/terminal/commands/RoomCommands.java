@@ -1,9 +1,6 @@
 package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.RoomController;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
-import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
@@ -25,9 +22,7 @@ public class RoomCommands extends AdvancedCommandGroup
     }
     
     @Command("Create a new room")
-    public void _new()
-            throws ElementNotFoundBusinessException, BusinessException
-    {
+    public void _new() {
         String type = readString("Enter the name of the room type you want to create:");
         int width = readInt("Enter the width of the room in centimeters:");
         int depth = readInt("Enter the depth of the room in centimeters:");
@@ -37,7 +32,7 @@ public class RoomCommands extends AdvancedCommandGroup
     
     @Command("Save the current room")
     public void save()
-            throws JAXBException, NoRoomCreatedException
+            throws JAXBException
     {
         String path = readString("Especifica la ruta donde guardar la habitación");
         

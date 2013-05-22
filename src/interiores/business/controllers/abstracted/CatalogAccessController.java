@@ -1,7 +1,5 @@
 package interiores.business.controllers.abstracted;
 
-import interiores.business.exceptions.DefaultCatalogOverwriteException;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.PersistentIdObject;
@@ -34,15 +32,11 @@ abstract public class CatalogAccessController<I extends PersistentIdObject>
         return (NamedCatalog<I>) data.get(keyData);
     }
     
-    protected I getForWrite(String id)
-            throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException
-    {
+    protected I getForWrite(String id) {
         return getActiveCatalog().getForWrite(id);
     }
     
-    protected I get(String id)
-            throws ElementNotFoundBusinessException
-    {
+    protected I get(String id) {
         return getActiveCatalog().get(id);
     }
     

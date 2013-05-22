@@ -5,9 +5,9 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.InterioresController;
-import interiores.business.models.fixed.Door;
-import interiores.business.models.fixed.Pillar;
-import interiores.business.models.fixed.Window;
+import interiores.business.models.room.elements.fixed.Door;
+import interiores.business.models.room.elements.fixed.Pillar;
+import interiores.business.models.room.elements.fixed.Window;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Dimension;
 import java.awt.Point;

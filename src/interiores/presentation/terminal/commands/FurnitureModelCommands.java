@@ -3,7 +3,7 @@ package interiores.presentation.terminal.commands;
 import interiores.business.controllers.FurnitureModelController;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
-import interiores.business.models.FurnitureModel;
+import interiores.business.models.room.FurnitureModel;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.annotation.Command;

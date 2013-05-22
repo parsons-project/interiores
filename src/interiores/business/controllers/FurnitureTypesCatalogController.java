@@ -2,7 +2,7 @@ package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogController;
 import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.models.FurnitureType;
+import interiores.business.models.room.FurnitureType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.factories.DefaultFurnitureTypesCatalogFactory;

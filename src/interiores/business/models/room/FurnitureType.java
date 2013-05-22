@@ -1,5 +1,6 @@
-package interiores.business.models;
+package interiores.business.models.room;
 
+import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.PersistentIdObject;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.UnaryConstraint;

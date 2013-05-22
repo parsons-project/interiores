@@ -1,6 +1,6 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.FurnitureModel;
+import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;

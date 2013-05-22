@@ -1,7 +1,7 @@
 package interiores.business.models.catalogs.factories;
 
-import interiores.business.models.FurnitureModel;
-import interiores.business.models.FurnitureType;
+import interiores.business.models.room.FurnitureModel;
+import interiores.business.models.room.FurnitureType;
 import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessException;

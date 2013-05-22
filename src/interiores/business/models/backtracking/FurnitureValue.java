@@ -1,6 +1,6 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.FurnitureModel;
+import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
 import interiores.shared.backtracking.Value;

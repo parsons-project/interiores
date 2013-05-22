@@ -4,7 +4,7 @@
  */
 package interiores.business.models.backtracking.trimmers.preliminar;
 
-import interiores.business.models.FurnitureModel;
+import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.trimmers.PreliminarTrimmer;

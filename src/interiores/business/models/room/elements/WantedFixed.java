@@ -1,6 +1,8 @@
-package interiores.business.models;
+package interiores.business.models.room.elements;
 
-import interiores.core.business.BusinessException;
+import interiores.business.models.Orientation;
+import interiores.business.models.SpaceAround;
+import interiores.business.models.room.FurnitureModel;
 import interiores.utils.Dimension;
 import java.awt.Point;
 
@@ -15,12 +17,8 @@ public class WantedFixed extends WantedElement
     protected FurnitureModel model;
 
     public WantedFixed(String typeName, Dimension size, String color, String material, SpaceAround space) {
-        super(typeName, typeName);
+        super(typeName);
         model = new FurnitureModel(name, size, 0, color, material, space);
-    }
-    
-    public void setName(String name) {
-        this.name = name;
     }
     
     public Point getPosition() {

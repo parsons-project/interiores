@@ -1,5 +1,6 @@
 package interiores.business.models;
 
+import interiores.business.models.room.FurnitureType;
 import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.MandatoryFurnitureException;
 import interiores.business.models.catalogs.PersistentIdObject;

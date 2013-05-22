@@ -1,44 +1,22 @@
-package interiores.business.models;
+package interiores.business.models.room.elements;
 
 import interiores.business.models.constraints.UnaryConstraint;
 import java.util.Collection;
-import java.util.HashMap;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElementWrapper;
+
 
 /**
- * This class is the abstraction of a wanted element for the room
- * @author alvaro
+ * This class represents a furniture that the user wants to add to the room
+ * @author larribas
  */
-public abstract class WantedElement {
-    @XmlAttribute
-    protected String name;
-    
-    @XmlAttribute
-    protected String typeName;
-    
-    /*
-     * The unary constraints related to this element
-     */
-    @XmlElementWrapper
-    protected HashMap<Class, UnaryConstraint> constraints;
+public class WantedFurniture extends WantedElement
+{
     
     /**
-     * Simple creator. Creates a wanted element given its type
-     * @param ft The funiture type of this wanted element
+     * Simple creator. Creates a wanted furniture given its type
+     * @param ft The funiture type of this wanted furniture
      */
-    public WantedElement(String name, String typeName) {
-        this.name = name;
-        this.typeName = typeName;
-        constraints = new HashMap();
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public String getTypeName() {
-        return typeName;
+    public WantedFurniture(String furnitureTypeName) {
+        super(furnitureTypeName);
     }
     
     /**
@@ -73,5 +51,5 @@ public abstract class WantedElement {
      */
     public Collection<UnaryConstraint> getUnaryConstraints() {
         return constraints.values();
-    }   
+    }
 }

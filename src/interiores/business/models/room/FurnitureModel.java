@@ -1,5 +1,8 @@
-package interiores.business.models;
+package interiores.business.models.room;
 
+import interiores.business.models.Orientation;
+import interiores.business.models.OrientedRectangle;
+import interiores.business.models.SpaceAround;
 import interiores.core.Utils;
 import interiores.core.business.BusinessException;
 import interiores.data.adapters.ColorAdapter;

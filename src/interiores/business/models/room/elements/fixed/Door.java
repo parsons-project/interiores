@@ -1,4 +1,4 @@
-package interiores.business.models.fixed;
+package interiores.business.models.room.elements.fixed;
 
 import interiores.business.models.SpaceAround;
 import interiores.utils.Dimension;

@@ -7,7 +7,7 @@ import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.models.FurnitureType;
+import interiores.business.models.room.FurnitureType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;

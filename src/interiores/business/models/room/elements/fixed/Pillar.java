@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interiores.business.models.fixed;
+package interiores.business.models.room.elements.fixed;
 
 import interiores.business.models.SpaceAround;
-import interiores.business.models.WantedFixed;
+import interiores.business.models.room.elements.WantedFixed;
 import interiores.utils.Dimension;
 import java.awt.Point;
 

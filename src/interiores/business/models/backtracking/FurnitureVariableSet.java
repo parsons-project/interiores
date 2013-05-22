@@ -1,10 +1,10 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.FurnitureType;
+import interiores.business.models.room.FurnitureType;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
-import interiores.business.models.WantedFixed;
-import interiores.business.models.WantedFurniture;
+import interiores.business.models.room.elements.WantedFixed;
+import interiores.business.models.room.elements.WantedFurniture;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.trimmers.PreliminarTrimmer;
 import interiores.business.models.catalogs.NamedCatalog;
@@ -228,34 +228,35 @@ public class FurnitureVariableSet
     //note: preliminar implementation. Final implementation should take more
     //things into consideration (e.g., not blocking paths)
     @Override
-    protected boolean canAssignToActual(Value value) {
-        // Check constant constraints!
-        // @TODO Transform to preliminar trims?
-        for(FurnitureConstant constant : constants) {
-            if(! binaryConstraints.isSatisfied(actual, constant))
-                return false;
-        }
-        
+    protected boolean canAssignToActual(Value value) {        
         FurnitureValue actual_fv = (FurnitureValue) value;
-        // A little explanation: fv.getArea() gets the ACTIVE area of actual_fv
-        // while fv.getWholeArea() gets the PASSIVE + ACTIVE area of actual_fv
         
         if (! roomArea.contains(actual_fv.getWholeArea())) return false;
 
         actual.assignValue(value);
-        for (int i = 0; i < depth; ++i) {
-            FurnitureValue other_fv = variables[i].getAssignedValue();
-            
-            if (!binaryConstraints.isSatisfied(actual, variables[i])
-                || actual_fv.getArea().intersects(other_fv.getWholeArea())
-                || actual_fv.getWholeArea().intersects(other_fv.getArea()) )
-            {
-                actual.undoAssignValue();
-                return false;
-            }
-
-        }
+        boolean result = (
+                checkAssignWith(actual_fv, constants, constants.length) &&
+                checkAssignWith(actual_fv, variables, depth)
+                );
         actual.undoAssignValue();
+        
+        return result;
+    }
+    
+    private boolean checkAssignWith(FurnitureValue actual_fv, InterioresVariable[] parameters, int end)
+    {
+        // A little explanation: fv.getArea() gets the ACTIVE area of actual_fv
+        // while fv.getWholeArea() gets the PASSIVE + ACTIVE area of actual_fv
+        
+        for(int i = 0; i < end; ++i) {
+            FurnitureValue other_fv = parameters[i].getAssignedValue();
+            
+            if (!binaryConstraints.isSatisfied(actual, parameters[i])
+                || actual_fv.getArea().intersects(other_fv.getWholeArea())
+                || actual_fv.getWholeArea().intersects(other_fv.getArea()))
+                return false;
+        }
+        
         return true;
     }
 
@@ -315,7 +316,7 @@ public class FurnitureVariableSet
     }
    
     
-    public Map<String, FurnitureValue> getValues() {
+    public Map<String, FurnitureValue> getVariableValues() {
         Map<String, FurnitureValue> values = new HashMap();
         
         for(FurnitureConstant constant : constants)

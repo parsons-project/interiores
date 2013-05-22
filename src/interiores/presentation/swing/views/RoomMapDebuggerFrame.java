@@ -33,6 +33,7 @@ public class RoomMapDebuggerFrame extends JFrame
     private boolean skipForever;
     private int drawIterations;
     private boolean isPaused;
+    private boolean isFinished;
     private DefaultListModel variableListModel;
     
     /**
@@ -42,6 +43,8 @@ public class RoomMapDebuggerFrame extends JFrame
     {
         this.designController = presentation.getBusinessController(DesignController.class);
         initComponents();
+        
+        isFinished = true;
     }
     
     public void setDebuggee(RoomMapPanel debuggee)
@@ -378,6 +381,9 @@ public class RoomMapDebuggerFrame extends JFrame
     @Listen(DebugRoomDesignStartedEvent.class)
     public void showDebug() {
         setVisible(true);
+        
+        if(isFinished)
+           reset(); 
     }
     
     @Listen(ActualVariableSetEvent.class)
@@ -443,6 +449,8 @@ public class RoomMapDebuggerFrame extends JFrame
         resumePauseButton.setEnabled(false);
         stopButton.setEnabled(false);
         iterateButton.setEnabled(false);
+        
+        isFinished = true;
     }
     
     private void enableButtons() {
@@ -453,7 +461,6 @@ public class RoomMapDebuggerFrame extends JFrame
         iterateButton.setEnabled(true);
     }
     
-    @Listen(RoomDesignStartedEvent.class)
     public void reset()
     {
         map.clear();
@@ -471,6 +478,8 @@ public class RoomMapDebuggerFrame extends JFrame
         setValueInfo("Unknown", "Unknown", "Unknown");
         
         enableButtons();
+        
+        isFinished = false;
     }
     
     private void setActualVariableName(String variableName)

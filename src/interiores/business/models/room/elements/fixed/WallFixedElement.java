@@ -1,8 +1,8 @@
-package interiores.business.models.fixed;
+package interiores.business.models.room.elements.fixed;
 
 import interiores.business.models.Orientation;
 import interiores.business.models.SpaceAround;
-import interiores.business.models.WantedFixed;
+import interiores.business.models.room.elements.WantedFixed;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import java.awt.Point;

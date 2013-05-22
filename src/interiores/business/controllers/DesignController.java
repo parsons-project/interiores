@@ -4,7 +4,7 @@ import interiores.business.controllers.abstracted.CatalogAccessController;
 import interiores.business.events.room.DebugRoomDesignStartedEvent;
 import interiores.business.events.room.RoomDesignFinishedEvent;
 import interiores.business.events.room.RoomDesignStartedEvent;
-import interiores.business.models.FurnitureType;
+import interiores.business.models.room.FurnitureType;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
@@ -87,7 +87,7 @@ public class DesignController
                     lastSolution = furVarSet.toString();
 
 
-                    roomDesigned.setDesign(furVarSet.getValues());
+                    roomDesigned.setDesign(furVarSet.getVariableValues());
                 }
                 catch (NoSolutionException nse) {
                     solutionFound = false;

@@ -1,6 +1,6 @@
 package interiores.business.models.constraints.unary;
 
-import interiores.business.models.FurnitureModel;
+import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.backtracking.Domain;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.utils.Dimension;

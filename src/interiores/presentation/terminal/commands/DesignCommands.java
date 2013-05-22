@@ -6,6 +6,7 @@ package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.DesignController;
 import interiores.core.Options;
+import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandOptions;
@@ -33,13 +34,16 @@ public class DesignCommands extends AdvancedCommandGroup {
        else {
            designController.solve(options.isEnabled("time"));
        }
-       
-       if (designController.hasSolution()) {
-           println(designController.getDesign());
-       }
-       else {
-           println("Solution not found");
-       }
    }
-    
+   
+   @Command("Show the last design")
+   public void show() {
+       if(designController.isSolving())
+           throw new BusinessException("The solver is still trying to find a solution...");
+       
+       if(designController.hasSolution())
+           println(designController.getDesign().toString());
+       else
+           println("No solution found :(");
+   }
 }

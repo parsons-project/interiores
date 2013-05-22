@@ -1,4 +1,4 @@
-package interiores.business.events.room;
+package interiores.business.events.backtracking;
 
 import interiores.core.Event;
 
@@ -6,7 +6,7 @@ import interiores.core.Event;
  *
  * @author hector
  */
-public class RoomDesignStartedEvent
+public class SolveDesignStartedEvent
     implements Event
 {
 

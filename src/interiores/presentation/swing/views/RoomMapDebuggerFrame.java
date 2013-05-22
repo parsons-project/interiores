@@ -5,9 +5,9 @@ import interiores.business.events.backtracking.ActualVariableSetEvent;
 import interiores.business.events.backtracking.NextValueEvent;
 import interiores.business.events.backtracking.ValueAssignedEvent;
 import interiores.business.events.backtracking.ValueUnassignedEvent;
-import interiores.business.events.room.DebugRoomDesignStartedEvent;
-import interiores.business.events.room.RoomDesignFinishedEvent;
-import interiores.business.events.room.RoomDesignStartedEvent;
+import interiores.business.events.backtracking.DebugSolveDesignStartedEvent;
+import interiores.business.events.backtracking.SolveDesignFinishedEvent;
+import interiores.business.events.backtracking.SolveDesignStartedEvent;
 import interiores.business.models.Orientation;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Business;
@@ -378,7 +378,7 @@ public class RoomMapDebuggerFrame extends JFrame
     private javax.swing.JList variableList;
     // End of variables declaration//GEN-END:variables
 
-    @Listen(DebugRoomDesignStartedEvent.class)
+    @Listen(DebugSolveDesignStartedEvent.class)
     public void showDebug() {
         setVisible(true);
         
@@ -442,7 +442,7 @@ public class RoomMapDebuggerFrame extends JFrame
         debuggee.repaint();
     }
     
-    @Listen(RoomDesignFinishedEvent.class)
+    @Listen(SolveDesignFinishedEvent.class)
     public void disableButtons() {
         pause();
         

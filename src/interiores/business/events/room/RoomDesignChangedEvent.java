@@ -6,7 +6,7 @@ import interiores.core.Event;
  *
  * @author hector
  */
-public class DesignChangedEvent
+public class RoomDesignChangedEvent
     implements Event
 {
     

@@ -1,10 +1,12 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogAccessController;
-import interiores.business.events.room.DebugRoomDesignStartedEvent;
-import interiores.business.events.room.RoomDesignFinishedEvent;
-import interiores.business.events.room.RoomDesignStartedEvent;
+import interiores.business.events.backtracking.DebugSolveDesignStartedEvent;
+import interiores.business.events.room.RoomDesignChangedEvent;
+import interiores.business.events.backtracking.SolveDesignFinishedEvent;
+import interiores.business.events.backtracking.SolveDesignStartedEvent;
 import interiores.business.exceptions.SolverNotFinishedException;
+import interiores.business.models.RoomDesign;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
@@ -28,7 +30,7 @@ public class DesignController
 {
     private boolean solutionFound = false;
     private long time = -1;
-    private String lastSolution;
+    private RoomDesign design;
     private Thread solver;
     
     /**
@@ -63,7 +65,7 @@ public class DesignController
                 getActiveCatalog());
         furVarSetDebug.addListener(this);
         
-        notify(new DebugRoomDesignStartedEvent());
+        notify(new DebugSolveDesignStartedEvent());
         computeSolution(furVarSetDebug, timeIt);
     }
     
@@ -79,25 +81,27 @@ public class DesignController
                 furVarSet.addPreliminarTrimmer(new UnaryConstraintsPreliminarTrimmer());
                 furVarSet.addPreliminarTrimmer(new UnfitModelsPreliminarTrimmer());
 
-                final RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
+                final SolveDesignFinishedEvent solveFinished = new SolveDesignFinishedEvent();
 
                 if (timeIt) time = System.nanoTime();
                 // And try to solve it
                 try {
-                    me.notify(new RoomDesignStartedEvent());
+                    me.notify(new SolveDesignStartedEvent());
                     furVarSet.solve();
                     solutionFound = true;
-                    lastSolution = furVarSet.toString();
+                    solveFinished.solutionFound();
 
-
-                    roomDesigned.setDesign(furVarSet.getVariableValues());
+                    design = new RoomDesign(furVarSet.getVariableValues());
+                    getRoom().setDesign(design);
+                    
+                    me.notify(new RoomDesignChangedEvent());
                 }
                 catch (NoSolutionException nse) {
                     solutionFound = false;
                 }
 
-                if (timeIt) roomDesigned.setTime(System.nanoTime() - time);
-                me.notify(roomDesigned);
+                if (timeIt) solveFinished.setTime(System.nanoTime() - time);
+                me.notify(solveFinished);
             }
         };
         
@@ -116,8 +120,8 @@ public class DesignController
      * Gets a text representation of the generated design
      * @return A String containing a text representation of the design
      */
-    public String getDesign() {
-        return lastSolution;
+    public RoomDesign getDesign() {
+        return design;
     }
     
     public void resumeSolver()
@@ -138,7 +142,7 @@ public class DesignController
         return (solver.getState() == Thread.State.WAITING);
     }
     
-    private boolean isSolving()
+    public boolean isSolving()
     {
         return (solver != null && solver.isAlive());
     }

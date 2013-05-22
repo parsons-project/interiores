@@ -5,7 +5,7 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.InterioresController;
-import interiores.business.events.room.DesignChangedEvent;
+import interiores.business.events.room.RoomDesignChangedEvent;
 import interiores.business.models.room.elements.fixed.Door;
 import interiores.business.models.room.elements.fixed.Pillar;
 import interiores.business.models.room.elements.fixed.Window;
@@ -31,7 +31,7 @@ public class FixedElementController extends InterioresController{
     public void addDoor(String wall, int displacement, int length) {
         getWishList().addWantedFixed(new Door(wall, displacement, length, getRoom().getDimension()));
         
-        notify(new DesignChangedEvent());
+        notify(new RoomDesignChangedEvent());
     }
     
     public void addWindow(String wall, int displacement, int length) {

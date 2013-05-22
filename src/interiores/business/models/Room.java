@@ -3,7 +3,7 @@ package interiores.business.models;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import java.util.Collection;
-import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -16,11 +16,14 @@ public class Room
 {
     private static final int RESOLUTION = 5;
     
-    @XmlAttribute
+    @XmlElement
     private RoomType type;
     
-    @XmlAttribute
+    @XmlElement
     private Dimension size;
+    
+    @XmlElement
+    private RoomDesign design;
     
     public Room() {
         
@@ -44,6 +47,7 @@ public class Room
         
         this.type = type;
         this.size = size;
+        design = null;
     }
     
     /**
@@ -105,5 +109,9 @@ public class Room
     
     public int getDepth() {
         return size.depth;
+    }
+    
+    public void setDesign(RoomDesign design) {
+        this.design = design;
     }
 }

@@ -1,10 +1,12 @@
 package interiores.presentation.swing.views;
 
+import interiores.business.controllers.DesignController;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.RoomController;
 import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
-import interiores.business.events.room.RoomDesignFinishedEvent;
-import interiores.business.events.room.RoomDesignStartedEvent;
+import interiores.business.events.room.RoomDesignChangedEvent;
+import interiores.business.events.backtracking.SolveDesignFinishedEvent;
+import interiores.business.events.backtracking.SolveDesignStartedEvent;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.core.Debug;
@@ -29,6 +31,7 @@ public class RoomMapPanel extends JPanel
 {
     private RoomController roomController;
     private FurnitureTypeController ftController;
+    private DesignController designController;
     private InteractiveRoomMap map;
     private RoomMapDebuggerFrame debuggerGui;
 
@@ -41,6 +44,7 @@ public class RoomMapPanel extends JPanel
         
         roomController = presentation.getBusinessController(RoomController.class);
         ftController = presentation.getBusinessController(FurnitureTypeController.class);
+        designController = presentation.getBusinessController(DesignController.class);
         
         if(Debug.isEnabled())
             debuggerGui = presentation.get(RoomMapDebuggerFrame.class);
@@ -126,28 +130,31 @@ public class RoomMapPanel extends JPanel
         return map;
     }
       
-    @Listen(RoomDesignStartedEvent.class)
+    @Listen(SolveDesignStartedEvent.class)
     public void putSearching() {
         map.setStatus("Searching...");
         
         repaint();
     }
     
-    @Listen(RoomDesignFinishedEvent.class)
-    public void updateDesign(RoomDesignFinishedEvent event) {
-        if (event.hasDesign())
-        {
-            map.clearFurniture();
-            
-            map.setStatus("Solution found! :)");
+    @Listen(RoomDesignChangedEvent.class)
+    public void updateDesign() {
+        map.clearFurniture();
         
-            for(Entry<String, FurnitureValue> entry : event.getDesign()) {
-                String name = entry.getKey();
-                Color color = entry.getValue().getModel().getColor();
+        for(Entry<String, FurnitureValue> entry : designController.getDesign().getEntries()) {
+            String name = entry.getKey();
+            Color color = entry.getValue().getModel().getColor();
 
-                addFurniture(name, entry.getValue().getArea(), color);
-            }
+            addFurniture(name, entry.getValue().getArea(), color);
         }
+        
+        repaint();
+    }
+    
+    @Listen(SolveDesignFinishedEvent.class)
+    public void updateStatus(SolveDesignFinishedEvent event) {
+        if (event.isSolutionFound())
+            map.setStatus("Solution found! :)");
         else
             map.setStatus("Solution not found :(");
         

@@ -5,7 +5,14 @@
 package interiores.presentation.swing.views;
 
 import interiores.business.controllers.RoomTypeController;
+import interiores.business.controllers.RoomTypesCatalogController;
+import interiores.business.models.RoomType;
 import interiores.core.presentation.SwingController;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -14,8 +21,10 @@ import interiores.core.presentation.SwingController;
 public class RoomTypeCatalogPanel extends javax.swing.JPanel {
 
      private SwingController swing;
-     private RoomTypeController roomTypesController;
+     private RoomTypeController rtController;
+     private RoomTypesCatalogController rtcController;
     
+     private List<RTC_Element> catElements;
     
     /**
      * Creates new form RoomTypeCatalogPanel
@@ -24,8 +33,12 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         initComponents();
         
         this.swing = presentation;
-        roomTypesController = swing.getBusinessController(RoomTypeController.class);
+        rtController = swing.getBusinessController(RoomTypeController.class);
+        rtcController = swing.getBusinessController(RoomTypesCatalogController.class);
         
+        catElements = new ArrayList();
+        
+        initCatalog();
     }
 
     /**
@@ -217,4 +230,160 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     private javax.swing.JLabel measureLabel3;
     private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
+
+    
+
+    public void initCatalog() {
+        
+        // Retrieve all the elements in the catalog
+//        Set<String> rtypes = rtController.getFullNamesMap().keySet();
+//        
+//        for (String s : rtypes) {
+//            
+//            
+//            
+//        }
+        for (int i = 0; i < 10; i++) {
+            RTC_Element test = new RTC_Element();
+            test.addToPanel();
+        }
+       
+        
+    }
+
+
+    class RTC_Element {
+        public javax.swing.JPanel outerPanel = new javax.swing.JPanel();
+        public javax.swing.JButton removeButton = new javax.swing.JButton();
+        public javax.swing.JPanel innerPanel = new javax.swing.JPanel();;
+        public javax.swing.JLabel rtname = new javax.swing.JLabel();
+        public javax.swing.JTextField mandatoryField = new javax.swing.JTextField();
+        public javax.swing.JLabel mandatoryLabel = new javax.swing.JLabel();
+        public javax.swing.JTextField forbiddenField = new javax.swing.JTextField();
+        public javax.swing.JLabel forbiddenLabel = new javax.swing.JLabel();
+        public javax.swing.JTextField measureField1 = new javax.swing.JTextField();
+        public javax.swing.JTextField measureField2 = new javax.swing.JTextField();
+        public javax.swing.JLabel measureLabel1 = new javax.swing.JLabel();
+        public javax.swing.JLabel measureLabel2 = new javax.swing.JLabel();
+        public javax.swing.JLabel measureLabel3 = new javax.swing.JLabel();
+        
+        public RTC_Element() {
+            removeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/remove_element.png"))); // NOI18N
+
+            innerPanel.setBackground(new java.awt.Color(255, 255, 255));
+            innerPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+            innerPanel.setMaximumSize(new java.awt.Dimension(650, 125));
+            innerPanel.setMinimumSize(new java.awt.Dimension(650, 125));
+
+            fname.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
+            fname.setText("Bedroom:"); // EHFBSHLJBEPJHBELHBEWJLHBEJLGHBEWLHJBEWJHBEWJLHVEBWVHEJBEWJHBVJ
+
+            measureLabel1.setText("This room should measure more than");
+            measureField1.setText("200"); // EHFBSHLJBEPJHBELHBEWJLHBEJLGHBEWLHJBEWJHBEWJLHVEBWVHEJBEWJHBVJ
+//            measureField1.addActionListener(new java.awt.event.ActionListener() {
+//                public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                    measureField1ActionPerformed(evt);
+//                }
+//            });
+
+            measureLabel2.setText("cm wide and");
+            measureField2.setText("300"); // EHFBSHLJBEPJHBELHBEWJLHBEJLGHBEWLHJBEWJHBEWJLHVEBWVHEJBEWJHBVJ
+            measureLabel3.setText("cm deep");
+            mandatoryLabel.setText("Mandatory furniture:");
+            mandatoryField.setText("Bed, Wardrove"); // EHFBSHLJBEPJHBELHBEWJLHBEJLGHBEWLHJBEWJHBEWJLHVEBWVHEJBEWJHBVJ
+            forbiddenField.setText("Toilet, Handwasher, Oven, Shower"); // EHFBSHLJBEPJHBELHBEWJLHBEJLGHBEWLHJBEWJHBEWJLHVEBWVHEJBEWJHBVJ
+            forbiddenLabel.setText("Obligatory furniture:");
+
+            org.jdesktop.layout.GroupLayout innerPanelLayout = new org.jdesktop.layout.GroupLayout(innerPanel);
+            innerPanel.setLayout(innerPanelLayout);
+            innerPanelLayout.setHorizontalGroup(
+                innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(innerPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .add(rtname)
+                    .add(58, 58, 58)
+                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                        .add(innerPanelLayout.createSequentialGroup()
+                            .add(measureLabel1)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(measureField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(measureLabel2)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(measureField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 52, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(measureLabel3))
+                        .add(innerPanelLayout.createSequentialGroup()
+                            .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(mandatoryLabel)
+                                .add(forbiddenLabel))
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                            .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(forbiddenField)
+                                .add(mandatoryField))))
+                    .addContainerGap(15, Short.MAX_VALUE))
+            );
+            innerPanelLayout.setVerticalGroup(
+                innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(innerPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(rtname)
+                        .add(measureLabel1)
+                        .add(measureField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(measureLabel2)
+                        .add(measureField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(measureLabel3))
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(mandatoryLabel)
+                        .add(mandatoryField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(forbiddenField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(forbiddenLabel))
+                    .addContainerGap(15, Short.MAX_VALUE))
+            );
+
+            org.jdesktop.layout.GroupLayout outerPanelLayout = new org.jdesktop.layout.GroupLayout(outerPanel);
+            outerPanel.setLayout(outerPanelLayout);
+            outerPanelLayout.setHorizontalGroup(
+                outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(outerPanelLayout.createSequentialGroup()
+                    .add(37, 37, 37)
+                    .add(removeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 31, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(768, Short.MAX_VALUE))
+                .add(outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(outerPanelLayout.createSequentialGroup()
+                        .add(0, 93, Short.MAX_VALUE)
+                        .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 93, Short.MAX_VALUE)))
+            );
+            outerPanelLayout.setVerticalGroup(
+                outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(outerPanelLayout.createSequentialGroup()
+                    .add(26, 26, 26)
+                    .add(removeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(116, Short.MAX_VALUE))
+                .add(outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(outerPanelLayout.createSequentialGroup()
+                        .add(0, 24, Short.MAX_VALUE)
+                        .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 25, Short.MAX_VALUE)))
+            );
+            }
+        
+        public void addToPanel() {
+            jPanel1.add(outerPanel);
+        }
+        
+    }
+
+
+
+
+
+
+
+
 }

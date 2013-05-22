@@ -39,14 +39,19 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         title1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jPanel8 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        closeButton = new javax.swing.JButton();
+        fm1 = new javax.swing.JPanel();
+        fname = new javax.swing.JLabel();
+        measureLabel1 = new javax.swing.JLabel();
+        measureField1 = new javax.swing.JTextField();
+        measureLabel2 = new javax.swing.JLabel();
+        measureField2 = new javax.swing.JTextField();
+        measureLabel3 = new javax.swing.JLabel();
+        mandatoryLabel = new javax.swing.JLabel();
+        mandatoryField = new javax.swing.JTextField();
+        forbiddenField = new javax.swing.JTextField();
+        forbiddenLabel = new javax.swing.JLabel();
 
         title1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         title1.setText("Room types catalog");
@@ -55,105 +60,118 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         jPanel1.setAutoscrolls(true);
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0))));
-        jPanel6.setMaximumSize(new java.awt.Dimension(300, 100));
-        jPanel6.setMinimumSize(new java.awt.Dimension(300, 100));
+        closeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/remove_element.png"))); // NOI18N
 
-        jLabel5.setText("jLabel1");
+        fm1.setBackground(new java.awt.Color(255, 255, 255));
+        fm1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        fm1.setMaximumSize(new java.awt.Dimension(650, 125));
+        fm1.setMinimumSize(new java.awt.Dimension(650, 125));
 
-        org.jdesktop.layout.GroupLayout jPanel6Layout = new org.jdesktop.layout.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(129, Short.MAX_VALUE)
-                .add(jLabel5)
-                .add(120, 120, 120))
+        fname.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
+        fname.setText("Bedroom:");
+
+        measureLabel1.setText("This room should measure more than");
+
+        measureField1.setText("200");
+        measureField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                measureField1ActionPerformed(evt);
+            }
+        });
+
+        measureLabel2.setText("cm wide and");
+
+        measureField2.setText("300");
+
+        measureLabel3.setText("cm deep");
+
+        mandatoryLabel.setText("Mandatory furniture:");
+
+        mandatoryField.setText("Bed, Wardrove");
+
+        forbiddenField.setText("Toilet, Handwasher, Oven, Shower");
+
+        forbiddenLabel.setText("Obligatory furniture:");
+
+        org.jdesktop.layout.GroupLayout fm1Layout = new org.jdesktop.layout.GroupLayout(fm1);
+        fm1.setLayout(fm1Layout);
+        fm1Layout.setHorizontalGroup(
+            fm1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(fm1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(fname)
+                .add(58, 58, 58)
+                .add(fm1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(fm1Layout.createSequentialGroup()
+                        .add(measureLabel1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(measureField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(measureLabel2)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(measureField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 52, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(measureLabel3))
+                    .add(fm1Layout.createSequentialGroup()
+                        .add(fm1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(mandatoryLabel)
+                            .add(forbiddenLabel))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(fm1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(forbiddenField)
+                            .add(mandatoryField))))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
-                .add(jLabel5)
-                .add(44, 44, 44))
-        );
-
-        jPanel1.add(jPanel6);
-
-        jPanel7.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0))));
-        jPanel7.setMaximumSize(new java.awt.Dimension(300, 100));
-        jPanel7.setMinimumSize(new java.awt.Dimension(300, 100));
-
-        jLabel6.setText("jLabel1");
-
-        org.jdesktop.layout.GroupLayout jPanel7Layout = new org.jdesktop.layout.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addContainerGap(129, Short.MAX_VALUE)
-                .add(jLabel6)
-                .add(120, 120, 120))
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
-                .add(jLabel6)
-                .add(44, 44, 44))
-        );
-
-        jPanel1.add(jPanel7);
-
-        jPanel8.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0))));
-        jPanel8.setMaximumSize(new java.awt.Dimension(300, 100));
-        jPanel8.setMinimumSize(new java.awt.Dimension(300, 100));
-
-        jLabel7.setText("jLabel1");
-
-        org.jdesktop.layout.GroupLayout jPanel8Layout = new org.jdesktop.layout.GroupLayout(jPanel8);
-        jPanel8.setLayout(jPanel8Layout);
-        jPanel8Layout.setHorizontalGroup(
-            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(129, Short.MAX_VALUE)
-                .add(jLabel7)
-                .add(120, 120, 120))
-        );
-        jPanel8Layout.setVerticalGroup(
-            jPanel8Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
-                .add(jLabel7)
-                .add(44, 44, 44))
-        );
-
-        jPanel1.add(jPanel8);
-
-        jPanel5.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0))));
-        jPanel5.setMaximumSize(new java.awt.Dimension(300, 100));
-        jPanel5.setMinimumSize(new java.awt.Dimension(300, 100));
-
-        jLabel4.setText("jLabel1");
-
-        org.jdesktop.layout.GroupLayout jPanel5Layout = new org.jdesktop.layout.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(129, Short.MAX_VALUE)
-                .add(jLabel4)
-                .add(120, 120, 120))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
-                .add(jLabel4)
-                .add(44, 44, 44))
+        fm1Layout.setVerticalGroup(
+            fm1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(fm1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(fm1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(fname)
+                    .add(measureLabel1)
+                    .add(measureField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(measureLabel2)
+                    .add(measureField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(measureLabel3))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(fm1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(mandatoryLabel)
+                    .add(mandatoryField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(fm1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(forbiddenField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(forbiddenLabel))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel5);
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .add(37, 37, 37)
+                .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 31, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(768, Short.MAX_VALUE))
+            .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jPanel2Layout.createSequentialGroup()
+                    .add(0, 93, Short.MAX_VALUE)
+                    .add(fm1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(0, 93, Short.MAX_VALUE)))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .add(26, 26, 26)
+                .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(116, Short.MAX_VALUE))
+            .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(jPanel2Layout.createSequentialGroup()
+                    .add(0, 24, Short.MAX_VALUE)
+                    .add(fm1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(0, 25, Short.MAX_VALUE)))
+        );
+
+        jPanel1.add(jPanel2);
 
         jScrollPane1.setViewportView(jPanel1);
 
@@ -161,11 +179,11 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jScrollPane1)
             .add(layout.createSequentialGroup()
                 .add(68, 68, 68)
                 .add(title1)
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -173,20 +191,30 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
                 .add(56, 56, 56)
                 .add(title1)
                 .add(18, 18, 18)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE))
+                .add(jScrollPane1))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void measureField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_measureField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_measureField1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JButton closeButton;
+    private javax.swing.JPanel fm1;
+    private javax.swing.JLabel fname;
+    private javax.swing.JTextField forbiddenField;
+    private javax.swing.JLabel forbiddenLabel;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField mandatoryField;
+    private javax.swing.JLabel mandatoryLabel;
+    private javax.swing.JTextField measureField1;
+    private javax.swing.JTextField measureField2;
+    private javax.swing.JLabel measureLabel1;
+    private javax.swing.JLabel measureLabel2;
+    private javax.swing.JLabel measureLabel3;
     private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
 }

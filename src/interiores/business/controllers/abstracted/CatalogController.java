@@ -2,6 +2,7 @@ package interiores.business.controllers.abstracted;
 
 import interiores.business.events.catalogs.CatalogChangedEvent;
 import interiores.business.exceptions.ActiveCatalogRemovalException;
+import interiores.business.exceptions.CatalogAlreadyExistsException;
 import interiores.business.exceptions.CatalogNotFoundException;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.catalogs.AvailableCatalog;
@@ -36,7 +37,9 @@ abstract public class CatalogController<I extends PersistentIdObject>
     }
     
     public void create(String catalogName) {
-        if(catalogName.equals(NamedCatalog.getDefaultName()))
+        if (loadedCatalogs.containsKey(catalogName))
+            throw new CatalogAlreadyExistsException(catalogName);
+        else if (catalogName.equals(NamedCatalog.getDefaultName()))
             throw new DefaultCatalogOverwriteException();
         
         loadedCatalogs.put(catalogName, new NamedCatalog(catalogName, getActiveCatalog()));

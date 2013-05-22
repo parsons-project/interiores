@@ -39,6 +39,12 @@ public class RoomTypesCatalogController
         notify(new RTCatalogChangedEvent(catalogName,true));
     }
     
+    @Override
+    public void remove(String catalogName) {
+        super.remove(catalogName);
+        notify(new RTCatalogChangedEvent(catalogName, false));
+    }
+    
 //    @Override
 //    public void load(String path) throws JAXBException {
 //        super.load(path);

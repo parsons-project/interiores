@@ -4,6 +4,7 @@ import interiores.business.controllers.abstracted.CatalogAccessController;
 import interiores.business.events.room.DebugRoomDesignStartedEvent;
 import interiores.business.events.room.RoomDesignFinishedEvent;
 import interiores.business.events.room.RoomDesignStartedEvent;
+import interiores.business.exceptions.SolverNotFinishedException;
 import interiores.business.models.room.FurnitureType;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
@@ -45,6 +46,9 @@ public class DesignController
      * case, returns the solution.
      */
     public void solve(boolean timeIt) {
+        if(isSolving())
+            throw new SolverNotFinishedException();
+                
         WishList wishList = getWishList();
         FurnitureVariableSet furVarSet = new FurnitureVariableSet(wishList, getActiveCatalog());
         
@@ -52,6 +56,9 @@ public class DesignController
     }
     
     public void debug(boolean timeIt) {
+        if(isSolving())
+            throw new SolverNotFinishedException();
+        
         WishList wishList = getWishList();
         FurnitureVariableSetDebugger furVarSetDebug = new FurnitureVariableSetDebugger(wishList,
                 getActiveCatalog());
@@ -63,9 +70,6 @@ public class DesignController
     
     private void computeSolution(final FurnitureVariableSet furVarSet, final boolean timeIt)
     {
-        if(isSolving())
-            throw new BusinessException("There is already a search in progress!");
-        
         final DesignController me = this;
         
         solver = new Thread(){

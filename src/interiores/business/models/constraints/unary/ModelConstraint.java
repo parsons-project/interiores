@@ -63,12 +63,6 @@ public class ModelConstraint
     
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
-
-        result.append(this.getClass().getName() + NEW_LINE);
-
-        result.append("Model: " + modelName + NEW_LINE);
-        return result.toString();
+        return "Model: " + modelName;
     }
 }

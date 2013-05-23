@@ -55,6 +55,7 @@ abstract public class SizeRangeConstraint
     
     @Override
     public String toString() {
-        return getClass().getName() + " Range[" + range + "]";
+        return "Range: " + range;
+        //return getClass().getName() + " Range[" + range + "]";
     }
 }

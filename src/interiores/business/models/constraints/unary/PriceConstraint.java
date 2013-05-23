@@ -52,6 +52,7 @@ public class PriceConstraint
     
     @Override
     public String toString() {
-        return this.getClass().getName() + " Max price[" + maxPrice + "]";
+        return "Max price: " + maxPrice;
+        //return this.getClass().getName() + " Max price[" + maxPrice + "]";
     }
 }

@@ -100,6 +100,14 @@ public class FurnitureModel {
         return size;
     }
     
+    /**
+     * Gets the area of the furniter model in surface units.
+     * @return 
+     */
+    public int areaSize() {
+        return size.depth * size.width;
+    }
+    
     public OrientedRectangle getActiveArea(Point position, Orientation orientation) {
         OrientedRectangle activeArea = new OrientedRectangle(position, getSize(), Orientation.S);
         activeArea.setOrientation(orientation);

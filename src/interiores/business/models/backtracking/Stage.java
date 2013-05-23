@@ -272,8 +272,18 @@ public class Stage {
     }
 
     int smallestModelSize() {
+        if (models.isEmpty()) return 0;
+
+        FurnitureModel smallestModel = models.get(0);
+        for (FurnitureModel model : models) {
+            if (model.areaSize() < smallestModel.areaSize())
+                smallestModel = model;
+        }
         
-    }
+        return smallestModel.areaSize();
+     }
+    
+ 
     
     
 }

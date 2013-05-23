@@ -79,7 +79,16 @@ public class FurnitureVariableSet
     Map<String, GlobalConstraint> globalConstraints;
     
     private List<PreliminarTrimmer> preliminarTrimmers;
-            
+    
+    /**
+     * constants to calibrate the selection of the next actual variable.
+     * The importance of each factor is proportional to the value of the
+     * constant.
+     */
+    private static final int DOMAIN_SIZE_FACTOR = 30;
+    private static final int SMALLEST_MODEL_FACTOR = 5;
+    private static final int BINARY_CONSTRAINTS_FACTOR = 12;
+    
     /**
      * Default Constructor.
      */
@@ -175,18 +184,80 @@ public class FurnitureVariableSet
      * as actual variable.
      * In order for the actual variable to be set it has to be moved to the
      * position depth of variables.
+     * The variable is chosen according to 3 factors:
+     * 1) The domain size: the smallest the better
+     * 2) The binary constraints with variables that have not been set: the more
+     * the better
+     * 3) The size of the smallest model: the more the better
+     * 
+     * Each factor has a weight defined by a global constant, so that it can
+     * be adjusted.
+     * 
      * The iterators of the actual variable are reset.
      */
     //note: trivial implementation. To be optimized.
+    
+    
     @Override
     protected void setActualVariable() {
-        for (int i = depth; i < variableCount; ++i) {
-            int domainSize = variables[depth].domainSize();
-            int binaryConstraintsWeight = variables[depth].binaryConstraintsWeight();
-            int smallestModelSize = variables[depth].smallestModelSize();
-        }
+        
         if (variables.length != 0) {
+            int maxDomainSize = -1;
+            int maxBinaryConstraints = -1;
+            int maxSmallestModelArea = -1;
+            int[] domainSize = new int[variableCount];
+            int[] binaryConstraintsLoad = new int[variableCount];
+            int[] smallestModelSize = new int[variableCount];
+
+
+            //get value of each factor for each variable and compute maximums
+            for (int i = depth; i < variableCount; ++i) {
+                domainSize[i] = variables[depth].domainSize();
+                if (domainSize[i] > maxDomainSize) maxDomainSize = domainSize[i];
+
+                binaryConstraintsLoad[i] = variables[depth].binaryConstraintsWeight();
+                if (binaryConstraintsLoad[i] > maxBinaryConstraints)
+                    maxBinaryConstraints = binaryConstraintsLoad[i];
+
+                smallestModelSize[i] = variables[depth].smallestModelSize();
+                if (smallestModelSize[i] > maxSmallestModelArea)
+                    maxSmallestModelArea = smallestModelSize[i];
+
+            }
+
+            //calculate the weight of each factor for each variable and the final
+            //weight of each variable, and compute the index of the variable with
+            //the lowest overall weight
+            int minimumWeight = -1;
+            int minimumWeightVariableIndex = -1;
+
+            for (int i = depth; i < variableCount; ++i) {
+
+                int domainSizeWeight = (domainSize[i] * DOMAIN_SIZE_FACTOR) / maxDomainSize;
+                int binaryConstraintsWeight = maxBinaryConstraints -
+                        (binaryConstraintsLoad[i] * BINARY_CONSTRAINTS_FACTOR) / maxBinaryConstraints;
+                int smallestModelSizeWeight =
+                        (smallestModelSize[i] * SMALLEST_MODEL_FACTOR) / maxSmallestModelArea;
+
+                int variableWeight = domainSizeWeight + binaryConstraintsWeight +
+                        smallestModelSizeWeight;
+
+                if (minimumWeight == -1 || variableWeight < minimumWeight) {
+                    minimumWeight = variableWeight;
+                    minimumWeightVariableIndex = i;
+                }
+
+            }
+
+            //set actual variable and move it to position depth
+            FurnitureVariable aux = variables[depth];
+            variables[depth] = variables[minimumWeightVariableIndex];
+            variables[minimumWeightVariableIndex] = aux;
+            
+            //set actual variable
             actual = variables[depth];
+            
+            //reset iterators
             actual.resetIterators(depth);
         }
         else {
@@ -360,4 +431,5 @@ public class FurnitureVariableSet
 
         return result.toString();
     }
+
 }

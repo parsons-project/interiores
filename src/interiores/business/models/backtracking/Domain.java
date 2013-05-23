@@ -68,15 +68,7 @@ public class Domain {
     }
 
     
-    /**
-     * Moves the positions from the current iteration to the next iteration,
-     * and leaves the set of positions of the current iteration empty.
-     * @param iteration 
-     */
-    public void pushPositions(int iteration) {
-        domain[iteration+1].setPositions(domain[iteration].getPositions());
-        domain[iteration].setPositions(new ArrayList<Point>());
-    }
+
     
     /**
      * Pushes positions from the iteration i+1 to iteration i.
@@ -105,7 +97,7 @@ public class Domain {
         return domain[iteration].getModels();
     }
     
-    public List<Point> getPositions(int iteration) {
+    public Area getPositions(int iteration) {
         return domain[iteration].getPositions();
     }
     
@@ -174,7 +166,15 @@ public class Domain {
         domain[iteration].swapOrientations(domain[iteration+1]);
     }
 
-
+    /**
+     * Moves the positions from the current iteration to the next iteration,
+     * and leaves the set of positions of the current iteration empty.
+     * @param iteration 
+     */
+    public void pushPositions(int iteration) {
+        domain[iteration+1].setPositions(domain[iteration].getPositions());
+        domain[iteration].setPositions(new ArrayList<Point>());
+    }
 
 
     

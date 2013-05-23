@@ -198,6 +198,38 @@ public class Stage {
 
     
     
+    
+    void swapPositions(Stage stage) {
+        Area aux = this.positions;
+        this.positions = stage.positions;
+        stage.positions = aux;
+        
+        Iterator it = positionIterator;
+        positionIterator = stage.positionIterator;
+        stage.positionIterator = it;
+    }
+
+    void swapModels(Stage stage) {
+        List<FurnitureModel> aux = this.models;
+        this.models = stage.models;
+        stage.models = aux;
+        
+        Iterator it = modelIterator;
+        modelIterator = stage.modelIterator;
+        stage.modelIterator = it;
+    }
+
+    void swapOrientations(Stage stage) {
+        List<Orientation> aux = this.orientations;
+        this.orientations = stage.orientations;
+        stage.orientations = aux;
+        
+        Iterator it = orientationIterator;
+        orientationIterator = stage.orientationIterator;
+        stage.orientationIterator = it;
+    }
+    
+    
     //SET OPERATION: THE DEFINITIVE ONES
     
     
@@ -251,35 +283,7 @@ public class Stage {
     //DEPRECATED METHODS
     
     
-//    void swapPositions(Stage stage) {
-//        Area aux = this.positions;
-//        this.positions = stage.positions;
-//        stage.positions = aux;
-//        
-//        Iterator it = positionIterator;
-//        positionIterator = stage.positionIterator;
-//        stage.positionIterator = it;
-//    }
-//
-//    void swapModels(Stage stage) {
-//        List<FurnitureModel> aux = this.models;
-//        this.models = stage.models;
-//        stage.models = aux;
-//        
-//        Iterator it = modelIterator;
-//        modelIterator = stage.modelIterator;
-//        stage.modelIterator = it;
-//    }
-//
-//    void swapOrientations(Stage stage) {
-//        List<Orientation> aux = this.orientations;
-//        this.orientations = stage.orientations;
-//        stage.orientations = aux;
-//        
-//        Iterator it = orientationIterator;
-//        orientationIterator = stage.orientationIterator;
-//        stage.orientationIterator = it;
-//    }
+
 //    
 //    void addPositions(Area newPositions) {
 //        positions.union(newPositions);

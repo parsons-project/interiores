@@ -32,6 +32,7 @@ public class RoomMapDebugger
     
     private boolean isGridEnabled;
     private boolean shouldDrawFurniture;
+    private boolean shouldDrawPillars;
     private List<String> furnitures;
     private Map<String, List<Point>> points;
     private Map<String, Color> colors;
@@ -42,6 +43,7 @@ public class RoomMapDebugger
         
         isGridEnabled = Debug.isEnabled();
         shouldDrawFurniture = true;
+        shouldDrawPillars = true;
         furnitures = new ArrayList();
         points = new HashMap();
         colors = new HashMap();
@@ -67,8 +69,20 @@ public class RoomMapDebugger
         shouldDrawFurniture = false;
     }
     
+    public void enableDrawPillars() {
+        shouldDrawPillars = true;
+    }
+    
+    public void disableDrawPillars() {
+        shouldDrawPillars = false;
+    }
+    
     public boolean shouldDrawFurniture() {
         return shouldDrawFurniture;
+    }
+    
+    public boolean shouldDrawPillars() {
+        return shouldDrawPillars;
     }
     
     public void addPoint(Point p) {
@@ -104,8 +118,13 @@ public class RoomMapDebugger
         if(isGridEnabled)
             drawGrid(g);
         
+        drawWalls(g);
+        
         if(shouldDrawFurniture)
-            super.drawElements(g);
+            drawFurniture(g);
+        
+        if(shouldDrawPillars)
+            drawPillars(g);
     }
     
     private void drawGrid(Graphics2D g) {
@@ -120,9 +139,10 @@ public class RoomMapDebugger
         }
     }
 
+    @Override
     public void clear()
     {
-        super.clearFurniture();
+        clearFurniture();
         
         furnitures.clear();
         points.clear();

@@ -1,23 +1,23 @@
 package interiores.presentation.swing.views.map;
 
+import interiores.business.models.Orientation;
+import interiores.business.models.room.FurnitureModel;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 
 /**
  *
  * @author hector
  */
-public class Window extends WallElement
+public class MapWindow extends WallElement
 {
-    private static final int DEPTH = Walls.getDepth();
     private static final Color COLOR = Color.decode("#006699");
     
-    public Window(int size) {
-        this(0, 0, size);
-    }
-    
-    public Window(int x, int y, int size) {
-        super(x, y, size, DEPTH);
+    public MapWindow(String name, FurnitureModel model, Point position, Orientation orientation) {
+        super(name, model);
+        
+        setPosition(position.x, position.y, orientation);
     }
     
     @Override

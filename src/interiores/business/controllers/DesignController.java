@@ -18,6 +18,7 @@ import interiores.business.models.room.FurnitureType;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
+import java.util.Set;
 
 
 /**
@@ -122,6 +123,10 @@ public class DesignController
      */
     public RoomDesign getDesign() {
         return design;
+    }
+    
+    public Set getDesignFurniture() {
+        return design.getEntries();
     }
     
     public void resumeSolver()

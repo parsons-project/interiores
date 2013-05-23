@@ -22,31 +22,31 @@ public class WallFixedElement
         super(typeName, new Dimension(length, DEPTH), color, material, space);
         
         // South side of the wall fixed element points inside of the room
-        Point position = new Point(-DEPTH, -DEPTH);
+        Point p = new Point(-DEPTH, -DEPTH);
 
         Orientation whichWall = Orientation.getEnum(wall);
         
         switch(whichWall) {
             case S:
-                position.y = roomSize.depth;
+                p.y = roomSize.depth;
                             
             case N:
-                position.x = displacement;
+                p.x = displacement;
                 break;
             
             case E:
-                position.x = roomSize.width;
+                p.x = roomSize.width;
                 
             case W:
             default:
-                position.y = displacement;
+                p.y = displacement;
                 break;
         }
         
-        if(!roomSize.contains(position, DEPTH))
+        if(!roomSize.contains(p, DEPTH))
             throw new BusinessException("The " + typeName + " does not fit in the room.");
         
-        setPosition(position);
-        setOrientation(whichWall.complementary());
+        setPosition(p);
+        setOrientation(whichWall);
     }
 }

@@ -4,6 +4,7 @@
  */
 package interiores.business.models.room.elements.fixed;
 
+import interiores.business.models.Orientation;
 import interiores.business.models.SpaceAround;
 import interiores.business.models.room.elements.WantedFixed;
 import interiores.utils.Dimension;
@@ -20,5 +21,6 @@ public class Pillar
         super("pillar", dimension, "gray", "brick", new SpaceAround(0, 0, 0, 0));
         
         setPosition(position);
+        setOrientation(Orientation.S);
     }
 }

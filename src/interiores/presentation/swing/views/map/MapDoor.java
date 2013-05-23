@@ -1,6 +1,7 @@
 package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
+import interiores.business.models.room.FurnitureModel;
 import interiores.core.Debug;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -9,21 +10,14 @@ import java.awt.Graphics2D;
  *
  * @author hector0193
  */
-public class Door
+public class MapDoor
     extends WallElement
 {
-    protected static final int DEPTH = Walls.getDepth();
-    private static final Color COLOR = Color.decode("#EEEEEE");
-    
     private boolean hasToOpenOutwards;
-
-    
-    public Door(int size) {
-        this(0, 0, size);
-    }
+    protected Orientation orientation;
         
-    public Door(int x, int y, int size) {
-        super(x, y, size, DEPTH);
+    public MapDoor(String name, FurnitureModel model) {
+        super(name, model);
         
         hasToOpenOutwards = false;
     }
@@ -38,7 +32,7 @@ public class Door
     
     @Override
     public void draw(Graphics2D g) {
-        g.setColor(COLOR);
+        g.setColor(color);
         g.fill(rectangle);
         
         g.setColor(Color.black);
@@ -54,25 +48,30 @@ public class Door
         int renderX = x;
         int renderY = y;
         
+        this.orientation = orientation;
+        
+        Debug.println(x + " " + y);
+        
         switch(orientation) {
             case E:
-                renderX += Walls.getDepth();
-                break;
-                
-            case N:
-                renderY -= size;
-                break;
-                
-            case W:
                 renderX -= size;
                 break;
                 
-            default:
+            case N:
                 renderY += Walls.getDepth();
+                break;
+                
+            case W:
+                renderX += Walls.getDepth();
+                break;
+                
+            default:
+                renderY -= size;
                 break;
         }
         
         rectangle.setLocation(renderX + RoomMap.getPadding(), renderY + RoomMap.getPadding());
         rectangle.setOrientation(orientation);
+        rectangle.rotateLeft();
     }
 }

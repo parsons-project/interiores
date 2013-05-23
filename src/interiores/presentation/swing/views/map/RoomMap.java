@@ -1,15 +1,18 @@
 package interiores.presentation.swing.views.map;
 
-import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
+import interiores.business.models.backtracking.FurnitureValue;
+import interiores.business.models.room.elements.WantedFixed;
 import interiores.core.Debug;
-import interiores.presentation.swing.views.map.doors.LeftDoor;
-import interiores.presentation.swing.views.map.doors.RightDoor;
+import interiores.core.Utils;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * 
@@ -24,7 +27,8 @@ public class RoomMap
     
     protected int width;
     protected int depth;
-    private Map<String, RoomElement> elements;
+    private Map<String, RoomElement> furnitures;
+    private Map<String, RoomElement> pillars;
     private Walls walls;
     private String status;
     private String time;
@@ -32,50 +36,70 @@ public class RoomMap
     public RoomMap(int roomWidth, int roomDepth) {
         width = roomWidth + getPadding() * 2;
         depth = roomDepth + getPadding() * 2;
-        elements = new HashMap();
+        furnitures = new HashMap();
+        pillars = new HashMap();
         walls = new Walls(roomWidth, roomDepth);
         status = "";
         time = "";
     }
     
     public void clearFurniture() {
-        elements.clear();
+        furnitures.clear();
         status = "";
     }
     
-    public void addDoor(String wall, int size, int displacement, boolean hasToOpenToLeft,
-            boolean hasToOpenOutwards) {
-        Door door;
-        
-        if(hasToOpenToLeft) door = new LeftDoor(size);
-        else door = new RightDoor(size);
-        
-        walls.addDoor(door, Orientation.valueOf(wall), displacement);
+    public void clearFixed() {
+        walls.clear();
+        pillars.clear();
     }
     
-    public void addWindow(String wall, int size, int displacement) {
-        Window window = new Window(size);
-        
-        walls.addWindow(window, Orientation.valueOf(wall), displacement);
+    public void clear() {
+        clearFurniture();
+        clearFixed();
     }
     
-    public void addPillar(int x, int y, int width, int depth) {
-        // @TODO Pillars
-        //elements.put(new Point(x, y), new RoomElement(x, y, width, depth));
+    public void addPillar(WantedFixed pillar) {
+        OrientedRectangle area = pillar.getActiveArea();
+        
+        pillars.put(pillar.getName(), new RoomElement(pillar.getName(), area));
+    }
+    
+    public void addFixed(Collection<WantedFixed> fixed) {
+        for(WantedFixed wf : fixed) {
+            String typeName = wf.getTypeName();
+            
+            if(typeName.equals("window"))
+                walls.addWindow(wf);
+            
+            else if(typeName.equals("door"))
+                walls.addDoor(wf);
+            
+            else if(typeName.equals("pillar"))
+                addPillar(wf);
+        }
     }
     
     public void addFurniture(String name, OrientedRectangle area, Color color) {
         Furniture furniture = new Furniture(name, area, color);
         
-        elements.put(name, furniture);
+        furnitures.put(name, furniture);
+    }
+    
+    public void addFurniture(Set<Entry<String, FurnitureValue>> furnitures) {
+        for(Entry<String, FurnitureValue> entry : furnitures) {
+            String name = entry.getKey();
+            Color color = entry.getValue().getModel().getColor();
+
+            addFurniture(name, entry.getValue().getArea(), color);
+        }
     }
     
     public void removeFurniture(String name) {
-        elements.remove(name);
+        furnitures.remove(name);
     }
     
     public RoomElement getElementAt(int x, int y) {
-        for(RoomElement element : elements.values()) {
+        for(RoomElement element : furnitures.values()) {
             if(element.contains(new Point(x, y)))
                 return element;
         }
@@ -92,8 +116,6 @@ public class RoomMap
         g.setColor(Color.white);
         g.fillRect(0, 0, width, depth);
         
-        walls.draw(g);
-        
         drawElements(g);
         
         g.setColor(Color.black);
@@ -103,8 +125,23 @@ public class RoomMap
     
     protected void drawElements(Graphics2D g)
     {
-        for(Drawable element : elements.values())
-            element.draw(g);
+        drawWalls(g);
+        drawFurniture(g);
+        drawPillars(g);
+    }
+    
+    protected void drawWalls(Graphics2D g) {
+        walls.draw(g);
+    }
+    
+    protected void drawFurniture(Graphics2D g) {
+        for(Drawable furniture : furnitures.values())
+            furniture.draw(g);
+    }
+    
+    protected void drawPillars(Graphics2D g) {
+        for(Drawable pillar : pillars.values())
+            pillar.draw(g);
     }
     
     public static int getPadding() {
@@ -128,25 +165,6 @@ public class RoomMap
     }
     
     public void setTime(long time) {
-        // This might be ugly
-        String[] scale = {"ns", "us", "ms", "s"};
-        int iters = 0;
-        float d_time = time;
-        while (d_time > 100 && iters < 3) {
-            d_time /= 1000.0;
-            ++iters;
-        }
-        String timeString;
-        if (d_time > 100) {
-            //we are in the minutes range
-            int min = (int)d_time / 60;
-            d_time %= 60;
-            timeString = String.valueOf(min) + "m" + String.valueOf(d_time) + "s";
-        }
-        else {
-            timeString = String.valueOf(d_time) + scale[iters];
-        }
-         
-        this.time = "Took: " + timeString;
+        this.time = "Time spent: " + Utils.timeString(time);
     }
 }

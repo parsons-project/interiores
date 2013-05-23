@@ -1,6 +1,7 @@
 package interiores.business.models.room.elements;
 
 import interiores.business.models.Orientation;
+import interiores.business.models.OrientedRectangle;
 import interiores.business.models.SpaceAround;
 import interiores.business.models.room.FurnitureModel;
 import interiores.utils.Dimension;
@@ -44,5 +45,9 @@ public class WantedFixed extends WantedElement
      */
     public FurnitureModel getModel() {
         return model;
+    }
+    
+    public OrientedRectangle getActiveArea() {
+        return model.getActiveArea(position, orientation);
     }
 }

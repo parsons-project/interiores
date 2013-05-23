@@ -13,7 +13,6 @@ public class Window
     private static final int DEPTH = 5;
     
     public Window(String wall, int displacement, int length, Dimension roomSize) {
-        super("window", "white", "glass", new SpaceAround(0, 0, 0, 0), wall, displacement, length, roomSize);
+        super("window", "blue", "glass", new SpaceAround(0, 0, 0, 0), wall, displacement, length, roomSize);
     }
-    
 }

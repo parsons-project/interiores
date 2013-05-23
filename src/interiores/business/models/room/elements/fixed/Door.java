@@ -12,7 +12,7 @@ public class Door
 {  
     public Door(String wall, int displacement, int length, Dimension roomSize)
     {
-        super("door", "brown", "wood", new SpaceAround(length, 0, 0, 0), wall, displacement, length,
+        super("door", "brown", "wood", new SpaceAround(0, 0, length, 0), wall, displacement, length,
                 roomSize);
     }  
 }

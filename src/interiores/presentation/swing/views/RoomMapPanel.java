@@ -1,14 +1,15 @@
 package interiores.presentation.swing.views;
 
 import interiores.business.controllers.DesignController;
+import interiores.business.controllers.FixedElementController;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.RoomController;
-import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
-import interiores.business.events.room.RoomDesignChangedEvent;
 import interiores.business.events.backtracking.SolveDesignFinishedEvent;
 import interiores.business.events.backtracking.SolveDesignStartedEvent;
+import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
+import interiores.business.events.room.RoomDesignChangedEvent;
+import interiores.business.events.room.WantedFixedChangedEvent;
 import interiores.business.models.OrientedRectangle;
-import interiores.business.models.backtracking.FurnitureValue;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
@@ -20,7 +21,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
-import java.util.Map.Entry;
 import javax.swing.JPanel;
 
 /**
@@ -31,7 +31,9 @@ public class RoomMapPanel extends JPanel
 {
     private RoomController roomController;
     private FurnitureTypeController ftController;
+    private FixedElementController fixedController;
     private DesignController designController;
+    
     private InteractiveRoomMap map;
     private RoomMapDebuggerFrame debuggerGui;
 
@@ -45,6 +47,7 @@ public class RoomMapPanel extends JPanel
         roomController = presentation.getBusinessController(RoomController.class);
         ftController = presentation.getBusinessController(FurnitureTypeController.class);
         designController = presentation.getBusinessController(DesignController.class);
+        fixedController = presentation.getBusinessController(FixedElementController.class);
         
         if(Debug.isEnabled())
             debuggerGui = presentation.get(RoomMapDebuggerFrame.class);
@@ -140,13 +143,15 @@ public class RoomMapPanel extends JPanel
     @Listen(RoomDesignChangedEvent.class)
     public void updateDesign() {
         map.clearFurniture();
-        
-        for(Entry<String, FurnitureValue> entry : designController.getDesign().getEntries()) {
-            String name = entry.getKey();
-            Color color = entry.getValue().getModel().getColor();
+        map.addFurniture(designController.getDesignFurniture());
 
-            addFurniture(name, entry.getValue().getArea(), color);
-        }
+        repaint();
+    }
+    
+    @Listen(WantedFixedChangedEvent.class)
+    public void updateFixed() {
+        map.clearFixed();
+        map.addFixed(fixedController.getWantedFixed());
         
         repaint();
     }

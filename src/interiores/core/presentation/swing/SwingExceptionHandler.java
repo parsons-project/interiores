@@ -26,5 +26,8 @@ public class SwingExceptionHandler
         
         exceptionDialog.setAlwaysOnTop(true);
         exceptionDialog.setVisible(true);
+        
+        if(Debug.isEnabled())
+            e.printStackTrace();
     }
 }

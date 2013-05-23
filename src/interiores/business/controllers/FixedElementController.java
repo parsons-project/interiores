@@ -5,7 +5,8 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.InterioresController;
-import interiores.business.events.room.RoomDesignChangedEvent;
+import interiores.business.events.room.WantedFixedChangedEvent;
+import interiores.business.models.room.elements.WantedFixed;
 import interiores.business.models.room.elements.fixed.Door;
 import interiores.business.models.room.elements.fixed.Pillar;
 import interiores.business.models.room.elements.fixed.Window;
@@ -31,28 +32,36 @@ public class FixedElementController extends InterioresController{
     public void addDoor(String wall, int displacement, int length) {
         getWishList().addWantedFixed(new Door(wall, displacement, length, getRoom().getDimension()));
         
-        notify(new RoomDesignChangedEvent());
+        notify(new WantedFixedChangedEvent());
     }
     
     public void addWindow(String wall, int displacement, int length) {
         getWishList().addWantedFixed(new Window(wall, displacement, length, getRoom().getDimension()));
+        
+        notify(new WantedFixedChangedEvent());
     }
     
     public void addPillar(Point point, Dimension dimension) {
         getWishList().addWantedFixed(new Pillar(point, dimension));
+        
+        notify(new WantedFixedChangedEvent());
     }
     
     public void remove(String name) {
         getWishList().removeWantedFixed(name);
+        
+        notify(new WantedFixedChangedEvent());
     }
     
-    public Collection<String> getFixedFurniture() {
+    public Collection<WantedFixed> getWantedFixed() {
+        return getWishList().getWantedFixed();
+    }
+    
+    public Collection<String> getFixedNames() {
         return getWishList().getFixedNames();
     }
 
     public Collection<String> getSelectable() {
         return selectable;
     }
-
 }
-

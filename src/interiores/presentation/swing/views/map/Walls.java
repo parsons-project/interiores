@@ -1,6 +1,8 @@
 package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
+import interiores.business.models.room.elements.WantedFixed;
+import interiores.presentation.swing.views.map.doors.RightDoor;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -95,17 +97,26 @@ public class Walls implements Drawable {
         return p;
     }
     
-    public void addDoor(Door door, Orientation wall, int displacement) {        
-        Point key = getPosition(wall, displacement);
-        door.setPosition(key.x, key.y, door.hasToOpenOutwards() ? wall : wall.complementary());
+    public void addDoor(WantedFixed door) {        
+        Point key = door.getPosition();
         
-        elements.put(key, door);
+        // Only right doors for now :/
+        RightDoor mapDoor = new RightDoor(door.getName(), door.getModel(), door.getPosition(),
+                door.getOrientation());
+        
+        elements.put(key, mapDoor);
     }
     
-    public void addWindow(Window window, Orientation wall, int displacement) {
-        Point key = getPosition(wall, displacement);
-        window.setPosition(key.x, key.y, wall.rotateRight());
+    public void addWindow(WantedFixed window) {
+        Point key = window.getPosition();
         
-        elements.put(key, window);
+        MapWindow mapWindow = new MapWindow(window.getName(), window.getModel(), window.getPosition(),
+                window.getOrientation());
+        
+        elements.put(key, mapWindow);
+    }
+    
+    public void clear() {
+        elements.clear();
     }
 }

@@ -49,11 +49,8 @@ public class Stage {
         this.models = models;
         
         // initialize positions
-        positions = new ArrayList<Point>();
-        for (int i = 0; i < roomSize.width; i += resolution) {
-            for (int j = 0; j < roomSize.depth; j += resolution)
-                positions.add(new Point(i,j));
-        }
+        positions = new Area(new Rectangle(0, 0, roomSize.width, roomSize.depth));
+
         
         //initialize orientations
         orientations = defaultOrientations();
@@ -77,7 +74,7 @@ public class Stage {
         this.resolution = resolution;
         
         models = new ArrayList();
-        positions = new ArrayList<Point>();
+        positions = new Area();
         orientations = new ArrayList();
         
         //initialize iterators
@@ -160,7 +157,7 @@ public class Stage {
         return models;
     }
     
-    List<Point> getPositions() {
+    Area getPositions() {
         return positions;
     }
     
@@ -172,96 +169,12 @@ public class Stage {
         this.models = models;
     }
     
-    void setPositions(List<Point> positions) {
+    void setPositions(Area positions) {
         this.positions = positions;
     }
         
     void setOrientations(List<Orientation> orientations) {
         this.orientations = orientations;
-    }
-
-    Collection<Point> trimInvalidRectangle(Rectangle invalidRectangle) {
-        Collection<Point> trimedPositions = new ArrayList();
-        int x = invalidRectangle.x;
-        int y = invalidRectangle.y;
-        int x_max = x+invalidRectangle.width;
-        int y_max = y+invalidRectangle.height;
-        for (int i = x; i < x_max; i += resolution) {
-            for (int j = y; j < y_max; j += resolution) {
-                Point p = new Point(i,j);
-                if (positions.contains(p)) {
-                    trimedPositions.add(p);
-                    positions.remove(p);
-                }
-            }
-        }
-        
-        return trimedPositions;
-    }
-    
-    void addPositions(Collection<Point> newPositions) {
-        positions.addAll(newPositions);
-        resetIterators();
-    }
-
-    void swapPositions(Stage stage) {
-        List<Point> aux = this.positions;
-        this.positions = stage.positions;
-        stage.positions = aux;
-        
-        Iterator it = positionIterator;
-        positionIterator = stage.positionIterator;
-        stage.positionIterator = it;
-    }
-
-    void swapModels(Stage stage) {
-        List<FurnitureModel> aux = this.models;
-        this.models = stage.models;
-        stage.models = aux;
-        
-        Iterator it = modelIterator;
-        modelIterator = stage.modelIterator;
-        stage.modelIterator = it;
-    }
-
-    void swapOrientations(Stage stage) {
-        List<Orientation> aux = this.orientations;
-        this.orientations = stage.orientations;
-        stage.orientations = aux;
-        
-        Iterator it = orientationIterator;
-        orientationIterator = stage.orientationIterator;
-        stage.orientationIterator = it;
-    }
-
-    void merge(Stage stage) {
-        
-        //A) process positions        
-        // 1) check if swap is beneficial
-        boolean shouldSwapPositions = positions.size() < stage.positions.size();
-        
-        // 2) swap
-        if (shouldSwapPositions) swapPositions(stage);
-        
-        // 3) merge
-        positions.addAll(stage.positions);
-        stage.positions.clear();
-        
-        //B) process models
-        // 1) check if swap is beneficial
-        boolean shouldSwapModels = models.size() < stage.models.size();
-        
-        // 2) swap
-        if (shouldSwapModels) swapModels(stage);
-        
-        // 3) merge
-        models.addAll(stage.models);
-        stage.models.clear();      
-        
-        //B) process orientations   
-        // 1) merge
-        orientations.addAll(stage.orientations);
-        stage.orientations.clear();
     }
 
     int size() {
@@ -283,6 +196,11 @@ public class Stage {
         return smallestModel.areaSize();
      }
 
+    
+    
+    //SET OPERATION: THE DEFINITIVE ONES
+    
+    
     /**
      * Makes the intersection of positions and returns the positions not
      * contained in the intersection.
@@ -299,6 +217,24 @@ public class Stage {
     void union(Area area) {
         positions.union(area);
     }
+    
+    void union(List<FurnitureModel> newModels) {
+        //we know that there aren't repeated models because each model
+        //is found only one in each domain
+        models.addAll(newModels);
+    }
+    
+    void union2(List<Orientation> newOrientations) {
+        //we know that there aren't repeated orienttations because each
+        //orientation is found only one in each domain
+        orientations.addAll(newOrientations);        
+    }
+    
+    void union(Stage stage) {
+        union(stage.positions);
+        union(stage.models);
+        union2(stage.orientations);
+    }
 
     Area difference(Area area) {
         Area startingPositions = new Area(positions);
@@ -308,4 +244,75 @@ public class Stage {
     }
     
     
+    
+    
+    
+    
+    //DEPRECATED METHODS
+    
+    
+//    void swapPositions(Stage stage) {
+//        Area aux = this.positions;
+//        this.positions = stage.positions;
+//        stage.positions = aux;
+//        
+//        Iterator it = positionIterator;
+//        positionIterator = stage.positionIterator;
+//        stage.positionIterator = it;
+//    }
+//
+//    void swapModels(Stage stage) {
+//        List<FurnitureModel> aux = this.models;
+//        this.models = stage.models;
+//        stage.models = aux;
+//        
+//        Iterator it = modelIterator;
+//        modelIterator = stage.modelIterator;
+//        stage.modelIterator = it;
+//    }
+//
+//    void swapOrientations(Stage stage) {
+//        List<Orientation> aux = this.orientations;
+//        this.orientations = stage.orientations;
+//        stage.orientations = aux;
+//        
+//        Iterator it = orientationIterator;
+//        orientationIterator = stage.orientationIterator;
+//        stage.orientationIterator = it;
+//    }
+//    
+//    void addPositions(Area newPositions) {
+//        positions.union(newPositions);
+//        resetIterators();
+//    }
+//    
+//        void merge(Stage stage) {
+//        
+//        //A) process positions        
+//        // 1) check if swap is beneficial
+//        boolean shouldSwapPositions = false;
+//        
+//        // 2) swap
+//        if (shouldSwapPositions) swapPositions(stage);
+//        
+//        // 3) merge
+//        positions.union(stage.positions);
+//        stage.positions = new Area();
+//        
+//        //B) process models
+//        // 1) check if swap is beneficial
+//        boolean shouldSwapModels = models.size() < stage.models.size();
+//        
+//        // 2) swap
+//        if (shouldSwapModels) swapModels(stage);
+//        
+//        // 3) merge
+//        models.addAll(stage.models);
+//        stage.models.clear();      
+//        
+//        //B) process orientations   
+//        // 1) merge
+//        orientations.addAll(stage.orientations);
+//        stage.orientations.clear();
+//    }
 }

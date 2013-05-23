@@ -25,6 +25,9 @@ abstract public class SizeRangeConstraint
     @XmlElement
     private Range range;
     
+    public SizeRangeConstraint()
+    { }
+    
     public SizeRangeConstraint(Dimension.Component component, Range range) {
         this.component = component;
         this.range = range;

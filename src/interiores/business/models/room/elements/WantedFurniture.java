@@ -2,14 +2,18 @@ package interiores.business.models.room.elements;
 
 import interiores.business.models.constraints.UnaryConstraint;
 import java.util.Collection;
+import javax.xml.bind.annotation.XmlRootElement;
 
 
 /**
  * This class represents a furniture that the user wants to add to the room
  * @author larribas
  */
+@XmlRootElement
 public class WantedFurniture extends WantedElement
 {
+    public WantedFurniture()
+    { }
     
     /**
      * Simple creator. Creates a wanted furniture given its type

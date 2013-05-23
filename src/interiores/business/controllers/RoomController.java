@@ -50,7 +50,7 @@ public class RoomController
      */
     public void save(String path) throws JAXBException
     {   
-        data.save(getRoom(), path);
+        data.save(getWishList(), path);
     }
     
     /**

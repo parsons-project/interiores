@@ -1,9 +1,9 @@
 package interiores.business.models;
 
-import interiores.business.models.room.FurnitureType;
 import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.MandatoryFurnitureException;
 import interiores.business.models.catalogs.PersistentIdObject;
+import interiores.business.models.room.FurnitureType;
 import interiores.core.Utils;
 import interiores.utils.Dimension;
 import interiores.utils.Range;

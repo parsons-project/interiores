@@ -1,15 +1,13 @@
 package interiores.business.models.constraints.unary;
 
-import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.backtracking.Domain;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.models.room.FurnitureModel;
 import interiores.core.business.BusinessException;
-import interiores.data.adapters.ColorAdapter;
 import interiores.utils.CoolColor;
 import java.util.Iterator;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * ColorConstraint represents a constraint imposed over the color of a piece of furniture
@@ -24,7 +22,6 @@ public class ColorConstraint
      * order to satisfy the constraint.
      */
     @XmlAttribute
-    @XmlJavaTypeAdapter(ColorAdapter.class)
     private CoolColor color;
     
     public ColorConstraint() {

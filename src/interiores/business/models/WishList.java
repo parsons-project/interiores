@@ -13,12 +13,14 @@ import interiores.utils.BinaryConstraintAssociation;
 import java.util.Collection;
 import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * This class represents the bag of furniture types and fixed elements
  * that the user wants to include in the room and the constraints required upon them.
  * @author larribas
  */
+@XmlRootElement
 public class WishList
 {   
     @XmlElement
@@ -32,6 +34,9 @@ public class WishList
     
     @XmlElement
     private BinaryConstraintSet binaryConstraints;
+    
+    public WishList()
+    { }
     
     public WishList(Room room)
     {

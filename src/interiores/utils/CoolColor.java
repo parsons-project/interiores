@@ -4,12 +4,14 @@ import interiores.core.business.BusinessException;
 import interiores.data.adapters.ColorAdapter;
 import java.awt.Color;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  *
  * @author hector
  */
+@XmlRootElement
 public enum CoolColor {
     
     BLACK("#000000"),

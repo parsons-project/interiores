@@ -5,7 +5,6 @@ import interiores.business.models.OrientedRectangle;
 import interiores.business.models.SpaceAround;
 import interiores.core.Utils;
 import interiores.core.business.BusinessException;
-import interiores.data.adapters.ColorAdapter;
 import interiores.utils.CoolColor;
 import interiores.utils.Dimension;
 import java.awt.Color;
@@ -15,7 +14,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * Represents a furniture model of a specific type. A model has its own name, size, price, color, and material
@@ -40,7 +38,6 @@ public class FurnitureModel {
     private float price;          // Market price of the furniture model
     
     @XmlAttribute
-    @XmlJavaTypeAdapter(ColorAdapter.class)
     private CoolColor color;        // Color of the furniture model
     
     @XmlAttribute

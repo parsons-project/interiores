@@ -4,11 +4,13 @@ import interiores.business.exceptions.WantedElementNotFoundException;
 import java.util.Collection;
 import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author hector
  */
+@XmlRootElement
 public class WantedElementSet<T extends WantedElement>
 {
     @XmlElementWrapper

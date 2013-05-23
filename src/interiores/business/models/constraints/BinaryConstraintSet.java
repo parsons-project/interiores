@@ -1,5 +1,6 @@
 package interiores.business.models.constraints;
 
+import interiores.business.models.Room;
 import interiores.utils.BinaryConstraintAssociation;
 import java.util.Collection;
 import java.util.HashSet;
@@ -38,8 +39,8 @@ public class BinaryConstraintSet
         if(! binaryConstraintCount.containsKey(f2))
             binaryConstraintCount.put(f2, 0);
         
-        binaryConstraintCount.put(f1, binaryConstraintCount.get(f1) + bc.getPriority());
-        binaryConstraintCount.put(f2, binaryConstraintCount.get(f2) + bc.getPriority());
+        binaryConstraintCount.put(f1, binaryConstraintCount.get(f1) + bc.getWeight(new Room()));
+        binaryConstraintCount.put(f2, binaryConstraintCount.get(f2) + bc.getWeight(new Room()));
         
         binaryConstraints.put(getKey(bc.getClass(), f1, f2), bca);
     }
@@ -53,8 +54,8 @@ public class BinaryConstraintSet
         String key = getKey(binaryConstraintClass, f1, f2);
         BinaryConstraint bc = binaryConstraints.get(key).getConstraint();
         
-        binaryConstraintCount.put(f1, binaryConstraintCount.get(f1) - bc.getPriority());
-        binaryConstraintCount.put(f2, binaryConstraintCount.get(f2) - bc.getPriority());
+        binaryConstraintCount.put(f1, binaryConstraintCount.get(f1) - bc.getWeight(new Room()));
+        binaryConstraintCount.put(f2, binaryConstraintCount.get(f2) - bc.getWeight(new Room()));
         
         binaryConstraints.remove(key);
     }

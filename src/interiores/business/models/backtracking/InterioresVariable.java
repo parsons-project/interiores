@@ -1,5 +1,6 @@
 package interiores.business.models.backtracking;
 
+import interiores.business.models.backtracking.Area.Area;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 
@@ -50,4 +51,5 @@ abstract public class InterioresVariable implements Variable
         isAssigned = false;
         assignedValue = null;        
     }
+
 }

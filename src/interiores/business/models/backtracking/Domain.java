@@ -3,6 +3,7 @@ package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
+import interiores.business.models.backtracking.Area.Area;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
 import java.awt.Point;
@@ -112,17 +113,7 @@ public class Domain {
         return domain[iteration].getOrientations();
     }
 
-    public void saveAllPositions(int iteration) {
-        domain[iteration].swapPositions(domain[iteration+1]);
-    }
-        
-    public void saveAllModels(int iteration) {
-        domain[iteration].swapModels(domain[iteration+1]);
-    }
 
-    public void saveAllOrientations(int iteration) {
-        domain[iteration].swapOrientations(domain[iteration+1]);
-    }
 
     /**
      * Returns the size of the domain.
@@ -136,6 +127,55 @@ public class Domain {
     int smallestModelSize(int iteration) {
         return domain[iteration].smallestModelSize();
     }
+
+    void forwardIteration(int iteration) {
+        domain[iteration].swapPositions(domain[iteration+1]);
+        domain[iteration].swapModels(domain[iteration+1]);
+        domain[iteration].swapOrientations(domain[iteration+1]);
+    }
     
+    
+    void setValidOnly(Area validPositions, int iteration) {
+        //modify domain[iteration+1]
+        Area discardedPositions = domain[iteration+1].intersection(validPositions);
+        //modify domain[iteration]
+        domain[iteration].union(discardedPositions);
+        
+    }
+    
+    void exclude(Area invalidPositions, int iteration) {
+        //modify domain[iteration+1]
+        Area discardedPositions = domain[iteration+1].difference(invalidPositions);
+        //modify domain[iteration]
+        domain[iteration].union(discardedPositions);
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //DEPRECATED METHODS
+    
+    //deprecated methods: substituted by forwardIteration()
+    public void saveAllPositions(int iteration) {
+        domain[iteration].swapPositions(domain[iteration+1]);
+    }
+        
+    public void saveAllModels(int iteration) {
+        domain[iteration].swapModels(domain[iteration+1]);
+    }
+
+    public void saveAllOrientations(int iteration) {
+        domain[iteration].swapOrientations(domain[iteration+1]);
+    }
+
+
+
+
     
 }

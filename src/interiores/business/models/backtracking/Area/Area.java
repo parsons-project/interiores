@@ -279,6 +279,14 @@ public class Area {
     }
     
     /**
+     * Constructor from another area.
+     */
+    public Area(Area a) {
+        this.vertexs = a.vertexs;
+        initializeAreaFromVertexs();
+    }
+    
+    /**
      * Constructor from a rectangle.
      */
     public Area(Rectangle r) {
@@ -764,5 +772,139 @@ public class Area {
         int boundingRectangleSize = (xMax - xMin) * (yMax - yMin);
         return (boundingRectangleSize * squareDensity) / SAMPLE_SIZE;
     }
+
+    /**
+     * Returns an area that contains all squares that are within a distance
+     * distance of this area.
+     * This method is currently not used.
+     * Pre: this area is a rectangle.
+     * @param distance
+     * @return 
+     */
+    public Area radiusAround(int distance) {
+        Area result = new Area(vertexs);
+        Area startingArea = new Area(vertexs);
+        
+        result.union(startingArea.shiftedArea(distance, Orientation.N));
+        result.union(startingArea.shiftedArea(distance, Orientation.S));
+        result.union(startingArea.shiftedArea(distance, Orientation.W));
+        result.union(startingArea.shiftedArea(distance, Orientation.E));
+ 
+        //get bounding rectangle = this area
+        Rectangle r = getBoundingRectangle();
+        
+        result.union(stairShapedArea(new GridPoint(r.x, r.y), distance-1, Orientation.N, Orientation.W));
+        result.union(stairShapedArea(new GridPoint(r.x+r.width, r.y), distance-1, Orientation.N, Orientation.E));
+        result.union(stairShapedArea(new GridPoint(r.x, r.y+r.height), distance-1, Orientation.S, Orientation.W));
+        result.union(stairShapedArea(new GridPoint(r.x+r.width, r.y+r.height), distance-1, Orientation.N, Orientation.E));
+        return result;
+    }
     
+    /**
+     * Returns an area with this shape:
+     * .....X
+     * ....XX
+     * ...XXX
+     * ..XXXX
+     * .XXXXX
+     * Where origin is the Gridpoint where the 90º angle is made,
+     * distance is the length of the cathetus', and the orientations
+     * define the directions in which the cathetus spawn from the origin.
+     * Pre:
+     * vertical is either N or S
+     * horizontal is either W or E
+     * 
+     * @param origin
+     * @param distance
+     * @param vertical
+     * @param horizontal
+     * @return 
+     */
+    private Area stairShapedArea(GridPoint origin, int distance, Orientation vertical, Orientation horizontal) {
+        List<GridPoint> resultVertexs = new ArrayList<GridPoint>();
+        resultVertexs.add(origin);
+        GridPoint startingVertex, endingVertex;
+        
+        //set the starting and ending vertexs of the stair shaped side.
+        //the resulting area has all vertexs betweeh them
+        if (vertical == Orientation.N)
+            startingVertex = new GridPoint(origin.x, origin.y - distance);
+        else startingVertex = new GridPoint(origin.x, origin.y + distance);
+        
+        if (horizontal == Orientation.W)
+            endingVertex = new GridPoint(origin.x - distance, origin.y);
+        else endingVertex = new GridPoint(origin.x + distance, origin.y);
+        
+        //add all vertexs between them
+        GridPoint currentVertex = startingVertex;
+        
+        if (vertical == Orientation.N && horizontal == Orientation.W) {
+            while (currentVertex != endingVertex) {
+                resultVertexs.add(currentVertex);
+                --currentVertex.x;
+                resultVertexs.add(currentVertex);
+                ++currentVertex.y;
+            }
+        }
+        
+        if (vertical == Orientation.N && horizontal == Orientation.E) {
+            while (currentVertex != endingVertex) {
+                resultVertexs.add(currentVertex);
+                ++currentVertex.x;
+                resultVertexs.add(currentVertex);
+                ++currentVertex.y;
+            }
+        }
+                
+        if (vertical == Orientation.S && horizontal == Orientation.W) {
+            while (currentVertex != endingVertex) {
+                resultVertexs.add(currentVertex);
+                --currentVertex.x;
+                resultVertexs.add(currentVertex);
+                --currentVertex.y;
+            }
+        }
+                        
+        if (vertical == Orientation.S && horizontal == Orientation.E) {
+            while (currentVertex != endingVertex) {
+                resultVertexs.add(currentVertex);
+                ++currentVertex.x;
+                resultVertexs.add(currentVertex);
+                --currentVertex.y;
+            }
+        }
+        
+        resultVertexs.add(endingVertex);
+        
+        return new Area(resultVertexs);
+    }
+
+    public Area rectangleAround(int distance) {
+        Area result = new Area(vertexs);
+        
+        result.union(result.shiftedArea(distance, Orientation.N));
+        result.union(result.shiftedArea(distance, Orientation.S));
+        result.union(result.shiftedArea(distance, Orientation.W));
+        result.union(result.shiftedArea(distance, Orientation.E));
+        
+        return result;
+    }
+    
+    public float distance(Point sq1, Point sq2) {
+        return euclideanDistance(new Square(sq1.x, sq1.y), new Square(sq2.x, sq2.y));
+    }
+
+    private float euclideanDistance(Square sq1, Square sq2) {
+        float xOffset = Math.abs(sq1.x - sq2.x) - 1;
+        //-1 because squares are 1 unit wide
+        float yOffset = Math.abs(sq1.y - sq2.y) - 1;
+        return (float) Math.sqrt(xOffset*xOffset + yOffset*yOffset);
+    }
+    
+    public static float distance(Rectangle r1, Rectangle r2) {
+        //find the cloosest point of r1 to r2
+        //TODO: Im getting tired and dont want to introduce bugs xd.
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

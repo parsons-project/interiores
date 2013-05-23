@@ -1,6 +1,7 @@
 package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
+import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
@@ -220,6 +221,36 @@ public class FurnitureVariable
 
     int smallestModelSize() {
         return domain.smallestModelSize(iteration);
+    }
+
+    
+    
+    //FUNCTIONS TO MODIFY THE DOMAIN:
+    //forwardIteration(), SetValidOnly() AND Exclude()
+    
+    /**
+     * Moves all values of the current iteration to the next iteration
+     */
+    public void forwardIteration() {
+        domain.forwardIteration(iteration);
+    }
+    
+    /**
+     * Any value of the domain of the next iteration not included in the
+     * parameter is trimmed (moved to the previous iteration)
+     * @param validArea 
+     */
+    public void setValidOnly(Area validArea) {
+        domain.setValidOnly(validArea, iteration);
+    }
+
+    /**
+     * Any value of the domain of the next iteration included in the
+     * parameter is trimmed (moved to the previous iteration)
+     * @param invalidArea 
+     */
+    public void exclude(Area invalidArea) {
+        domain.exclude(invalidArea, iteration);
     }
 
 

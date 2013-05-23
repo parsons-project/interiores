@@ -1,7 +1,9 @@
 package interiores.business.models.constraints.binary;
 
 import interiores.business.models.OrientedRectangle;
+import interiores.business.models.Room;
 import interiores.business.models.backtracking.FurnitureValue;
+import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.BinaryConstraint;
 
@@ -24,7 +26,7 @@ public class StraightFacingConstraint extends BinaryConstraint {
     
     
     @Override
-    public boolean isSatisfied(InterioresVariable fvariable1, InterioresVariable fvariable2) {
+    public boolean isSatisfied(InterioresVariable fvariable1, FurnitureVariable fvariable2) {
         
         OrientedRectangle rectangle1 = ((FurnitureValue) fvariable1.getAssignedValue()).getArea();
         OrientedRectangle rectangle2 = ((FurnitureValue) fvariable2.getAssignedValue()).getArea();
@@ -37,7 +39,17 @@ public class StraightFacingConstraint extends BinaryConstraint {
     }
     
     @Override
-    public int getPriority() {
+    public int getWeight(Room room) {
         return 5;
+    }
+
+    @Override
+    public void trim(InterioresVariable assignedVariable, FurnitureVariable toTrimVariable, Room room) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void preliminarTrim(InterioresVariable variable1, InterioresVariable variable2, Room room) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }  

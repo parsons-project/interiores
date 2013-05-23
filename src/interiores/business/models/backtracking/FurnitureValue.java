@@ -51,6 +51,10 @@ public class FurnitureValue extends Value {
         return model;
     }
     
+    public Orientation getOrientation() {
+        return activeArea.getOrientation();
+    }
+    
     @Override
     public String toString() {
         return "Model Name: " + model.getName() + " Location: (" + activeArea.x + "," + activeArea.y + ")" +

@@ -282,8 +282,30 @@ public class Stage {
         
         return smallestModel.areaSize();
      }
-    
- 
+
+    /**
+     * Makes the intersection of positions and returns the positions not
+     * contained in the intersection.
+     * @param validPositions
+     * @return 
+     */
+    Area intersection(Area area) {
+        Area startingPositions = new Area(positions);
+        positions.intersection(area);
+        startingPositions.difference(positions);
+        return startingPositions;
+    }
+
+    void union(Area area) {
+        positions.union(area);
+    }
+
+    Area difference(Area area) {
+        Area startingPositions = new Area(positions);
+        positions.difference(area);
+        startingPositions.difference(positions);
+        return startingPositions;
+    }
     
     
 }

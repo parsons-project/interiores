@@ -1,7 +1,11 @@
 package interiores.business.models.constraints.binary;
 
+import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
+import interiores.business.models.Room;
+import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.backtracking.FurnitureValue;
+import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.BinaryConstraint;
 
@@ -11,7 +15,7 @@ import interiores.business.models.constraints.BinaryConstraint;
  */
 public class PartialFacingConstraint extends BinaryConstraint{
     
-    private int maxDist = 1000;
+    private int maxDist;
     
     
     public PartialFacingConstraint() {
@@ -24,10 +28,9 @@ public class PartialFacingConstraint extends BinaryConstraint{
     
     
     @Override
-    public boolean isSatisfied(InterioresVariable fvariable1, InterioresVariable fvariable2) {
+    public boolean isSatisfied(InterioresVariable fvariable1, FurnitureVariable fvariable2) {
         OrientedRectangle rectangle1 = ((FurnitureValue) fvariable1.getAssignedValue()).getArea();
         OrientedRectangle rectangle2 = ((FurnitureValue) fvariable2.getAssignedValue()).getArea();
-        
         
         return rectangle1.enlarge(maxDist, rectangle1.getOrientation()).intersects(rectangle2) &&
                rectangle2.enlarge(maxDist, rectangle2.getOrientation()).intersects(rectangle1);
@@ -35,7 +38,18 @@ public class PartialFacingConstraint extends BinaryConstraint{
     }
     
     @Override
-    public int getPriority() {
-        return 5;
+    public int getWeight(Room room) {
+        return 80;
+    }
+
+    @Override
+    public void trim(InterioresVariable assignedVariable, FurnitureVariable toTrimVariable, Room room) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    }
+
+    @Override
+    public void preliminarTrim(InterioresVariable variable1, InterioresVariable variable2, Room room) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

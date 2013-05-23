@@ -7,6 +7,7 @@ import interiores.business.models.Room;
 import interiores.business.models.RoomType;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.core.Debug;
 import interiores.core.data.JAXBDataController;
 import javax.xml.bind.JAXBException;
 
@@ -49,8 +50,12 @@ public class RoomController
      * @throws JAXBException
      */
     public void save(String path) throws JAXBException
-    {   
+    {
+        Debug.println("Saving:" + path);
+        
         data.save(getWishList(), path);
+        
+        Debug.println("Saved successfully.");
     }
     
     /**
@@ -60,11 +65,14 @@ public class RoomController
      */
     public void load(String path) throws JAXBException
     {
-        WishList wishList = (WishList) data.load(WishList.class, path);
+        Debug.println("Loading: " + path);
         
+        WishList wishList = (WishList) data.load(WishList.class, path);
         setWishList(wishList);
         
         notify(new RoomLoadedEvent(wishList.getRoom()));
+        
+        Debug.println("Loaded successfully.");
     }
     
     public int getResolution() {

@@ -25,12 +25,13 @@ public class WelcomePanel extends JPanel
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        newDesignButton = new javax.swing.JButton();
+        openDesignButton = new javax.swing.JButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -43,34 +44,48 @@ public class WelcomePanel extends JPanel
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         add(jLabel1, gridBagConstraints);
 
-        jButton1.setText("Create a new room design...");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        newDesignButton.setText("Create a new room design...");
+        newDesignButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                newDesignButtonActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        add(jButton1, gridBagConstraints);
+        add(newDesignButton, gridBagConstraints);
 
-        jButton2.setText("Open a previous design...");
+        openDesignButton.setText("Open a previous design...");
+        openDesignButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                openDesignButtonActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        add(jButton2, gridBagConstraints);
+        add(openDesignButton, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
-    {//GEN-HEADEREND:event_jButton1ActionPerformed
+    private void newDesignButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_newDesignButtonActionPerformed
+    {//GEN-HEADEREND:event_newDesignButtonActionPerformed
         swing.showNew(NewDesignDialog.class);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_newDesignButtonActionPerformed
+
+    private void openDesignButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_openDesignButtonActionPerformed
+    {//GEN-HEADEREND:event_openDesignButtonActionPerformed
+        swing.get(MainAppFrame.class).openDesign();
+    }//GEN-LAST:event_openDesignButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton newDesignButton;
+    private javax.swing.JButton openDesignButton;
     // End of variables declaration//GEN-END:variables
 }

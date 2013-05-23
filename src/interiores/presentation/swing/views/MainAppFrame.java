@@ -1,16 +1,21 @@
 package interiores.presentation.swing.views;
 
+import interiores.business.controllers.RoomController;
 import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomLoadedEvent;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.core.presentation.swing.SwingException;
+import interiores.presentation.swing.helpers.FileChooser;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -19,10 +24,12 @@ import javax.swing.JFrame;
 public class MainAppFrame extends JFrame
 {
     private SwingController presentation;
+    private RoomController roomController;
     private WelcomePanel welcome;
     private RoomTypeCatalogPanel rtCatalogPanel;
     
     private List<Component> previousViews, currentViews;
+    private JFileChooser fileChooser;
     
     /**
      * Creates new form MainView
@@ -33,11 +40,16 @@ public class MainAppFrame extends JFrame
         setLayout(new BorderLayout());
         
         this.presentation = presentation;
-        previousViews = new ArrayList();
-        currentViews = new ArrayList();
+        roomController = presentation.getBusinessController(RoomController.class);
         welcome = presentation.get(WelcomePanel.class);
         rtCatalogPanel = presentation.get(RoomTypeCatalogPanel.class);
         
+        
+        previousViews = new ArrayList();
+        currentViews = new ArrayList();
+        
+        fileChooser = new FileChooser();
+
         loadComponent(welcome, BorderLayout.CENTER);
     }
 
@@ -54,6 +66,9 @@ public class MainAppFrame extends JFrame
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         newRoom = new javax.swing.JMenuItem();
+        openMenuItem = new javax.swing.JMenuItem();
+        saveMenuItem = new javax.swing.JMenuItem();
+        exitMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         rtCatalog = new javax.swing.JMenuItem();
 
@@ -64,6 +79,7 @@ public class MainAppFrame extends JFrame
 
         jMenu1.setText("File");
 
+        newRoom.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         newRoom.setText("New room design...");
         newRoom.addActionListener(new java.awt.event.ActionListener()
         {
@@ -73,6 +89,40 @@ public class MainAppFrame extends JFrame
             }
         });
         jMenu1.add(newRoom);
+
+        openMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        openMenuItem.setText("Open room design...");
+        openMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                openMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(openMenuItem);
+
+        saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        saveMenuItem.setText("Save room design...");
+        saveMenuItem.setEnabled(false);
+        saveMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                saveMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(saveMenuItem);
+
+        exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        exitMenuItem.setText("Exit");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu1.add(exitMenuItem);
 
         jMenuBar1.add(jMenu1);
 
@@ -102,15 +152,45 @@ public class MainAppFrame extends JFrame
 
     private void rtCatalogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rtCatalogActionPerformed
         unloadCurrentView();
-        loadComponent(rtCatalogPanel,BorderLayout.CENTER);      
+        loadComponent(rtCatalogPanel, BorderLayout.CENTER);      
     }//GEN-LAST:event_rtCatalogActionPerformed
 
+    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_exitMenuItemActionPerformed
+    {//GEN-HEADEREND:event_exitMenuItemActionPerformed
+        // @TODO Confirmation if design has changes
+        System.exit(0);
+    }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_openMenuItemActionPerformed
+    {//GEN-HEADEREND:event_openMenuItemActionPerformed
+        openDesign();
+    }//GEN-LAST:event_openMenuItemActionPerformed
+
+    private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_saveMenuItemActionPerformed
+    {//GEN-HEADEREND:event_saveMenuItemActionPerformed
+        int status = fileChooser.showSaveDialog(this);
+        
+        if(status == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            
+            try {
+                roomController.save(file.getAbsolutePath());
+            }
+            catch(JAXBException e) {
+                
+            }
+        }
+    }//GEN-LAST:event_saveMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem newRoom;
+    private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem rtCatalog;
+    private javax.swing.JMenuItem saveMenuItem;
     // End of variables declaration//GEN-END:variables
 
     
@@ -121,11 +201,27 @@ public class MainAppFrame extends JFrame
     // showAlternate(view) : Shows an alternate view (that is, a view whose meaning
     //                       is independent from from the main use case, and from which,
     //                       therefore, we should return to the previous view
-
+    
+    public void openDesign() {
+        int status = fileChooser.showOpenDialog(this);
+        
+        if(status == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            
+            try {
+                roomController.load(file.getAbsolutePath());
+            }
+            catch(JAXBException e) {
+                
+            }
+        }
+    }
     
     @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
     public void showFurnitureAndMap() {
         unloadCurrentView();
+        
+        saveMenuItem.setEnabled(true);
         
         RoomMapPanel map = presentation.getNew(RoomMapPanel.class);
         WishListPanel wishListPanel = presentation.getNew(WishListPanel.class);

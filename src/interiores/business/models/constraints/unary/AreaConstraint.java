@@ -1,5 +1,6 @@
 package interiores.business.models.constraints.unary;
 
+import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.UnaryConstraint;
@@ -26,7 +27,7 @@ public class AreaConstraint
      * his top left coordinate.
      */
     @XmlElementWrapper
-    private List<Point> validPositions;
+    private Area validPositions;
     
     public AreaConstraint() {
         
@@ -37,7 +38,7 @@ public class AreaConstraint
      * furniture placed in one of the given positions will satisfy it
      * @param validPositions The positions that define the constraint
      */
-    public AreaConstraint(List<Point> validPositions) {
+    public AreaConstraint(Area validPositions) {
         this.validPositions = validPositions;
     }
     
@@ -46,26 +47,15 @@ public class AreaConstraint
      * @param variable The variable to be checked.
      */
     @Override
-    public void eliminateInvalidValues(Domain domain) {        
-        Iterator it = domain.getPositions(0).iterator();
-        
-        List<Point> invalidPositions = new ArrayList();
-        
-        while(it.hasNext()) {
-            Point p = (Point) it.next();
-            if(! validPositions.contains(p))
-                invalidPositions.add(p);
-        }
-        
-        for(Point position : invalidPositions)
-            domain.getPositions(0).remove(position);
+    public void eliminateInvalidValues(Domain domain) {
+        domain.getPositions(0).intersection(validPositions);
     }
     
     /**
      * Modifies the orientations defined for the constraint.
      * @param newOrientations The orientations that will override the previous ones
      */
-    public void changePositions(List<Point> newPositions) {
+    public void changePositions(Area newPositions) {
         validPositions = newPositions;
     }
     

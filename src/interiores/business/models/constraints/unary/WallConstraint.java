@@ -5,7 +5,9 @@
 package interiores.business.models.constraints.unary;
 
 import interiores.business.models.Orientation;
+import interiores.business.models.backtracking.Area.Area;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,24 +21,25 @@ public class WallConstraint
     public WallConstraint(int roomWidth, int roomDepth, Orientation[] orientations) {
         super();
         
-        List<Point> validPositions = new ArrayList();
+        Area validPositions;
         
         for(Orientation orientation : orientations) {
             switch(orientation) {
                 case N:
-                    for (int i = 0; i < roomWidth; i++) validPositions.add(new Point(i, 0));
+                    validPositions = new Area(new Rectangle(0,0,roomWidth,1));
                     break;
-                    
+                
+                    //not implemented! depends on the models!
                 case S:
-                    for (int i = 0; i < roomWidth; i++) validPositions.add(new Point(i, roomDepth-1));
+                    validPositions = new Area(new Rectangle(0,0,roomWidth,roomDepth));
                     break;
                     
                 case W:
-                    for (int i = 0; i < roomDepth; i++) validPositions.add(new Point(0, i));
+                    validPositions = new Area(new Rectangle(0,0,1,roomDepth));
                     break;
-                    
+                    //not implemented! depends on the models!                   
                 default:
-                    for (int i = 0; i < roomDepth; i++) validPositions.add(new Point(roomWidth-1, i));
+                    validPositions = new Area(new Rectangle(0,0,roomWidth,roomDepth));
                     break;
             }
             

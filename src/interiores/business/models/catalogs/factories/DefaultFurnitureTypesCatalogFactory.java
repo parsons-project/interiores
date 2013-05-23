@@ -91,7 +91,7 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.addFurnitureModel(new FurnitureModel("BJOJANA", new Dimension(90, 205), 169.99f, "glazed",
                 "pine"));
         ft.addFurnitureModel(new FurnitureModel("DAMMH", new Dimension(80, 190), 169.99f, "glazed",
-                "puno"));
+                "pine"));
         ft.addFurnitureModel(new FurnitureModel("BJERNNT", new Dimension(80, 205), 169.99f, "glazed",
                 "pine"));
         ft.addFurnitureModel(new FurnitureModel("RR", new Dimension(80, 205), 189.99f, "glazed",

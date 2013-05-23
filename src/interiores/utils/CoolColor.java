@@ -25,8 +25,6 @@ public enum CoolColor {
     YELLOW("#FFAE4B"),
     GLAZED("#FFFACD");
     
-    private static final String BLACK_HEX = "#000000";
-    
     @XmlAttribute
     @XmlJavaTypeAdapter(ColorAdapter.class)
     private Color color;

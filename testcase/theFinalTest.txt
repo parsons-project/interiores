@@ -1,0 +1,114 @@
+# MASTER TEST TO TRY OUT ALL THE FEATURES
+help
+new room livingroom
+
+
+# LET'S SAVE AND LOAD THE CREATED ROOM
+save room r.xml
+load room r.xml
+
+
+# NOW, LET'S TEST THE RTCatalog
+help rtc
+new rtc newRTcatalog
+save rtc rc.xml
+remove rtc newRTcatalog
+load rtc rc.xml
+new rtc newRTcatalog2
+list rtc
+checkout rtc newRTcatalog
+add rt testRoom
+put rt testRoom mandatory chair
+put rt testRoom forbidden bedSingle
+types rt testRoom
+add rt testRoom2
+rm rt testRoom2
+release rt testRoom mandatory chair
+checkout rtc newRTcatalog2
+merge rtc newRTcatalog
+list rt
+
+
+# FTCatalog test
+help ftc
+new ftc newFTcatalog
+save ftc fc.xml
+remove ftc newFTcatalog
+load ftc fc.xml
+new ftc newFTcatalog2
+list ftc
+checkout ftc newFTcatalog
+add ft coolChair 10 20 10 20
+add ft uglyChair 30 40 50 60
+rm ft uglyChair
+list ft
+checkout ftc newFTcatalog2
+merge rtc newRTcatalog
+list ft
+
+
+# LET'S SELECT SOME FURNITURE FOR OUR LIVING ROOM
+help ft
+selectable ft
+select ft chair
+select ft chair
+select ft chair
+select ft chair
+select ft chair
+select ft chair
+list ft
+unselect ft chair1
+list ft
+
+
+# TESTING FIXED ELEMENTS
+help fe
+list fe
+add fe door N 20 40
+add fe window E 10 10
+selected fe
+remove fe door1
+selected fe
+
+
+# UNARY CONSTRAINTS TESTING
+help uc
+add uc color blue chair2
+add uc material wood chair3
+add uc depth 10 100 chair4
+add uc width 10 100 chair5
+add uc model NADDA chair6
+add uc orientation N chair2
+add uc position at 30 30 chair3
+add uc position range 10 40 10 40 chair4
+add uc position walls all chair5
+add uc price 300.99 chair6
+list uc chair2
+remove uc color chair2
+list uc chair2
+
+
+# TESTING BINARY CONSTRAINTS
+add bc distance-min 100 chair2 chair3
+add bc distance-max 50 chair4 chair5
+add bc facing-partial chair6 chair2
+add bc facing-straight chair3 chair4
+list bc chair2
+remove bc distance-min chair2 chair3
+list bc chair2
+
+
+# TESTING FURNITURE MODELS
+list fm bedSingle
+rm fm bedSingle
+add fm chair newFM 50 50 50.88 blue wood 1 2 3 4
+list fm chair
+
+# FINALLY, WE WILL TEST THE DESIGN CALLING SOLVE DESIGN (WITH THE DEBUGGER ACTIVATED)
+show design
+solve design --debug
+show design
+
+
+# AND WE GO OUT
+quit

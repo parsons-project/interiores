@@ -120,7 +120,7 @@ public class UnaryConstraintCommands extends AdvancedCommandGroup {
                 constraintController.getAvailableConstraints());
         String furn = readString("Select the furniture piece from which to remove the constraint");
         
-        constraintController.remove(ctype, furn);
+        constraintController.remove(furn, ctype);
     }
     
     @Command("List constraints applied to some selected furniture")

@@ -3,14 +3,24 @@ package interiores.business.models;
 import interiores.utils.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * This class extends java.awt.Rectangle to be used with orientations.
  * Rotations will not change the position of the upper-left corner.
  * @author alvaro
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class OrientedRectangle extends Rectangle {
+    @XmlAttribute
     private Orientation orientation;
+    
+    public OrientedRectangle()
+    { }
     
     public OrientedRectangle(int x, int y, int w, int h, Orientation orientation) {
         this(new Point(x, y), new Dimension(w, h), orientation);

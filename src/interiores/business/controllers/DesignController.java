@@ -31,7 +31,6 @@ public class DesignController
 {
     private boolean solutionFound = false;
     private long time = -1;
-    private RoomDesign design;
     private Thread solver;
     
     /**
@@ -92,8 +91,7 @@ public class DesignController
                     solutionFound = true;
                     solveFinished.solutionFound();
 
-                    design = new RoomDesign(furVarSet.getVariableValues());
-                    getRoom().setDesign(design);
+                    getRoom().setDesign(new RoomDesign(furVarSet.getVariableValues()));
                     
                     me.notify(new RoomDesignChangedEvent());
                 }
@@ -122,11 +120,11 @@ public class DesignController
      * @return A String containing a text representation of the design
      */
     public RoomDesign getDesign() {
-        return design;
+        return getRoom().getDesign();
     }
     
     public Set getDesignFurniture() {
-        return design.getEntries();
+        return getDesign().getEntries();
     }
     
     public void resumeSolver()

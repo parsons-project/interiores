@@ -68,7 +68,9 @@ public class RoomMapPanel extends JPanel
             map = new InteractiveRoomMap(width, depth); // A simple room map on production
         
         setPreferredSize(new Dimension(map.getWidth(), map.getHeight()));
-        repaint();
+        
+        updateFixed();
+        updateDesign();
     }
 
     /**

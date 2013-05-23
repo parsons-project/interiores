@@ -6,13 +6,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author hector
  */
+@XmlRootElement
 public class RoomDesign
 {
+    @XmlElementWrapper
     private Map<String, FurnitureValue> furniture;
     
     public RoomDesign() {

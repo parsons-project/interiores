@@ -3,12 +3,14 @@ package interiores.utils;
 import java.awt.Point;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  *
  * @author hector
  */
 @XmlRootElement
+@XmlType(name="size")
 public class Dimension
 {
     public static enum Component { WIDTH, DEPTH };

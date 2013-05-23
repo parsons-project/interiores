@@ -4,20 +4,26 @@ import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.SpaceAround;
 import interiores.business.models.room.FurnitureModel;
+import interiores.data.adapters.PointAdapter;
 import interiores.utils.Dimension;
 import java.awt.Point;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * This class represents a given FixedElement wanted by the user
  * @author alvaro
  */
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class WantedFixed extends WantedElement
 {
     @XmlElement
+    @XmlJavaTypeAdapter(PointAdapter.class)
     protected Point position;
     
     @XmlAttribute

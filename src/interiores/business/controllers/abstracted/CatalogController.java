@@ -1,5 +1,8 @@
 package interiores.business.controllers.abstracted;
 
+import interiores.business.events.catalogs.CatalogChangedEvent;
+import interiores.business.exceptions.ActiveCatalogRemovalException;
+import interiores.business.exceptions.CatalogAlreadyExistsException;
 import interiores.business.exceptions.CatalogNotFoundException;
 import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.catalogs.AvailableCatalog;
@@ -20,6 +23,7 @@ abstract public class CatalogController<I extends PersistentIdObject>
     extends CatalogAccessController<I>
 {
     protected Map<String, NamedCatalog<I>> loadedCatalogs;
+    protected String lastLoaded = "";
     
     public CatalogController(JAXBDataController data, AvailableCatalog catalog) {
         super(data, catalog);
@@ -34,7 +38,9 @@ abstract public class CatalogController<I extends PersistentIdObject>
     }
     
     public void create(String catalogName) {
-        if(catalogName.equals(NamedCatalog.getDefaultName()))
+        if (loadedCatalogs.containsKey(catalogName))
+            throw new CatalogAlreadyExistsException(catalogName);
+        else if (catalogName.equals(NamedCatalog.getDefaultName()))
             throw new DefaultCatalogOverwriteException();
         
         loadedCatalogs.put(catalogName, new NamedCatalog(catalogName, getActiveCatalog()));
@@ -72,14 +78,17 @@ abstract public class CatalogController<I extends PersistentIdObject>
         if(!path.startsWith("/"))
             path = getAbsolutePath(path);
         
+        
         Debug.println("Loading from " + path);
         
         NamedCatalog loadedCatalog = (NamedCatalog<I>) data.load(classes, path);
         
         if(loadedCatalog.isDefault())
             throw new DefaultCatalogOverwriteException();
-            
+        
+        lastLoaded = loadedCatalog.getName();
         loadedCatalogs.put(loadedCatalog.getName(), loadedCatalog);
+        
     }
     
     public void save(String path) throws JAXBException {
@@ -96,11 +105,26 @@ abstract public class CatalogController<I extends PersistentIdObject>
         data.save(getActiveCatalog(), path, classes);
     }
     
+    public void remove(String catalogName) {
+        if(! loadedCatalogs.containsKey(catalogName))
+            throw new CatalogNotFoundException(catalogName);
+        else if(catalogName.equals(NamedCatalog.getDefaultName()))
+            throw new DefaultCatalogOverwriteException();
+        else if (catalogName.equals(getActiveCatalog().getName()))
+            throw new ActiveCatalogRemovalException();
+        
+        loadedCatalogs.remove(catalogName);
+    }
+    
     public Collection<String> getNamesLoadedCatalogs() {
         return loadedCatalogs.keySet();
     }
     
     private String getAbsolutePath(String path) {
         return System.getProperty("user.dir") + System.getProperty("file.separator") + path;
+    }
+
+    public String getLastLoaded() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

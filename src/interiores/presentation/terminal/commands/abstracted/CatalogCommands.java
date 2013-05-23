@@ -23,6 +23,7 @@ abstract public class CatalogCommands
     private static final String SAVE_MSG = "Enter the path where to save the %s %s catalog:";
     private static final String MERGE_MSG = "Enter the name of the %s catalog you want to merge with the"
             + "current catalog:";
+    private static final String RMV_MSG = "Enter the name of the %s catalog you want to remove";
     
     
     protected CatalogController catalogController;
@@ -94,4 +95,12 @@ abstract public class CatalogCommands
         for(String catalogName : catalogNames)
             catalogController.merge(catalogName);
     }
+    
+    @Command("Removes the specified catalog")
+    public void remove() {
+        String question = String.format(RMV_MSG, catalogTypeName);
+        String cat_to_remove = readString(question);
+        catalogController.remove(cat_to_remove);
+    }
+    
 }

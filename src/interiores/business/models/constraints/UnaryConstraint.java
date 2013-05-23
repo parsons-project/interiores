@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlSeeAlso({AreaConstraint.class, ColorConstraint.class, MaterialConstraint.class, ModelConstraint.class,
     OrientationConstraint.class, PriceConstraint.class, SizeRangeConstraint.class})
 public abstract class UnaryConstraint
-    extends Constraint
+    extends Constraint implements PreliminarTrimmer
 {
     private static Map<String, Class<? extends Constraint>> availableConstraints = new TreeMap();
     
@@ -42,10 +42,5 @@ public abstract class UnaryConstraint
         return availableConstraints.keySet();
     }
     
-     /**
-     * Eliminates all values from the variables' domain that do not fulfill the
-     * restriction.
-     * @param variable The specific variable that has to pass the constraint
-     */
-    public abstract void eliminateInvalidValues(Domain domain);
+    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 }

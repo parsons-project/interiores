@@ -13,7 +13,8 @@ import java.util.List;
  * Represents a constraint imposed over a set of furniture (that is, the whole wishlist of a room)
  * @author larribas
  */
-public abstract class GlobalConstraint {
+public abstract class GlobalConstraint
+    extends Constraint {
     
     /**
      * Lets the constraint know of a value that's been assigned, so that it can update its information
@@ -28,6 +29,6 @@ public abstract class GlobalConstraint {
     public abstract void notifyUnassignment(FurnitureValue fv);
     
     
-    public abstract void eliminateInvalidValues(List<Domain> domains);
+    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     
 }

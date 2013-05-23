@@ -31,47 +31,24 @@ public class MaxDistanceConstraint
         this.distance = distance;
     }
     
-    /**
-     * Checks whether two variables satisfy the constraint
-     * @param assignedVariable The first variable
-     * @param fvariable2 The second variable
-     * @return 'true' if the two variables are separated by, at most, 'distance' cm. 'false' otherwise
-     */
-    @Override
-    public boolean isSatisfied(InterioresVariable assignedVariable, FurnitureVariable fvariable2) {
-        
-        OrientedRectangle rectangle1 = ((FurnitureValue) assignedVariable.getAssignedValue()).getArea();
-        OrientedRectangle rectangle2 = ((FurnitureValue) fvariable2.getAssignedValue()).getArea();
-        
-        return Area.distance(rectangle1, rectangle2) < distance;
-    }
     
     @Override
     public String toString() {
         return "Maximum distance = " + distance + "cm constraint";
     }
 
+    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::    
+    
     /**
-     * Trims the domain of toTrimVariable according to the value of
-     * assignedVariable and the restriction.
-     * @param assignedVariable the variable with an assigned value
-     * @param toTrimVariable the variable whose domain has to be trimmed
+     * Trims the domain of variable according to the value of
+     * the other variable and the restriction.
+     * @param variable the variable whose domain has to be trimmed
      */
     @Override
-    public void trim(InterioresVariable assignedVariable, FurnitureVariable toTrimVariable, OrientedRectangle roomArea) {
-        Area modelArea = new Area(assignedVariable.assignedValue.getArea());
+    public void Trim2(FurnitureVariable variable) {
+        Area modelArea = new Area(otherVariable.assignedValue.getArea());
         Area validArea = modelArea.rectangleAround(distance);
-        toTrimVariable.setValidOnly(validArea);
-    }
-
-    /**
-     * We can not eliminate any value due to this constraint.
-     * @param variable1
-     * @param variable2 
-     */
-    @Override
-    public void preliminarTrim(InterioresVariable variable1, InterioresVariable variable2, OrientedRectangle roomArea) {
-        
+        variable.setValidOnly(validArea);
     }
 
     /**
@@ -79,7 +56,7 @@ public class MaxDistanceConstraint
      * @return 
      */
     @Override
-    public int getWeight(OrientedRectangle roomArea) {
+    public int getWeight() {
         if (distance < 6) return 150;
         if (distance < 20) return 60;
         if (distance < 60) return 30;
@@ -87,5 +64,19 @@ public class MaxDistanceConstraint
         if (distance < 200) return 10;
         return 5;
     }
-    
+
+    /**
+     * Checks whether two variables satisfy the constraint
+     * @param assignedVariable The first variable
+     * @param fvariable2 The second variable
+     * @return 'true' if the two variables are separated by, at most, 'distance' cm. 'false' otherwise
+     */
+    @Override
+    public boolean isSatisfied(FurnitureVariable variable) {
+        
+        OrientedRectangle rectangle1 = ((FurnitureValue) otherVariable.getAssignedValue()).getArea();
+        OrientedRectangle rectangle2 = ((FurnitureValue) variable.getAssignedValue()).getArea();
+        
+        return Area.distance(rectangle1, rectangle2) < distance;
+    }    
 }

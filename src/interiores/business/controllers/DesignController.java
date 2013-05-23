@@ -8,9 +8,9 @@ import interiores.business.models.FurnitureType;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
-import interiores.business.models.backtracking.trimmers.preliminar.ConstantPreliminarTrimmer;
+import interiores.business.models.constraints.global.SpaceRespectingConstraint;
 import interiores.business.models.backtracking.trimmers.preliminar.UnaryConstraintsPreliminarTrimmer;
-import interiores.business.models.backtracking.trimmers.preliminar.UnfitModelsPreliminarTrimmer;
+import interiores.business.models.constraints.global.UnfitModelsPseudoConstraint;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.core.Observer;
 import interiores.core.business.BusinessException;
@@ -72,9 +72,9 @@ public class DesignController
             @Override
             public void run() {
                 // @TODO Refactorize. Create a FurnitureVariableSetFactory
-                furVarSet.addPreliminarTrimmer(new ConstantPreliminarTrimmer());
+                furVarSet.addPreliminarTrimmer(new SpaceRespectingConstraint());
                 furVarSet.addPreliminarTrimmer(new UnaryConstraintsPreliminarTrimmer());
-                furVarSet.addPreliminarTrimmer(new UnfitModelsPreliminarTrimmer());
+                furVarSet.addPreliminarTrimmer(new UnfitModelsPseudoConstraint());
 
                 final RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
 

@@ -2,19 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interiores.business.models.backtracking.trimmers.preliminar;
+package interiores.business.models.constraints.global;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.backtracking.trimmers.PreliminarTrimmer;
+import interiores.business.models.constraints.PreliminarTrimmer;
 import java.util.Iterator;
 
 /**
  *
  * @author hector0193
  */
-public class UnfitModelsPreliminarTrimmer
+public class UnfitModelsPseudoConstraint
     implements PreliminarTrimmer
 {
     @Override

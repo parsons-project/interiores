@@ -6,7 +6,7 @@ import interiores.business.models.OrientedRectangle;
 import interiores.business.models.WantedFixed;
 import interiores.business.models.WantedFurniture;
 import interiores.business.models.WishList;
-import interiores.business.models.backtracking.trimmers.PreliminarTrimmer;
+import interiores.business.models.constraints.PreliminarTrimmer;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.GlobalConstraint;

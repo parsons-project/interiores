@@ -1,15 +1,15 @@
-package interiores.business.models.backtracking.trimmers.preliminar;
+package interiores.business.models.constraints.global;
 
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.backtracking.trimmers.PreliminarTrimmer;
+import interiores.business.models.constraints.PreliminarTrimmer;
 import java.awt.Rectangle;
 
 /**
  *
  * @author hector
  */
-public class ConstantPreliminarTrimmer
+public class SpaceRespectingConstraint
     implements PreliminarTrimmer
 {
     @Override

@@ -6,9 +6,10 @@ package interiores.presentation.swing.views;
 
 import interiores.business.controllers.RoomTypeController;
 import interiores.business.controllers.RoomTypesCatalogController;
-import interiores.business.events.catalogs.CatalogChangedEvent;
+import interiores.business.events.catalogs.ElementChangedEvent;
 import interiores.business.events.catalogs.RTCatalogChangedEvent;
 import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
+import interiores.business.events.catalogs.RTChangedEvent;
 import interiores.business.models.RoomType;
 import interiores.core.Debug;
 import interiores.core.Event;
@@ -48,7 +49,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         catElements = new ArrayList();
         
         // Initially, we load the current catalog
-        loadCatalog();
+        refreshCatalog();
         initCatalogList();
     }
 
@@ -146,9 +147,13 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
 
-    
     @Listen({RTCatalogCheckoutEvent.class})
-    public void loadCatalog() {
+    public void updateSelectedCatalog(RTCatalogCheckoutEvent evt) {
+        currentCatalogSelect.setSelectedItem(evt.getName());
+        refreshCatalog();
+    }
+    
+    public void refreshCatalog() {
         // Clear jPanel1
         jPanel1.removeAll();
         
@@ -157,25 +162,14 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         
         // Each 'key' has the full name of the furniture, which in turn is accessed by its short name
         for (String key : rtypes.keySet()) {
-            
             String rtn = rtypes.get(key); // 'rtn' is the short name (its actual name within the program)
-            
-            int width = rtController.getWidthRange(rtn).min;
-            int depth = rtController.getDepthRange(rtn).min;
-            String mandatory = rtController.getMandatory(rtn).toString();
-            mandatory = (String) mandatory.subSequence(1, mandatory.length()-1);
-            
-            String forbidden = rtController.getForbidden(rtn).toString();
-            forbidden = (String) forbidden.subSequence(1, forbidden.length()-1);
-            
-            RTC_Element rtInstance = new RTC_Element(key,width,depth,mandatory,forbidden);
-            rtInstance.addToPanel();
-            
-//            Debug.println("Creating a panel with the following specifications:\n"
-//                    + "name: " + key + ", width: " + width + ", depth: " + depth
-//                    + "\nMandatory: " + mandatory + "\nForbidden: " + forbidden);
-            
-        }       
+            addElement(key, rtn);
+        }
+    }
+    
+    @Listen({RTChangedEvent.class})
+    public void updateCatalogElement(RTChangedEvent evt) {
+        refreshCatalog();
     }
     
     public void initCatalogList() {
@@ -333,7 +327,18 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     }
 
 
+    private void addElement(String key, String rtn) {
+        int width = rtController.getWidthRange(rtn).min;
+        int depth = rtController.getDepthRange(rtn).min;
+        String mandatory = rtController.getMandatory(rtn).toString();
+        mandatory = (String) mandatory.subSequence(1, mandatory.length()-1);
 
+        String forbidden = rtController.getForbidden(rtn).toString();
+        forbidden = (String) forbidden.subSequence(1, forbidden.length()-1);
+
+        RTC_Element rtInstance = new RTC_Element(key,width,depth,mandatory,forbidden);
+        rtInstance.addToPanel();
+    }
 
 
 

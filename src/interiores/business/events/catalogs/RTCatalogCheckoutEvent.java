@@ -12,4 +12,13 @@ import interiores.core.Event;
  */
 public class RTCatalogCheckoutEvent implements Event {
     
+    private String name;
+    
+    public RTCatalogCheckoutEvent(String name) {
+        this.name = name;
+    }
+    
+    public String getName() {
+        return name;
+    }
 }

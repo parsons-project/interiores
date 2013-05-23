@@ -1,6 +1,7 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogElementController;
+import interiores.business.events.catalogs.RTChangedEvent;
 import interiores.business.models.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
@@ -34,6 +35,14 @@ public class RoomTypeController
     {
         RoomType type = new RoomType(typeName);
         super.add(type);
+        
+        notify(new RTChangedEvent(typeName,true));
+    }
+    
+    @Override
+    public void rm(String typeName) {
+        super.rm(typeName);
+        notify(new RTChangedEvent(typeName,false));
     }
     
     /**

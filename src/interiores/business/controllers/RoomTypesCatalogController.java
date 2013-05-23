@@ -1,7 +1,7 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogController;
-import interiores.business.events.catalogs.CatalogChangedEvent;
+import interiores.business.events.catalogs.ElementChangedEvent;
 import interiores.business.events.catalogs.RTCatalogChangedEvent;
 import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
 import interiores.business.models.RoomType;
@@ -49,7 +49,7 @@ public class RoomTypesCatalogController
     @Override
     public void checkout(String catalogName) {
         super.checkout(catalogName);
-        notify(new RTCatalogCheckoutEvent());
+        notify(new RTCatalogCheckoutEvent(catalogName));
     }
     
     @Override

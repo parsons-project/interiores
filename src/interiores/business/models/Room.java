@@ -50,7 +50,7 @@ public class Room
         
         this.type = type;
         this.size = size;
-        design = null;
+        design = new RoomDesign();
     }
     
     /**

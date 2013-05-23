@@ -70,7 +70,7 @@ public class RoomMapPanel extends JPanel
         setPreferredSize(new Dimension(map.getWidth(), map.getHeight()));
         
         updateFixed();
-        //updateDesign();
+        updateDesign();
     }
 
     /**

@@ -214,6 +214,14 @@ public class FurnitureVariable
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+    int domainSize() {
+        return domain.domainSize(iteration);
+    }
+
+    int smallestModelSize() {
+        return domain.smallestModelSize(iteration);
+    }
+
 
 
     

@@ -239,6 +239,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -265,6 +266,8 @@ public class Area {
     
     private HashMap<Integer,List<VerticalEdge>> verticalEdgesStoredByX;
     private HashMap<Integer,List<HorizontalEdge>> horizontalEdgesStoredByY;
+    
+    private static final int SAMPLE_SIZE = 20;
     
     
     /**
@@ -734,6 +737,32 @@ public class Area {
                 newVertexs.add(new GridPoint(v.x+distance, v.y));
         
         return new Area(newVertexs);
+    }
+
+    /**
+     * Returns a probabilistic estimation of the area size.
+     * SAMPLE_SIZE points from inside the bounding rectangle are chosen 
+     * randomly. From these, an estimation of the density of area inside the
+     * bounding rectangle is infered.
+     * @return an estimation of the size.
+     */
+    public int areaSize() {
+        Rectangle boundingRectangle = getBoundingRectangle();
+        int xMin = boundingRectangle.x;
+        int xMax = boundingRectangle.x + boundingRectangle.width;
+        int yMin = boundingRectangle.y;
+        int yMax = boundingRectangle.y + boundingRectangle.height;
+        
+        Random randomGenerator = new Random();
+        int squareDensity = 0;
+        for (int i = 0; i < SAMPLE_SIZE; ++i) {
+            int Xrand = xMin + randomGenerator.nextInt(boundingRectangle.width);
+            int Yrand = yMin + randomGenerator.nextInt(boundingRectangle.height);
+            if (contains(new Square(Xrand, Yrand))) ++squareDensity;
+        }
+        
+        int boundingRectangleSize = (xMax - xMin) * (yMax - yMin);
+        return (boundingRectangleSize * squareDensity) / SAMPLE_SIZE;
     }
     
 }

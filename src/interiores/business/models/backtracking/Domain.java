@@ -123,6 +123,19 @@ public class Domain {
     public void saveAllOrientations(int iteration) {
         domain[iteration].swapOrientations(domain[iteration+1]);
     }
+
+    /**
+     * Returns the size of the domain.
+     * @param iteration
+     * @return 
+     */
+    int domainSize(int iteration) {
+        return domain[iteration].size();
+    }
+
+    int smallestModelSize(int iteration) {
+        return domain[iteration].smallestModelSize();
+    }
     
     
 }

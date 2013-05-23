@@ -118,22 +118,22 @@ public class FurnitureVariableSet
     }
     
     private void addVariables(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog,
-            Dimension roomSize)
-    {   
+            Dimension roomSize) {   
         PriorityQueue<Entry<Integer, FurnitureVariable>> queue = new PriorityQueue(
-                variableCount + 1,
-                new Comparator<Entry<Integer, FurnitureVariable>>() {
-                    @Override
-                    public int compare(Entry<Integer, FurnitureVariable> e1,
-                            Entry<Integer, FurnitureVariable> e2)
-                    {
-                        if(e1.getKey() > e2.getKey()) return -1;
-                        if(e1.getKey() == e2.getKey()) return 0;
-                        
-                        return 1;
-                    }
+            variableCount + 1,
+            new Comparator<Entry<Integer, FurnitureVariable>>() {
+                @Override
+                public int compare(Entry<Integer, FurnitureVariable> e1,
+                        Entry<Integer, FurnitureVariable> e2) {
+                    if(e1.getKey() > e2.getKey()) return -1;
+                    if(e1.getKey() == e2.getKey()) return 0;
+
+                    return 1;
                 }
+            }
         );
+        
+        
         
         for(WantedFurniture wantedFurniture : wishList.getWantedFurniture()) {
             String variableName = wantedFurniture.getName();
@@ -173,11 +173,18 @@ public class FurnitureVariableSet
     /**
      * Selects a variable from variables[depth..variableCount-1] and sets it
      * as actual variable.
+     * In order for the actual variable to be set it has to be moved to the
+     * position depth of variables.
      * The iterators of the actual variable are reset.
      */
     //note: trivial implementation. To be optimized.
     @Override
     protected void setActualVariable() {
+        for (int i = depth; i < variableCount; ++i) {
+            int domainSize = variables[depth].domainSize();
+            int binaryConstraintsWeight = variables[depth].binaryConstraintsWeight();
+            int smallestModelSize = variables[depth].smallestModelSize();
+        }
         if (variables.length != 0) {
             actual = variables[depth];
             actual.resetIterators(depth);

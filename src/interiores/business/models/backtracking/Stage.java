@@ -3,6 +3,7 @@ package interiores.business.models.backtracking;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
+import interiores.business.models.backtracking.Area.Area;
 import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
@@ -23,7 +24,7 @@ public class Stage {
     private int resolution;
     
     private List<FurnitureModel> models;
-    private List<Point> positions;
+    private Area positions;
     private List<Orientation> orientations;
 
     
@@ -261,6 +262,17 @@ public class Stage {
         // 1) merge
         orientations.addAll(stage.orientations);
         stage.orientations.clear();
+    }
+
+    int size() {
+        int modelCount = models.size();
+        int oriCount = orientations.size();
+        int areaSize = positions.areaSize();
+        return modelCount * oriCount * areaSize;
+    }
+
+    int smallestModelSize() {
+        
     }
     
     

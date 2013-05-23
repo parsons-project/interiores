@@ -8,6 +8,7 @@ import interiores.business.controllers.RoomTypeController;
 import interiores.business.controllers.RoomTypesCatalogController;
 import interiores.business.events.catalogs.CatalogChangedEvent;
 import interiores.business.events.catalogs.RTCatalogChangedEvent;
+import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
 import interiores.business.models.RoomType;
 import interiores.core.Debug;
 import interiores.core.Event;
@@ -88,6 +89,11 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
 
         currentCatalogSelect.setBackground(new java.awt.Color(255, 255, 255));
         currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        currentCatalogSelect.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                currentCatalogSelectItemStateChanged(evt);
+            }
+        });
 
         currentCatalogLabel.setText("Current catalog:");
 
@@ -127,6 +133,10 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void currentCatalogSelectItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_currentCatalogSelectItemStateChanged
+        rtcController.checkout(currentCatalogSelect.getSelectedItem().toString());
+    }//GEN-LAST:event_currentCatalogSelectItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentCatalogLabel;
     private javax.swing.JComboBox currentCatalogSelect;
@@ -137,8 +147,10 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     
-
+    @Listen({RTCatalogCheckoutEvent.class})
     public void loadCatalog() {
+        // Clear jPanel1
+        jPanel1.removeAll();
         
         // Retrieve all the elements in the catalog
         Map<String,String> rtypes = rtController.getFullNamesMap();
@@ -173,7 +185,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     }
 
     @Listen({RTCatalogChangedEvent.class})
-    public void updateCatalogList(CatalogChangedEvent evt) {
+    public void updateCatalogList(RTCatalogChangedEvent evt) {
         if (evt.isAdded()) currentCatalogSelect.addItem(evt.getName());
         else currentCatalogSelect.removeItem(evt.getName());
     }

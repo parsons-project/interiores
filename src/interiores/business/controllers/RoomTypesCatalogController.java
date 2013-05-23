@@ -3,6 +3,7 @@ package interiores.business.controllers;
 import interiores.business.controllers.abstracted.CatalogController;
 import interiores.business.events.catalogs.CatalogChangedEvent;
 import interiores.business.events.catalogs.RTCatalogChangedEvent;
+import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
 import interiores.business.models.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
@@ -43,6 +44,12 @@ public class RoomTypesCatalogController
     public void remove(String catalogName) {
         super.remove(catalogName);
         notify(new RTCatalogChangedEvent(catalogName, false));
+    }
+    
+    @Override
+    public void checkout(String catalogName) {
+        super.checkout(catalogName);
+        notify(new RTCatalogCheckoutEvent());
     }
     
     @Override

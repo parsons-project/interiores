@@ -7,6 +7,7 @@ import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.room.FurnitureType;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Dimension;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -72,5 +73,15 @@ public class FurnitureModelController
         FurnitureType furnitureType = get(furnitureTypeName);
         
         return furnitureType.getFurnitureModels();
+    }
+    
+    public Collection<String> getFurnitureModelNames(String furnitureTypeName) {
+        Collection<FurnitureModel> fmodels = getFurnitureModels(furnitureTypeName);
+        
+        Collection<String> furnitureNames = new ArrayList();
+        for (FurnitureModel fm : fmodels) {
+            furnitureNames.add(fm.getName());
+        }
+        return furnitureNames;
     }
 }

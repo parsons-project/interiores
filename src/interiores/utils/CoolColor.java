@@ -3,6 +3,8 @@ package interiores.utils;
 import interiores.core.business.BusinessException;
 import interiores.data.adapters.ColorAdapter;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -35,6 +37,14 @@ public enum CoolColor {
     
     public Color getColor() {
         return color;
+    }
+    
+    public static Collection<String> getNames() {
+        Collection<String> names = new ArrayList();
+        for(CoolColor coolColor : values()) {
+            names.add(coolColor.name().toLowerCase());
+        }
+        return names;
     }
     
     public static CoolColor getEnum(String name) throws BusinessException {

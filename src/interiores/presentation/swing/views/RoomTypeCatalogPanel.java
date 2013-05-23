@@ -79,7 +79,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         title1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         jScrollPane1.setBorder(null);
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(900, 600));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(900, 0));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setAutoscrolls(true);
@@ -179,7 +179,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     }
     
 
-    // This class represents a catalog element
+    // This class represents an existent catalog element
     class RTC_Element {
         private javax.swing.JPanel outerPanel = new javax.swing.JPanel();
         private javax.swing.JButton removeButton = new javax.swing.JButton();

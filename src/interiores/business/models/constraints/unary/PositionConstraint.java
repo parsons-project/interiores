@@ -7,8 +7,13 @@ import java.util.Arrays;
  * This constraint forces the furniture to be positioned in an exact point
  * @author alvaro
  */
-public class PositionConstraint extends AreaConstraint {
-      
+public class PositionConstraint
+    extends AreaConstraint
+{
+    
+    public PositionConstraint()
+    { }
+    
     /**
      * Creator of the constraint
      * @param point The point where the furniture must be placed 

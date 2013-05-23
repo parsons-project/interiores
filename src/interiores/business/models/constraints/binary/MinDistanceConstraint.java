@@ -4,7 +4,6 @@ import interiores.business.models.OrientedRectangle;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.BinaryConstraint;
-import interiores.core.Debug;
 import interiores.utils.Dimension;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;

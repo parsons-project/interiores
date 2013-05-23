@@ -3,6 +3,8 @@ package interiores.business.models.constraints;
 import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.binary.MinDistanceConstraint;
+import interiores.business.models.constraints.binary.PartialFacingConstraint;
+import interiores.business.models.constraints.binary.StraightFacingConstraint;
 import interiores.core.business.BusinessException;
 import java.util.Collection;
 import java.util.Map;
@@ -15,7 +17,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  * @author alvaro
  */
 @XmlRootElement
-@XmlSeeAlso({MaxDistanceConstraint.class, MinDistanceConstraint.class})
+@XmlSeeAlso({MaxDistanceConstraint.class, MinDistanceConstraint.class,
+    StraightFacingConstraint.class, PartialFacingConstraint.class})
 public abstract class BinaryConstraint
     extends Constraint
 {

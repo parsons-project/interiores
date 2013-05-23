@@ -1,7 +1,6 @@
 package interiores.business.models.constraints.unary;
 
 import interiores.business.models.backtracking.Domain;
-import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.UnaryConstraint;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  * 
@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * a piece of furniture.
  */
 @XmlRootElement
+@XmlSeeAlso({PositionConstraint.class, WallConstraint.class})
 public class AreaConstraint
     extends UnaryConstraint {
     

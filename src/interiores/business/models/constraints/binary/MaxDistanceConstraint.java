@@ -58,7 +58,7 @@ public class MaxDistanceConstraint
      * @param toTrimVariable the variable whose domain has to be trimmed
      */
     @Override
-    public void trim(InterioresVariable assignedVariable, FurnitureVariable toTrimVariable, Room room) {
+    public void trim(InterioresVariable assignedVariable, FurnitureVariable toTrimVariable, OrientedRectangle roomArea) {
         Area modelArea = new Area(assignedVariable.assignedValue.getArea());
         Area validArea = modelArea.rectangleAround(distance);
         toTrimVariable.setValidOnly(validArea);
@@ -70,7 +70,7 @@ public class MaxDistanceConstraint
      * @param variable2 
      */
     @Override
-    public void preliminarTrim(InterioresVariable variable1, InterioresVariable variable2, Room room) {
+    public void preliminarTrim(InterioresVariable variable1, InterioresVariable variable2, OrientedRectangle roomArea) {
         
     }
 
@@ -79,7 +79,7 @@ public class MaxDistanceConstraint
      * @return 
      */
     @Override
-    public int getWeight(Room room) {
+    public int getWeight(OrientedRectangle roomArea) {
         if (distance < 6) return 150;
         if (distance < 20) return 60;
         if (distance < 60) return 30;

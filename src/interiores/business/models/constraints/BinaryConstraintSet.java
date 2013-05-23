@@ -1,7 +1,9 @@
 package interiores.business.models.constraints;
 
+import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
 import interiores.utils.BinaryConstraintAssociation;
+import interiores.utils.Dimension;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,9 +27,13 @@ public class BinaryConstraintSet
     @XmlElementWrapper
     private TreeMap<String, Integer> binaryConstraintCount;
     
-    public BinaryConstraintSet() {
+    private OrientedRectangle roomArea;
+    
+    public BinaryConstraintSet(OrientedRectangle roomArea) {
         binaryConstraints = new TreeMap();
         binaryConstraintCount = new TreeMap();
+        
+        this.roomArea = roomArea;
     }
     
     public void add(BinaryConstraint bc, String f1, String f2) {
@@ -39,8 +45,8 @@ public class BinaryConstraintSet
         if(! binaryConstraintCount.containsKey(f2))
             binaryConstraintCount.put(f2, 0);
         
-        binaryConstraintCount.put(f1, binaryConstraintCount.get(f1) + bc.getWeight(new Room()));
-        binaryConstraintCount.put(f2, binaryConstraintCount.get(f2) + bc.getWeight(new Room()));
+        binaryConstraintCount.put(f1, binaryConstraintCount.get(f1) + bc.getWeight(roomArea));
+        binaryConstraintCount.put(f2, binaryConstraintCount.get(f2) + bc.getWeight(roomArea));
         
         binaryConstraints.put(getKey(bc.getClass(), f1, f2), bca);
     }
@@ -54,8 +60,8 @@ public class BinaryConstraintSet
         String key = getKey(binaryConstraintClass, f1, f2);
         BinaryConstraint bc = binaryConstraints.get(key).getConstraint();
         
-        binaryConstraintCount.put(f1, binaryConstraintCount.get(f1) - bc.getWeight(new Room()));
-        binaryConstraintCount.put(f2, binaryConstraintCount.get(f2) - bc.getWeight(new Room()));
+        binaryConstraintCount.put(f1, binaryConstraintCount.get(f1) - bc.getWeight(roomArea));
+        binaryConstraintCount.put(f2, binaryConstraintCount.get(f2) - bc.getWeight(roomArea));
         
         binaryConstraints.remove(key);
     }

@@ -7,6 +7,7 @@ import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.BinaryConstraintSet;
 import interiores.business.models.constraints.UnaryConstraint;
 import interiores.utils.BinaryConstraintAssociation;
+import java.awt.Point;
 import java.util.Collection;
 import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlElement;
@@ -44,7 +45,8 @@ public class WishList
         furniture = new TreeMap();
         fixed = new TreeMap();
         typesCount = new TreeMap();
-        binaryConstraints = new BinaryConstraintSet();
+        binaryConstraints = new BinaryConstraintSet(
+                new OrientedRectangle(new Point(0, 0), room.getDimension(), Orientation.S));
         
         for(String mandatoryType : room.getMandatoryFurniture())
             addWithoutChecking(mandatoryType);

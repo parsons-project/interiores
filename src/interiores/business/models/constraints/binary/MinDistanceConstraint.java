@@ -60,7 +60,7 @@ public class MinDistanceConstraint
      * @param toTrimVariable the variable whose domain has to be trimmed
      */
     @Override
-    public void trim(InterioresVariable assignedVariable, FurnitureVariable toTrimVariable, Room room) {
+    public void trim(InterioresVariable assignedVariable, FurnitureVariable toTrimVariable, OrientedRectangle roomArea) {
         Area modelArea = new Area(assignedVariable.assignedValue.getArea());
         Area invalidArea = modelArea.rectangleAround(distance);
         toTrimVariable.exclude(invalidArea);
@@ -79,7 +79,7 @@ public class MinDistanceConstraint
      * @param variable2 
      */
     @Override
-    public void preliminarTrim(InterioresVariable variable1, InterioresVariable variable2, Room room) {
+    public void preliminarTrim(InterioresVariable variable1, InterioresVariable variable2, OrientedRectangle roomArea) {
         //Not implemented for now. This shouldn't have an important impact.
     }
 
@@ -88,7 +88,7 @@ public class MinDistanceConstraint
      * @return 
      */
     @Override
-    public int getWeight(Room room) {
+    public int getWeight(OrientedRectangle roomArea) {
         if (distance > 500) return 150;
         if (distance > 300) return 90;
         if (distance > 200) return 50;

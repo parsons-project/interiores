@@ -8,6 +8,7 @@ import interiores.business.models.WantedFurniture;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.trimmers.PreliminarTrimmer;
 import interiores.business.models.catalogs.NamedCatalog;
+import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.GlobalConstraint;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
@@ -215,7 +216,14 @@ public class FurnitureVariableSet
                 domainSize[i] = variables[depth].domainSize();
                 if (domainSize[i] > maxDomainSize) maxDomainSize = domainSize[i];
 
-                binaryConstraintsLoad[i] = variables[depth].binaryConstraintsWeight();
+                // the weight of all binary constraints between this variable and
+                // other variables which have not been assigned yet.
+                binaryConstraintsLoad[i] = 0;
+                for (BinaryConstraint bc : binaryConstraints.getConstraints(variables[depth])) {
+                    if (bc.getOtherVariable(variables[depth]).isAssigned())
+                        binaryConstraintsLoad[i] += bc.getWeight(roomArea);
+                }
+                
                 if (binaryConstraintsLoad[i] > maxBinaryConstraints)
                     maxBinaryConstraints = binaryConstraintsLoad[i];
 

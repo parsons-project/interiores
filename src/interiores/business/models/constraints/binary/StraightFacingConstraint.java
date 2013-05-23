@@ -39,17 +39,17 @@ public class StraightFacingConstraint extends BinaryConstraint {
     }
     
     @Override
-    public int getWeight(Room room) {
-        return 5;
+    public int getWeight(OrientedRectangle roomArea) {
+        return 140;
     }
 
     @Override
-    public void trim(InterioresVariable assignedVariable, FurnitureVariable toTrimVariable, Room room) {
+    public void trim(InterioresVariable assignedVariable, FurnitureVariable toTrimVariable, OrientedRectangle roomArea) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void preliminarTrim(InterioresVariable variable1, InterioresVariable variable2, Room room) {
+    public void preliminarTrim(InterioresVariable variable1, InterioresVariable variable2, OrientedRectangle roomArea) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }  

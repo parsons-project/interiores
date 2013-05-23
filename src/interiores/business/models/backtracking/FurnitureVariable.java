@@ -253,7 +253,5 @@ public class FurnitureVariable
         domain.exclude(invalidArea, iteration);
     }
 
-
-
     
 }

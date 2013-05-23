@@ -1,11 +1,13 @@
 package interiores.business.models.constraints;
 
+import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.binary.MinDistanceConstraint;
 import interiores.core.business.BusinessException;
+import interiores.utils.Dimension;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
@@ -46,20 +48,20 @@ public abstract class BinaryConstraint
      * @param toTrimVariable
      * @param room
      */
-    public abstract void trim(InterioresVariable assignedVariable, FurnitureVariable toTrimVariable, Room room);
+    public abstract void trim(InterioresVariable assignedVariable, FurnitureVariable toTrimVariable, OrientedRectangle roomArea);
     
     /**
      * Given 2 variables, none of which has a value, eliminates values of the domain of
      * elther that can not fulfil the constraint.
      */
-    public abstract void preliminarTrim(InterioresVariable variable1, InterioresVariable variable2, Room room);
+    public abstract void preliminarTrim(InterioresVariable variable1, InterioresVariable variable2, OrientedRectangle roomArea);
     
     /**
      * Returns a estimation of the impact (wheight) of the constraint. The more
      * restrictive, the higher the weight.
      * @return 
      */
-    abstract public int getWeight(Room room);
+    abstract public int getWeight(OrientedRectangle roomArea);
     
     /**
      * Returns whether a the constraint is satisfied.

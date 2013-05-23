@@ -59,7 +59,7 @@ public class ColorConstraint
     
     @Override
     public String toString() {
-        return "Color: " + color;
+        return "Color: " + color.name();
         //return this.getClass().getName() + " Color: " + color;
     }
 }

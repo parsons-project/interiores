@@ -22,6 +22,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="alwaysOnTop" type="boolean" value="true"/>
     <Property name="name" type="java.lang.String" value="Constraint Editor" noResource="true"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
@@ -54,25 +55,30 @@
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="propertiesPanel" alignment="1" min="0" pref="158" max="32767" attributes="1"/>
-                              <Component id="unaryConstraintRadio" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="binaryConstraintRadio" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="relatableCombo" alignment="0" pref="158" max="32767" attributes="1"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="unaryConstraintRadio" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="binaryConstraintRadio" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                              </Group>
                               <Component id="constraintTypeList" alignment="0" max="32767" attributes="1"/>
                           </Group>
                           <Component id="addConstraintButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jScrollPanel2" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
-                                  <Component id="jScrollPane2" alignment="0" pref="193" max="32767" attributes="1"/>
-                              </Group>
-                          </Group>
                           <Group type="102" alignment="1" attributes="1">
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="cancelButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jScrollPanel2" alignment="0" min="0" pref="0" max="32767" attributes="1"/>
+                                  <Component id="jScrollPane2" alignment="0" min="-2" pref="193" max="-2" attributes="1"/>
+                              </Group>
                           </Group>
                       </Group>
                   </Group>
@@ -86,9 +92,9 @@
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="selectedElementLabel" min="-2" pref="21" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Component id="unaryConstraintRadio" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="binaryConstraintRadio" min="-2" max="-2" attributes="0"/>
@@ -99,10 +105,10 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="propertiesPanel" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                      <Component id="jScrollPanel2" min="0" pref="0" max="32767" attributes="1"/>
-                      <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="1">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPanel2" min="-2" pref="96" max="-2" attributes="1"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="jScrollPane2" min="-2" pref="91" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -151,7 +157,7 @@
         <Property name="label" type="java.lang.String" value="Unary"/>
       </Properties>
       <Events>
-        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="unaryConstraintRadioStateChanged"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="unaryConstraintRadioActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="binaryConstraintRadio">
@@ -162,7 +168,7 @@
         <Property name="label" type="java.lang.String" value="Binary"/>
       </Properties>
       <Events>
-        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="binaryConstraintRadioStateChanged"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="binaryConstraintRadioActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="selectedElementLabel">

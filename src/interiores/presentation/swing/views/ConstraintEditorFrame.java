@@ -1,13 +1,16 @@
 package interiores.presentation.swing.views;
 
 import interiores.business.controllers.BinaryConstraintController;
+import interiores.business.controllers.FurnitureModelController;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.RoomController;
 import interiores.business.controllers.UnaryConstraintController;
-import interiores.business.models.constraints.BinaryConstraint;
+import interiores.business.models.Orientation;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.utils.BinaryConstraintAssociation;
+import interiores.utils.CoolColor;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,6 +27,7 @@ public class ConstraintEditorFrame extends JFrame {
 
     private String selectedId;
     private FurnitureTypeController furnitureTypeController;
+    private FurnitureModelController furnitureModelController;
     private UnaryConstraintController unaryConstraintController;
     private BinaryConstraintController binaryConstraintController;
     private Collection<String> relatableFurniture;
@@ -32,17 +36,18 @@ public class ConstraintEditorFrame extends JFrame {
     public ConstraintEditorFrame(SwingController presentation) {
         initComponents();
         
-        this.furnitureTypeController = presentation.getBusinessController(FurnitureTypeController.class);
-        this.unaryConstraintController = presentation.getBusinessController(UnaryConstraintController.class);
-        this.binaryConstraintController = presentation.getBusinessController(BinaryConstraintController.class);
-        
-        unaryConstraintRadio.setSelected(true);
-        updateComboBox(constraintTypeList, unaryConstraintController.getAvailableConstraints());
-        relatableCombo.setVisible(false);
+        furnitureTypeController = presentation.getBusinessController(FurnitureTypeController.class);
+        furnitureModelController = presentation.getBusinessController(FurnitureModelController.class);
+        unaryConstraintController = presentation.getBusinessController(UnaryConstraintController.class);
+        binaryConstraintController = presentation.getBusinessController(BinaryConstraintController.class);
         
         RoomController roomController = presentation.getBusinessController(RoomController.class);
         distanceSpinner.setModel(new SpinnerNumberModel(0, 0, 1000, roomController.getResolution())); 
         
+    }
+    
+    private String getTypeName(String id) {
+        return id.replaceAll("\\d+", "");
     }
     
     public void setSelectedId(String selectedId) {
@@ -58,15 +63,28 @@ public class ConstraintEditorFrame extends JFrame {
        relatableFurniture = new ArrayList(furnitureTypeController.getRoomFurniture());       
        relatableFurniture.remove(selectedId);
        
-       updateComboBox(relatableCombo, relatableFurniture);
+       unaryConstraintRadio.setSelected(true);
+       updateComboBox(constraintTypeList, unaryConstraintController.getAvailableConstraints());
+       
        updateActiveConstraintsList();
     }
     
+    private void updateComboBox(JComboBox combo, Collection<? extends Object> constraintList) {
+        combo.removeAllItems();
+        for (Object item : constraintList)
+            combo.addItem(item.toString());
+    }
+    
+    private void updateComboBox(JComboBox combo, Object[] objects) {
+        combo.removeAllItems();
+        for (Object item : objects)
+            combo.addItem(item.toString());
+    }
     
     private void setListValues(JList jlist, Collection<? extends Object> objects) {
             jlist.setListData(objects.toArray(new Object[objects.size()]));
     }
-    
+     
     private void updateActiveConstraintsList() {
         setListValues(activeUnaries, unaryConstraintController.getConstraints(selectedId));
         setListValues(activeBinaries, binaryConstraintController.getConstraints(selectedId));        
@@ -104,6 +122,7 @@ public class ConstraintEditorFrame extends JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setAlwaysOnTop(true);
         setName("Constraint Editor"); // NOI18N
         setResizable(false);
 
@@ -129,17 +148,17 @@ public class ConstraintEditorFrame extends JFrame {
 
         constraintMultiplicity.add(unaryConstraintRadio);
         unaryConstraintRadio.setLabel("Unary");
-        unaryConstraintRadio.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                unaryConstraintRadioStateChanged(evt);
+        unaryConstraintRadio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                unaryConstraintRadioActionPerformed(evt);
             }
         });
 
         constraintMultiplicity.add(binaryConstraintRadio);
         binaryConstraintRadio.setLabel("Binary");
-        binaryConstraintRadio.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                binaryConstraintRadioStateChanged(evt);
+        binaryConstraintRadio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                binaryConstraintRadioActionPerformed(evt);
             }
         });
 
@@ -209,21 +228,24 @@ public class ConstraintEditorFrame extends JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(propertiesPanel, javax.swing.GroupLayout.Alignment.TRAILING, 0, 158, Short.MAX_VALUE)
-                                .addComponent(unaryConstraintRadio)
-                                .addComponent(binaryConstraintRadio)
                                 .addComponent(relatableCombo, 0, 158, Short.MAX_VALUE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(unaryConstraintRadio)
+                                        .addComponent(binaryConstraintRadio))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                                 .addComponent(constraintTypeList, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(addConstraintButton))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(55, 55, 55)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jScrollPanel2, 0, 0, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(cancelButton)
-                                .addGap(62, 62, 62)))))
+                                .addGap(62, 62, 62))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(55, 55, 55)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPanel2, 0, 0, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -231,9 +253,9 @@ public class ConstraintEditorFrame extends JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(selectedElementLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(2, 2, 2)
                         .addComponent(unaryConstraintRadio)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(binaryConstraintRadio)
@@ -244,9 +266,9 @@ public class ConstraintEditorFrame extends JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(propertiesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jScrollPanel2, 0, 0, Short.MAX_VALUE)
-                        .addGap(23, 23, 23)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -266,8 +288,18 @@ private void addConstraintButtonActionPerformed(java.awt.event.ActionEvent evt) 
         addBinaryConstraint(otherId, type, dist);
         
     }
-    else {
+    else if (unaryConstraintRadio.isSelected()) {
+        String type = (String) constraintTypeList.getSelectedItem();
+        String value = (String) relatableCombo.getSelectedItem();
+        int numValue = (Integer) distanceSpinner.getValue();
         
+        addUnaryConstraint(type, value, numValue);
+        //material; wall;
+        //depth; width; price;
+        //position;
+        
+        
+               
     }
     updateActiveConstraintsList();
 }//GEN-LAST:event_addConstraintButtonActionPerformed
@@ -277,28 +309,13 @@ private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     dispose();
 }//GEN-LAST:event_cancelButtonActionPerformed
 
-private void binaryConstraintRadioStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_binaryConstraintRadioStateChanged
-    if (binaryConstraintRadio.isSelected()) {
-        updateComboBox(constraintTypeList, binaryConstraintController.getAvailableConstraints());
-        relatableCombo.setVisible(true);
-    }
-    else 
-        relatableCombo.setVisible(false);
-}//GEN-LAST:event_binaryConstraintRadioStateChanged
-
-private void unaryConstraintRadioStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_unaryConstraintRadioStateChanged
-    if (unaryConstraintRadio.isSelected()) {
-        updateComboBox(constraintTypeList, unaryConstraintController.getAvailableConstraints());
-    }
-}//GEN-LAST:event_unaryConstraintRadioStateChanged
-
 private void constraintTypeListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_constraintTypeListActionPerformed
     String consName = (String) constraintTypeList.getSelectedItem();
     if (consName != null &&  binaryConstraintRadio.isSelected() && consName.startsWith("dist")) {
         propertiesPanel.setVisible(true);
     }
     else {
-        propertiesPanel.setVisible(false);
+        updateRelatableUnary();
     }
 }//GEN-LAST:event_constraintTypeListActionPerformed
 
@@ -330,6 +347,22 @@ private void activeBinariesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:
    
 }//GEN-LAST:event_activeBinariesKeyPressed
 
+private void binaryConstraintRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_binaryConstraintRadioActionPerformed
+    if (binaryConstraintRadio.isSelected()) {
+        updateComboBox(constraintTypeList, binaryConstraintController.getAvailableConstraints());
+        updateComboBox(relatableCombo, relatableFurniture);
+        relatableCombo.setVisible(true);
+    }
+}//GEN-LAST:event_binaryConstraintRadioActionPerformed
+
+private void unaryConstraintRadioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unaryConstraintRadioActionPerformed
+    if (unaryConstraintRadio.isSelected()) {
+        relatableCombo.setVisible(false);
+        updateComboBox(constraintTypeList, unaryConstraintController.getAvailableConstraints());
+        updateRelatableUnary();
+    }
+}//GEN-LAST:event_unaryConstraintRadioActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -354,11 +387,6 @@ private void activeBinariesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:
     private javax.swing.JRadioButton unaryConstraintRadio;
     // End of variables declaration//GEN-END:variables
 
-    private void updateComboBox(JComboBox combo, Collection<String> constraintList) {
-        combo.removeAllItems();
-        for (String item : constraintList)
-            combo.addItem(item);
-    }
 
     private void addBinaryConstraint(String otherId, String type, int dist) {
         if (type.equals("distance-max"))
@@ -370,4 +398,47 @@ private void activeBinariesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:
         else if (type.equals("facing-partial"))
             binaryConstraintController.addPartialFacingConstraint(selectedId, otherId);
     }
+
+    private void addUnaryConstraint(String type, String value, int numValue) {
+        if (type.equals("color")) {
+            unaryConstraintController.addColorConstraint(selectedId, value);
+        }
+        else if (type.equals("model")) {
+            unaryConstraintController.addModelConstraint(selectedId, value);
+        }
+        else if (type.equals("orientation")) {
+            unaryConstraintController.addOrientationConstraint(selectedId, value);              
+        }
+        else if (type.equals("material")) {
+            unaryConstraintController.addMaterialConstraint(selectedId, value);
+        }
+    }
+    
+    private void updateRelatableUnary() {
+        String type = (String) constraintTypeList.getSelectedItem();
+        if (type != null) {
+            String typeName = getTypeName(selectedId);
+            if (type.equals("color")) {
+                updateComboBox(relatableCombo, CoolColor.getNames());
+                relatableCombo.setVisible(true);
+                propertiesPanel.setVisible(false);
+            }
+            else if (type.equals("model")) {
+                updateComboBox(relatableCombo, furnitureModelController.getFurnitureModelNames(typeName));
+                relatableCombo.setVisible(true);
+                propertiesPanel.setVisible(false);
+            }
+            else if (type.equals("orientation")) {
+                updateComboBox(relatableCombo, Orientation.values());
+                relatableCombo.setVisible(true);
+                propertiesPanel.setVisible(false);                
+            }
+            else if (type.equals("material")) {
+                updateComboBox(relatableCombo, Orientation.values());
+                relatableCombo.setVisible(true);
+                propertiesPanel.setVisible(false);
+            }
+        }
+    }
+
 }

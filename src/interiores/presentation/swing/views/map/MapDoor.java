@@ -50,8 +50,6 @@ public class MapDoor
         
         this.orientation = orientation;
         
-        Debug.println(x + " " + y);
-        
         switch(orientation) {
             case E:
                 renderX -= size;

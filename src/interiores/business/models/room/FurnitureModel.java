@@ -7,6 +7,7 @@ import interiores.core.Utils;
 import interiores.core.business.BusinessException;
 import interiores.utils.CoolColor;
 import interiores.utils.Dimension;
+import interiores.utils.Material;
 import java.awt.Color;
 import java.awt.Point;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -41,7 +42,7 @@ public class FurnitureModel {
     private CoolColor color;        // Color of the furniture model
     
     @XmlAttribute
-    private String material;    // Material the furniture model is made in
+    private Material material;    // Material the furniture model is made in
     
     /**
      * Default constructor.
@@ -64,7 +65,7 @@ public class FurnitureModel {
         this.size = size;
         this.price = price;
         this.color = CoolColor.getEnum(color);
-        this.material = material;
+        this.material = Material.getEnum(material);
         this.passiveSpace = passiveSpace;
     }
     
@@ -132,7 +133,7 @@ public class FurnitureModel {
      * @return String representing the material the model is made from
      */
     public String getMaterial() {
-        return material;
+        return material.name();
     }
 
     /**

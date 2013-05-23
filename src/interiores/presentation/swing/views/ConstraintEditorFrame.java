@@ -11,6 +11,7 @@ import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.utils.BinaryConstraintAssociation;
 import interiores.utils.CoolColor;
+import interiores.utils.Material;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -434,7 +435,7 @@ private void unaryConstraintRadioActionPerformed(java.awt.event.ActionEvent evt)
                 propertiesPanel.setVisible(false);                
             }
             else if (type.equals("material")) {
-                updateComboBox(relatableCombo, Orientation.values());
+                updateComboBox(relatableCombo, Material.values());
                 relatableCombo.setVisible(true);
                 propertiesPanel.setVisible(false);
             }

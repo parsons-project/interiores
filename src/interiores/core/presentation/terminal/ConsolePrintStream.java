@@ -17,8 +17,8 @@ public class ConsolePrintStream
 {
     private ConsoleOutputStream consoleOutput;
     
-    public ConsolePrintStream(PrintStream printStream) {
-        this(new ConsoleOutputStream(Color.black, printStream, true));
+    public ConsolePrintStream() {
+        this(new ConsoleOutputStream(Color.black, null, true));
     }
     
     public ConsolePrintStream(ConsoleOutputStream consoleOutput) {

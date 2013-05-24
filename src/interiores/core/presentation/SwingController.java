@@ -5,6 +5,7 @@ import interiores.core.business.BusinessController;
 import interiores.core.presentation.swing.SwingException;
 import interiores.core.presentation.swing.SwingExceptionHandler;
 import java.awt.Component;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,6 +78,10 @@ public class SwingController extends PresentationController
             throw new SwingException("Business controller not found: " + controllerClass.getName());
         
         return (T) businessControllers.get(controllerClass);
+    }
+    
+    public Collection<BusinessController> getBusinessControllers() {
+        return businessControllers.values();
     }
     
     /**

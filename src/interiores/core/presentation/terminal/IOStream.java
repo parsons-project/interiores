@@ -30,7 +30,7 @@ public class IOStream
     /**
      * Output stream
      */
-    private ConsolePrintStream ostream;
+    private PrintStream ostream;
     
     /**
      * Input prompt
@@ -45,13 +45,9 @@ public class IOStream
     public IOStream(InputStream istream, PrintStream ostream)
     {
         this.istream = new BufferedReader(new InputStreamReader(istream));
-        this.ostream = new ConsolePrintStream(ostream);
+        this.ostream = ostream;
         ibuffer = new Scanner("");
         prompt = ">";
-    }
-    
-    public ConsolePrintStream getConsolePrintStream() {
-        return ostream;
     }
     
     /**

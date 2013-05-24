@@ -4,8 +4,13 @@
  */
 package interiores.presentation.swing.views;
 
+import interiores.core.business.BusinessController;
 import interiores.core.presentation.SwingController;
+import interiores.core.presentation.TerminalController;
 import interiores.core.presentation.terminal.ConsolePrintStream;
+import interiores.presentation.InterioresTerminal;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.swing.JPanel;
 
 /**
@@ -20,16 +25,23 @@ public class TerminalPanel
      */
     public TerminalPanel(SwingController swing) {
         initComponents();
-    }
-    
-    @Override
-    public void setVisible(boolean visible) {
-        if(visible) {
-            ConsolePrintStream printStream = (ConsolePrintStream) System.out;
-            printStream.setTextComponent(jTextPane1);
-        }
         
-        super.setVisible(visible);
+        ConsolePrintStream ostream = new ConsolePrintStream();
+        ostream.setTextComponent(jTextPane1);
+        
+        TerminalController terminal = new InterioresTerminal(new InputStream() {
+
+            @Override
+            public int read() throws IOException
+            {
+                return -1;
+            }
+        }, ostream);
+        
+        for(BusinessController controller : swing.getBusinessControllers())
+            terminal.addBusinessController(controller);
+        
+        terminal.init();
     }
 
     /**

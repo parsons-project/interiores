@@ -9,6 +9,8 @@ import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.CommandGroup;
 import interiores.core.presentation.terminal.IOStream;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -52,18 +54,19 @@ public class TerminalController extends PresentationController
      */
     private String welcomeMsg;
     
+    private boolean isInitialized;
+    
     /**
      * Constructs a new TerminalController with the default System input/output.
      * @param commandsPackage The package where the commands are located
      */
-    public TerminalController(String commandsPackage)
+    public TerminalController(String commandsPackage, InputStream istream, PrintStream ostream)
     {
         this.commandsPackage = commandsPackage;
-        iostream = new IOStream(System.in, System.out);
+        iostream = new IOStream(istream, ostream);
         commandGroups = new TreeMap();
         shortcuts = new HashMap();
-        
-        System.setOut(iostream.getConsolePrintStream());
+        isInitialized = false;
     }
     
     public void setWelcomeMessage(String welcomeMsg) {
@@ -76,24 +79,36 @@ public class TerminalController extends PresentationController
     @Override
     public void init()
     {
-        iostream.println(welcomeMsg);
+        if(isInitialized)
+            throw new RuntimeException("The terminal is initialized already.");
         
-        String line = iostream.readLine();
+        isInitialized = true;
         
-        while(line != null)
-        {
-            line = line.trim();
-            
-            if (! shouldLineBeIgnored(line)) {
-                // Set subcommand prompt
-                iostream.setPrompt(">>");
-                exec(line);
+        new Thread() {
+            @Override
+            public void run() {
+                iostream.println(welcomeMsg);
+
+                String line = iostream.readLine();
+
+                while(line != null)
+                {
+                    line = line.trim();
+
+                    if (! shouldLineBeIgnored(line)) {
+                        // Set subcommand prompt
+                        iostream.setPrompt(">>");
+                        exec(line);
+                    }
+
+                    // Set command prompt
+                    iostream.setPrompt(">");
+                    line = iostream.readLine();
+                }
+                
+                isInitialized = false;
             }
-            
-            // Set command prompt
-            iostream.setPrompt(">");
-            line = iostream.readLine();
-        }
+        }.start();
     }
     
     private boolean shouldLineBeIgnored(String line)
@@ -109,13 +124,7 @@ public class TerminalController extends PresentationController
     @Override
     public void notify(Event event)
     {
-        // @TODO Disable terminal notifications forever?
-        /*if(Debug.isEnabled()) {
-            System.out.println(name);
-        
-            for(Map.Entry<String, ?> e : data.entrySet())
-                iostream.println(e.getKey() + ": " + e.getValue().toString());
-        }*/
+        // Does nothing by default
     }
     
     /**

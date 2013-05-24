@@ -4,7 +4,6 @@
  */
 package interiores.core.presentation.terminal;
 
-import com.apple.crypto.provider.Debug;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

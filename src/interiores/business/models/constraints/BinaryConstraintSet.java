@@ -1,5 +1,6 @@
 package interiores.business.models.constraints;
 
+import interiores.core.business.BusinessException;
 import interiores.utils.BinaryConstraintAssociation;
 import java.util.Collection;
 import java.util.HashSet;
@@ -30,6 +31,9 @@ public class BinaryConstraintSet
     }
     
     public void add(BinaryConstraint bc, String f1, String f2) {
+        
+        if (f1.equals(f2)) throw new BusinessException("Cant' apply binary constraint to itself");
+        
         BinaryConstraintAssociation bca = new BinaryConstraintAssociation(bc, f1, f2);
         
         if(! binaryConstraintCount.containsKey(f1))

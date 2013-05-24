@@ -82,12 +82,15 @@ abstract public class CatalogController<I extends PersistentIdObject>
         Debug.println("Loading from " + path);
         
         NamedCatalog loadedCatalog = (NamedCatalog<I>) data.load(classes, path);
+        String catalogName = loadedCatalog.getName();
         
         if(loadedCatalog.isDefault())
             throw new DefaultCatalogOverwriteException();
+        else if (loadedCatalogs.containsKey(catalogName))
+            throw new CatalogAlreadyExistsException(catalogName);
         
-        lastLoaded = loadedCatalog.getName();
-        loadedCatalogs.put(loadedCatalog.getName(), loadedCatalog);
+        lastLoaded = catalogName;
+        loadedCatalogs.put(catalogName, loadedCatalog);
         
     }
     

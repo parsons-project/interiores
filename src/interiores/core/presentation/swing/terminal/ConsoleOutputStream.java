@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interiores.core.presentation.terminal;
+package interiores.core.presentation.swing.terminal;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
@@ -23,24 +23,26 @@ public class ConsoleOutputStream
     private JTextComponent textComponent;
     private Document document;
     private SimpleAttributeSet attributes;
-    private PrintStream printStream;
     private StringBuffer buffer = new StringBuffer(80);
     private boolean isFirstLine;
     private boolean isAppend;
 
+    public ConsoleOutputStream(JTextComponent textComponent, Color textColor) {
+        this(textComponent, textColor, true);
+    }
+    
     /*
      *  Specify the option text color and PrintStream
      */
-    public ConsoleOutputStream(Color textColor, PrintStream printStream, boolean isAppend) {
-        textComponent = null;
-        document = null;
+    public ConsoleOutputStream(JTextComponent textComponent, Color textColor,  boolean isAppend) {
+        this.textComponent = textComponent;
+        document = textComponent.getDocument();
 
         if (textColor != null) {
             attributes = new SimpleAttributeSet();
             StyleConstants.setForeground(attributes, textColor);
         }
 
-        this.printStream = printStream;
         this.isAppend = isAppend;
 
         if (isAppend) {
@@ -91,10 +93,6 @@ public class ConsoleOutputStream
 
     private void clearBuffer() {
         String line = buffer.toString();
-        buffer.setLength(0);
-        
-        if (printStream != null)
-            printStream.print(line);
         
         if (textComponent == null)
             return;
@@ -116,5 +114,7 @@ public class ConsoleOutputStream
         } catch (BadLocationException ble) {
             // ?
         }
+        
+        buffer.setLength(0);
     }
 }

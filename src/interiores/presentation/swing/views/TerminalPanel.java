@@ -7,10 +7,10 @@ package interiores.presentation.swing.views;
 import interiores.core.business.BusinessController;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.TerminalController;
-import interiores.core.presentation.terminal.ConsolePrintStream;
+import interiores.core.presentation.swing.terminal.ConsoleInputStream;
+import interiores.core.presentation.swing.terminal.ConsolePrintStream;
 import interiores.presentation.InterioresTerminal;
-import java.io.IOException;
-import java.io.InputStream;
+import java.awt.Color;
 import javax.swing.JPanel;
 
 /**
@@ -26,17 +26,9 @@ public class TerminalPanel
     public TerminalPanel(SwingController swing) {
         initComponents();
         
-        ConsolePrintStream ostream = new ConsolePrintStream();
-        ostream.setTextComponent(jTextPane1);
-        
-        TerminalController terminal = new InterioresTerminal(new InputStream() {
-
-            @Override
-            public int read() throws IOException
-            {
-                return -1;
-            }
-        }, ostream);
+        ConsoleInputStream istream = new ConsoleInputStream(jTextPane1);
+        ConsolePrintStream ostream = new ConsolePrintStream(jTextPane1, Color.white);
+        TerminalController terminal = new InterioresTerminal(istream, ostream);
         
         for(BusinessController controller : swing.getBusinessControllers())
             terminal.addBusinessController(controller);
@@ -50,17 +42,23 @@ public class TerminalPanel
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
 
+        setMinimumSize(new java.awt.Dimension(500, 300));
+        setPreferredSize(new java.awt.Dimension(700, 300));
         setLayout(new java.awt.BorderLayout());
 
-        jScrollPane2.setMinimumSize(new java.awt.Dimension(23, 200));
+        jScrollPane2.setMinimumSize(new java.awt.Dimension(500, 200));
         jScrollPane2.setPreferredSize(new java.awt.Dimension(0, 200));
 
-        jTextPane1.setMinimumSize(new java.awt.Dimension(0, 200));
+        jTextPane1.setBackground(new java.awt.Color(1, 1, 1));
+        jTextPane1.setFont(new java.awt.Font("Andale Mono", 0, 15)); // NOI18N
+        jTextPane1.setMinimumSize(new java.awt.Dimension(500, 200));
+        jTextPane1.setPreferredSize(new java.awt.Dimension(0, 0));
         jScrollPane2.setViewportView(jTextPane1);
 
         add(jScrollPane2, java.awt.BorderLayout.CENTER);

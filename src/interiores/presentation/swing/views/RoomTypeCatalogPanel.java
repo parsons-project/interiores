@@ -204,11 +204,11 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         
         public RTC_Element(String rname, Integer width, Integer depth, String mandatory, String forbidden) {
             
-            ImageIcon im = new javax.swing.ImageIcon(getClass().getResource("resources/remove_element.png"));
-            im.setImage( im.getImage().getScaledInstance(40,40,java.awt.Image.SCALE_SMOOTH) );
-            removeButton.setIcon(im); // NOI18N
-            removeButton.setBorder(BorderFactory.createEmptyBorder());
-            removeButton.setContentAreaFilled(false);
+//            ImageIcon im = new javax.swing.ImageIcon(getClass().getResource("resources/remove_element.png"));
+//            im.setImage( im.getImage().getScaledInstance(40,40,java.awt.Image.SCALE_SMOOTH) );
+//            removeButton.setIcon(im); // NOI18N
+//            removeButton.setBorder(BorderFactory.createEmptyBorder());
+//            removeButton.setContentAreaFilled(false);
             
             
             innerPanel.setBackground(new java.awt.Color(255, 255, 255));

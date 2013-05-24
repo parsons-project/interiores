@@ -21,6 +21,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.swing.JPanel;
 
 /**
@@ -33,6 +36,7 @@ public class RoomMapPanel extends JPanel
     private FurnitureTypeController ftController;
     private FixedElementController fixedController;
     private DesignController designController;
+    private SwingController swing;
     
     private InteractiveRoomMap map;
     private RoomMapDebuggerFrame debuggerGui;
@@ -44,10 +48,13 @@ public class RoomMapPanel extends JPanel
     {
         initComponents();
         
+        swing = presentation;
+        
         roomController = presentation.getBusinessController(RoomController.class);
         ftController = presentation.getBusinessController(FurnitureTypeController.class);
         designController = presentation.getBusinessController(DesignController.class);
         fixedController = presentation.getBusinessController(FixedElementController.class);
+        
         
         if(Debug.isEnabled())
             debuggerGui = presentation.get(RoomMapDebuggerFrame.class);
@@ -102,12 +109,27 @@ public class RoomMapPanel extends JPanel
     private void formMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseClicked
     {//GEN-HEADEREND:event_formMouseClicked
         requestFocus();
-        
-        if(!evt.isControlDown())
-            map.unselectAll();
-        
-        map.select(evt.getX(), evt.getY());
-        
+        switch (evt.getButton()) {
+            case MouseEvent.BUTTON1: // left click
+                if(!evt.isControlDown())
+                    map.unselectAll();
+
+                map.select(evt.getX(), evt.getY());
+                break;
+            case MouseEvent.BUTTON3: // Right click
+                int x = evt.getX();
+                int y = evt.getY();
+                if (map.select(x, y)) {
+                    ArrayList<String> selected = new ArrayList(map.getSelected());
+                    ConstraintEditorFrame cef = swing.getNew(ConstraintEditorFrame.class);
+                    cef.setSelectedId(selected.get(selected.size() - 1));
+                    cef.setVisible(true);
+                }
+                map.unselect(x, y);
+                break;
+                
+        }
+                
         repaint();
     }//GEN-LAST:event_formMouseClicked
 

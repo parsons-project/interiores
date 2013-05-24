@@ -22,7 +22,7 @@ public class InteractiveRoomMap
         selected = new ArrayList();
     }
     
-    public void select(int x, int y) {
+    public boolean select(int x, int y) {
         Point p = normalize(x, y);
         
         Debug.println("Selecting element at " + p);
@@ -32,7 +32,24 @@ public class InteractiveRoomMap
         if(element != null) {
             element.select();
             selected.add(element);
+            return true;
         }
+        return false;
+    }
+    
+    public boolean unselect(int x, int y) {
+        Point p = normalize(x, y);
+        
+        Debug.println("Unselecting element at " + p);
+        
+        RoomElement element = getElementAt(p.x, p.y);
+        
+        if(element != null) {
+            element.unselect();
+            selected.remove(element);
+            return true;
+        }
+        return false;
     }
     
     public void unselectAll() {

@@ -49,6 +49,9 @@ public class RoomTypesCatalogController
     @Override
     public void merge(String catalogName) {
         super.merge(catalogName);
+        // We notify a checkout event, as this operation performs a great change
+        // upon the currently selected catalog, and thus we are somehow changing
+        // into a completely different catalog
         notify(new RTCatalogCheckoutEvent(getNameActiveCatalog()));
     }
     

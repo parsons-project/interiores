@@ -6,21 +6,15 @@ package interiores.presentation.swing.views;
 
 import interiores.business.controllers.RoomTypeController;
 import interiores.business.controllers.RoomTypesCatalogController;
-import interiores.business.events.catalogs.ElementChangedEvent;
 import interiores.business.events.catalogs.RTCatalogChangedEvent;
 import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
 import interiores.business.events.catalogs.RTChangedEvent;
-import interiores.business.models.RoomType;
-import interiores.core.Debug;
-import interiores.core.Event;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import java.awt.Dimension;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 
@@ -147,13 +141,34 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
 
+    
+    
+    @Listen({RTChangedEvent.class})
+    public void updateCatalogElement(RTChangedEvent evt) {
+        //refreshCatalog();
+        if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
+        else removeElement(evt.getFullName());
+    }
+
+    @Listen({RTCatalogChangedEvent.class})
+    public void updateCatalogList(RTCatalogChangedEvent evt) {
+        if (evt.isAdded()) currentCatalogSelect.addItem(evt.getName());
+        else currentCatalogSelect.removeItem(evt.getName());
+    }
+    
     @Listen({RTCatalogCheckoutEvent.class})
     public void updateSelectedCatalog(RTCatalogCheckoutEvent evt) {
         currentCatalogSelect.setSelectedItem(evt.getName());
         refreshCatalog();
     }
     
-    public void refreshCatalog() {
+    private void initCatalogList() {
+        Collection<String> catalogs = rtcController.getNamesLoadedCatalogs();
+        Object[] s = catalogs.toArray();
+        currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(s) );
+    }
+    
+    private void refreshCatalog() {
         clearElements();
         
         // Retrieve all the elements in the catalog
@@ -165,26 +180,6 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
             addElement(key, rtn);
         }
     }
-    
-    @Listen({RTChangedEvent.class})
-    public void updateCatalogElement(RTChangedEvent evt) {
-        //refreshCatalog();
-        if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
-        else removeElement(evt.getFullName());
-    }
-    
-    public void initCatalogList() {
-        Collection<String> catalogs = rtcController.getNamesLoadedCatalogs();
-        Object[] s = catalogs.toArray();
-        currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(s) );
-    }
-
-    @Listen({RTCatalogChangedEvent.class})
-    public void updateCatalogList(RTCatalogChangedEvent evt) {
-        if (evt.isAdded()) currentCatalogSelect.addItem(evt.getName());
-        else currentCatalogSelect.removeItem(evt.getName());
-    }
-    
 
     // This class represents an existent catalog element
     class RTC_Element {
@@ -204,11 +199,11 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         
         public RTC_Element(String rname, Integer width, Integer depth, String mandatory, String forbidden) {
             
-//            ImageIcon im = new javax.swing.ImageIcon(getClass().getResource("resources/remove_element.png"));
-//            im.setImage( im.getImage().getScaledInstance(40,40,java.awt.Image.SCALE_SMOOTH) );
-//            removeButton.setIcon(im); // NOI18N
-//            removeButton.setBorder(BorderFactory.createEmptyBorder());
-//            removeButton.setContentAreaFilled(false);
+            ImageIcon im = new javax.swing.ImageIcon(getClass().getResource("resources/remove_element.png"));
+            im.setImage( im.getImage().getScaledInstance(40,40,java.awt.Image.SCALE_SMOOTH) );
+            removeButton.setIcon(im); // NOI18N
+            removeButton.setBorder(BorderFactory.createEmptyBorder());
+            removeButton.setContentAreaFilled(false);
             
             
             innerPanel.setBackground(new java.awt.Color(255, 255, 255));

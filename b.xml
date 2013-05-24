@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<namedCatalog name="b">
+    <table>
+        <entry>
+            <key>bathroom</key>
+            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="roomType" identifier="bathroom">
+                <minDimension width="100" depth="210"/>
+                <mustHave>
+                    <mustHave>bidet</mustHave>
+                    <mustHave>mirror</mustHave>
+                    <mustHave>toilet</mustHave>
+                    <mustHave>washbasin</mustHave>
+                </mustHave>
+                <cantHave>
+                    <cantHave>armchair</cantHave>
+                    <cantHave>bedDouble</cantHave>
+                    <cantHave>bedSingle</cantHave>
+                    <cantHave>dishwasher</cantHave>
+                    <cantHave>extractor</cantHave>
+                    <cantHave>fridge</cantHave>
+                    <cantHave>hob</cantHave>
+                    <cantHave>microwave</cantHave>
+                    <cantHave>oven</cantHave>
+                    <cantHave>sink</cantHave>
+                    <cantHave>sofa</cantHave>
+                    <cantHave>stove</cantHave>
+                    <cantHave>tableBedside</cantHave>
+                    <cantHave>worktop</cantHave>
+                    <cantHave>wringer</cantHave>
+                </cantHave>
+            </value>
+        </entry>
+        <entry>
+            <key>bedroom</key>
+            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="roomType" identifier="bedroom">
+                <minDimension width="180" depth="240"/>
+                <mustHave/>
+                <cantHave>
+                    <cantHave>bathtub</cantHave>
+                    <cantHave>bidet</cantHave>
+                    <cantHave>dishwasher</cantHave>
+                    <cantHave>dryer</cantHave>
+                    <cantHave>extractor</cantHave>
+                    <cantHave>fridge</cantHave>
+                    <cantHave>hob</cantHave>
+                    <cantHave>microwave</cantHave>
+                    <cantHave>oven</cantHave>
+                    <cantHave>shower</cantHave>
+                    <cantHave>sink</cantHave>
+                    <cantHave>stove</cantHave>
+                    <cantHave>toilet</cantHave>
+                    <cantHave>washbasin</cantHave>
+                    <cantHave>washer</cantHave>
+                    <cantHave>worktop</cantHave>
+                    <cantHave>wringer</cantHave>
+                </cantHave>
+            </value>
+        </entry>
+        <entry>
+            <key>kitchen</key>
+            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="roomType" identifier="kitchen">
+                <minDimension width="120" depth="240"/>
+                <mustHave>
+                    <mustHave>fridge</mustHave>
+                    <mustHave>sink</mustHave>
+                    <mustHave>wringer</mustHave>
+                </mustHave>
+                <cantHave>
+                    <cantHave>bathtub</cantHave>
+                    <cantHave>bedDouble</cantHave>
+                    <cantHave>bedSingle</cantHave>
+                    <cantHave>bidet</cantHave>
+                    <cantHave>dryer</cantHave>
+                    <cantHave>shower</cantHave>
+                    <cantHave>tableBedside</cantHave>
+                    <cantHave>toilet</cantHave>
+                    <cantHave>washbasin</cantHave>
+                    <cantHave>washer</cantHave>
+                </cantHave>
+            </value>
+        </entry>
+        <entry>
+            <key>livingRoom</key>
+            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="roomType" identifier="livingRoom">
+                <minDimension width="270" depth="270"/>
+                <mustHave>
+                    <mustHave>chair</mustHave>
+                    <mustHave>table</mustHave>
+                </mustHave>
+                <cantHave>
+                    <cantHave>bathtub</cantHave>
+                    <cantHave>bedDouble</cantHave>
+                    <cantHave>bedSingle</cantHave>
+                    <cantHave>bidet</cantHave>
+                    <cantHave>cabinet</cantHave>
+                    <cantHave>dishwasher</cantHave>
+                    <cantHave>dryer</cantHave>
+                    <cantHave>extractor</cantHave>
+                    <cantHave>fridge</cantHave>
+                    <cantHave>hob</cantHave>
+                    <cantHave>oven</cantHave>
+                    <cantHave>shower</cantHave>
+                    <cantHave>sink</cantHave>
+                    <cantHave>stove</cantHave>
+                    <cantHave>tableBedside</cantHave>
+                    <cantHave>toilet</cantHave>
+                    <cantHave>washbasin</cantHave>
+                    <cantHave>washer</cantHave>
+                    <cantHave>wringer</cantHave>
+                </cantHave>
+            </value>
+        </entry>
+        <entry>
+            <key>lounge</key>
+            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="roomType" identifier="lounge">
+                <minDimension width="270" depth="270"/>
+                <mustHave/>
+                <cantHave>
+                    <cantHave>bathtub</cantHave>
+                    <cantHave>bedDouble</cantHave>
+                    <cantHave>bedSingle</cantHave>
+                    <cantHave>bidet</cantHave>
+                    <cantHave>dishwasher</cantHave>
+                    <cantHave>dryer</cantHave>
+                    <cantHave>extractor</cantHave>
+                    <cantHave>fridge</cantHave>
+                    <cantHave>hob</cantHave>
+                    <cantHave>microwave</cantHave>
+                    <cantHave>oven</cantHave>
+                    <cantHave>shower</cantHave>
+                    <cantHave>sink</cantHave>
+                    <cantHave>stove</cantHave>
+                    <cantHave>toilet</cantHave>
+                    <cantHave>washbasin</cantHave>
+                    <cantHave>washer</cantHave>
+                    <cantHave>worktop</cantHave>
+                    <cantHave>wringer</cantHave>
+                </cantHave>
+            </value>
+        </entry>
+        <entry>
+            <key>studio</key>
+            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="roomType" identifier="studio">
+                <minDimension width="180" depth="200"/>
+                <mustHave/>
+                <cantHave>
+                    <cantHave>bathtub</cantHave>
+                    <cantHave>bidet</cantHave>
+                    <cantHave>dishwasher</cantHave>
+                    <cantHave>dryer</cantHave>
+                    <cantHave>extractor</cantHave>
+                    <cantHave>fridge</cantHave>
+                    <cantHave>hob</cantHave>
+                    <cantHave>microwave</cantHave>
+                    <cantHave>oven</cantHave>
+                    <cantHave>shower</cantHave>
+                    <cantHave>sink</cantHave>
+                    <cantHave>stove</cantHave>
+                    <cantHave>toilet</cantHave>
+                    <cantHave>washbasin</cantHave>
+                    <cantHave>washer</cantHave>
+                    <cantHave>worktop</cantHave>
+                    <cantHave>wringer</cantHave>
+                </cantHave>
+            </value>
+        </entry>
+        <entry>
+            <key>testRoom1</key>
+            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="roomType" identifier="testRoom1">
+                <minDimension width="0" depth="0"/>
+                <mustHave/>
+                <cantHave/>
+            </value>
+        </entry>
+        <entry>
+            <key>testRoom2</key>
+            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="roomType" identifier="testRoom2">
+                <minDimension width="0" depth="0"/>
+                <mustHave/>
+                <cantHave/>
+            </value>
+        </entry>
+        <entry>
+            <key>testRoom3</key>
+            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="roomType" identifier="testRoom3">
+                <minDimension width="0" depth="0"/>
+                <mustHave/>
+                <cantHave/>
+            </value>
+        </entry>
+        <entry>
+            <key>testRoom4</key>
+            <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="roomType" identifier="testRoom4">
+                <minDimension width="0" depth="0"/>
+                <mustHave/>
+                <cantHave/>
+            </value>
+        </entry>
+    </table>
+</namedCatalog>

@@ -26,7 +26,6 @@ public class MainAppFrame extends JFrame
     private SwingController presentation;
     private RoomController roomController;
     private WelcomePanel welcome;
-    private RoomTypeCatalogPanel rtCatalogPanel;
     
     private List<Component> previousViews, currentViews;
     private JFileChooser fileChooser;
@@ -42,7 +41,6 @@ public class MainAppFrame extends JFrame
         this.presentation = presentation;
         roomController = presentation.getBusinessController(RoomController.class);
         welcome = presentation.get(WelcomePanel.class);
-        rtCatalogPanel = presentation.get(RoomTypeCatalogPanel.class);
         
         
         previousViews = new ArrayList();
@@ -50,6 +48,7 @@ public class MainAppFrame extends JFrame
         
         fileChooser = new FileChooser();
 
+               
         loadComponent(welcome, BorderLayout.CENTER);
     }
 
@@ -151,8 +150,9 @@ public class MainAppFrame extends JFrame
     }//GEN-LAST:event_newRoomActionPerformed
 
     private void rtCatalogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rtCatalogActionPerformed
-        unloadCurrentView();
-        loadComponent(rtCatalogPanel, BorderLayout.CENTER);      
+        presentation.showNew(RoomTypeCatalogFrame.class);
+        //RoomTypeCatalogFrame rtcf = presentation.getNew(RoomTypeCatalogFrame.class);
+        //rtcf.setVisible(true);
     }//GEN-LAST:event_rtCatalogActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_exitMenuItemActionPerformed

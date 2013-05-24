@@ -28,7 +28,7 @@ import javax.xml.bind.JAXBException;
  *
  * @author larribas
  */
-public class RoomTypeCatalogPanel extends javax.swing.JPanel {
+public class RoomTypeCatalogFrame extends javax.swing.JFrame {
 
      private SwingController swing;
      private RoomTypeController rtController;
@@ -41,7 +41,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     /**
      * Creates new form RoomTypeCatalogPanel
      */
-    public RoomTypeCatalogPanel(SwingController presentation) {
+    public RoomTypeCatalogFrame(SwingController presentation) {
         initComponents();
         
         this.swing = presentation;
@@ -73,8 +73,8 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         loadCatalogButton = new javax.swing.JButton();
         removeCatalogButton = new javax.swing.JButton();
         saveCatalogButton = new javax.swing.JButton();
-        returnToDesignButton = new javax.swing.JButton();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setBounds(new java.awt.Rectangle(0, 0, 900, 600));
         setMaximumSize(new java.awt.Dimension(900, 600));
@@ -121,19 +121,8 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
             }
         });
 
-        ImageIcon im = new javax.swing.ImageIcon("src/resources/go_back.png");
-        im.setImage( im.getImage().getScaledInstance(30,30,java.awt.Image.SCALE_SMOOTH) );
-        returnToDesignButton.setIcon(im); // NOI18N
-        returnToDesignButton.setBorder(BorderFactory.createEmptyBorder());
-        returnToDesignButton.setContentAreaFilled(false);
-        returnToDesignButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                returnToDesignButtonActionPerformed(evt);
-            }
-        });
-
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
-        this.setLayout(layout);
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
@@ -143,13 +132,11 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(returnToDesignButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(title1))
-                    .add(layout.createSequentialGroup()
                         .add(newCatalogButton)
                         .add(18, 18, 18)
-                        .add(loadCatalogButton)))
+                        .add(loadCatalogButton))
+                    .add(title1))
+                .add(301, 301, 301)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(layout.createSequentialGroup()
                         .add(0, 0, Short.MAX_VALUE)
@@ -170,8 +157,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(title1)
                     .add(currentCatalogLabel)
-                    .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(returnToDesignButton))
+                    .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .add(18, 18, 18)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(newCatalogButton)
@@ -195,11 +181,6 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_saveCatalogButtonActionPerformed
 
-    private void returnToDesignButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_returnToDesignButtonActionPerformed
-        MainAppFrame topFrame = (MainAppFrame) SwingUtilities.getWindowAncestor(this);
-        topFrame.loadPreviousView();
-    }//GEN-LAST:event_returnToDesignButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentCatalogLabel;
     private javax.swing.JComboBox currentCatalogSelect;
@@ -208,7 +189,6 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     private javax.swing.JButton loadCatalogButton;
     private javax.swing.JButton newCatalogButton;
     private javax.swing.JButton removeCatalogButton;
-    private javax.swing.JButton returnToDesignButton;
     private javax.swing.JButton saveCatalogButton;
     private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables

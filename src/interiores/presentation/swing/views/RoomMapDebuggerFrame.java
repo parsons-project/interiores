@@ -449,6 +449,7 @@ public class RoomMapDebuggerFrame extends JFrame
         resumePauseButton.setEnabled(false);
         stopButton.setEnabled(false);
         iterateButton.setEnabled(false);
+        closeButton.setEnabled(true);
         
         isFinished = true;
     }
@@ -459,6 +460,8 @@ public class RoomMapDebuggerFrame extends JFrame
         resumePauseButton.setEnabled(true);
         stopButton.setEnabled(true);
         iterateButton.setEnabled(true);
+        closeButton.setEnabled(false);
+        
     }
     
     public void reset()

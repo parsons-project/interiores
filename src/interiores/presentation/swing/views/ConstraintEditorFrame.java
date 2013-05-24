@@ -90,7 +90,7 @@ public class ConstraintEditorFrame extends JFrame {
     }
     
     @Listen({ConstraintAddedEvent.class, ConstraintRemovedEvent.class})
-    private void updateActiveConstraintsList() {
+    public void updateActiveConstraintsList() {
         Debug.println("Something changed");
         setListValues(activeUnaries, unaryConstraintController.getConstraints(selectedId));
         setListValues(activeBinaries, binaryConstraintController.getConstraints(selectedId));

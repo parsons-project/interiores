@@ -123,11 +123,12 @@ abstract public class CatalogController<I extends PersistentIdObject>
         return loadedCatalogs.keySet();
     }
     
+    public boolean catalogContains(String cname) {
+        return loadedCatalogs.containsKey(cname);
+    }
+    
     private String getAbsolutePath(String path) {
         return System.getProperty("user.dir") + System.getProperty("file.separator") + path;
     }
-
-    public String getLastLoaded() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 }

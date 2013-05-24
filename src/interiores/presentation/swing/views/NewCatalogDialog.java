@@ -5,6 +5,7 @@
 package interiores.presentation.swing.views;
 
 import interiores.business.controllers.abstracted.CatalogController;
+import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 
 /**
@@ -44,14 +45,19 @@ public class NewCatalogDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New Catalog");
         setAlwaysOnTop(true);
+        setModal(true);
 
         nameLabel.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         nameLabel.setText("Enter the name for the new catalog:");
 
-        nameField.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
-        nameField.setText("name");
+        nameField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nameFieldKeyTyped(evt);
+            }
+        });
 
         createButton.setText("Create");
+        createButton.setEnabled(false);
         createButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createButtonActionPerformed(evt);
@@ -88,10 +94,10 @@ public class NewCatalogDialog extends javax.swing.JDialog {
                 .add(nameLabel)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(nameField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(18, 18, 18)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(createButton)
-                    .add(cancelButton))
+                    .add(cancelButton)
+                    .add(createButton))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -106,6 +112,12 @@ public class NewCatalogDialog extends javax.swing.JDialog {
         catalogController.create( nameField.getText() );
         dispose();
     }//GEN-LAST:event_createButtonActionPerformed
+
+    private void nameFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameFieldKeyTyped
+        String name = nameField.getText();
+        if(!"".equals(name)) createButton.setEnabled(true);
+        else createButton.setEnabled(false);
+    }//GEN-LAST:event_nameFieldKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

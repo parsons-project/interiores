@@ -1,7 +1,7 @@
 /**
  * Part 1: global vision on constraints.
  * 
- * Constraint is the ancestor class of all constraints.
+ * FurnitureConstraint is the ancestor class of all constraints.
  * It has the method that characterizes constraints:
  * isSatisfied(FurnitureVariable variable)
  * Any other information that a constraint needs to determine whether
@@ -41,7 +41,7 @@
  * not be necessary after the trim.
  * We conclude that backtracking-time trims are never exhaustive, whereas the
  * preliminar trims might be.
- * For this reason, Constraint also declares the method
+ * For this reason, FurnitureConstraint also declares the method
  * boolean isExhaustive(), which by default returns false, but subclasses can
  * override and implement(with a single return true or false statement).
  * 
@@ -62,7 +62,7 @@
  * 
  * Part 2: the subclasses of constraint.
  * 
- * Constraint is abstract. Moreover, it has exactly 3 subclasses, all of which
+ * FurnitureConstraint is abstract. Moreover, it has exactly 3 subclasses, all of which
  * are also abstract. Those subclasses are then subclassed by the wide catalog
  * of constraints.
  * Rule of thumb: A restriction is associated with ONE variable.
@@ -170,7 +170,7 @@
  * of other variables.
  */
 
-package interiores.business.models.constraints;
+package interiores.business.models.FurnitureConstraints;
 
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.core.business.BusinessException;
@@ -180,16 +180,16 @@ import java.util.Map;
  *
  * @author hector
  */
-abstract public class Constraint
+abstract public class FurnitureConstraint
 {
-    public static void addConstraintClass(Map<String, Class<? extends Constraint>> availableConstraints,
-            String name, Class<? extends Constraint> constraintClass)
+    public static void addConstraintClass(Map<String, Class<? extends FurnitureConstraint>> availableConstraints,
+            String name, Class<? extends FurnitureConstraint> constraintClass)
     {
         availableConstraints.put(name, constraintClass);
     }
     
-    public static Class<? extends Constraint> getConstraintClass(
-            Map<String, Class<? extends Constraint>> availableConstraints, String name, String type)
+    public static Class<? extends FurnitureConstraint> getConstraintClass(
+            Map<String, Class<? extends FurnitureConstraint>> availableConstraints, String name, String type)
             throws BusinessException
     {
         if(! availableConstraints.containsKey(name))

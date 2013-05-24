@@ -2,7 +2,7 @@ package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.Area.Area;
-import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.models.FurnitureConstraints.UnaryConstraint;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;

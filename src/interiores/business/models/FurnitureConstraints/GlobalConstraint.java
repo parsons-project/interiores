@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interiores.business.models.constraints;
+package interiores.business.models.FurnitureConstraints;
 
 import interiores.business.exceptions.ConstraintException;
 import interiores.business.models.backtracking.Domain;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author larribas
  */
 public abstract class GlobalConstraint
-    extends Constraint {
+    extends FurnitureConstraint {
     
     /**
      * Lets the constraint know of a value that's been assigned, so that it can update its information

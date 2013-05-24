@@ -1,6 +1,6 @@
 package interiores.business.models;
 
-import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.models.FurnitureConstraints.UnaryConstraint;
 import java.util.Collection;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlAttribute;

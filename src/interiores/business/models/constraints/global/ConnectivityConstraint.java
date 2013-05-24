@@ -4,8 +4,8 @@ package interiores.business.models.constraints.global;
 import interiores.business.exceptions.ConstraintException;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.constraints.BacktrackingTimeTrimmer;
-import interiores.business.models.constraints.GlobalConstraint;
+import interiores.business.models.FurnitureConstraints.BacktrackingTimeTrimmer;
+import interiores.business.models.FurnitureConstraints.GlobalConstraint;
 
 /**
  * This constraint checks that each furniture piece of the room is reacheable

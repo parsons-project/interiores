@@ -5,7 +5,7 @@ import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.business.models.Orientation;
 import interiores.business.models.Room;
-import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.models.FurnitureConstraints.UnaryConstraint;
 import interiores.business.models.constraints.unary.AreaConstraint;
 import interiores.business.models.constraints.unary.ColorConstraint;
 import interiores.business.models.constraints.unary.DepthConstraint;

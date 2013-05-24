@@ -1,6 +1,6 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.constraints.BinaryConstraint;
+import interiores.business.models.FurnitureConstraints.BinaryConstraint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -5,8 +5,8 @@ import interiores.business.models.Room;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
-import interiores.business.models.constraints.BinaryConstraint;
-import interiores.business.models.constraints.PreliminarTrimmer;
+import interiores.business.models.FurnitureConstraints.BinaryConstraint;
+import interiores.business.models.FurnitureConstraints.PreliminarTrimmer;
 
 /**
  *

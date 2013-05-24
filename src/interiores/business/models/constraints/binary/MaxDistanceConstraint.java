@@ -6,7 +6,7 @@ import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
-import interiores.business.models.constraints.BinaryConstraint;
+import interiores.business.models.FurnitureConstraints.BinaryConstraint;
 import interiores.utils.Dimension;
 import java.awt.Rectangle;
 import javax.xml.bind.annotation.XmlAttribute;

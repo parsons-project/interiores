@@ -6,10 +6,10 @@ import interiores.business.models.OrientedRectangle;
 import interiores.business.models.WantedFixed;
 import interiores.business.models.WantedFurniture;
 import interiores.business.models.WishList;
-import interiores.business.models.constraints.PreliminarTrimmer;
+import interiores.business.models.FurnitureConstraints.PreliminarTrimmer;
 import interiores.business.models.catalogs.NamedCatalog;
-import interiores.business.models.constraints.BinaryConstraint;
-import interiores.business.models.constraints.GlobalConstraint;
+import interiores.business.models.FurnitureConstraints.BinaryConstraint;
+import interiores.business.models.FurnitureConstraints.GlobalConstraint;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.Value;
@@ -50,14 +50,27 @@ public class FurnitureVariableSet
      * (which is also the number of iterations of the algorithm), but their
      * elements might be reallocated.
      */
-    protected FurnitureVariable[] variables;
-    private FurnitureConstant[] constants;
+    
+    /**
+     * This list contains the variables which do not have an assigned value yet.
+     */
+    List<FurnitureVariable> unassignedVariables;
+    
+    /**
+     * This list contains the variables which have an assigned value.
+     */
+    List<FurnitureVariable> assignedVariables;
     
     /**
      * This is the variable that the algorithm is trying to assign in the
      * current iteration.
+     * It is not in either of the previous lists.
      */
     protected FurnitureVariable actual;
+    
+    private FurnitureConstant[] constants;
+    
+
     
     /**
      * Indicates whether all variables have an assigned value.
@@ -102,7 +115,8 @@ public class FurnitureVariableSet
         variableCount = wishList.getUnfixedSize();
         constantCount = wishList.getFixedSize();
         
-        variables = new FurnitureVariable[variableCount];
+        unassignedVariables = new ArrayList();
+        assignedVariables = new ArrayList();
         constants = new FurnitureConstant[constantCount];
         
         preliminarTrimmers = new ArrayList();
@@ -129,40 +143,14 @@ public class FurnitureVariableSet
     
     private void addVariables(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog,
             Dimension roomSize) {   
-        PriorityQueue<Entry<Integer, FurnitureVariable>> queue = new PriorityQueue(
-            variableCount + 1,
-            new Comparator<Entry<Integer, FurnitureVariable>>() {
-                @Override
-                public int compare(Entry<Integer, FurnitureVariable> e1,
-                        Entry<Integer, FurnitureVariable> e2) {
-                    if(e1.getKey() > e2.getKey()) return -1;
-                    if(e1.getKey() == e2.getKey()) return 0;
-
-                    return 1;
-                }
-            }
-        );
-        
-        
-        
+           
         for(WantedFurniture wantedFurniture : wishList.getWantedFurniture()) {
             String variableName = wantedFurniture.getName();
             FurnitureType furnitureType = furnitureCatalog.get(wantedFurniture.getTypeName());
             
-            int priority = wishList.getPriority(variableName);
-            Debug.println("Adding variable " + variableName + " with " + priority + " priority.");
-            
-            queue.add(new SimpleEntry(
-                    priority,
-                    new FurnitureVariable(variableName, furnitureType.getFurnitureModels(),
-                        roomSize, wantedFurniture.getUnaryConstraints(), variableCount)
-                    ));
-        }
-        
-        int i = 0;
-        while(!queue.isEmpty()) {
-            variables[i] = queue.poll().getValue();
-            i++;
+            unassignedVariables.add(new FurnitureVariable(variableName,
+                    furnitureType.getFurnitureModels(), roomSize,
+                    wantedFurniture.getUnaryConstraints(), variableCount));
         }
     }
     
@@ -202,32 +190,34 @@ public class FurnitureVariableSet
     @Override
     protected void setActualVariable() {
         
-        if (variables.length != 0) {
+        if (unassignedVariables.size() == 0)
+            allAssigned = true;
+        else {
             int maxDomainSize = -1;
             int maxBinaryConstraints = -1;
             int maxSmallestModelArea = -1;
-            int[] domainSize = new int[variableCount];
-            int[] binaryConstraintsLoad = new int[variableCount];
-            int[] smallestModelSize = new int[variableCount];
+            int[] domainSize = new int[unassignedVariables.size()];
+            int[] binaryConstraintsLoad = new int[unassignedVariables.size()];
+            int[] smallestModelSize = new int[unassignedVariables.size()];
 
-
+            int i = 0;
             //get value of each factor for each variable and compute maximums
-            for (int i = depth; i < variableCount; ++i) {
-                domainSize[i] = variables[depth].domainSize();
+            for (FurnitureVariable variable : unassignedVariables) {
+                domainSize[i] = variable.domainSize();
                 if (domainSize[i] > maxDomainSize) maxDomainSize = domainSize[i];
 
                 // the weight of all binary constraints between this variable and
                 // other variables which have not been assigned yet.
                 binaryConstraintsLoad[i] = 0;
-                for (BinaryConstraint bc : binaryConstraints.getConstraints(variables[depth])) {
-                    if (bc.getOtherVariable(variables[depth]).isAssigned())
+                for (BinaryConstraint bc : binaryConstraints.getConstraints(variable)) {
+                    if (bc.getOtherVariable(variable).isAssigned())
                         binaryConstraintsLoad[i] += bc.getWeight(roomArea);
                 }
                 
                 if (binaryConstraintsLoad[i] > maxBinaryConstraints)
                     maxBinaryConstraints = binaryConstraintsLoad[i];
 
-                smallestModelSize[i] = variables[depth].smallestModelSize();
+                smallestModelSize[i] = variable.smallestModelSize();
                 if (smallestModelSize[i] > maxSmallestModelArea)
                     maxSmallestModelArea = smallestModelSize[i];
 
@@ -239,7 +229,7 @@ public class FurnitureVariableSet
             int minimumWeight = -1;
             int minimumWeightVariableIndex = -1;
 
-            for (int i = depth; i < variableCount; ++i) {
+            for (i = 0; i < unassignedVariables.size(); ++i) {
 
                 int domainSizeWeight = (domainSize[i] * DOMAIN_SIZE_FACTOR) / maxDomainSize;
                 int binaryConstraintsWeight = maxBinaryConstraints -
@@ -256,43 +246,38 @@ public class FurnitureVariableSet
                 }
 
             }
-
-            //set actual variable and move it to position depth
-            FurnitureVariable aux = variables[depth];
-            variables[depth] = variables[minimumWeightVariableIndex];
-            variables[minimumWeightVariableIndex] = aux;
             
             //set actual variable
-            actual = variables[depth];
+            actual = unassignedVariables.get(minimumWeightVariableIndex);
+            
+            //remove it from the set of unassigned variables
+            unassignedVariables.remove(minimumWeightVariableIndex);
             
             //reset iterators
             actual.resetIterators(depth);
-        }
-        else {
-            allAssigned = true;
         }
     }
  
     
     @Override
     protected void trimDomains() {
-        for (int i = depth + 1; i < variableCount; ++i) {
-            variables[i].trimDomain(actual, depth);
+        for (FurnitureVariable variable : unassignedVariables) {
+            variable.trimDomain(actual, depth);
         }
     }
 
     
     @Override
     protected void undoTrimDomains(Value value) {
-        for (int i = depth + 1; i < variableCount; ++i) {
-            variables[i].undoTrimDomain(actual, value, depth);
+        for (FurnitureVariable variable : unassignedVariables) {
+            variable.undoTrimDomain(actual, value, depth);
         }
     }
 
     
     @Override
     protected boolean allAssigned() {
-        if (depth == (variableCount - 1) && actual.isAssigned()) {
+        if (unassignedVariables.isEmpty() && actual.isAssigned()) {
             allAssigned = true;
         }
         return allAssigned;
@@ -349,6 +334,7 @@ public class FurnitureVariableSet
     @Override
     protected void assignToActual(Value value) {        
         actual.assignValue(value);
+        //assignedVariables.add(actual);
     }
 
     
@@ -394,8 +380,12 @@ public class FurnitureVariableSet
     
     
     private InterioresVariable getVariable(String name) {
-        for (int i = 0; i < variableCount; i++)
-            if (variables[i].getID().equals(name)) return variables[i];
+        for (FurnitureVariable variable : unassignedVariables)
+            if (variable.getID().equals(name)) return variable;
+        for (FurnitureVariable variable : assignedVariables)
+            if (variable.getID().equals(name)) return variable;
+        if (actual.getID().equals(name)) return actual;
+            
         
         throw new BusinessException(name + " variable not found.");
     }
@@ -407,37 +397,40 @@ public class FurnitureVariableSet
         for(FurnitureConstant constant : constants)
             values.put(constant.getID(), constant.getAssignedValue());
         
-        for(int i = 0; i < variables.length; ++i)
-            values.put(variables[i].getID(), variables[i].getAssignedValue());
+        for(FurnitureVariable variable : unassignedVariables)
+            values.put(variable.getID(), variable.getAssignedValue());
+     
+        for(FurnitureVariable variable : assignedVariables)
+            values.put(variable.getID(), variable.getAssignedValue());
         
         return values;
     }
  
     
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
-
-        result.append(this.getClass().getName() + ":" + NEW_LINE);
-        result.append("Iteration: " + depth + NEW_LINE);
-        result.append("Number of variables: " + variableCount + NEW_LINE);
-        
-        result.append("Variables: " + NEW_LINE);
-        for (int i = depth; i < variableCount; ++i) {
-            result.append(variables[i].getID() + ": ");
-            result.append(variables[i].getAssignedValue().toString() + NEW_LINE);
-        }
+//    @Override
+//    public String toString() {
+//        StringBuilder result = new StringBuilder();
+//        String NEW_LINE = System.getProperty("line.separator");
+//
+//        result.append(this.getClass().getName() + ":" + NEW_LINE);
+//        result.append("Iteration: " + depth + NEW_LINE);
+//        result.append("Number of variables: " + variableCount + NEW_LINE);
+//        
+//        result.append("Variables: " + NEW_LINE);
+//        for (FurnitureVariable variable : assignedVariables) {
+//            result.append(variable.getID() + ": ");
+//            result.append(variable.getAssignedValue().toString() + NEW_LINE);
+//        }
 //        result.append("Actual variable:" + NEW_LINE);
 //        if (actual == null) result.append("none" + NEW_LINE);
 //        else result.append(actual.toString());
 //        result.append("Are all variables assigned? " + NEW_LINE);
-        if (allAssigned) result.append("All assigned: Yes" + NEW_LINE);
-        else result.append("No" + NEW_LINE);
-        result.append("Binary restrictions:" + NEW_LINE);
-        result.append(binaryConstraints.toString());
-
-        return result.toString();
-    }
+//        if (allAssigned) result.append("All assigned: Yes" + NEW_LINE);
+//        else result.append("No" + NEW_LINE);
+//        result.append("Binary restrictions:" + NEW_LINE);
+//        result.append(binaryConstraints.toString());
+//
+//        return result.toString();
+//    }
 
 }

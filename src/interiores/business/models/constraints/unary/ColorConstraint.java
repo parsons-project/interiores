@@ -2,7 +2,7 @@ package interiores.business.models.constraints.unary;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.Domain;
-import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.models.FurnitureConstraints.UnaryConstraint;
 import interiores.core.business.BusinessException;
 import interiores.data.adapters.ColorAdapter;
 import interiores.utils.CoolColor;

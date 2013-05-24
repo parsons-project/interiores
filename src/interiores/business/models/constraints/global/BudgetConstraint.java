@@ -8,7 +8,7 @@ package interiores.business.models.constraints.global;
 import interiores.business.exceptions.ConstraintException;
 import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureValue;
-import interiores.business.models.constraints.GlobalConstraint;
+import interiores.business.models.FurnitureConstraints.GlobalConstraint;
 import interiores.core.business.BusinessException;
 import java.util.List;
 

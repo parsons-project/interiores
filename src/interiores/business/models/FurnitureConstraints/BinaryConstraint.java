@@ -1,4 +1,4 @@
-package interiores.business.models.constraints;
+package interiores.business.models.FurnitureConstraints;
 
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
@@ -21,9 +21,9 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlRootElement
 @XmlSeeAlso({MaxDistanceConstraint.class, MinDistanceConstraint.class})
 public abstract class BinaryConstraint
-    extends Constraint implements BacktrackingTimeTrimmer {
+    extends FurnitureConstraint implements BacktrackingTimeTrimmer {
     
-    private static Map<String, Class<? extends Constraint>> availableConstraints = new TreeMap();
+    private static Map<String, Class<? extends FurnitureConstraint>> availableConstraints = new TreeMap();
     
     public static void addConstraintClass(String name, Class<? extends BinaryConstraint> constraintClass)
     {

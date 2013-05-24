@@ -2,7 +2,7 @@ package interiores.business.models.constraints.global;
 
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.constraints.PreliminarTrimmer;
+import interiores.business.models.FurnitureConstraints.PreliminarTrimmer;
 import java.awt.Rectangle;
 
 /**

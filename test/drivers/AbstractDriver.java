@@ -11,7 +11,7 @@ import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.VariableConstraintSet;
-import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.models.FurnitureConstraints.UnaryConstraint;
 import interiores.business.models.constraints.unary.AreaConstraint;
 import interiores.business.models.constraints.unary.ColorConstraint;
 import interiores.business.models.constraints.unary.MaterialConstraint;

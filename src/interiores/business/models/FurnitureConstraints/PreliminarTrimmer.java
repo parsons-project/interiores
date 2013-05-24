@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interiores.business.models.constraints;
+package interiores.business.models.FurnitureConstraints;
 
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;

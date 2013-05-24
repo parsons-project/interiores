@@ -3,7 +3,7 @@ package interiores.business.models.constraints.unary;
 import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.models.FurnitureConstraints.UnaryConstraint;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -1,5 +1,5 @@
 
-package interiores.business.models.constraints;
+package interiores.business.models.FurnitureConstraints;
 
 import interiores.business.models.backtracking.Domain;
 import interiores.business.models.constraints.unary.AreaConstraint;
@@ -23,9 +23,9 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlSeeAlso({AreaConstraint.class, ColorConstraint.class, MaterialConstraint.class, ModelConstraint.class,
     OrientationConstraint.class, PriceConstraint.class, SizeRangeConstraint.class})
 public abstract class UnaryConstraint
-    extends Constraint implements PreliminarTrimmer
+    extends FurnitureConstraint implements PreliminarTrimmer
 {
-    private static Map<String, Class<? extends Constraint>> availableConstraints = new TreeMap();
+    private static Map<String, Class<? extends FurnitureConstraint>> availableConstraints = new TreeMap();
     
     public static void addConstraintClass(String name, Class<? extends UnaryConstraint> constraintClass)
     {

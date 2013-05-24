@@ -3,7 +3,7 @@ package interiores.business.controllers;
 import interiores.business.controllers.abstracted.InterioresController;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.exceptions.WantedElementNotFoundException;
-import interiores.business.models.constraints.BinaryConstraint;
+import interiores.business.models.FurnitureConstraints.BinaryConstraint;
 import interiores.business.models.constraints.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.binary.MinDistanceConstraint;
 import interiores.business.models.constraints.binary.PartialFacingConstraint;

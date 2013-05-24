@@ -15,7 +15,7 @@ public enum Material {
     
     AGGLOMERATE, PINE, PLASTIC,
     STEEL, BEECH, BIRCH,
-    MARBLE, PORCELAIN, GLASS;
+    MARBLE, PORCELAIN, GLASS, BRICK, WOOD;
    
     public static Collection<String> getNames() {
         Collection<String> names = new ArrayList();

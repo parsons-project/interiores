@@ -16,6 +16,7 @@ import interiores.core.data.JAXBDataController;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.TerminalController;
 import interiores.data.MappedDataController;
+import interiores.presentation.InterioresTerminal;
 import interiores.presentation.swing.views.MainAppFrame;
 
 /**
@@ -39,19 +40,12 @@ public class Interiores
         
         // Application dependencies
         JAXBDataController dataController = new MappedDataController();
-        TerminalController terminal = new TerminalController("interiores.presentation.terminal.commands");
+        TerminalController terminal = new InterioresTerminal(System.in, System.out);
         SwingController swingController = new SwingController(MainAppFrame.class);
-        
-        // Terminal welcome message
-        terminal.setWelcomeMessage("Welcome to Interior design! Use 'help' to see the available commands.");
         
         // Persistance layer
         app.setDataController(dataController);
-        
-        // Presentation layer
-        app.addPresentation(swingController);
-        app.addPresentation(terminal);
-        
+              
         // Business layer
         app.addBusiness(RoomController.class);
         app.addBusiness(UnaryConstraintController.class);
@@ -63,6 +57,10 @@ public class Interiores
         app.addBusiness(FurnitureTypesCatalogController.class);
         app.addBusiness(RoomTypesCatalogController.class);
         app.addBusiness(FixedElementController.class);
+        
+        // Presentation layer
+        app.addPresentation(swingController);
+        app.addPresentation(terminal);
         
         // Run, run, run!!!
         app.init();

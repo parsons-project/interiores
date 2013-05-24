@@ -26,6 +26,7 @@ public class MainAppFrame extends JFrame
     private SwingController presentation;
     private RoomController roomController;
     private WelcomePanel welcome;
+    private TerminalPanel terminal;
     private RoomTypeCatalogPanel rtCatalogPanel;
     
     private List<Component> previousViews, currentViews;
@@ -42,8 +43,8 @@ public class MainAppFrame extends JFrame
         this.presentation = presentation;
         roomController = presentation.getBusinessController(RoomController.class);
         welcome = presentation.get(WelcomePanel.class);
+        terminal = presentation.get(TerminalPanel.class);
         rtCatalogPanel = presentation.get(RoomTypeCatalogPanel.class);
-        
         
         previousViews = new ArrayList();
         currentViews = new ArrayList();
@@ -71,6 +72,8 @@ public class MainAppFrame extends JFrame
         exitMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         rtCatalog = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        terminalMenuCheckbox = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Interior design");
@@ -140,6 +143,21 @@ public class MainAppFrame extends JFrame
 
         jMenuBar1.add(jMenu2);
 
+        jMenu3.setText("View");
+
+        terminalMenuCheckbox.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        terminalMenuCheckbox.setText("Terminal");
+        terminalMenuCheckbox.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                terminalMenuCheckboxActionPerformed(evt);
+            }
+        });
+        jMenu3.add(terminalMenuCheckbox);
+
+        jMenuBar1.add(jMenu3);
+
         setJMenuBar(jMenuBar1);
 
         pack();
@@ -182,15 +200,24 @@ public class MainAppFrame extends JFrame
         }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
+    private void terminalMenuCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalMenuCheckboxActionPerformed
+        if(terminalMenuCheckbox.isSelected())
+            loadComponent(terminal, BorderLayout.PAGE_END);
+        else
+            unloadComponent(terminal);
+    }//GEN-LAST:event_terminalMenuCheckboxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem newRoom;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem rtCatalog;
     private javax.swing.JMenuItem saveMenuItem;
+    private javax.swing.JCheckBoxMenuItem terminalMenuCheckbox;
     // End of variables declaration//GEN-END:variables
 
     
@@ -219,7 +246,7 @@ public class MainAppFrame extends JFrame
     
     @Listen({RoomCreatedEvent.class, RoomLoadedEvent.class})
     public void showFurnitureAndMap() {
-        unloadCurrentView();
+        unloadComponent(welcome);
         
         saveMenuItem.setEnabled(true);
         
@@ -243,6 +270,14 @@ public class MainAppFrame extends JFrame
         add(comp, constraints);
         currentViews.add(comp);
         comp.setVisible(true);
+        
+        invalidate();
+        validate();
+        pack();
+    }
+    
+    private void unloadComponent(Component comp) {
+        remove(comp);
         
         invalidate();
         validate();

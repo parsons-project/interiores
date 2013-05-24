@@ -18,6 +18,11 @@ public class Application
     private JAXBDataController data;
     
     /**
+     * The controllers of the application business layer
+     */
+    private List<BusinessController> business;
+    
+    /**
      * The controllers of the application presentation layer
      */
     private List<PresentationController> presentations;
@@ -28,6 +33,7 @@ public class Application
      */
     public Application()
     {
+        business = new ArrayList();
         presentations = new ArrayList();
     }
     
@@ -64,6 +70,9 @@ public class Application
     public void addPresentation(PresentationController presentation)
     {
         presentations.add(presentation);
+        
+        for(BusinessController controller : business)
+            presentation.addBusinessController(controller);
     }
     
     /**
@@ -93,7 +102,6 @@ public class Application
      */
     public void addBusiness(BusinessController controller)
     {
-        for(PresentationController presentation : presentations)
-            presentation.addBusinessController(controller);
+        business.add(controller);
     }
 }

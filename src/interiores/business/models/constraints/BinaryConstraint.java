@@ -60,17 +60,10 @@ public abstract class BinaryConstraint
             Trim2(variable);
     }
  
-    /**
-     * Returns a estimation of the impact (wheight) of the constraint. The more
-     * restrictive, the higher the weight.
-     * @return 
-     */
-    public abstract int getWeight();
-
     public abstract void Trim2(FurnitureVariable variable);
-    
+
     @Override
-    public boolean isSatisfied(FurnitureVariable variable) {
+    public final boolean isSatisfied(FurnitureVariable variable) {
         if (! otherVariable.isAssigned())
             return true;
         else return isSatisfied2(variable);
@@ -78,7 +71,14 @@ public abstract class BinaryConstraint
 
     public abstract boolean isSatisfied2(FurnitureVariable variable);
     
-    public InterioresVariable getOtherVariable() {
+    /**
+     * Returns a estimation of the impact (wheight) of the constraint. The more
+     * restrictive, the higher the weight.
+     * @return 
+     */
+    public abstract int getWeight();
+    
+    public final InterioresVariable getOtherVariable() {
         return otherVariable;
     }
     

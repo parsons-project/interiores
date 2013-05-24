@@ -87,7 +87,7 @@ public class MinDistanceConstraint
      * 'distance' cm. 'false' otherwise
      */
     @Override
-    public boolean isSatisfied(FurnitureVariable variable) {
+    public boolean isSatisfied2(FurnitureVariable variable) {
            
         OrientedRectangle rectangle1 =
                 ((FurnitureValue) variable.getAssignedValue()).getArea();

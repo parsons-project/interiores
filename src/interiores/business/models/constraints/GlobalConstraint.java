@@ -20,13 +20,13 @@ public abstract class GlobalConstraint
      * Lets the constraint know of a value that's been assigned, so that it can update its information
      * @param fv The value that has been assigned
      */
-    public abstract void notifyAssignment(FurnitureValue fv) throws ConstraintException;
+    //public abstract void notifyAssignment(FurnitureValue fv) throws ConstraintException;
     
     /**
      * Lets the constraint know of a value that's been unassigned, so that it can update its information
      * @param fv The value that has been unassigned
      */
-    public abstract void notifyUnassignment(FurnitureValue fv);
+    //public abstract void notifyUnassignment(FurnitureValue fv);
     
     
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

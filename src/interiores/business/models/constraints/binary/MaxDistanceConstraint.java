@@ -72,11 +72,11 @@ public class MaxDistanceConstraint
      * @return 'true' if the two variables are separated by, at most, 'distance' cm. 'false' otherwise
      */
     @Override
-    public boolean isSatisfied(FurnitureVariable variable) {
+    public boolean isSatisfied2(FurnitureVariable variable) {
         
         OrientedRectangle rectangle1 = ((FurnitureValue) otherVariable.getAssignedValue()).getArea();
         OrientedRectangle rectangle2 = ((FurnitureValue) variable.getAssignedValue()).getArea();
         
         return Area.distance(rectangle1, rectangle2) < distance;
-    }    
+    }
 }

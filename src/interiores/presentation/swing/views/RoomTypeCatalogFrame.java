@@ -75,6 +75,8 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         saveCatalogButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Room Types Catalog Editor");
+        setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
         setBounds(new java.awt.Rectangle(0, 0, 900, 600));
         setMaximumSize(new java.awt.Dimension(900, 600));
@@ -113,6 +115,11 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         });
 
         removeCatalogButton.setText("Remove Catalog");
+        removeCatalogButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeCatalogButtonActionPerformed(evt);
+            }
+        });
 
         saveCatalogButton.setText("Save Catalog");
         saveCatalogButton.addActionListener(new java.awt.event.ActionListener() {
@@ -178,8 +185,13 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_loadCatalogButtonActionPerformed
 
     private void saveCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveCatalogButtonActionPerformed
-        // TODO add your handling code here:
+        saveCatalog();
     }//GEN-LAST:event_saveCatalogButtonActionPerformed
+
+    private void removeCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeCatalogButtonActionPerformed
+        rtcController.checkout("default");
+        rtcController.remove(currentCatalogSelect.getSelectedItem().toString());
+    }//GEN-LAST:event_removeCatalogButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentCatalogLabel;
@@ -415,6 +427,21 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                 rtcController.load(file.getAbsolutePath());
             }
             catch(JAXBException e) {
+            }
+        }
+    }
+    
+    private void saveCatalog() {
+        int status = fileChooser.showSaveDialog(this);
+        
+        if(status == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            
+            try {
+                rtcController.save(file.getAbsolutePath());
+            }
+            catch(JAXBException e) {
+                
             }
         }
     }

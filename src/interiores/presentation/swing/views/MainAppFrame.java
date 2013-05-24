@@ -239,6 +239,7 @@ public class MainAppFrame extends JFrame
         currentViews.clear();
     }
     
+    
     protected void loadPreviousView() {
         for (Component c : currentViews) remove(c);
         currentViews.clear();

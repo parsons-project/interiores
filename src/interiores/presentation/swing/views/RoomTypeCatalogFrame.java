@@ -20,8 +20,6 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -106,6 +104,11 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         currentCatalogLabel.setText("Current catalog:");
 
         newCatalogButton.setText("New Catalog");
+        newCatalogButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newCatalogButtonActionPerformed(evt);
+            }
+        });
 
         loadCatalogButton.setText("Load Catalog");
         loadCatalogButton.addActionListener(new java.awt.event.ActionListener() {
@@ -192,6 +195,11 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         rtcController.checkout("default");
         rtcController.remove(currentCatalogSelect.getSelectedItem().toString());
     }//GEN-LAST:event_removeCatalogButtonActionPerformed
+
+    private void newCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCatalogButtonActionPerformed
+        NewCatalogDialog newCat = new NewCatalogDialog(rtcController);
+        newCat.setVisible(true);
+    }//GEN-LAST:event_newCatalogButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentCatalogLabel;

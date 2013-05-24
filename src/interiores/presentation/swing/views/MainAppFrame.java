@@ -231,12 +231,27 @@ public class MainAppFrame extends JFrame
     }
     
     private void unloadCurrentView() {
+        previousViews.clear();
         for (Component c : currentViews) {
-            remove(c);
             c.setVisible(false);
             previousViews.add(c);
         }
         currentViews.clear();
+    }
+    
+    protected void loadPreviousView() {
+        for (Component c : currentViews) remove(c);
+        currentViews.clear();
+        
+        for (Component c : previousViews) {
+            currentViews.add(c);
+            c.setVisible(true);
+        }
+        previousViews.clear();
+        
+        invalidate();
+        validate();
+        pack();
     }
     
     private void loadComponent(Component comp, Object constraints) {

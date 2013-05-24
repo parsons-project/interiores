@@ -37,15 +37,34 @@
               <Component id="jScrollPane1" max="-2" attributes="0"/>
               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
-              <Component id="title1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="97" max="-2" attributes="0"/>
-              <Component id="currentCatalogLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="currentCatalogSelect" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="newCatalogButton" min="-2" pref="147" max="-2" attributes="0"/>
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="returnToDesignButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="title1" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="newCatalogButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="loadCatalogButton" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="saveCatalogButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="removeCatalogButton" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="currentCatalogLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="currentCatalogSelect" min="-2" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -53,14 +72,21 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="title1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="currentCatalogSelect" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="currentCatalogLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="newCatalogButton" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                  <Component id="currentCatalogSelect" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="returnToDesignButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="newCatalogButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="loadCatalogButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="removeCatalogButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="saveCatalogButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
               <Component id="jScrollPane1" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -70,9 +96,9 @@
     <Component class="javax.swing.JLabel" name="title1">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Lucida Grande" size="18" style="0"/>
+          <Font name="Lucida Grande" size="24" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Room types catalog"/>
+        <Property name="text" type="java.lang.String" value="Room types catalog editor"/>
         <Property name="verticalAlignment" type="int" value="1"/>
       </Properties>
     </Component>
@@ -127,18 +153,36 @@
     </Component>
     <Component class="javax.swing.JButton" name="newCatalogButton">
       <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ea" green="ea" red="ea" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Create new catalog"/>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-            <LineBorder/>
-          </Border>
-        </Property>
+        <Property name="text" type="java.lang.String" value="New Catalog"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="loadCatalogButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Load Catalog"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="loadCatalogButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="removeCatalogButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Remove Catalog"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="saveCatalogButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Save Catalog"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveCatalogButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="returnToDesignButton">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="returnToDesignButtonActionPerformed"/>
+      </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="newCatalogButton.setBorder(BorderFactory.createEmptyBorder());&#xa;newCatalogButton.setContentAreaFilled(false);"/>
+        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="ImageIcon im = new javax.swing.ImageIcon(&quot;src/resources/go_back.png&quot;);&#xa;im.setImage( im.getImage().getScaledInstance(30,30,java.awt.Image.SCALE_SMOOTH) );&#xa;returnToDesignButton.setIcon(im); // NOI18N&#xa;returnToDesignButton.setBorder(BorderFactory.createEmptyBorder());&#xa;returnToDesignButton.setContentAreaFilled(false);           "/>
       </AuxValues>
     </Component>
   </SubComponents>

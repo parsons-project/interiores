@@ -11,12 +11,18 @@ import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
 import interiores.business.events.catalogs.RTChangedEvent;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
+import interiores.presentation.swing.helpers.FileChooser;
 import java.awt.Dimension;
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.xml.bind.JAXBException;
 
 /**
  *
@@ -27,6 +33,8 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
      private SwingController swing;
      private RoomTypeController rtController;
      private RoomTypesCatalogController rtcController;
+     private JFileChooser fileChooser;
+     
     
      private Map<String,RTC_Element> catElements;
     
@@ -39,6 +47,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         this.swing = presentation;
         rtController = swing.getBusinessController(RoomTypeController.class);
         rtcController = swing.getBusinessController(RoomTypesCatalogController.class);
+        fileChooser = new FileChooser();
         
         catElements = new HashMap();
         
@@ -61,8 +70,10 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         currentCatalogSelect = new javax.swing.JComboBox();
         currentCatalogLabel = new javax.swing.JLabel();
         newCatalogButton = new javax.swing.JButton();
-        newCatalogButton.setBorder(BorderFactory.createEmptyBorder());
-        newCatalogButton.setContentAreaFilled(false);
+        loadCatalogButton = new javax.swing.JButton();
+        removeCatalogButton = new javax.swing.JButton();
+        saveCatalogButton = new javax.swing.JButton();
+        returnToDesignButton = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBounds(new java.awt.Rectangle(0, 0, 900, 600));
@@ -70,8 +81,8 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         setMinimumSize(new java.awt.Dimension(900, 600));
         setPreferredSize(new java.awt.Dimension(900, 600));
 
-        title1.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
-        title1.setText("Room types catalog");
+        title1.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        title1.setText("Room types catalog editor");
         title1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         jScrollPane1.setBorder(null);
@@ -92,9 +103,34 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
 
         currentCatalogLabel.setText("Current catalog:");
 
-        newCatalogButton.setBackground(new java.awt.Color(234, 234, 234));
-        newCatalogButton.setText("Create new catalog");
-        newCatalogButton.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        newCatalogButton.setText("New Catalog");
+
+        loadCatalogButton.setText("Load Catalog");
+        loadCatalogButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadCatalogButtonActionPerformed(evt);
+            }
+        });
+
+        removeCatalogButton.setText("Remove Catalog");
+
+        saveCatalogButton.setText("Save Catalog");
+        saveCatalogButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveCatalogButtonActionPerformed(evt);
+            }
+        });
+
+        ImageIcon im = new javax.swing.ImageIcon("src/resources/go_back.png");
+        im.setImage( im.getImage().getScaledInstance(30,30,java.awt.Image.SCALE_SMOOTH) );
+        returnToDesignButton.setIcon(im); // NOI18N
+        returnToDesignButton.setBorder(BorderFactory.createEmptyBorder());
+        returnToDesignButton.setContentAreaFilled(false);
+        returnToDesignButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                returnToDesignButtonActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -104,26 +140,45 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 0, Short.MAX_VALUE))
             .add(layout.createSequentialGroup()
-                .add(68, 68, 68)
-                .add(title1)
-                .add(97, 97, 97)
-                .add(currentCatalogLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(newCatalogButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 147, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(returnToDesignButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(title1))
+                    .add(layout.createSequentialGroup()
+                        .add(newCatalogButton)
+                        .add(18, 18, 18)
+                        .add(loadCatalogButton)))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(layout.createSequentialGroup()
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(saveCatalogButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(removeCatalogButton))
+                    .add(layout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(currentCatalogLabel)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(56, 56, 56)
+                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(title1)
-                    .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(currentCatalogLabel)
-                    .add(newCatalogButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 43, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(returnToDesignButton))
                 .add(18, 18, 18)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(newCatalogButton)
+                    .add(loadCatalogButton)
+                    .add(removeCatalogButton)
+                    .add(saveCatalogButton))
+                .add(31, 31, 31)
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -132,12 +187,29 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         rtcController.checkout(currentCatalogSelect.getSelectedItem().toString());
     }//GEN-LAST:event_currentCatalogSelectItemStateChanged
 
+    private void loadCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadCatalogButtonActionPerformed
+        loadCatalog();
+    }//GEN-LAST:event_loadCatalogButtonActionPerformed
+
+    private void saveCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveCatalogButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_saveCatalogButtonActionPerformed
+
+    private void returnToDesignButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_returnToDesignButtonActionPerformed
+        MainAppFrame topFrame = (MainAppFrame) SwingUtilities.getWindowAncestor(this);
+        topFrame.loadPreviousView();
+    }//GEN-LAST:event_returnToDesignButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentCatalogLabel;
     private javax.swing.JComboBox currentCatalogSelect;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton loadCatalogButton;
     private javax.swing.JButton newCatalogButton;
+    private javax.swing.JButton removeCatalogButton;
+    private javax.swing.JButton returnToDesignButton;
+    private javax.swing.JButton saveCatalogButton;
     private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
 
@@ -199,7 +271,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         
         public RTC_Element(String rname, Integer width, Integer depth, String mandatory, String forbidden) {
             
-            ImageIcon im = new javax.swing.ImageIcon(getClass().getResource("resources/remove_element.png"));
+            ImageIcon im = new javax.swing.ImageIcon("src/resources/remove_element.png");
             im.setImage( im.getImage().getScaledInstance(40,40,java.awt.Image.SCALE_SMOOTH) );
             removeButton.setIcon(im); // NOI18N
             removeButton.setBorder(BorderFactory.createEmptyBorder());
@@ -351,6 +423,20 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     private void clearElements() {
         jPanel1.removeAll();
         catElements.clear();
+    }
+    
+    public void loadCatalog() {
+        int status = fileChooser.showOpenDialog(this);
+        
+        if(status == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            
+            try {
+                rtcController.load(file.getAbsolutePath());
+            }
+            catch(JAXBException e) {
+            }
+        }
     }
 
 

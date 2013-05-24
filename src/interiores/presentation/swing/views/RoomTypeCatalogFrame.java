@@ -95,6 +95,10 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
 
         currentCatalogSelect.setBackground(new java.awt.Color(255, 255, 255));
         currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        currentCatalogSelect.setMaximumSize(new java.awt.Dimension(130, 32767));
+        currentCatalogSelect.setMinimumSize(new java.awt.Dimension(90, 27));
+        currentCatalogSelect.setPreferredSize(new java.awt.Dimension(130, 27));
+        currentCatalogSelect.setSize(new java.awt.Dimension(130, 0));
         currentCatalogSelect.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 currentCatalogSelectItemStateChanged(evt);
@@ -217,7 +221,6 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
     
     @Listen({RTChangedEvent.class})
     public void updateCatalogElement(RTChangedEvent evt) {
-        //refreshCatalog();
         if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
         else removeElement(evt.getFullName());
     }
@@ -425,7 +428,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         catElements.clear();
     }
     
-    public void loadCatalog() {
+    private void loadCatalog() {
         int status = fileChooser.showOpenDialog(this);
         
         if(status == JFileChooser.APPROVE_OPTION) {

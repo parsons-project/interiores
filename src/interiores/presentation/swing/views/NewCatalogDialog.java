@@ -5,8 +5,6 @@
 package interiores.presentation.swing.views;
 
 import interiores.business.controllers.abstracted.CatalogController;
-import interiores.core.Debug;
-import interiores.core.presentation.SwingController;
 
 /**
  *
@@ -15,13 +13,6 @@ import interiores.core.presentation.SwingController;
 public class NewCatalogDialog extends javax.swing.JDialog {
 
     private CatalogController catalogController;
-    
-    /**
-     * Creates new form NewCatalogDialog
-     */
-    public NewCatalogDialog(SwingController presentation) {
-        initComponents();
-    }
     
     public NewCatalogDialog(CatalogController abstractedCatalogController) {
         initComponents();
@@ -109,7 +100,9 @@ public class NewCatalogDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
-        catalogController.create( nameField.getText() );
+        String name = nameField.getText();
+        catalogController.create(name);
+        catalogController.checkout(name);
         dispose();
     }//GEN-LAST:event_createButtonActionPerformed
 

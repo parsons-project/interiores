@@ -31,9 +31,9 @@ public class RoomTypeController
      * Adds a new type of room to the current catalog
      * @param typeName The name of the new type
      */
-    public void add(String typeName)
+    public void add(String typeName, int width, int depth)
     {
-        RoomType type = new RoomType(typeName);
+        RoomType type = new RoomType(typeName,width,depth);
         super.add(type);
         
         notify(new RTChangedEvent(type.getFullName(), typeName,true));
@@ -41,8 +41,9 @@ public class RoomTypeController
     
     @Override
     public void rm(String typeName) {
+        String fullName = get(typeName).getFullName();
         super.rm(typeName);
-        notify(new RTChangedEvent(null,typeName,false));
+        notify(new RTChangedEvent(fullName,typeName,false));
     }
     
     /**
@@ -134,6 +135,14 @@ public class RoomTypeController
     
     public Range getDepthRange(String roomTypeName) {
         return get(roomTypeName).getDepthRange();
+    }
+    
+    public void setMinWidth(String roomTypeName, int w) {
+        get(roomTypeName).setMinWidth(w);
+    }
+    
+    public void setMinDepth(String roomTypeName, int d) {
+        get(roomTypeName).setMinDepth(d);
     }
     
     /**

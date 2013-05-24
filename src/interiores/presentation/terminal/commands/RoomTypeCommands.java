@@ -25,8 +25,10 @@ public class RoomTypeCommands
     @Command("Add a room type to the catalog")
     public void add() {
         String name = readString("Enter the name of the room type you want to add:");
+        int width = readInt("Enter the minimum width and depth of this type of room");
+        int depth = readInt("");
         
-        rTypeController.add(name);
+        rTypeController.add(name,width,depth);
     }
     
     @Command("Mark a type of furniture as mandatory or forbidden for a room type")

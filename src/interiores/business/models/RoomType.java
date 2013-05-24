@@ -43,15 +43,15 @@ public class RoomType
     private TreeSet<String> cantHave;
     
     public RoomType() {
-        this(null);
+        this(null,0,0);
     }
     
     /**
      * Simple creator of the room type
      * @param name The name of the room type
      */
-    public RoomType(String name) {
-        this(name, new Dimension(), new String[0], new String[0]);
+    public RoomType(String name, int width, int depth) {
+        this(name, new Dimension(width,depth), new String[0], new String[0]);
     }
     
 
@@ -95,6 +95,10 @@ public class RoomType
         
         return fullName;
     }
+    
+    public void setName(String n) {
+        super.identifier = n;
+    }
 
     public Range getWidthRange() {
         return new Range(minDimension.width, MAX_WIDTH);
@@ -102,6 +106,14 @@ public class RoomType
     
     public Range getDepthRange() {
         return new Range(minDimension.depth, MAX_DEPTH);
+    }
+    
+    public void setMinWidth(int w) {
+        minDimension = new Dimension(w,minDimension.depth);
+    }
+    
+    public void setMinDepth(int d) {
+        minDimension = new Dimension(minDimension.width,d);
     }
     
     public boolean isSizeValid(Dimension size) {

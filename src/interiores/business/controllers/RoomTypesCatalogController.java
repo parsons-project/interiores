@@ -47,6 +47,12 @@ public class RoomTypesCatalogController
     }
     
     @Override
+    public void merge(String catalogName) {
+        super.merge(catalogName);
+        notify(new RTCatalogCheckoutEvent(getNameActiveCatalog()));
+    }
+    
+    @Override
     public void checkout(String catalogName) {
         super.checkout(catalogName);
         notify(new RTCatalogCheckoutEvent(catalogName));

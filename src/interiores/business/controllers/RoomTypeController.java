@@ -36,13 +36,13 @@ public class RoomTypeController
         RoomType type = new RoomType(typeName);
         super.add(type);
         
-        notify(new RTChangedEvent(typeName,true));
+        notify(new RTChangedEvent(type.getFullName(), typeName,true));
     }
     
     @Override
     public void rm(String typeName) {
         super.rm(typeName);
-        notify(new RTChangedEvent(typeName,false));
+        notify(new RTChangedEvent(null,typeName,false));
     }
     
     /**

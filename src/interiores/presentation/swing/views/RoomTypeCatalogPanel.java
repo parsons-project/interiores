@@ -16,8 +16,8 @@ import interiores.core.Event;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +34,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
      private RoomTypeController rtController;
      private RoomTypesCatalogController rtcController;
     
-     private List<RTC_Element> catElements;
+     private Map<String,RTC_Element> catElements;
     
     /**
      * Creates new form RoomTypeCatalogPanel
@@ -46,7 +46,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         rtController = swing.getBusinessController(RoomTypeController.class);
         rtcController = swing.getBusinessController(RoomTypesCatalogController.class);
         
-        catElements = new ArrayList();
+        catElements = new HashMap();
         
         // Initially, we load the current catalog
         refreshCatalog();
@@ -154,8 +154,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     }
     
     public void refreshCatalog() {
-        // Clear jPanel1
-        jPanel1.removeAll();
+        clearElements();
         
         // Retrieve all the elements in the catalog
         Map<String,String> rtypes = rtController.getFullNamesMap();
@@ -169,7 +168,9 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
     
     @Listen({RTChangedEvent.class})
     public void updateCatalogElement(RTChangedEvent evt) {
-        refreshCatalog();
+        //refreshCatalog();
+        if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
+        else removeElement(evt.getFullName());
     }
     
     public void initCatalogList() {
@@ -203,7 +204,7 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
         
         public RTC_Element(String rname, Integer width, Integer depth, String mandatory, String forbidden) {
             
-            ImageIcon im = new javax.swing.ImageIcon(getClass().getResource("/resources/remove_element.png"));
+            ImageIcon im = new javax.swing.ImageIcon(getClass().getResource("resources/remove_element.png"));
             im.setImage( im.getImage().getScaledInstance(40,40,java.awt.Image.SCALE_SMOOTH) );
             removeButton.setIcon(im); // NOI18N
             removeButton.setBorder(BorderFactory.createEmptyBorder());
@@ -324,6 +325,10 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
             jPanel1.add(outerPanel);
         }
         
+        public void removeFromPanel() {
+            jPanel1.remove(outerPanel);
+        }
+        
     }
 
 
@@ -338,6 +343,19 @@ public class RoomTypeCatalogPanel extends javax.swing.JPanel {
 
         RTC_Element rtInstance = new RTC_Element(key,width,depth,mandatory,forbidden);
         rtInstance.addToPanel();
+        catElements.put(key, rtInstance);
+    }
+    
+    private void removeElement(String key) {
+        if (catElements.containsKey(key)) {
+            catElements.get(key).removeFromPanel();
+            catElements.remove(key);
+        }
+    }
+    
+    private void clearElements() {
+        jPanel1.removeAll();
+        catElements.clear();
     }
 
 

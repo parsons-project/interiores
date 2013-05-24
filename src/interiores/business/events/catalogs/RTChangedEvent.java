@@ -10,8 +10,15 @@ package interiores.business.events.catalogs;
  */
 public class RTChangedEvent extends ElementChangedEvent {
     
-    public RTChangedEvent(String name, boolean isAdded) {
+    private String fullName;
+    
+    public RTChangedEvent(String fullName, String name, boolean isAdded) {
         super(name,isAdded);
+        this.fullName = fullName;
+    }
+    
+    public String getFullName() {
+        return fullName;
     }
     
 }

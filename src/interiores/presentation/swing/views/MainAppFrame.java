@@ -26,6 +26,7 @@ public class MainAppFrame extends JFrame
     private SwingController presentation;
     private RoomController roomController;
     private WelcomePanel welcome;
+    private TerminalPanel terminal;
     private RoomTypeCatalogPanel rtCatalogPanel;
     
     private List<Component> previousViews, currentViews;
@@ -42,8 +43,8 @@ public class MainAppFrame extends JFrame
         this.presentation = presentation;
         roomController = presentation.getBusinessController(RoomController.class);
         welcome = presentation.get(WelcomePanel.class);
+        terminal = presentation.get(TerminalPanel.class);
         rtCatalogPanel = presentation.get(RoomTypeCatalogPanel.class);
-        
         
         previousViews = new ArrayList();
         currentViews = new ArrayList();
@@ -60,8 +61,7 @@ public class MainAppFrame extends JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -71,6 +71,8 @@ public class MainAppFrame extends JFrame
         exitMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         rtCatalog = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        terminalMenuCheckbox = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Interior design");
@@ -81,10 +83,8 @@ public class MainAppFrame extends JFrame
 
         newRoom.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         newRoom.setText("New room design...");
-        newRoom.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        newRoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 newRoomActionPerformed(evt);
             }
         });
@@ -92,10 +92,8 @@ public class MainAppFrame extends JFrame
 
         openMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         openMenuItem.setText("Open room design...");
-        openMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        openMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openMenuItemActionPerformed(evt);
             }
         });
@@ -104,10 +102,8 @@ public class MainAppFrame extends JFrame
         saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         saveMenuItem.setText("Save room design...");
         saveMenuItem.setEnabled(false);
-        saveMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveMenuItemActionPerformed(evt);
             }
         });
@@ -115,10 +111,8 @@ public class MainAppFrame extends JFrame
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitMenuItemActionPerformed(evt);
             }
         });
@@ -129,16 +123,27 @@ public class MainAppFrame extends JFrame
         jMenu2.setText("Edit");
 
         rtCatalog.setText("Room type catalog");
-        rtCatalog.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        rtCatalog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rtCatalogActionPerformed(evt);
             }
         });
         jMenu2.add(rtCatalog);
 
         jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("View");
+
+        terminalMenuCheckbox.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        terminalMenuCheckbox.setText("Terminal");
+        terminalMenuCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                terminalMenuCheckboxActionPerformed(evt);
+            }
+        });
+        jMenu3.add(terminalMenuCheckbox);
+
+        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -182,15 +187,24 @@ public class MainAppFrame extends JFrame
         }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
+    private void terminalMenuCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalMenuCheckboxActionPerformed
+        if(terminalMenuCheckbox.isSelected())
+            loadComponent(terminal, BorderLayout.PAGE_END);
+        else
+            unloadComponent(terminal);
+    }//GEN-LAST:event_terminalMenuCheckboxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem newRoom;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem rtCatalog;
     private javax.swing.JMenuItem saveMenuItem;
+    private javax.swing.JCheckBoxMenuItem terminalMenuCheckbox;
     // End of variables declaration//GEN-END:variables
 
     
@@ -243,6 +257,14 @@ public class MainAppFrame extends JFrame
         add(comp, constraints);
         currentViews.add(comp);
         comp.setVisible(true);
+        
+        invalidate();
+        validate();
+        pack();
+    }
+    
+    private void unloadComponent(Component comp) {
+        remove(comp);
         
         invalidate();
         validate();

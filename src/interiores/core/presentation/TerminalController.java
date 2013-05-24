@@ -62,6 +62,8 @@ public class TerminalController extends PresentationController
         iostream = new IOStream(System.in, System.out);
         commandGroups = new TreeMap();
         shortcuts = new HashMap();
+        
+        System.setOut(iostream.getConsolePrintStream());
     }
     
     public void setWelcomeMessage(String welcomeMsg) {

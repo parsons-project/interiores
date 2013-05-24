@@ -9,6 +9,7 @@ import interiores.business.controllers.RoomTypesCatalogController;
 import interiores.business.events.catalogs.RTCatalogChangedEvent;
 import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
 import interiores.business.events.catalogs.RTChangedEvent;
+import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.helpers.FileChooser;
@@ -20,6 +21,7 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -158,7 +160,6 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(removeCatalogButton))
                     .add(layout.createSequentialGroup()
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(currentCatalogLabel)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
@@ -258,6 +259,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
 
     // This class represents an existent catalog element
     class RTC_Element {
+        private String actualName;
         private javax.swing.JPanel outerPanel = new javax.swing.JPanel();
         private javax.swing.JButton removeButton = new javax.swing.JButton();
         private javax.swing.JPanel innerPanel = new javax.swing.JPanel();;
@@ -272,7 +274,9 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         private javax.swing.JLabel measureLabel2 = new javax.swing.JLabel();
         private javax.swing.JLabel measureLabel3 = new javax.swing.JLabel();
         
-        public RTC_Element(String rname, Integer width, Integer depth, String mandatory, String forbidden) {
+        public RTC_Element(String aName, String rname, Integer width, Integer depth, String mandatory, String forbidden) {
+            
+            actualName = aName;
             
             ImageIcon im = new javax.swing.ImageIcon("src/resources/remove_element.png");
             im.setImage( im.getImage().getScaledInstance(40,40,java.awt.Image.SCALE_SMOOTH) );
@@ -294,18 +298,67 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
 
             measureLabel1.setText("This room should measure more than");
             measureField1.setText(width.toString());
-//            measureField1.addActionListener(new java.awt.event.ActionListener() {
-//                public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                    measureField1ActionPerformed(evt);
-//                }
-//            });
+            measureField1.addFocusListener(new java.awt.event.FocusAdapter() {
+                @Override
+                public void focusLost(java.awt.event.FocusEvent evt) {
+                    widthModification();
+                }
+
+                private void widthModification() {
+                    String str = measureField1.getText();
+                    if (str.matches("[0-9]+") && Integer.parseInt(str)!=0)
+                        rtController.setMinWidth(actualName, Integer.parseInt(str));
+                    else {
+                        JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,"Width should be a number different from 0","Error",JOptionPane.WARNING_MESSAGE);
+                        measureField1.setText(String.valueOf(rtController.getWidthRange(actualName).min));
+                    }
+                        
+                }
+            });
 
             measureLabel2.setText("cm wide and");
             measureField2.setText(depth.toString());
+            measureField2.addFocusListener(new java.awt.event.FocusAdapter() {
+                @Override
+                public void focusLost(java.awt.event.FocusEvent evt) {
+                    depthModification();
+                }
+                private void depthModification() {
+                    String str = measureField2.getText();
+                    if (str.matches("[0-9]+") && Integer.parseInt(str)!=0)
+                        rtController.setMinDepth(actualName, Integer.parseInt(str));
+                    else {
+                        JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,"Depth should be a number different from 0","Error",JOptionPane.WARNING_MESSAGE);
+                        measureField2.setText(String.valueOf(rtController.getDepthRange(actualName).min));
+                    }
+                        
+                }
+            });
+            
             measureLabel3.setText("cm deep");
             mandatoryLabel.setText("Mandatory furniture:");
             mandatoryField.setText(mandatory);
             mandatoryField.setColumns(30);
+            mandatoryField.addFocusListener(new java.awt.event.FocusAdapter() {
+                @Override
+                public void focusLost(java.awt.event.FocusEvent evt) {
+                    mandatoryModification();
+                }
+                private void mandatoryModification() {
+                    String str = measureField2.getText();
+                    str = str.replace(" ","");
+                    String[] mand = str.split(",");
+                    try { rtController.setMandatory(actualName, mand); }
+                    catch (ElementNotFoundBusinessException e) {
+                        e.getMessage();
+                        String mm = rtController.getMandatory(actualName).toString();
+                        mm = (String) mm.subSequence(1, mm.length()-1);
+                        mandatoryField.setText(mm);
+                    }
+                        
+                }
+            });
+            
             forbiddenLabel.setText("Forbidden furniture:");
             forbiddenField.setText(forbidden);
             forbiddenField.setColumns(30);
@@ -411,7 +464,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         String forbidden = rtController.getForbidden(rtn).toString();
         forbidden = (String) forbidden.subSequence(1, forbidden.length()-1);
 
-        RTC_Element rtInstance = new RTC_Element(key,width,depth,mandatory,forbidden);
+        RTC_Element rtInstance = new RTC_Element(rtn,key,width,depth,mandatory,forbidden);
         rtInstance.addToPanel();
         catElements.put(key, rtInstance);
     }

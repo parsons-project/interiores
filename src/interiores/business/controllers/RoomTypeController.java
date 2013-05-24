@@ -2,6 +2,7 @@ package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.business.events.catalogs.RTChangedEvent;
+import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
@@ -71,6 +72,18 @@ public class RoomTypeController
         roomType.removeFromMandatory(furnitureTypeName);
     }
     
+    public void setMandatory(String roomTypeName, String[] mandatory) {
+        RoomType roomType = getForWrite(roomTypeName);
+        roomType.clearMandatory();
+        for (String s : mandatory) roomType.addToMandatory(getFurnitureType(s));
+    }
+    
+    public void setForbidden(String roomTypeName, String[] forbidden) {
+        RoomType roomType = getForWrite(roomTypeName);
+        roomType.clearForbidden();
+        for (String s : forbidden) roomType.addToForbidden(getFurnitureType(s));
+    }
+    
     /**
      * Marks a furniture type as forbidden for a determined type of room
      * @param roomTypeName The type of room within which we want to create this rule
@@ -137,7 +150,7 @@ public class RoomTypeController
         return get(roomTypeName).getDepthRange();
     }
     
-    public void setMinWidth(String roomTypeName, int w) {
+    public void setMinWidth(String roomTypeName, int w) {       
         get(roomTypeName).setMinWidth(w);
     }
     

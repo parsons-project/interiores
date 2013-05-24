@@ -157,6 +157,14 @@ public class RoomType
         mustHave.remove(fTypename);
     }
     
+    public void clearMandatory() {
+        mustHave.clear();
+    }
+    
+    public void clearForbidden() {
+        cantHave.clear();
+    }
+    
     /**
      * Get a tree set of the names of the furniture types that this type of room can't contain. 
      * @return A tree set of the names of the furniture types that this type of room can't contain.

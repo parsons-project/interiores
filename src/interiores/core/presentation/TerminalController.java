@@ -197,7 +197,7 @@ public class TerminalController extends PresentationController
             iostream.println("[Business error] " + e.getMessage());
         }
         catch(JAXBException e) {
-            iostream.println("[Storage error] " + e.getMessage());
+            iostream.println("[Storage error] " + e.getLinkedException().getMessage());
             
             if(Debug.isEnabled())
                 e.printStackTrace();

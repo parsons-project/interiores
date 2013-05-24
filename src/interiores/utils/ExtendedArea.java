@@ -121,6 +121,16 @@ public class ExtendedArea implements Iterable<Point> {
         return new AreaIterator(this);
     }
     
+    /**
+     * Attending a horizontal and a vertical offset, this method performs a double
+     * intersection process whose outcome is the area resulting from the intersection of:
+     *   - The base area (the one we have built the class with)
+     *   - The base area translated 'h_offset' units to the left
+     *   - The base area translated 'v_offset' units to the top
+     * This process eliminates many invalid positions the variable could take on.
+     * @param h_offset The horizontal offset (the width of the furniture model)
+     * @param v_offset The vertical offset (the depth of the furniture model)
+     */
     private void applyIntersections(int h_offset, int v_offset) {
         // We create the translation scheme (both vertical and horizontal)
         // and intersect the area with the two areas resulting from applying

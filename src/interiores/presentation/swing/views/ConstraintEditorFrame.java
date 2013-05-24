@@ -7,8 +7,11 @@ import interiores.business.controllers.RoomController;
 import interiores.business.controllers.UnaryConstraintController;
 import interiores.business.models.Orientation;
 import interiores.business.models.constraints.UnaryConstraint;
+import interiores.business.events.constraints.ConstraintAddedEvent;
+import interiores.business.events.constraints.ConstraintRemovedEvent;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
+import interiores.core.presentation.annotation.Listen;
 import interiores.utils.BinaryConstraintAssociation;
 import interiores.utils.CoolColor;
 import interiores.utils.Material;
@@ -85,10 +88,13 @@ public class ConstraintEditorFrame extends JFrame {
     private void setListValues(JList jlist, Collection<? extends Object> objects) {
             jlist.setListData(objects.toArray(new Object[objects.size()]));
     }
-     
+    
+    @Listen({ConstraintAddedEvent.class, ConstraintRemovedEvent.class})
     private void updateActiveConstraintsList() {
+        Debug.println("Something changed");
         setListValues(activeUnaries, unaryConstraintController.getConstraints(selectedId));
-        setListValues(activeBinaries, binaryConstraintController.getConstraints(selectedId));        
+        setListValues(activeBinaries, binaryConstraintController.getConstraints(selectedId));
+        repaint();
     }
     
     /** This method is called from within the constructor to
@@ -287,7 +293,6 @@ private void addConstraintButtonActionPerformed(java.awt.event.ActionEvent evt) 
         String type = (String) constraintTypeList.getSelectedItem();
         int dist = (Integer) distanceSpinner.getValue();
         addBinaryConstraint(otherId, type, dist);
-        
     }
     else if (unaryConstraintRadio.isSelected()) {
         String type = (String) constraintTypeList.getSelectedItem();
@@ -295,7 +300,7 @@ private void addConstraintButtonActionPerformed(java.awt.event.ActionEvent evt) 
         int numValue = (Integer) distanceSpinner.getValue();
         
         addUnaryConstraint(type, value, numValue);
-        //material; wall;
+        //wall;
         //depth; width; price;
         //position;
         

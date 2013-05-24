@@ -1,6 +1,8 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.InterioresController;
+import interiores.business.events.constraints.ConstraintAddedEvent;
+import interiores.business.events.constraints.ConstraintRemovedEvent;
 import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.binary.MinDistanceConstraint;
@@ -44,21 +46,25 @@ public class BinaryConstraintController
     public void addMaxDistanceConstraint(String furnitureId1, String furnitureId2, int distance)
     {
         getWishList().addBinaryConstraint(new MaxDistanceConstraint(distance), furnitureId1, furnitureId2);
+        notify(new ConstraintAddedEvent());
     }
     
     public void addMinDistanceConstraint(String furnitureId1, String furnitureId2, int distance)
     {
         getWishList().addBinaryConstraint(new MinDistanceConstraint(distance), furnitureId1, furnitureId2);
+        notify(new ConstraintAddedEvent());
     }
     
     public void addStraightFacingConstraint(String furnitureId1, String furnitureId2)
     {
         getWishList().addBinaryConstraint(new StraightFacingConstraint(), furnitureId1, furnitureId2);
+        notify(new ConstraintAddedEvent());
     }
     
     public void addPartialFacingConstraint(String furnitureId1, String furnitureId2)
     {
         getWishList().addBinaryConstraint(new PartialFacingConstraint(), furnitureId1, furnitureId2);
+        notify(new ConstraintAddedEvent());
     }
     
     public void removeConstraint(String furnitureId1, String furnitureId2, String constraintAlias)
@@ -72,6 +78,7 @@ public class BinaryConstraintController
             Class<? extends BinaryConstraint> binaryConstraintClass)
     {
         getWishList().removeBinaryConstraint(binaryConstraintClass, furnitureId1, furnitureId2);
+        notify(new ConstraintRemovedEvent());
     }
 
     public Collection<BinaryConstraintAssociation> getConstraints(String furn)

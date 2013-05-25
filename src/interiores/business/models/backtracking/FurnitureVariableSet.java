@@ -6,10 +6,10 @@ import interiores.business.models.OrientedRectangle;
 import interiores.business.models.WantedFixed;
 import interiores.business.models.WantedFurniture;
 import interiores.business.models.WishList;
-import interiores.business.models.FurnitureConstraints.PreliminarTrimmer;
+import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.catalogs.NamedCatalog;
-import interiores.business.models.FurnitureConstraints.BinaryConstraint;
-import interiores.business.models.FurnitureConstraints.GlobalConstraint;
+import interiores.business.models.constraints.furniture.BinaryConstraint;
+import interiores.business.models.constraints.room.GlobalInexhaustiveConstraint;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.Value;
@@ -90,7 +90,7 @@ public class FurnitureVariableSet
     /**
      * Indicates restrictions amongst all variables.
      */
-    Map<String, GlobalConstraint> globalConstraints;
+    Map<String, GlobalInexhaustiveConstraint> globalConstraints;
     
     private List<PreliminarTrimmer> preliminarTrimmers;
     

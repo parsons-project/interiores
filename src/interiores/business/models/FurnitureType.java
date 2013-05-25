@@ -1,8 +1,8 @@
 package interiores.business.models;
 
 import interiores.business.models.catalogs.PersistentIdObject;
-import interiores.business.models.FurnitureConstraints.BinaryConstraint;
-import interiores.business.models.FurnitureConstraints.UnaryConstraint;
+import interiores.business.models.constraints.furniture.BinaryConstraint;
+import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.core.Utils;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;

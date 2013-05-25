@@ -4,7 +4,7 @@
  */
 package interiores.utils;
 
-import interiores.business.models.FurnitureConstraints.BinaryConstraint;
+import interiores.business.models.constraints.furniture.BinaryConstraint;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

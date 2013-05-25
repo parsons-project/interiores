@@ -730,7 +730,7 @@ public class Area
      * @param orientation
      * @return 
      */
-    public Area shiftedArea(int distance, Orientation orientation) {
+    public void shift(int distance, Orientation orientation) {
        
         List<GridPoint> newVertexs = new ArrayList<GridPoint>();
         if (orientation == Orientation.N)
@@ -746,7 +746,8 @@ public class Area
             for (GridPoint v : vertexs)
                 newVertexs.add(new GridPoint(v.x+distance, v.y));
         
-        return new Area(newVertexs);
+        vertexs = newVertexs;
+        initializeAreaFromVertexs();
     }
 
     /**
@@ -776,7 +777,7 @@ public class Area
     }
 
     /**
-     * Returns an area that contains all squares that are within area distance
+     * Returns an area that contains all squares that are within distance
      * distance of this area.
      * This method is currently not used.
      * Pre: this area is area rectangle.
@@ -1011,4 +1012,7 @@ public class Area
         }
         
     }
+    
+    
+
 }

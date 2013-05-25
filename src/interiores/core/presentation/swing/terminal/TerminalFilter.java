@@ -19,12 +19,10 @@ public class TerminalFilter
     private final InputStream istream;
     private boolean isLocked;
     private int lockOffset;
-    private int lineLength;
     
     public TerminalFilter(InputStream istream) {
         this.istream = istream;
         lockOffset = 0;
-        lineLength = 0;
         
         isLocked = true;
     }
@@ -35,10 +33,14 @@ public class TerminalFilter
         String readString = "";
         
         try {
+            int docLength = document.getLength();
+            int lineLength = docLength - lockOffset;
+            
             readString = document.getText(lockOffset, lineLength);
             
-            lockOffset += lineLength;
-            lineLength = 0;
+            Debug.println(readString);
+            
+            lockOffset = docLength;
         }
         catch(BadLocationException e) {
             if(Debug.isEnabled())
@@ -62,11 +64,6 @@ public class TerminalFilter
         if(lockOffset > offset)
             return;
         
-        if(lineLength < length)
-            return;
-        
-        lineLength -= length;
-        
         super.remove(fb, offset, length);
     }
     
@@ -80,15 +77,15 @@ public class TerminalFilter
             if(totalOffset > lockOffset)
                 lockOffset = totalOffset;
         }
-        else if(lockOffset <= offset)
-            lineLength += string.length();
-        else
+        else if(lockOffset > offset)
             return;
+        
+        if(! string.endsWith("\n"))
+            super.insertString(fb, offset, string, attr);
+        
+        else if(! isLocked) {
+            super.insertString(fb, fb.getDocument().getLength(), string, attr);
             
-        
-        super.insertString(fb, offset, string, attr);
-        
-        if(! isLocked && string.endsWith("\n")) {
             synchronized (istream) {
                 istream.notify();
             }

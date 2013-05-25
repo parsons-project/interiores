@@ -1,14 +1,11 @@
 package interiores.business.models.constraints.furniture;
 
-import interiores.business.models.OrientedRectangle;
-import interiores.business.models.Room;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
 import interiores.core.business.BusinessException;
-import interiores.utils.Dimension;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
@@ -22,9 +19,11 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlRootElement
 @XmlSeeAlso({MaxDistanceConstraint.class, MinDistanceConstraint.class})
 public abstract class BinaryConstraint
-    extends Constraint implements InexhaustiveTrimmer, BacktrackingTimeTrimmer {
+    extends Constraint
+    implements InexhaustiveTrimmer, BacktrackingTimeTrimmer
+{
     
-    private static Map<String, Class<? extends InexhaustiveTrimmer>> availableConstraints = new TreeMap();
+    private static Map<String, Class<? extends Constraint>> availableConstraints = new TreeMap();
     
     public static void addConstraintClass(String name, Class<? extends BinaryConstraint> constraintClass)
     {

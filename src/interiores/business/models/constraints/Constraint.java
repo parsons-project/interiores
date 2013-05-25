@@ -351,17 +351,17 @@ import java.util.Map;
  *
  * @author Nil
  */
-public abstract class Constraint {
-    
+public abstract class Constraint
+{    
     public static void addConstraintClass(Map<String,
-            Class<? extends FurnitureConstraint>> availableConstraints,
-            String name, Class<? extends FurnitureConstraint> constraintClass) {
+            Class<? extends Constraint>> availableConstraints,
+            String name, Class<? extends Constraint> constraintClass) {
         
         availableConstraints.put(name, constraintClass);
     }
     
-    public static Class<? extends FurnitureConstraint> getConstraintClass(
-            Map<String, Class<? extends FurnitureConstraint>> availableConstraints,
+    public static Class<? extends Constraint> getConstraintClass(
+            Map<String, Class<? extends Constraint>> availableConstraints,
             String name, String type)            
             throws BusinessException {
         

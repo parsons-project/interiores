@@ -129,7 +129,7 @@ public class RoomMapPanel extends JPanel
                 break;
                 
         }
-                
+        Debug.println("Nearest Wall: " + map.getNearestWall(evt.getX(), evt.getY()));        
         repaint();
     }//GEN-LAST:event_formMouseClicked
 

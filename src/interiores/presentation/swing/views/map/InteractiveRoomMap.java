@@ -1,5 +1,6 @@
 package interiores.presentation.swing.views.map;
 
+import interiores.business.models.Orientation;
 import interiores.core.Debug;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -66,6 +67,36 @@ public class InteractiveRoomMap
             names.add(element.getName());
         
         return names;
+    }
+    
+    public int getDistanceToWall(Orientation orientation, Point p) {
+        switch (orientation) {
+            case N:
+                return Math.abs(PADDING - p.y);
+            case S:
+                return Math.abs(PADDING + depth - p.y);
+            case W:
+                return Math.abs(PADDING - p.x);
+            case E:
+                return Math.abs(PADDING + width - p.x);
+            default:
+                return -1;
+        }
+    }
+    
+    public Orientation getNearestWall(int x, int y) {
+        Point p = normalize(x, y);
+        Orientation orientation  = Orientation.N;
+        int distance = getDistanceToWall(Orientation.N, p);
+        int curDistance;
+        for (Orientation o : Orientation.values()) {
+            curDistance = getDistanceToWall(o, p);
+            if (distance > curDistance) {
+                orientation = o;
+                distance = curDistance;
+            }
+        }
+        return orientation;
     }
     
     public Point normalize(int x, int y) {

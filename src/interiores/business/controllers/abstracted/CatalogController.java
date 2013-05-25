@@ -30,8 +30,8 @@ abstract public class CatalogController<I extends PersistentIdObject>
         
         loadedCatalogs = new TreeMap();
         
+        // Default catalog (cannot be overwritten)
         NamedCatalog<I> defaultCatalog = new NamedCatalog();
-        
         loadedCatalogs.put(defaultCatalog.getName(), defaultCatalog);
         
         setActiveCatalog(defaultCatalog);

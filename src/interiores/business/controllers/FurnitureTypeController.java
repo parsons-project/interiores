@@ -1,6 +1,7 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogElementController;
+import interiores.business.events.catalogs.FTSetModifiedEvent;
 import interiores.business.events.furniture.FurnitureTypeSelectedEvent;
 import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
 import interiores.business.models.RoomType;
@@ -12,6 +13,8 @@ import interiores.core.data.JAXBDataController;
 import interiores.utils.Range;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Business controller covering the operations performed over a type of furniture
@@ -44,6 +47,14 @@ public class FurnitureTypeController
         FurnitureType toAdd = new FurnitureType(name, widthRange, depthRange);
         
         super.add(toAdd);
+        notify(new FTSetModifiedEvent(toAdd.getFullName(),name, true));
+    }
+    
+    @Override
+    public void rm(String typeName) {
+        String fullName = get(typeName).getFullName();
+        super.rm(typeName);
+        notify(new FTSetModifiedEvent(fullName,typeName,false));
     }
     
     /**
@@ -76,6 +87,15 @@ public class FurnitureTypeController
     public Collection<String> getRoomFurniture()
     {
         return getWishList().getFurnitureNames();
+    }
+    
+    public Map<String, String> getFullNamesMap() {
+        Map<String, String> fullNames = new TreeMap();
+        
+        for(FurnitureType ft : getCatalogObjects())
+            fullNames.put(ft.getFullName(), ft.getName());
+        
+        return fullNames;
     }
 
     /**

@@ -6,7 +6,6 @@ import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.PersistentIdObject;
 import interiores.core.data.JAXBDataController;
 import java.util.Collection;
-import java.util.LinkedList;
 
 /**
  *

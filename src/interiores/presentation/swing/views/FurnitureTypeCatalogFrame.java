@@ -5,6 +5,9 @@ import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.FurnitureTypesCatalogController;
 import interiores.business.controllers.RoomTypeController;
 import interiores.business.controllers.RoomTypesCatalogController;
+import interiores.business.events.catalogs.FTCatalogCheckoutEvent;
+import interiores.business.events.catalogs.FTCatalogSetModifiedEvent;
+import interiores.business.events.catalogs.FTSetModifiedEvent;
 import interiores.business.events.catalogs.RTCatalogSetModifiedEvent;
 import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
 import interiores.business.events.catalogs.RTSetModifiedEvent;
@@ -44,7 +47,7 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
     // activer catalog. This map is modified everytime the catalog changes
     // or a particular element does. Changes from any other presentation layer
     // are automatically reflected
-    private Map<String,RTC_Element> catElements;
+    private Map<String,FTC_Element> catElements;
     
     // The frame also stores the changes made to the current catalog so far,
     // so that one can save them or discard them
@@ -386,8 +389,8 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
      * is added or removed, so that those changes reflect upon this frame
      * @param evt The tell-tale event
      */
-    @Listen({RTSetModifiedEvent.class})
-    public void updateCatalogElement(RTSetModifiedEvent evt) {
+    @Listen({FTSetModifiedEvent.class})
+    public void updateCatalogElement(FTSetModifiedEvent evt) {
         if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
         else removeElement(evt.getFullName());
         refresh();
@@ -398,8 +401,8 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
      * so that those changes reflect upon this frame
      * @param evt The tell-tale event
      */
-    @Listen({RTCatalogSetModifiedEvent.class})
-    public void updateCatalogList(RTCatalogSetModifiedEvent evt) {
+    @Listen({FTCatalogSetModifiedEvent.class})
+    public void updateCatalogList(FTCatalogSetModifiedEvent evt) {
         if (evt.isAdded()) currentCatalogSelect.addItem(evt.getName());
         else currentCatalogSelect.removeItem(evt.getName());
     }
@@ -409,8 +412,8 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
      * so that those changes reflect upon this frame
      * @param evt The tell-tale event
      */
-    @Listen({RTCatalogCheckoutEvent.class})
-    public void updateSelectedCatalog(RTCatalogCheckoutEvent evt) {
+    @Listen({FTCatalogCheckoutEvent.class})
+    public void updateSelectedCatalog(FTCatalogCheckoutEvent evt) {
         currentCatalogSelect.setSelectedItem(evt.getName());
         refreshCatalog();
     }
@@ -423,25 +426,25 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
         clearElements();
         
         // Retrieve all the elements in the catalog
-        Map<String,String> rtypes = rtController.getFullNamesMap();
+        Map<String,String> ftypes = ftController.getFullNamesMap();
         
         // Each 'key' has the full name of the furniture, which in turn is accessed by its short name
-        for (String key : rtypes.keySet()) {
-            String rtn = rtypes.get(key); // 'rtn' is the short name (its actual name within the program)
-            addElement(key, rtn);
+        for (String key : ftypes.keySet()) {
+            String ftn = ftypes.get(key); // 'ftn' is the short name (its actual name within the program)
+            addElement(key, ftn);
         }
         refresh();
     }
 
     /**
      * Loads a new element to the current catalog display
-     * @param key The full name of the element (e.g. Living Room)
-     * @param rtn The short (internal) id of the element (e.g. livingroom)
+     * @param key The full name of the element (e.g. Single Bed)
+     * @param ftn The short (internal) id of the element (e.g. singleBed)
      */
-    private void addElement(String key, String rtn) {
-        RTC_Element rtInstance = new RTC_Element(rtn,key);
-        rtInstance.addToPanel();
-        catElements.put(key, rtInstance);
+    private void addElement(String key, String ftn) {
+        FTC_Element ftcInstance = new FTC_Element(ftn,key);
+        ftcInstance.addToPanel();
+        catElements.put(key, ftcInstance);
     }
     
     /**
@@ -468,7 +471,7 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
      * It loads the available catalogs into the frame
      */
     private void initCatalogList() {
-        Collection<String> catalogs = rtcController.getNamesLoadedCatalogs();
+        Collection<String> catalogs = ftcController.getNamesLoadedCatalogs();
         Object[] s = catalogs.toArray();
         currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(s) );
         currentCatalogSelect.setSelectedItem("session");
@@ -495,8 +498,8 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
         if (!hasBeenModified) {
             hasBeenModified = true;
             String currM = (String) currentCatalogSelect.getSelectedItem() + "(mod)";
-            rtcController.create(currM);
-            rtcController.checkout(currM);
+            ftcController.create(currM);
+            ftcController.checkout(currM);
         }        
     }
     
@@ -506,9 +509,9 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
      */
     private void saveChanges(String modCat) {
         hasBeenModified = false;
-        rtcController.checkout(modCat.substring(0, modCat.length()-5));
-        rtcController.replace(modCat);
-        rtcController.remove(modCat);
+        ftcController.checkout(modCat.substring(0, modCat.length()-5));
+        ftcController.replace(modCat);
+        ftcController.remove(modCat);
     }
     
     /**
@@ -517,8 +520,8 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
      */
     private void discardChanges(String modCat) {
         hasBeenModified = false;
-        rtcController.checkout(modCat.substring(0,modCat.length()-5));
-        rtcController.remove(modCat);
+        ftcController.checkout(modCat.substring(0,modCat.length()-5));
+        ftcController.remove(modCat);
     }
     
     private void showModificationWarning() {
@@ -535,7 +538,7 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
      * It serves as an auxiliary data structure to hold a whole information pane
      * with its own features, events, and properties.
      */
-    class RTC_Element {
+    class FTC_Element {
         // The actual name of the element contains its internal name within the application
         private String actualName;
         // rtname, on the other hand, contains a visually clearer name
@@ -564,7 +567,7 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
          * @param actname The actual (internal) id of the element
          * @param fullname A visually clearer name for such an element
          */
-        public RTC_Element(String actname, String fullname) {
+        public FTC_Element(String actname, String fullname) {
 
             actualName = actname;
             

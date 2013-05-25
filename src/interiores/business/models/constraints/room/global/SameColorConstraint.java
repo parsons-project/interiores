@@ -82,7 +82,9 @@ public class SameColorConstraint
      * @param actual 
      */
     @Override
-    public void trim(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
+    public void trim(List<FurnitureVariable> assignedVariables,
+        List<FurnitureVariable> unassignedVariables,
+        List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
         if (assignedVariables.isEmpty()) {
             Color validColor = actual.getAssignedValue().getModel().getColor();
             for (FurnitureVariable variable : unassignedVariables)

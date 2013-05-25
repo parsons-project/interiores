@@ -6,6 +6,7 @@ import interiores.business.controllers.RoomTypeController;
 import interiores.business.controllers.RoomTypesCatalogController;
 import interiores.business.events.catalogs.RTCatalogSetModifiedEvent;
 import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
+import interiores.business.events.catalogs.RTModifiedEvent;
 import interiores.business.events.catalogs.RTSetModifiedEvent;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
@@ -388,10 +389,20 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
      * @param evt The tell-tale event
      */
     @Listen({RTSetModifiedEvent.class})
-    public void updateCatalogElement(RTSetModifiedEvent evt) {
+    public void updateCatalogElementSet(RTSetModifiedEvent evt) {
         if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
         else removeElement(evt.getFullName());
         refresh();
+    }
+    
+    /**
+     * This function is invoked whenever a particular element of the catalog
+     * is modified, so that those changes reflect upon this frame
+     * @param evt The tell-tale event
+     */
+    @Listen({RTModifiedEvent.class})
+    public void updateCatalogElementSet(RTModifiedEvent evt) {
+        catElements.get(evt.getFullName()).updateChanges();
     }
 
     /**
@@ -660,8 +671,8 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                     }
                 }
             });
-            String forbidden = rtController.getForbidden(actualName).toString();
             forbiddenLabel.setText("Forbidden furniture:");
+            String forbidden = rtController.getForbidden(actualName).toString();
             forbiddenField.setText(forbidden.substring(1, forbidden.length()-1));
             forbiddenField.setColumns(30);
             forbiddenField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -779,6 +790,18 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         public void removeFromPanel() {
             jPanel1.remove(outerPanel);
         }
+        
+        /**
+         * Consults all over again the information of the item and updates its state
+         */
+        public void updateChanges() {
+            measureField1.setText(Integer.toString(rtController.getWidthRange(actualName).min) );
+            measureField2.setText(Integer.toString(rtController.getDepthRange(actualName).min) );
+            String mandatory = rtController.getMandatory(actualName).toString();
+            mandatoryField.setText(mandatory.substring(1, mandatory.length()-1));
+            String forbidden = rtController.getForbidden(actualName).toString();
+            forbiddenField.setText(forbidden.substring(1, forbidden.length()-1));
+        }               
         
         /**
          * Updates the tooltips of the current item with all the necessary information.

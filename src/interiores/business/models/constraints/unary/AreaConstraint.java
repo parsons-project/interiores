@@ -74,6 +74,8 @@ public class AreaConstraint
     
     @Override
     public String toString() {
-       return "Position area: from " + validPositions.get(0) + " to " + validPositions.get(validPositions.size() -1);
+       Point initial = validPositions.get(0);
+       Point end = validPositions.get(validPositions.size() -1);
+       return "Restricted to area from (" + initial.x + "," + initial.y + ") to (" + end.x + "," + end.y + ")";
     }
 }

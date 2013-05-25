@@ -150,12 +150,13 @@ public class RoomTypeController
         return get(roomTypeName).getDepthRange();
     }
     
-    public void setMinWidth(String roomTypeName, int w) {       
-        get(roomTypeName).setMinWidth(w);
+    public void setMinWidth(String roomTypeName, int w) {
+        
+        getForWrite(roomTypeName).setMinWidth(w);
     }
     
     public void setMinDepth(String roomTypeName, int d) {
-        get(roomTypeName).setMinDepth(d);
+        getForWrite(roomTypeName).setMinDepth(d);
     }
     
     /**

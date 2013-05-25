@@ -283,6 +283,12 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             removeButton.setIcon(im); // NOI18N
             removeButton.setBorder(BorderFactory.createEmptyBorder());
             removeButton.setContentAreaFilled(false);
+            removeButton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    rtController.rm(actualName);
+                }
+            });
             
             
             innerPanel.setBackground(new java.awt.Color(255, 255, 255));

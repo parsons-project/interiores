@@ -131,7 +131,7 @@ public class Domain {
         //modify domain[iteration+1]
         Area discardedPositions = domain[iteration+1].intersection(validPositions);
         //modify domain[iteration]
-        domain[iteration].union(discardedPositions);
+        domain[iteration].unionP(discardedPositions);
         
     }
     
@@ -139,7 +139,7 @@ public class Domain {
         //modify domain[iteration+1]
         Area discardedPositions = domain[iteration+1].difference(invalidPositions);
         //modify domain[iteration]
-        domain[iteration].union(discardedPositions);
+        domain[iteration].unionP(discardedPositions);
 
     }
     

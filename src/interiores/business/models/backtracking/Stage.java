@@ -12,8 +12,10 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A Stage represents a subset of the domain with the values that were
@@ -23,9 +25,9 @@ import java.util.List;
 public class Stage {
     private int resolution;
     
-    private List<FurnitureModel> models;
+    private HashSet<FurnitureModel> models;
     private Area positions;
-    private List<Orientation> orientations;
+    private HashSet<Orientation> orientations;
 
     
     // The following variables are used to iterate over the domain.
@@ -40,7 +42,7 @@ public class Stage {
     
     private boolean firstValueIteration;
     
-    public Stage(List<FurnitureModel> models, Dimension roomSize,
+    public Stage(HashSet<FurnitureModel> models, Dimension roomSize,
             int resolution)
     {
         this.resolution = resolution;
@@ -73,9 +75,9 @@ public class Stage {
     public Stage(int resolution) {
         this.resolution = resolution;
         
-        models = new ArrayList();
+        models = new HashSet();
         positions = new Area();
-        orientations = new ArrayList();
+        orientations = new HashSet();
         
         //initialize iterators
         currentPosition = null;
@@ -149,11 +151,16 @@ public class Stage {
     /**
      * Returns a list with all orientations.
      */
-    private List<Orientation> defaultOrientations() {
-        return new ArrayList(Arrays.asList(Orientation.values()));
+    private HashSet<Orientation> defaultOrientations() {
+        HashSet<Orientation> allOrientations = new HashSet<Orientation>();
+        allOrientations.add(Orientation.E);
+        allOrientations.add(Orientation.W);
+        allOrientations.add(Orientation.S);
+        allOrientations.add(Orientation.N);
+        return allOrientations;
     }
 
-    List<FurnitureModel> getModels() {
+    HashSet<FurnitureModel> getModels() {
         return models;
     }
     
@@ -161,11 +168,11 @@ public class Stage {
         return positions;
     }
     
-    List<Orientation> getOrientations() {
+    HashSet<Orientation> getOrientations() {
         return orientations;
     }
     
-    void setModels(List<FurnitureModel> models) {
+    void setModels(HashSet<FurnitureModel> models) {
         this.models = models;
     }
     
@@ -173,7 +180,7 @@ public class Stage {
         this.positions = positions;
     }
         
-    void setOrientations(List<Orientation> orientations) {
+    void setOrientations(HashSet<Orientation> orientations) {
         this.orientations = orientations;
     }
 
@@ -187,9 +194,10 @@ public class Stage {
     int smallestModelSize() {
         if (models.isEmpty()) return 0;
 
-        FurnitureModel smallestModel = models.get(0);
+        FurnitureModel smallestModel = null;
         for (FurnitureModel model : models) {
-            if (model.areaSize() < smallestModel.areaSize())
+            if (smallestModel == null ||
+                    model.areaSize() < smallestModel.areaSize())
                 smallestModel = model;
         }
         
@@ -210,7 +218,7 @@ public class Stage {
     }
 
     void swapModels(Stage stage) {
-        List<FurnitureModel> aux = this.models;
+        HashSet<FurnitureModel> aux = this.models;
         this.models = stage.models;
         stage.models = aux;
         
@@ -220,7 +228,7 @@ public class Stage {
     }
 
     void swapOrientations(Stage stage) {
-        List<Orientation> aux = this.orientations;
+        HashSet<Orientation> aux = this.orientations;
         this.orientations = stage.orientations;
         stage.orientations = aux;
         
@@ -246,26 +254,26 @@ public class Stage {
         return startingPositions;
     }
 
-    void union(Area area) {
+    void unionP(Area area) {
         positions.union(area);
     }
     
-    void union(List<FurnitureModel> newModels) {
+    void unionM(HashSet<FurnitureModel> newModels) {
         //we know that there aren't repeated models because each model
         //is found only one in each domain
         models.addAll(newModels);
     }
     
-    void union2(List<Orientation> newOrientations) {
+    void unionO(HashSet<Orientation> newOrientations) {
         //we know that there aren't repeated orienttations because each
         //orientation is found only one in each domain
         orientations.addAll(newOrientations);        
     }
     
     void union(Stage stage) {
-        union(stage.positions);
-        union(stage.models);
-        union2(stage.orientations);
+        unionP(stage.positions);
+        unionM(stage.models);
+        unionO(stage.orientations);
     }
 
     Area difference(Area area) {
@@ -286,7 +294,7 @@ public class Stage {
 
 //    
 //    void addPositions(Area newPositions) {
-//        positions.union(newPositions);
+//        positions.unionM(newPositions);
 //        resetIterators();
 //    }
 //    
@@ -300,7 +308,7 @@ public class Stage {
 //        if (shouldSwapPositions) swapPositions(stage);
 //        
 //        // 3) merge
-//        positions.union(stage.positions);
+//        positions.unionM(stage.positions);
 //        stage.positions = new Area();
 //        
 //        //B) process models

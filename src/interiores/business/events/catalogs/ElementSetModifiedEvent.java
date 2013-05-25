@@ -10,14 +10,14 @@ import interiores.core.Event;
  *
  * @author larribas
  */
-public abstract class ElementChangedEvent
+public abstract class ElementSetModifiedEvent
 implements Event
 {
     
     private String name;
     private boolean added;
     
-    public ElementChangedEvent(String name, boolean added) {
+    public ElementSetModifiedEvent(String name, boolean added) {
         this.name = name;
         this.added = added;
     }

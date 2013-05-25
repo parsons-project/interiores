@@ -8,9 +8,9 @@ package interiores.business.events.catalogs;
  *
  * @author larribas
  */
-public class FTCatalogChangedEvent extends ElementChangedEvent {
+public class RTCatalogSetModifiedEvent extends ElementSetModifiedEvent {
     
-    public FTCatalogChangedEvent(String name, boolean added) {
+    public RTCatalogSetModifiedEvent(String name, boolean added) {
         super(name,added);
     }
 }

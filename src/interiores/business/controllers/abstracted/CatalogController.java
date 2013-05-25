@@ -1,6 +1,6 @@
 package interiores.business.controllers.abstracted;
 
-import interiores.business.events.catalogs.ElementChangedEvent;
+import interiores.business.events.catalogs.ElementSetModifiedEvent;
 import interiores.business.exceptions.ActiveCatalogRemovalException;
 import interiores.business.exceptions.CatalogAlreadyExistsException;
 import interiores.business.exceptions.CatalogNotFoundException;

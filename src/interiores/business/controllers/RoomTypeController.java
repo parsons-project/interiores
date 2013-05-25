@@ -1,7 +1,7 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogElementController;
-import interiores.business.events.catalogs.RTChangedEvent;
+import interiores.business.events.catalogs.RTSetModifiedEvent;
 import interiores.business.models.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
@@ -37,14 +37,14 @@ public class RoomTypeController
         RoomType type = new RoomType(typeName,width,depth);
         super.add(type);
         
-        notify(new RTChangedEvent(type.getFullName(),typeName,true));
+        notify(new RTSetModifiedEvent(type.getFullName(),typeName,true));
     }
     
     @Override
     public void rm(String typeName) {
         String fullName = get(typeName).getFullName();
         super.rm(typeName);
-        notify(new RTChangedEvent(fullName,typeName,false));
+        notify(new RTSetModifiedEvent(fullName,typeName,false));
     }
     
     /**
@@ -75,7 +75,7 @@ public class RoomTypeController
     public void setMandatory(String roomTypeName, String[] mandatory) {
         RoomType roomType = getForWrite(roomTypeName);
         Collection<FurnitureType> cft = new LinkedList();
-        for (String s : mandatory) cft.add(getFurnitureType(s));
+        for (String s : mandatory) if(!s.equals("")) cft.add(getFurnitureType(s));
         // Now, if everything went alright
         roomType.clearMandatory();
         for (FurnitureType ft : cft) roomType.addToMandatory(ft);
@@ -84,7 +84,7 @@ public class RoomTypeController
     public void setForbidden(String roomTypeName, String[] forbidden) {
         RoomType roomType = getForWrite(roomTypeName);
         Collection<FurnitureType> cft = new LinkedList();
-        for (String s : forbidden) cft.add(getFurnitureType(s));
+        for (String s : forbidden) if(!s.equals("")) cft.add(getFurnitureType(s));
         // Now, if everything went alright
         roomType.clearForbidden();
         for (FurnitureType ft : cft) roomType.addToForbidden(ft);

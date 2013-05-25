@@ -1,8 +1,8 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogController;
-import interiores.business.events.catalogs.ElementChangedEvent;
-import interiores.business.events.catalogs.RTCatalogChangedEvent;
+import interiores.business.events.catalogs.ElementSetModifiedEvent;
+import interiores.business.events.catalogs.RTCatalogSetModifiedEvent;
 import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
 import interiores.business.models.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
@@ -40,13 +40,13 @@ public class RoomTypesCatalogController
     @Override
     public void create(String catalogName) {
         super.create(catalogName);
-        notify(new RTCatalogChangedEvent(catalogName,true));
+        notify(new RTCatalogSetModifiedEvent(catalogName,true));
     }
     
     @Override
     public void remove(String catalogName) {
         super.remove(catalogName);
-        notify(new RTCatalogChangedEvent(catalogName, false));
+        notify(new RTCatalogSetModifiedEvent(catalogName, false));
     }
     
     @Override
@@ -67,6 +67,6 @@ public class RoomTypesCatalogController
     @Override
     public void load(String path) throws JAXBException {
         super.load(path);
-        notify(new RTCatalogChangedEvent(lastLoaded, true));
+        notify(new RTCatalogSetModifiedEvent(lastLoaded, true));
     }
 }

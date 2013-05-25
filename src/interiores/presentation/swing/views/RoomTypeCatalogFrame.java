@@ -96,7 +96,6 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jPanel1);
 
         currentCatalogSelect.setBackground(new java.awt.Color(255, 255, 255));
-        currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         currentCatalogSelect.setMaximumSize(new java.awt.Dimension(130, 32767));
         currentCatalogSelect.setMinimumSize(new java.awt.Dimension(90, 27));
         currentCatalogSelect.setPreferredSize(new java.awt.Dimension(130, 27));
@@ -152,10 +151,9 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                         .add(18, 18, 18)
                         .add(loadCatalogButton))
                     .add(title1))
-                .add(301, 301, 301)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(layout.createSequentialGroup()
-                        .add(0, 0, Short.MAX_VALUE)
                         .add(saveCatalogButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(removeCatalogButton))
@@ -224,6 +222,8 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
     public void updateCatalogElement(RTChangedEvent evt) {
         if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
         else removeElement(evt.getFullName());
+        validate();
+        pack();
     }
 
     @Listen({RTCatalogChangedEvent.class})
@@ -242,6 +242,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         Collection<String> catalogs = rtcController.getNamesLoadedCatalogs();
         Object[] s = catalogs.toArray();
         currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(s) );
+        currentCatalogSelect.setSelectedItem("session");
     }
     
     private void refreshCatalog() {
@@ -255,6 +256,9 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             String rtn = rtypes.get(key); // 'rtn' is the short name (its actual name within the program)
             addElement(key, rtn);
         }
+        // Redrawing operations
+        validate();
+        pack();
     }
 
     // This class represents an existent catalog element

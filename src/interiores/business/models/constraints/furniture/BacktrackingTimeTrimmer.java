@@ -14,7 +14,7 @@ import interiores.business.models.backtracking.FurnitureVariable;
  * @author nmamano
  */
 public interface BacktrackingTimeTrimmer
-    extends InexhaustiveConstraint {
+    extends InexhaustiveTrimmer {
     
     public void trim(FurnitureVariable variable);
 }

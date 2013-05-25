@@ -12,7 +12,7 @@ import java.util.List;
  * Represents a constraint imposed over a set of furniture (that is, the whole wishlist of a room)
  * @author larribas
  */
-public interface GlobalInexhaustiveConstraint {
+public interface RoomInexhaustiveTrimmer {
     
     /**
      * Given that the assignedVariables fulfil the constraint, returns whether

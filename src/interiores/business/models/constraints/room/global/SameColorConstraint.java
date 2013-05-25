@@ -10,10 +10,10 @@ import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.constraints.room.GlobalBacktrackingTimeTrimmer;
+import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
-import interiores.business.models.constraints.room.GlobalInexhaustiveConstraint;
-import interiores.business.models.constraints.room.GlobalPreliminarTrimmer;
+import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
+import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class SameColorConstraint 
     extends GlobalConstraint
-    implements GlobalPreliminarTrimmer, GlobalBacktrackingTimeTrimmer {
+    implements RoomPreliminarTrimmer, RoomBacktrackingTimeTrimmer {
     
     public SameColorConstraint() { }
 

@@ -14,7 +14,7 @@ import java.util.List;
  * is stored as a field of the trimmer.
  * @author hector0193
  */
-public interface GlobalPreliminarTrimmer
+public interface RoomPreliminarTrimmer
 {
     public void preliminarTrim(List<FurnitureVariable> variables,
             List<FurnitureConstant> fixedFurniture);

@@ -9,7 +9,7 @@ import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
-import interiores.business.models.constraints.room.GlobalPreliminarTrimmer;
+import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class UnfitModelsPseudoConstraint
     extends GlobalConstraint
-    implements GlobalPreliminarTrimmer {
+    implements RoomPreliminarTrimmer {
 
     private boolean sameColorConstraintActive;
     private boolean sameMaterialConstraintActive;

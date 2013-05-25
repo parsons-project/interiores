@@ -16,8 +16,8 @@ import java.util.List;
  * is stored as a field of the trimmer.
  * @author nmamano
  */
-public interface GlobalBacktrackingTimeTrimmer
-    extends GlobalInexhaustiveConstraint {
+public interface RoomBacktrackingTimeTrimmer
+    extends RoomInexhaustiveTrimmer {
     public void trim(List<FurnitureVariable> assignedVariables,
             List<FurnitureVariable> unassignedVariables,
             List<FurnitureConstant> fixedFurniture,

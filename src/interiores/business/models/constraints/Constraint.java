@@ -28,7 +28,9 @@
  * 
  * Part 2: The roles of a constraint.
  * 
- * Each constraint can have up to 3 functionalities, in the form of interfaces:
+ * Each constraint can have up to 3 functionalities, in the form of interfaces.
+ * The interfaces receive different parameters for room and furniture constraints,
+ * but its semantics are the same.
  * 
  * 1) PreliminarTrimmer interface: this interface allows for detecting and
  * eliminating values that fall in conflict with the restriction by themselves,
@@ -55,7 +57,7 @@
  * checked in pre-backtracking time.
  * 
  * 
- * 3) InexhaustiveConstraint interface:
+ * 3) InexhaustiveTrimmer interface:
  * Are trims and preliminar trims exhaustive? If a trim is exhaustive, we do not
  * need to check explicitly if it is fulfilled or not, given that we have trimmed
  * the domain of the variable.
@@ -75,15 +77,15 @@
  * Which interface combinations make sense?
  * Since trims are not exhaustive, any constraint that implements the
  * BacktrackingTimeTrimmer (B) interface must also implement the
- * InexhaustiveConstraint (I) interface. In fact, the B interface implements
+ * InexhaustiveTrimmer (I) interface. For this reason the B interface implements
  * the I interface.
  * There are no other dependences between interfaces.
  * So, the possible combinations are:
  *
- * PBI (i.e. maximum-budget constraint)
- * PI (i.e. area constraint)
- * BI (i.e. maximum-distance constraint)
- * P (i.e. blue-color constraint)
+ * PBI (e.g. maximum-budget constraint)
+ * PI (e.g. area constraint)
+ * BI (e.g. maximum-distance constraint)
+ * P (e.g. blue-color constraint)
  * I
  * 
  *
@@ -179,7 +181,7 @@
  * 
  * There can't be more than one instance of a room constraint.
  * 
- * The interfaces share the same names, except the keyword Global is added in
+ * The interfaces share the same names, except the keyword Room is added in
  * the beginning of their names.
  * Thier methods are:
  * 

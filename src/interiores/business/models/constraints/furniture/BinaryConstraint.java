@@ -22,9 +22,9 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlRootElement
 @XmlSeeAlso({MaxDistanceConstraint.class, MinDistanceConstraint.class})
 public abstract class BinaryConstraint
-    extends Constraint implements InexhaustiveConstraint, BacktrackingTimeTrimmer {
+    extends Constraint implements InexhaustiveTrimmer, BacktrackingTimeTrimmer {
     
-    private static Map<String, Class<? extends InexhaustiveConstraint>> availableConstraints = new TreeMap();
+    private static Map<String, Class<? extends InexhaustiveTrimmer>> availableConstraints = new TreeMap();
     
     public static void addConstraintClass(String name, Class<? extends BinaryConstraint> constraintClass)
     {

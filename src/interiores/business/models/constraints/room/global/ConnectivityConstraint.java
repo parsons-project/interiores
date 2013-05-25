@@ -6,7 +6,7 @@ import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.BacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
-import interiores.business.models.constraints.room.GlobalInexhaustiveConstraint;
+import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 
 /**
  * This constraint checks that each furniture piece of the room is reacheable

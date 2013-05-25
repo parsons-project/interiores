@@ -9,7 +9,7 @@ import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.constraints.furniture.InexhaustiveConstraint;
+import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -22,7 +22,7 @@ import java.util.List;
  * @author hector0193
  */
 public class WallConstraint
-    extends UnaryConstraint implements InexhaustiveConstraint {
+    extends UnaryConstraint implements InexhaustiveTrimmer {
     
     List<Orientation> orientations;
     int roomWidth;
@@ -45,7 +45,7 @@ public class WallConstraint
      * exhaustive.
      * On the other hand, for east and south walls, the distance between the
      * top left corner of a variable and the wall depend on the size of the
-     * model. This is why this constraint implements the InexhaustiveConstraint
+     * model. This is why this constraint implements the InexhaustiveTrimmer
      * interface.
      */
     @Override

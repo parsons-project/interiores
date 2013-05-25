@@ -117,7 +117,7 @@ public class Domain {
     
     void trimExceptM(HashSet<FurnitureModel> validModels, int iteration) {
         //modify domain[iteration+1]
-        HashSet<FurnitureModel> discardedModels = domain[iteration+1].intersection(validModels);
+        HashSet<FurnitureModel> discardedModels = domain[iteration+1].intersectionM(validModels);
         //modify domain[iteration]
         domain[iteration].unionM(discardedModels);
     }

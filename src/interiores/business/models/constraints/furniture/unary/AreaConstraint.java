@@ -2,7 +2,7 @@ package interiores.business.models.constraints.furniture.unary;
 
 import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.constraints.furniture.InexhaustiveConstraint;
+import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import java.awt.Point;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class AreaConstraint
-    extends UnaryConstraint implements InexhaustiveConstraint {
+    extends UnaryConstraint implements InexhaustiveTrimmer {
     
     /**
      * validPositions contains the positions a piece of furniture can have

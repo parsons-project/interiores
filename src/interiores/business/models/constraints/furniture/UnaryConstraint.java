@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 public abstract class UnaryConstraint
     extends Constraint implements PreliminarTrimmer {
     
-    private static Map<String, Class<? extends InexhaustiveConstraint>> availableConstraints = new TreeMap();
+    private static Map<String, Class<? extends InexhaustiveTrimmer>> availableConstraints = new TreeMap();
     
     public static void addConstraintClass(String name, Class<? extends UnaryConstraint> constraintClass)
     {

@@ -8,7 +8,7 @@ import interiores.business.models.backtracking.FurnitureVariable;
  *
  * @author hector
  */
-public interface InexhaustiveConstraint
+public interface InexhaustiveTrimmer
 {
     public abstract boolean isSatisfied(FurnitureVariable variable);
 

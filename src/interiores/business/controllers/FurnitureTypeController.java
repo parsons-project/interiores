@@ -1,10 +1,12 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogElementController;
+import interiores.business.events.catalogs.FTModifiedEvent;
 import interiores.business.events.catalogs.FTSetModifiedEvent;
 import interiores.business.events.furniture.FurnitureTypeSelectedEvent;
 import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
 import interiores.business.models.RoomType;
+import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.room.FurnitureType;
@@ -96,6 +98,35 @@ public class FurnitureTypeController
             fullNames.put(ft.getFullName(), ft.getName());
         
         return fullNames;
+    }
+    
+    public Range getWidthRange(String ftname) {
+        return get(ftname).getWidthRange();
+    }
+    
+    public Range getDepthRange(String ftname) {
+        return get(ftname).getDepthRange();
+    }
+    
+    public void setWidthRange(String ftname, int wmin, int wmax) {
+        FurnitureType ft = getForWrite(ftname);
+        ft.setWidthRange(new Range(wmin, wmax));
+        notify(new FTModifiedEvent(ft.getFullName(),ftname));
+    }
+    
+    public void setDepthRange(String ftname, int dmin, int dmax) {
+        FurnitureType ft = getForWrite(ftname);
+        ft.setWidthRange(new Range(dmin, dmax));
+        notify(new FTModifiedEvent(ft.getFullName(),ftname));
+    }
+    
+    public int[] getPassiveSpace(String ftname) {
+        return get(ftname).getPassiveSpace().getOffsets();
+    }
+    
+    public void setPassiveSpace(String ftname, int[] ps) {
+        SpaceAround sa = new SpaceAround(ps[0],ps[1],ps[2],ps[3]);
+        getForWrite(ftname).setPassiveSpace(sa);
     }
 
     /**

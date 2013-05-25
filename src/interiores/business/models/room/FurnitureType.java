@@ -190,6 +190,30 @@ public class FurnitureType
         return depthRange;
     }
     
+    /**
+     * Sets the width range a furniture model of this type should have
+     * @return The minimum dimensions a furniture model of this type should have
+     */
+    public void setWidthRange(Range w) {
+        widthRange = w;
+    }
+    
+    /**
+     * Sets the depth range a furniture model of this type should have
+     * @return The minimum dimensions a furniture model of this type should have
+     */
+    public void setDepthRange(Range d) {
+        depthRange = d;
+    }
+    
+    public SpaceAround getPassiveSpace() {
+        return defaultPassiveSpace;
+    }
+    
+    public void setPassiveSpace(SpaceAround sa) {
+        defaultPassiveSpace = sa;
+    }
+    
     @Override
     public String toString() {
         return Utils.padRight(getName(), 20) + "Width[" + widthRange.toString() + "], Depth["

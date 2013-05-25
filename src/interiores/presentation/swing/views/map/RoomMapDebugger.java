@@ -127,16 +127,14 @@ public class RoomMapDebugger
             drawPillars(g);
     }
     
-    private void drawGrid(Graphics2D g) {
-        int rows = width / RESOLUTION;
-        int cols = depth / RESOLUTION;
-        
+    private void drawGrid(Graphics2D g) {        
         g.setColor(COLOR_GRID);
         
-        for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < cols; j++)
-                g.drawRect(i* RESOLUTION, j * RESOLUTION, RESOLUTION, RESOLUTION);
-        }
+        for(int i = 0; i < size.width; i += RESOLUTION)
+            g.drawLine(i, 0, i, size.depth);
+        
+        for(int i = 0; i < size.depth; i += RESOLUTION)
+            g.drawLine(0, i, size.width, i);
     }
 
     @Override

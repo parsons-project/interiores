@@ -13,7 +13,6 @@ import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
-import interiores.presentation.swing.views.ConstraintEditorFrame;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
 import interiores.presentation.swing.views.map.RoomMap;
 import interiores.presentation.swing.views.map.RoomMapDebugger;
@@ -23,8 +22,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import javax.swing.JPanel;
 
 /**
@@ -171,6 +168,7 @@ public class RoomMapPanel extends JPanel
     {
         if(map != null) {
             Graphics2D g2d = (Graphics2D) g;
+            map.setSize(getSize());
             map.draw(g2d);
         }
     }

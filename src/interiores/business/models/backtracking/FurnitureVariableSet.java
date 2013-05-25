@@ -362,11 +362,6 @@ public class FurnitureVariableSet
         actual.undoAssignValue();
     }
     
-    
-    public void addPreliminarTrimmer(PreliminarTrimmer preliminarTrimmer) {
-        preliminarTrimmers.add(preliminarTrimmer);
-    }
-    
     //note: trivial implementation. To be optimized.
     @Override
     protected void preliminarTrimDomains() {

@@ -6,6 +6,7 @@ package interiores.business.models.constraints.room.global;
 
 
 import interiores.business.exceptions.ConstraintException;
+import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureValue;
@@ -15,6 +16,8 @@ import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
 import interiores.core.business.BusinessException;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -63,8 +66,17 @@ public class BudgetConstraint
      */
     @Override
     public void preliminarTrim(List<FurnitureVariable> variables, List<FurnitureConstant> fixedFurniture) {
-        //I implemented this somewhere else. I'll update when i come across it lols
-        throw new UnsupportedOperationException("Not supported yet.");
+        double minBudget = 0;
+        for (FurnitureVariable variable : variables)
+            minBudget += variable.getMinPrice();
+       
+        for (FurnitureVariable variable : variables) {
+            //if a model from this variable is more expensive than maxPrice,
+            //there is no possible assignmentment to variables such that
+            //variable has assigned this model and the maxBudget is not exceeded 
+            double maxPrice = maxBudget - ( minBudget - variable.getMinPrice());
+            eliminateTooExpensiveModels(variable, maxPrice);
+        }
     }
 
     /**
@@ -87,8 +99,17 @@ public class BudgetConstraint
     public void trim(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
         
     }
-
-    
+  
+    private void eliminateTooExpensiveModels(FurnitureVariable variable, double maxPrice) {
+        HashSet<FurnitureModel> validModels = new HashSet(variable.getDomain().getModels(0));
+        Iterator<FurnitureModel> it = validModels.iterator();
+        while (it.hasNext()) {
+            if (it.next().getPrice() > maxPrice)
+                it.remove();
+        }
+        
+        variable.eliminateExceptM(validModels);
+    }
 
 //Deprecated methods and field: notify system not used.
     
@@ -105,4 +126,5 @@ public class BudgetConstraint
 //    public void notifyUnassignment(FurnitureValue fv) {
 //        current_budget -= fv.getModel().getPrice();
 //    }
+
 }

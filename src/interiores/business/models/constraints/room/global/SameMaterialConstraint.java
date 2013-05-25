@@ -58,7 +58,7 @@ public class SameMaterialConstraint
         
         //3) for each variable, eliminate models with an invalid color
         for (FurnitureVariable variable : variables) {
-            HashSet<FurnitureModel> validModels = variable.getDomain().getModels(0);
+            HashSet<FurnitureModel> validModels = new HashSet(variable.getDomain().getModels(0));
             Iterator<FurnitureModel> it = validModels.iterator();
             while (it.hasNext()) {
                 if (! validMaterials.contains(it.next().getMaterial()))

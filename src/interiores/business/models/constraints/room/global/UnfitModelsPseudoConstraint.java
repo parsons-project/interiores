@@ -53,7 +53,7 @@ public class UnfitModelsPseudoConstraint
     }
     
     private void trimUnfitModels(FurnitureVariable variable) {
-        HashSet<FurnitureModel> validModels = variable.getDomain().getModels(0);
+        HashSet<FurnitureModel> validModels = new HashSet(variable.getDomain().getModels(0));
         Iterator<FurnitureModel> evaluatedModelIterator = validModels.iterator();
         while (evaluatedModelIterator.hasNext()) {
             FurnitureModel evaluatedModel = evaluatedModelIterator.next();

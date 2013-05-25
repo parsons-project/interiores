@@ -117,8 +117,11 @@ public class WallConstraint
                     break;
             }    
         }
+        
+        variable.eliminateExceptP(validPositions);
     }
 
+    
     @Override
     public boolean isSatisfied(FurnitureVariable variable) {
         for(Orientation orientation : orientations) {

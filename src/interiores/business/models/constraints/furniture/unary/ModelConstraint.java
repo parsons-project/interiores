@@ -45,7 +45,7 @@ public class ModelConstraint
      */
     @Override
     public void preliminarTrim(FurnitureVariable variable) {
-        HashSet<FurnitureModel> validModels = variable.getDomain().getModels(0);
+        HashSet<FurnitureModel> validModels = new HashSet(variable.getDomain().getModels(0));
         Iterator<FurnitureModel> it = validModels.iterator();
         while (it.hasNext()) {
             if (! it.next().getName().equals(modelName))

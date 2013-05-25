@@ -85,18 +85,8 @@ public class SameColorConstraint
     public void trim(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
         if (assignedVariables.isEmpty()) {
             Color validColor = actual.getAssignedValue().getModel().getColor();
-            for (FurnitureVariable variable : unassignedVariables) {
-                HashSet<FurnitureModel> validModels = variable.getDomain().getModels(1);
-                //if assignedVariables is empty, we are at iteration 0, trimming
-                //values of iteration 1
-                Iterator<FurnitureModel> it = validModels.iterator();
-                while (it.hasNext()) {
-                    if (! it.next().getColor().equals(validColor))
-                        it.remove();
-                }
-
-                variable.trimExceptM(validModels);
-            }
+            for (FurnitureVariable variable : unassignedVariables)
+                trimVariable(variable, validColor);
         }
     }
 
@@ -117,6 +107,20 @@ public class SameColorConstraint
         else
             return actual.getAssignedValue().getModel().getColor() ==
                     assignedVariables.get(0).getAssignedValue().getModel().getColor();
+    }
+    
+    
+    private void trimVariable(FurnitureVariable variable, Color validColor) {
+         HashSet<FurnitureModel> validModels = new HashSet(variable.getDomain().getModels(1));
+        //if assignedVariables is empty, we are at iteration 0, trimming
+        //values of iteration 1
+        Iterator<FurnitureModel> it = validModels.iterator();
+        while (it.hasNext()) {
+            if (! it.next().getColor().equals(validColor))
+                it.remove();
+        }
+
+        variable.trimExceptM(validModels);
     }
     
     /**

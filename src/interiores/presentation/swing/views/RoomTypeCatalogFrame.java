@@ -240,8 +240,8 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_newCatalogButtonActionPerformed
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        NewCatalogDialog newCat = new NewCatalogDialog(rtcController);
-        newCat.setVisible(true);
+        NewRoomTypeDialog newRT = new NewRoomTypeDialog(rtController);
+        newRT.setVisible(true);
     }//GEN-LAST:event_newButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -264,8 +264,6 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
     public void updateCatalogElement(RTChangedEvent evt) {
         if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
         else removeElement(evt.getFullName());
-        validate();
-        pack();
     }
 
     @Listen({RTCatalogChangedEvent.class})
@@ -298,9 +296,9 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             String rtn = rtypes.get(key); // 'rtn' is the short name (its actual name within the program)
             addElement(key, rtn);
         }
-        // Redrawing operations
-        validate();
-        pack();
+//        invalidate();
+//        validate();
+//        pack();
     }
 
     // This class represents an existent catalog element

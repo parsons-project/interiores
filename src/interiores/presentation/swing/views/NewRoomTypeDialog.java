@@ -4,18 +4,23 @@
  */
 package interiores.presentation.swing.views;
 
+import interiores.business.controllers.RoomTypeController;
+
 /**
  *
  * @author larribas
  */
 public class NewRoomTypeDialog extends javax.swing.JDialog {
 
+    private RoomTypeController rtController;
+    
     /**
      * Creates new form newRoomTypeDialog
      */
-    public NewRoomTypeDialog(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public NewRoomTypeDialog(RoomTypeController rtc) {
         initComponents();
+        
+        rtController = rtc;
     }
 
     /**
@@ -30,10 +35,6 @@ public class NewRoomTypeDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         widthField = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        mandatoryField = new javax.swing.JTextField();
-        forbiddenField = new javax.swing.JTextField();
         cancelButton = new javax.swing.JButton();
         createButton = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -42,6 +43,7 @@ public class NewRoomTypeDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New room type");
+        setAlwaysOnTop(true);
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jLabel1.setText("Select the properties the new room will have:");
@@ -50,13 +52,19 @@ public class NewRoomTypeDialog extends javax.swing.JDialog {
 
         jLabel3.setText("Min. Dimensions:");
 
-        jLabel4.setText("Mandatory furniture:");
-
-        jLabel5.setText("Forbidden furniture:");
-
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
 
         createButton.setText("Create");
+        createButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createButtonActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("x");
 
@@ -68,6 +76,10 @@ public class NewRoomTypeDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
+                        .add(cancelButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(createButton))
+                    .add(layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(jLabel1)
                             .add(layout.createSequentialGroup()
@@ -75,30 +87,15 @@ public class NewRoomTypeDialog extends javax.swing.JDialog {
                                 .add(18, 18, 18)
                                 .add(nameField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 148, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                             .add(layout.createSequentialGroup()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(cancelButton)
-                                    .add(layout.createSequentialGroup()
-                                        .add(jLabel3)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                        .add(widthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                                .add(jLabel3)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(widthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                                 .add(jLabel6)
                                 .add(12, 12, 12)
                                 .add(depthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 78, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .add(0, 0, Short.MAX_VALUE))
-                    .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(createButton)
-                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                                .add(layout.createSequentialGroup()
-                                    .add(jLabel4)
-                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                    .add(mandatoryField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 169, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                .add(layout.createSequentialGroup()
-                                    .add(jLabel5)
-                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                    .add(forbiddenField))))
-                        .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .add(0, 0, Short.MAX_VALUE)))
+                .add(0, 3, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -117,74 +114,34 @@ public class NewRoomTypeDialog extends javax.swing.JDialog {
                     .add(depthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel4)
-                    .add(mandatoryField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(18, 18, 18)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(jLabel5)
-                    .add(forbiddenField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(cancelButton)
-                    .add(createButton)))
+                    .add(createButton))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewRoomTypeDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewRoomTypeDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewRoomTypeDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewRoomTypeDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                NewRoomTypeDialog dialog = new NewRoomTypeDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
+        String name = nameField.getText();
+        Integer minW = Integer.parseInt(widthField.getText());
+        Integer minD = Integer.parseInt(depthField.getText());
+        rtController.add(name, minW, minD);
+        dispose();
+    }//GEN-LAST:event_createButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton createButton;
     private javax.swing.JTextField depthField;
-    private javax.swing.JTextField forbiddenField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField mandatoryField;
     private javax.swing.JTextField nameField;
     private javax.swing.JTextField widthField;
     // End of variables declaration//GEN-END:variables

@@ -12,6 +12,7 @@ import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.BinaryConstraint;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
+import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.Value;
@@ -23,6 +24,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -365,28 +367,25 @@ public class FurnitureVariableSet
     //note: trivial implementation. To be optimized.
     @Override
     protected void preliminarTrimDomains() {
-        for(PreliminarTrimmer preliminarTrimmer : preliminarTrimmers)
-            preliminarTrimmer.preliminarTrim(constants, variables);
         
-        // @TODO Refactorize
-        //3) remove furniture too expensive
-        /*float minBudget = 0;
-        for (int i = 0; i < variableCount; ++i)
-            minBudget += variables[i].getMinPrice();
-       
-        for (int i = 0; i < variableCount; ++i) {
-            //if a model from this variable is more expensive than maxPrice,
-            //there is no possible assignmentment to variables such that
-            //variables[i] has assigned this model and the maxBudget is not exceeded 
-            float maxPrice = maxBudget - ( minBudget - variables[i].getMinPrice());
-            variables[i].trimTooExpensiveModels(maxPrice);
+        //1) each variable triggers its own preliminar trimmers
+        for (FurnitureVariable variable : unassignedVariables)
+            variable.triggerPreliminarTrimmers();
+        
+        //2) global constraints that implement the preliminar trimmer interface
+        //are triggered
+        Iterator<GlobalConstraint> it = globalConstraints.iterator();
+        while(it.hasNext()) {
+            GlobalConstraint constraint = it.next();
+            if (constraint instanceof RoomPreliminarTrimmer) {
+                RoomPreliminarTrimmer preliminarTrimmer =
+                        (RoomPreliminarTrimmer) constraint;
+                preliminarTrimmer.preliminarTrim(unassignedVariables, constants);
+            }
+            //ditch it if it doesn't implement any other interface
+            if (! (constraint instanceof RoomInexhaustiveTrimmer))
+                it.remove();
         }
-        
-        //4) remove positions such that no model fit there due to walls and
-        //topology elements
-        for (int i = 0; i < variableCount; ++i)
-            variables[i].trimObstructedPositions();*/
-        
     }
     
     

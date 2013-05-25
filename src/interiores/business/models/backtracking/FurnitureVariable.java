@@ -4,7 +4,12 @@ import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.constraints.Constraint;
+import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
+import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
+import interiores.business.models.constraints.room.GlobalConstraint;
+import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
+import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
@@ -275,6 +280,20 @@ public class FurnitureVariable
 
     public void trimExceptM(HashSet<FurnitureModel> validModels) {
         domain.trimExceptM(validModels, iteration);
+    }
+
+    void triggerPreliminarTrimmers() {
+        Iterator<Constraint> it = furnitureConstraints.iterator();
+        while(it.hasNext()) {
+            Constraint constraint = it.next();
+            if (constraint instanceof PreliminarTrimmer) {
+                PreliminarTrimmer preliminarTrimmer = (PreliminarTrimmer) constraint;
+                preliminarTrimmer.preliminarTrim(this);
+            }
+            //ditch it if it doesn't implement any other interface
+            if (! (constraint instanceof InexhaustiveTrimmer))
+                it.remove();
+        }
     }
     
     

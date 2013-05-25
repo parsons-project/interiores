@@ -3,6 +3,7 @@ package interiores.business.models.constraints.furniture.binary;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
 import interiores.business.models.backtracking.Area.Area;
+import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
@@ -10,6 +11,7 @@ import interiores.business.models.constraints.furniture.BinaryConstraint;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.core.Debug;
 import interiores.utils.Dimension;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -24,11 +26,9 @@ public class MinDistanceConstraint
     @XmlAttribute
     private int distance; // The minimum distance between the two variables
     
-    public MinDistanceConstraint() {
-        
-    }
     
-    public MinDistanceConstraint(int distance) {
+    public MinDistanceConstraint(InterioresVariable otherVariable, int distance) {
+        super(otherVariable);
         this.distance = distance;
     }
     
@@ -58,7 +58,7 @@ public class MinDistanceConstraint
     }
 
     @Override
-    public void Trim2(FurnitureVariable variable) {
+    public void trim2(FurnitureVariable variable) {
         Area modelArea = new Area(otherVariable.assignedValue.getArea());
         Area invalidArea = modelArea.rectangleAround(distance);
         variable.exclude(invalidArea);

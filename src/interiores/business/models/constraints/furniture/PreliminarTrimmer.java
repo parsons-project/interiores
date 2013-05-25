@@ -16,9 +16,7 @@ import java.util.List;
  */
 public interface PreliminarTrimmer
 {
-    public void preliminarTrim(
-            List<FurnitureVariable> unassignedVariables,
-            List<FurnitureConstant> fixedFurniture);
+    public void preliminarTrim(FurnitureVariable variable);
     
     
 }

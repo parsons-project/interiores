@@ -4,11 +4,7 @@
  */
 package interiores.business.models.constraints.room;
 
-import interiores.business.exceptions.ConstraintException;
-import interiores.business.models.constraints.furniture.FurnitureConstraint;
-import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureConstant;
-import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import java.util.List;
 

@@ -20,11 +20,9 @@ public class PartialFacingConstraint
     private int maxDist;
     
     
-    public PartialFacingConstraint() {
-        
-    }
     
-    public PartialFacingConstraint(int distance) {
+    public PartialFacingConstraint(InterioresVariable otherVariable, int distance) {
+        super(otherVariable);
         maxDist = distance;
     }
     
@@ -45,7 +43,7 @@ public class PartialFacingConstraint
     }
 
     @Override
-    public void Trim2(FurnitureVariable variable) {
+    public void trim2(FurnitureVariable variable) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

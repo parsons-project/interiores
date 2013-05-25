@@ -22,12 +22,10 @@ public class MaxDistanceConstraint
     
     @XmlAttribute
     private int distance; // The maximum distance between the two variables
+
     
-    public MaxDistanceConstraint() {
-        
-    }
-    
-    public MaxDistanceConstraint(int distance) {
+    public MaxDistanceConstraint(InterioresVariable otherVariable, int distance) {
+        super(otherVariable);
         this.distance = distance;
     }
     
@@ -45,7 +43,7 @@ public class MaxDistanceConstraint
      * @param variable the variable whose domain has to be trimmed
      */
     @Override
-    public void Trim2(FurnitureVariable variable) {
+    public void trim2(FurnitureVariable variable) {
         Area modelArea = new Area(otherVariable.assignedValue.getArea());
         Area validArea = modelArea.rectangleAround(distance);
         variable.setValidOnly(validArea);

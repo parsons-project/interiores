@@ -18,11 +18,8 @@ public class StraightFacingConstraint
     private int maxDist = 1000;
     
     
-    public StraightFacingConstraint() {
-        
-    }
-    
-    public StraightFacingConstraint(int distance) {
+    public StraightFacingConstraint(InterioresVariable otherVariable, int distance) {
+        super(otherVariable);
         maxDist = distance;
     }
     
@@ -46,7 +43,7 @@ public class StraightFacingConstraint
     }
 
     @Override
-    public void Trim2(FurnitureVariable variable) {
+    public void trim2(FurnitureVariable variable) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

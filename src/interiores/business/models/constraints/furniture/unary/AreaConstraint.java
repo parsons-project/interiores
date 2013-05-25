@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class AreaConstraint
-    extends UnaryConstraint {
+    extends UnaryConstraint implements InexhaustiveConstraint {
     
     /**
      * validPositions contains the positions a piece of furniture can have

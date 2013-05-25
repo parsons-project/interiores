@@ -4,6 +4,7 @@ import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
+import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
 import interiores.core.business.BusinessException;
@@ -21,7 +22,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlRootElement
 @XmlSeeAlso({MaxDistanceConstraint.class, MinDistanceConstraint.class})
 public abstract class BinaryConstraint
-    extends InexhaustiveConstraint implements BacktrackingTimeTrimmer {
+    extends Constraint implements InexhaustiveConstraint, BacktrackingTimeTrimmer {
     
     private static Map<String, Class<? extends InexhaustiveConstraint>> availableConstraints = new TreeMap();
     
@@ -46,6 +47,9 @@ public abstract class BinaryConstraint
     
     protected InterioresVariable otherVariable;
     
+    protected BinaryConstraint(InterioresVariable otherVariable) {
+        this.otherVariable = otherVariable;
+    }
     
     /**
      * Given 2 variables, of which the first one has an assigned value, trims
@@ -57,10 +61,10 @@ public abstract class BinaryConstraint
     @Override
     public final void trim(FurnitureVariable variable) {
         if (otherVariable.isAssigned())
-            Trim2(variable);
+            trim2(variable);
     }
  
-    public abstract void Trim2(FurnitureVariable variable);
+    public abstract void trim2(FurnitureVariable variable);
 
     @Override
     public final boolean isSatisfied(FurnitureVariable variable) {
@@ -81,9 +85,5 @@ public abstract class BinaryConstraint
     public final InterioresVariable getOtherVariable() {
         return otherVariable;
     }
-    
-    @Override
-    public final boolean isExhaustive() {
-        return false;
-    }
+
 }

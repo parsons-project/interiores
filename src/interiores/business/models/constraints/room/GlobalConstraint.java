@@ -3,6 +3,7 @@ package interiores.business.models.constraints.room;
 
 import interiores.business.models.constraints.furniture.*;
 import interiores.business.models.backtracking.Domain;
+import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.unary.AreaConstraint;
 import interiores.business.models.constraints.furniture.unary.ColorConstraint;
 import interiores.business.models.constraints.furniture.unary.MaterialConstraint;
@@ -24,9 +25,9 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlSeeAlso({AreaConstraint.class, ColorConstraint.class, MaterialConstraint.class, ModelConstraint.class,
     OrientationConstraint.class, PriceConstraint.class, SizeRangeConstraint.class})
 public abstract class GlobalConstraint
-    extends InexhaustiveConstraint implements PreliminarTrimmer
-{
-    private static Map<String, Class<? extends InexhaustiveConstraint>> availableConstraints = new TreeMap();
+    extends Constraint {
+    
+    private static Map<String, Class<? extends Constraint>> availableConstraints = new TreeMap();
     
     public static void addConstraintClass(String name, Class<? extends UnaryConstraint> constraintClass)
     {

@@ -49,7 +49,7 @@ abstract public class CatalogController<I extends PersistentIdObject>
     public void checkout(String catalogName) {
         if(! loadedCatalogs.containsKey(catalogName))
             throw new CatalogNotFoundException(catalogName);
-        
+               
         setActiveCatalog(loadedCatalogs.get(catalogName));
     }
     

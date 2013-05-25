@@ -257,7 +257,8 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
      * Triggers when a different catalog is selected. It basically performs a checkout to the selected catalog
      */
     private void currentCatalogSelectItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_currentCatalogSelectItemStateChanged
-        rtcController.checkout(currentCatalogSelect.getSelectedItem().toString());
+        if (!hasBeenModified) rtcController.checkout(currentCatalogSelect.getSelectedItem().toString());
+        //else showModificationWarning();
     }//GEN-LAST:event_currentCatalogSelectItemStateChanged
 
     /**
@@ -280,8 +281,11 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
      * and checks out the default one (which cannot be modified or removed)
      */
     private void removeCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeCatalogButtonActionPerformed
-        rtcController.checkout("default");
-        rtcController.remove(currentCatalogSelect.getSelectedItem().toString());
+        if (!hasBeenModified) {
+            rtcController.checkout("default");
+            rtcController.remove(currentCatalogSelect.getSelectedItem().toString());
+        }
+        else showModificationWarning();
     }//GEN-LAST:event_removeCatalogButtonActionPerformed
 
     /**
@@ -289,8 +293,11 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
      * properties of the new catalog, and creates it.
      */
     private void newCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCatalogButtonActionPerformed
-        NewCatalogDialog newCat = new NewCatalogDialog(rtcController);
-        newCat.setVisible(true);
+        if (!hasBeenModified) {
+            NewCatalogDialog newCat = new NewCatalogDialog(rtcController);
+            newCat.setVisible(true);
+        }
+        else showModificationWarning();
     }//GEN-LAST:event_newCatalogButtonActionPerformed
 
     /**
@@ -298,6 +305,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
      * properties of the new element, and creates it.
      */
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
+        performModification();
         NewRoomTypeDialog newRT = new NewRoomTypeDialog(rtController);
         newRT.setVisible(true);
     }//GEN-LAST:event_newButtonActionPerformed
@@ -307,11 +315,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
      * eliminates the temporarily modified catalog (if any), and closes the window
      */
     private void discardChangesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discardChangesButtonActionPerformed
-        if (hasBeenModified) {
-            String currM = (String) currentCatalogSelect.getSelectedItem();
-            rtcController.checkout(currM.substring(0,currM.length()-5));
-            rtcController.remove(currM);
-        }
+        if (hasBeenModified) discardChanges((String) currentCatalogSelect.getSelectedItem());
         dispose();
     }//GEN-LAST:event_discardChangesButtonActionPerformed
 
@@ -321,12 +325,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
      * eliminates 'name(mod)', and closes the window
      */
     private void saveChangesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveChangesButtonActionPerformed
-        if (hasBeenModified) {
-            String currM = (String) currentCatalogSelect.getSelectedItem();
-            rtcController.checkout(currM.substring(0,currM.length()-5));
-            rtcController.replace(currM);
-            rtcController.remove(currM);
-        }
+        if (hasBeenModified) saveChanges((String) currentCatalogSelect.getSelectedItem());
         dispose();
     }//GEN-LAST:event_saveChangesButtonActionPerformed
 
@@ -500,6 +499,36 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             rtcController.create(currM);
             rtcController.checkout(currM);
         }        
+    }
+    
+    /**
+     * Given the name of a modified catalog, it saves all the changes and erases the modified version
+     * @param modCat The name of the modified catalog (e.g. session(mod) )
+     */
+    private void saveChanges(String modCat) {
+        hasBeenModified = false;
+        rtcController.checkout(modCat.substring(0, modCat.length()-5));
+        rtcController.replace(modCat);
+        rtcController.remove(modCat);
+    }
+    
+    /**
+     * Given the name of a modified catalog, it discards all the changes and erases the modified version
+     * @param modCat The name of the modified catalog (e.g. session(mod) )
+     */
+    private void discardChanges(String modCat) {
+        hasBeenModified = false;
+        rtcController.checkout(modCat.substring(0,modCat.length()-5));
+        rtcController.remove(modCat);
+    }
+    
+    private void showModificationWarning() {
+        int choice = JOptionPane.showConfirmDialog(this,"The current catalog has been modified. Do you want to save those changes?",
+                                                    "Save changes", JOptionPane.YES_NO_OPTION);
+        
+        String curr = (String) currentCatalogSelect.getSelectedItem();
+        if (choice == JOptionPane.NO_OPTION) discardChanges(curr);
+        else saveChanges(curr);
     }
 
     /**

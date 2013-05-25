@@ -18,6 +18,10 @@ abstract public class EditorTool
         return false;
     }
     
+    public boolean mouseReleased(MouseEvent evt, InteractiveRoomMap map) {
+        return false;
+    }
+    
     public boolean mouseMoved(MouseEvent evt, InteractiveRoomMap map) {
         return false;
     }

@@ -6,7 +6,7 @@ import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.RoomController;
 import interiores.business.events.backtracking.SolveDesignFinishedEvent;
 import interiores.business.events.backtracking.SolveDesignStartedEvent;
-import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
+import interiores.business.events.furniture.ElementUnselectedEvent;
 import interiores.business.events.room.RoomDesignChangedEvent;
 import interiores.business.events.room.WantedFixedChangedEvent;
 import interiores.business.models.OrientedRectangle;
@@ -93,31 +93,26 @@ public class RoomMapPanel extends JPanel
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
-        addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mousePressed(java.awt.event.MouseEvent evt)
-            {
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 formMousePressed(evt);
             }
-        });
-        addMouseMotionListener(new java.awt.event.MouseMotionAdapter()
-        {
-            public void mouseDragged(java.awt.event.MouseEvent evt)
-            {
-                formMouseDragged(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                formMouseReleased(evt);
             }
-            public void mouseMoved(java.awt.event.MouseEvent evt)
-            {
+        });
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
                 formMouseMoved(evt);
             }
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                formMouseDragged(evt);
+            }
         });
-        addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyReleased(java.awt.event.KeyEvent evt)
-            {
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
                 formKeyReleased(evt);
             }
         });
@@ -159,6 +154,11 @@ public class RoomMapPanel extends JPanel
         if(activeTool.mousePressed(evt, map))        
             repaint();
     }//GEN-LAST:event_formMousePressed
+
+private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
+    if (activeTool.mouseReleased(evt, map))
+        repaint();
+}//GEN-LAST:event_formMouseReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
@@ -217,8 +217,8 @@ public class RoomMapPanel extends JPanel
         map.addFurniture(name, area, color);
     }
     
-    @Listen(FurnitureTypeUnselectedEvent.class)
-    public void removeFurniture(FurnitureTypeUnselectedEvent evt) {
+    @Listen(ElementUnselectedEvent.class)
+    public void removeFurniture(ElementUnselectedEvent evt) {
         map.removeFurniture(evt.getName());
         repaint();
     }

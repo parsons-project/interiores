@@ -327,12 +327,16 @@
  * to stage[iteration].
  * 
  * 
+ * Apart from this methods, Constaints might invoke getters to the varirable to
+ * get the information they need, such as getDomain().
+ * 
+ * 
  * The whole process of trimming a variable consists on:
  * 1) moving all values of stage[iteration] to stage[iteration+1]. This is
  * called forward iteration.
  * 
  * 2) for each constraint, some values of stage[iteration+1] are moved back to
- * stage[iteration] through setValidOnly() and exclude() calls.
+ * stage[iteration] through trim() and trimExcept() calls.
  * 
  */
 package interiores.business.models.constraints;

@@ -1,14 +1,10 @@
 package interiores.business.models.constraints.furniture.unary;
 
 import interiores.business.models.backtracking.Area.Area;
-import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.InexhaustiveConstraint;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -43,15 +39,6 @@ public class AreaConstraint
         this.validPositions = validPositions;
     }
     
-    /**
-     * Eliminates all values that do not fulfil the constraint.
-     * @param variable The variable to be checked.
-     */
-    @Override
-    public void preliminarTrim(FurnitureVariable variable) {
-        variable.eliminate()
-        domain.getPositions(0).intersection(validPositions);
-    }
     
     /**
      * Modifies the orientations defined for the constraint.
@@ -60,6 +47,26 @@ public class AreaConstraint
     public void changePositions(Area newPositions) {
         validPositions = newPositions;
     }
+    
+    
+    /**
+     * Eliminates all values that do not fulfil the constraint.
+     * @param variable The variable to be checked.
+     */
+    @Override
+    public void preliminarTrim(FurnitureVariable variable) {
+        variable.eliminateExcept(validPositions);
+    }
+ 
+
+    @Override
+    public boolean isSatisfied(FurnitureVariable variable) {
+        return validPositions.contains(
+                new Area(variable.getAssignedValue().getArea().getRectangle()));
+    }
+    
+    
+    
     
     @Override
     public String toString() {
@@ -74,15 +81,5 @@ public class AreaConstraint
         }
         result.append(NEW_LINE);
         return result.toString();
-    }
-
-    @Override
-    public void preliminarTrim(FurnitureVariable variable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isSatisfied(FurnitureVariable variable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

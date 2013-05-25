@@ -137,4 +137,8 @@ public class OrientedRectangle extends Rectangle {
         return super.toString() + " " + this.orientation;
         
     }
+    
+    public Rectangle getRectangle() {
+        return new Rectangle(x,y,width,height);
+    }
 }

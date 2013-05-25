@@ -225,8 +225,8 @@ public class FurnitureVariable
 
     
     
-    //FUNCTIONS TO MODIFY THE DOMAIN:
-    //forwardIteration(), SetValidOnly() AND Exclude()
+    //FUNCTIONS TO MODIFY THE DOMAIN
+    //forwardIteration(), and consfraint - variable interface
     
     /**
      * Moves all values of the current iteration to the next iteration
@@ -235,23 +235,36 @@ public class FurnitureVariable
         domain.forwardIteration(iteration);
     }
     
+   
+    //CONSTRAINT - VARIABLE INTERFACE
+    
+    public void eliminateExcept(Area validPositions) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+       /**
+     * Any value of the domain of the next iteration included in the
+     * parameter is trimmed (moved to the previous iteration)
+     * @param invalidArea 
+     */
+    public void trim(Area invalidArea) {
+        domain.exclude(invalidArea, iteration);
+    }
+    
+    
     /**
      * Any value of the domain of the next iteration not included in the
      * parameter is trimmed (moved to the previous iteration)
      * @param validArea 
      */
-    public void setValidOnly(Area validArea) {
+    public void trimExcept(Area validArea) {
         domain.setValidOnly(validArea, iteration);
     }
 
-    /**
-     * Any value of the domain of the next iteration included in the
-     * parameter is trimmed (moved to the previous iteration)
-     * @param invalidArea 
-     */
-    public void exclude(Area invalidArea) {
-        domain.exclude(invalidArea, iteration);
+    public void eliminateExcept(List<FurnitureModel> validModels) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     
 }

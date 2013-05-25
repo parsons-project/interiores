@@ -2,11 +2,14 @@ package interiores.business.models.constraints.furniture.unary;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.Domain;
+import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.core.business.BusinessException;
 import interiores.data.adapters.ColorAdapter;
+import interiores.shared.backtracking.Variable;
 import interiores.utils.CoolColor;
 import java.util.Iterator;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -50,13 +53,15 @@ public class ColorConstraint
      * @param variable The variable whose values have to be checked.
      */
     @Override
-    public void eliminateInvalidValues(Domain domain) {
-        Iterator it = domain.getModels(0).iterator();
+    public void preliminarTrim(FurnitureVariable variable) {
+        List<FurnitureModel> validModels = variable.getDomain().getModels(0);
+        Iterator<FurnitureModel> it = validModels.iterator();
         while (it.hasNext()) {
-            FurnitureModel model = (FurnitureModel) it.next();
-            if (!model.getColor().equals(color.getColor()))
+            if (! it.next().getColor().equals(color.getColor()))
                 it.remove();
         }
+        
+        variable.eliminateExcept(validModels);
     }
     
     

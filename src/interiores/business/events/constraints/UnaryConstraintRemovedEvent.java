@@ -6,7 +6,7 @@ import interiores.core.Event;
  *
  * @author alvaro
  */
-public class ConstraintRemovedEvent  
+public class UnaryConstraintRemovedEvent  
     implements Event
 {
     

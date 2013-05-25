@@ -5,10 +5,12 @@ import interiores.business.controllers.FurnitureModelController;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.RoomController;
 import interiores.business.controllers.UnaryConstraintController;
+import interiores.business.events.constraints.BinaryConstraintAddedEvent;
+import interiores.business.events.constraints.BinaryConstraintRemovedEvent;
 import interiores.business.models.Orientation;
 import interiores.business.models.constraints.UnaryConstraint;
-import interiores.business.events.constraints.ConstraintAddedEvent;
-import interiores.business.events.constraints.ConstraintRemovedEvent;
+import interiores.business.events.constraints.UnaryConstraintAddedEvent;
+import interiores.business.events.constraints.UnaryConstraintRemovedEvent;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.utils.BinaryConstraintAssociation;
@@ -120,7 +122,8 @@ public class ConstraintEditorFrame extends JFrame {
         return orientations.toArray(new Orientation[orientations.size()]);
     }
     
-    @Listen({ConstraintAddedEvent.class, ConstraintRemovedEvent.class})
+    @Listen({UnaryConstraintAddedEvent.class, UnaryConstraintRemovedEvent.class,
+             BinaryConstraintAddedEvent.class, BinaryConstraintRemovedEvent.class})
     public void updateActiveConstraintsList() {
         setListValues(activeUnaries, unaryConstraintController.getConstraints(selectedId));
         setListValues(activeBinaries, binaryConstraintController.getConstraints(selectedId));

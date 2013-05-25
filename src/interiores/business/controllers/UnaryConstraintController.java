@@ -1,8 +1,8 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.InterioresController;
-import interiores.business.events.constraints.ConstraintAddedEvent;
-import interiores.business.events.constraints.ConstraintRemovedEvent;
+import interiores.business.events.constraints.UnaryConstraintAddedEvent;
+import interiores.business.events.constraints.UnaryConstraintRemovedEvent;
 import interiores.business.models.Orientation;
 import interiores.business.models.Room;
 import interiores.business.models.constraints.UnaryConstraint;
@@ -119,7 +119,7 @@ public class UnaryConstraintController
     
     private void addConstraint(String furnitureId, UnaryConstraint unaryConstraint) {
         getWishList().addUnaryConstraint(furnitureId, unaryConstraint);
-        notify(new ConstraintAddedEvent());
+        notify(new UnaryConstraintAddedEvent());
     }
     
     public void remove(String furnitureId, String unaryConstraintAlias) {
@@ -131,6 +131,6 @@ public class UnaryConstraintController
     
     public void remove(String furnitureId, Class<? extends UnaryConstraint> unaryConstraintClass) {
         getWishList().removeUnaryConstraint(furnitureId, unaryConstraintClass);
-        notify(new ConstraintRemovedEvent());
+        notify(new UnaryConstraintRemovedEvent());
     }
 }

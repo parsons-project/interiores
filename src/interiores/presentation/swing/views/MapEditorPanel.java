@@ -42,6 +42,9 @@ public class MapEditorPanel extends JPanel
         jToolBar1 = new javax.swing.JToolBar();
         jToggleButton1 = new javax.swing.JToggleButton();
         jToggleButton2 = new javax.swing.JToggleButton();
+        jToggleButton3 = new javax.swing.JToggleButton();
+        jToggleButton4 = new javax.swing.JToggleButton();
+        jToggleButton5 = new javax.swing.JToggleButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -50,22 +53,48 @@ public class MapEditorPanel extends JPanel
         jToolBar1.setRollover(true);
 
         jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/cursor.png"))); // NOI18N
+        jToggleButton1.setToolTipText("Selection tool");
         jToggleButton1.setFocusable(false);
         jToggleButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jToggleButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jToggleButton1);
 
         jToggleButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/move.png"))); // NOI18N
+        jToggleButton2.setToolTipText("Move tool");
         jToggleButton2.setFocusable(false);
         jToggleButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jToggleButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar1.add(jToggleButton2);
+
+        jToggleButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/door.png"))); // NOI18N
+        jToggleButton3.setToolTipText("Door tool");
+        jToggleButton3.setFocusable(false);
+        jToggleButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jToggleButton3);
+
+        jToggleButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/window.png"))); // NOI18N
+        jToggleButton4.setToolTipText("Windows tool");
+        jToggleButton4.setFocusable(false);
+        jToggleButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jToggleButton4);
+
+        jToggleButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/cube.png"))); // NOI18N
+        jToggleButton5.setToolTipText("Pillar tool");
+        jToggleButton5.setFocusable(false);
+        jToggleButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jToggleButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(jToggleButton5);
 
         add(jToolBar1, java.awt.BorderLayout.LINE_START);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
+    private javax.swing.JToggleButton jToggleButton3;
+    private javax.swing.JToggleButton jToggleButton4;
+    private javax.swing.JToggleButton jToggleButton5;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }

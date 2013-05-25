@@ -70,7 +70,6 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         initCatalogList();
         initVisualSettings();
         refreshCatalog();
-        
     }
 
     /**
@@ -92,8 +91,8 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         saveCatalogButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         newButton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        saveChangesButton = new javax.swing.JButton();
+        discardChangesButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Room Types Catalog Editor");
@@ -101,7 +100,6 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 255, 255));
         setBounds(new java.awt.Rectangle(0, 0, 900, 600));
         setMinimumSize(new java.awt.Dimension(900, 600));
-        setPreferredSize(new java.awt.Dimension(900, 700));
         setResizable(false);
         setSize(new java.awt.Dimension(900, 700));
 
@@ -175,9 +173,9 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Save changes");
+        saveChangesButton.setText("Save changes");
 
-        jButton2.setText("Discard changes");
+        discardChangesButton.setText("Discard changes");
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -206,13 +204,13 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                                 .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap())
                     .add(layout.createSequentialGroup()
-                        .add(jButton2)
+                        .add(discardChangesButton)
                         .add(206, 206, 206)
                         .add(newButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jLabel1)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 198, Short.MAX_VALUE)
-                        .add(jButton1))))
+                        .add(saveChangesButton))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -235,8 +233,8 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                     .add(newButton)
                     .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                         .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(jButton1))
-                    .add(jButton2))
+                        .add(saveChangesButton))
+                    .add(discardChangesButton))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -293,8 +291,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentCatalogLabel;
     private javax.swing.JComboBox currentCatalogSelect;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton discardChangesButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -303,6 +300,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
     private javax.swing.JButton newCatalogButton;
     private javax.swing.JButton removeCatalogButton;
     private javax.swing.JButton saveCatalogButton;
+    private javax.swing.JButton saveChangesButton;
     private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
 
@@ -430,7 +428,6 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
      * It loads the available catalogs into the frame
      */
     private void initCatalogList() {
-               
         Collection<String> catalogs = rtcController.getNamesLoadedCatalogs();
         Object[] s = catalogs.toArray();
         currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(s) );

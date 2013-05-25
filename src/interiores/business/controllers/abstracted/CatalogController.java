@@ -53,7 +53,7 @@ abstract public class CatalogController<I extends PersistentIdObject>
         setActiveCatalog(loadedCatalogs.get(catalogName));
     }
     
-    public void merge(String catalogName) {
+    public void merge(String catalogName, boolean replace) {
         NamedCatalog<I> currentCatalog = getActiveCatalog();
         
         if(currentCatalog.isDefault())
@@ -64,11 +64,9 @@ abstract public class CatalogController<I extends PersistentIdObject>
         
         Collection<I> toMerge = loadedCatalogs.get(catalogName).getCopyObjects();
         
-        for (I fType : toMerge) {
-            if (! currentCatalog.hasObject(fType)) {
-                    currentCatalog.add(fType);
-            }
-        }
+        for (I fType : toMerge)
+            if (!currentCatalog.hasObject(fType) || replace)
+                currentCatalog.add(fType);
     }
     
     public void load(String path) throws JAXBException {

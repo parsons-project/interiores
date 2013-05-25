@@ -208,7 +208,7 @@ public class FurnitureVariableSet
     @Override
     protected void setActualVariable() {
         
-        if (unassignedVariables.isEmtpy())
+        if (unassignedVariables.isEmpty())
             allAssigned = true;
         else {
             int maxDomainSize = -1;
@@ -227,9 +227,8 @@ public class FurnitureVariableSet
                 // the weight of all binary constraints between this variable and
                 // other variables which have not been assigned yet.
                 binaryConstraintsLoad[i] = 0;
-                for (BinaryConstraint bc : binaryConstraints.getConstraints(variable)) {
-                    if (bc.getOtherVariable(variable).isAssigned())
-                        binaryConstraintsLoad[i] += bc.getWeight(roomArea);
+                for (FurnitureVariable otherVariable : unassignedVariables) {
+                    binaryConstraintsLoad[i] += getDependence(variable, otherVariable);
                 }
                 
                 if (binaryConstraintsLoad[i] > maxBinaryConstraints)
@@ -238,7 +237,6 @@ public class FurnitureVariableSet
                 smallestModelSize[i] = variable.smallestModelSize();
                 if (smallestModelSize[i] > maxSmallestModelArea)
                     maxSmallestModelArea = smallestModelSize[i];
-
             }
 
             //calculate the weight of each factor for each variable and the final

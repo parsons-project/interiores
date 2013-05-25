@@ -235,11 +235,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Save changes"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveChangesButtonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="discardChangesButton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Discard changes"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="discardChangesButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

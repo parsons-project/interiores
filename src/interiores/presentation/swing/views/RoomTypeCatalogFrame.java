@@ -46,6 +46,10 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
     // are automatically reflected
     private Map<String,RTC_Element> catElements;
     
+    // The frame also stores the changes made to the current catalog so far,
+    // so that one can save them or discard them
+    boolean hasBeenModified = false;
+    
     /**
      * Creates the very RTC editor frame
      * @param presentation 
@@ -174,8 +178,18 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         });
 
         saveChangesButton.setText("Save changes");
+        saveChangesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveChangesButtonActionPerformed(evt);
+            }
+        });
 
         discardChangesButton.setText("Discard changes");
+        discardChangesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                discardChangesButtonActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -287,6 +301,34 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         NewRoomTypeDialog newRT = new NewRoomTypeDialog(rtController);
         newRT.setVisible(true);
     }//GEN-LAST:event_newButtonActionPerformed
+
+    /**
+     * Triggers when the "Discard changes" button is pressed. It forgets about all the changes,
+     * eliminates the temporarily modified catalog (if any), and closes the window
+     */
+    private void discardChangesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discardChangesButtonActionPerformed
+        if (hasBeenModified) {
+            String currM = (String) currentCatalogSelect.getSelectedItem();
+            rtcController.checkout(currM.substring(0,currM.length()-5));
+            rtcController.remove(currM);
+        }
+        dispose();
+    }//GEN-LAST:event_discardChangesButtonActionPerformed
+
+    /**
+     * Triggers when the "Save changes" button is pressed. It merges all the changes,
+     * done in the temporarily modified catalog "name(mod)" with the actual catalog,
+     * eliminates 'name(mod)', and closes the window
+     */
+    private void saveChangesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveChangesButtonActionPerformed
+        if (hasBeenModified) {
+            String currM = (String) currentCatalogSelect.getSelectedItem();
+            rtcController.checkout(currM.substring(0,currM.length()-5));
+            rtcController.replace(currM);
+            rtcController.remove(currM);
+        }
+        dispose();
+    }//GEN-LAST:event_saveChangesButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentCatalogLabel;
@@ -450,6 +492,15 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         jPanel1.revalidate();
         jPanel1.repaint();
     }
+    
+    private void performModification() {
+        if (!hasBeenModified) {
+            hasBeenModified = true;
+            String currM = (String) currentCatalogSelect.getSelectedItem() + "(mod)";
+            rtcController.create(currM);
+            rtcController.checkout(currM);
+        }        
+    }
 
     /**
      * This class is a visual representation of a catalog item.
@@ -504,6 +555,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             removeButton.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    performModification();
                     rtController.rm(actualName);
                 }
             });
@@ -524,8 +576,10 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                 public void focusLost(java.awt.event.FocusEvent evt) {
                     String str = measureField1.getText();
                     Range r = rtController.getWidthRange(actualName);
-                    if (str.matches("[0-9]+") && Integer.parseInt(str) > 0 && Integer.parseInt(str) <= r.max)
+                    if (str.matches("[0-9]+") && Integer.parseInt(str) > 0 && Integer.parseInt(str) <= r.max) {
+                        performModification();
                         rtController.setMinWidth(actualName, Integer.parseInt(str));
+                    }
                     else {
                         String msg = "Width should be a positive number between 0 and " + r.max;
                         JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
@@ -540,8 +594,10 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                 public void focusLost(java.awt.event.FocusEvent evt) {
                     String str = measureField2.getText();
                     Range r = rtController.getDepthRange(actualName);
-                    if (str.matches("[0-9]+") && Integer.parseInt(str) > 0 && Integer.parseInt(str) <= r.max)
+                    if (str.matches("[0-9]+") && Integer.parseInt(str) > 0 && Integer.parseInt(str) <= r.max) {
+                        performModification();
                         rtController.setMinDepth(actualName, Integer.parseInt(str));
+                    }
                     else {
                         String msg = "Depth should be a positive number between 0 and " + r.max;
                         JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
@@ -564,6 +620,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                     String[] mand = str.split(",");
                     String mandatory = rtController.getMandatory(actualName).toString();
                     try {
+                        performModification();
                         rtController.setMandatory(actualName, mand);
                         updateTooltips();
                     }
@@ -586,6 +643,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                     String[] forb = str.split(",");
                     String forbidden = rtController.getForbidden(actualName).toString();
                     try {
+                        performModification();
                         rtController.setForbidden(actualName, forb);
                         updateTooltips();
                     }

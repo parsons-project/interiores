@@ -117,6 +117,19 @@ abstract public class CatalogController<I extends PersistentIdObject>
         loadedCatalogs.remove(catalogName);
     }
     
+    public void replace(String catalogName) {
+        NamedCatalog<I> currentCatalog = getActiveCatalog();
+        
+        if(currentCatalog.isDefault())
+            throw new DefaultCatalogOverwriteException();
+        else if (! loadedCatalogs.containsKey(catalogName))
+            throw new CatalogNotFoundException(catalogName);
+        
+        String currName = currentCatalog.getName();
+        NamedCatalog<I> newCat = new NamedCatalog<I>(currName, loadedCatalogs.get(catalogName));
+        loadedCatalogs.put(currName,newCat);
+    }
+    
     public Collection<String> getNamesLoadedCatalogs() {
         return loadedCatalogs.keySet();
     }

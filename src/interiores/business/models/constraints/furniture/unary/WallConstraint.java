@@ -16,8 +16,8 @@ import java.util.List;
  * @author hector0193
  */
 public class WallConstraint
-    extends AreaConstraint
-{
+    extends AreaConstraint {
+    
     public WallConstraint(int roomWidth, int roomDepth, Orientation[] orientations) {
         super();
         

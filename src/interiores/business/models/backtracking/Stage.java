@@ -327,4 +327,18 @@ public class Stage {
 //        orientations.addAll(stage.orientations);
 //        stage.orientations.clear();
 //    }
+
+    void eliminateExceptM(HashSet<FurnitureModel> validModels) {
+        Iterator<FurnitureModel> it = models.iterator();
+        while(it.hasNext())
+            if (! validModels.contains(it.next()))
+                it.remove();
+    }
+
+    void eliminateExceptO(HashSet<Orientation> validOrientations) {
+        Iterator<Orientation> it = orientations.iterator();
+        while(it.hasNext())
+            if (! validOrientations.contains(it.next()))
+                it.remove();
+    }
 }

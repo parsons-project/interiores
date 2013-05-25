@@ -2,9 +2,11 @@ package interiores.business.models.constraints.furniture.unary;
 
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.Domain;
+import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
+import java.util.HashSet;
 import java.util.Iterator;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -39,16 +41,15 @@ abstract public class SizeRangeConstraint
      * @param variable The variable whose values have to be checked.
      */
     @Override
-    public void eliminateInvalidValues(Domain domain) {
-        Iterator it = domain.getModels(0).iterator();
-        
-        while(it.hasNext()) {
-            FurnitureModel model = (FurnitureModel) it.next();
-            
-            if(! model.getSize().isBetween(component, range))
+    public void preliminarTrim(FurnitureVariable variable) {
+        HashSet<FurnitureModel> validModels = variable.getDomain().getModels(0);
+        Iterator<FurnitureModel> it = validModels.iterator();
+        while (it.hasNext()) {
+            if (! it.next().getSize().isBetween(component, range))
                 it.remove();
-        }
-    }
+        }        
+        variable.eliminateExceptM(validModels);
+    }       
     
     @Override
     public String toString() {

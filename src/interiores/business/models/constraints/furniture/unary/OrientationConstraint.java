@@ -2,8 +2,10 @@ package interiores.business.models.constraints.furniture.unary;
 
 import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.Domain;
+import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -53,9 +55,13 @@ public class OrientationConstraint
      * @param variable The variable to be checked.
      */
     @Override
-    public void eliminateInvalidValues(Domain domain) {
-        domain.getOrientations(0).clear();
-        domain.getOrientations(0).addAll(validOrientations);
+    public void preliminarTrim(FurnitureVariable variable) {
+        HashSet<Orientation> validOris = new HashSet<Orientation>();
+        for (Orientation orientation : validOrientations) {
+            validOris.add(orientation);
+        }
+        variable.eliminateExceptO(validOris);
+        
     }
     
     /**

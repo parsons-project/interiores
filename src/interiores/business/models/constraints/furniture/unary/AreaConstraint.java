@@ -55,7 +55,7 @@ public class AreaConstraint
      */
     @Override
     public void preliminarTrim(FurnitureVariable variable) {
-        variable.eliminateExcept(validPositions);
+        variable.eliminateExceptP(validPositions);
     }
  
 

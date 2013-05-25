@@ -1,6 +1,7 @@
 package interiores.business.models.backtracking;
 
 import interiores.business.models.FurnitureModel;
+import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.shared.backtracking.Value;
@@ -9,6 +10,7 @@ import interiores.utils.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -238,7 +240,7 @@ public class FurnitureVariable
    
     //CONSTRAINT - VARIABLE INTERFACE
     
-    public void eliminateExcept(Area validPositions) {
+    public void eliminateExceptP(Area validPositions) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -249,7 +251,7 @@ public class FurnitureVariable
      * @param invalidArea 
      */
     public void trim(Area invalidArea) {
-        domain.exclude(invalidArea, iteration);
+        domain.trim(invalidArea, iteration);
     }
     
     
@@ -259,11 +261,15 @@ public class FurnitureVariable
      * @param validArea 
      */
     public void trimExcept(Area validArea) {
-        domain.setValidOnly(validArea, iteration);
+        domain.trimExcept(validArea, iteration);
     }
 
-    public void eliminateExcept(List<FurnitureModel> validModels) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void eliminateExceptM(HashSet<FurnitureModel> validModels) {
+        domain.eliminateExceptM(validModels);
+    }
+
+    public void eliminateExceptO(HashSet<Orientation> validOrientations) {
+        domain.eliminateExceptO(validOrientations);
     }
     
     

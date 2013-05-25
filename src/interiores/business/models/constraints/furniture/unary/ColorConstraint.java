@@ -8,6 +8,7 @@ import interiores.core.business.BusinessException;
 import interiores.data.adapters.ColorAdapter;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.CoolColor;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -54,14 +55,14 @@ public class ColorConstraint
      */
     @Override
     public void preliminarTrim(FurnitureVariable variable) {
-        List<FurnitureModel> validModels = variable.getDomain().getModels(0);
+        HashSet<FurnitureModel> validModels = variable.getDomain().getModels(0);
         Iterator<FurnitureModel> it = validModels.iterator();
         while (it.hasNext()) {
-            if (! it.next().getColor().equals(color.getColor()))
+            if (! it.next().getColor().equals(color))
                 it.remove();
         }
         
-        variable.eliminateExcept(validModels);
+        variable.eliminateExceptM(validModels);
     }
     
     

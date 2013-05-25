@@ -1,13 +1,12 @@
 package interiores.core.presentation.swing.terminal;
 
 import interiores.core.Debug;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Queue;
 import javax.swing.JTextPane;
+import javax.swing.text.AbstractDocument;
 
 /**
  *
@@ -16,33 +15,17 @@ import javax.swing.JTextPane;
 public class ConsoleInputStream
     extends InputStream
 {
-    Deque<Character> contents;
+    TerminalFilter terminalFilter;
+    AbstractDocument document;
+    Queue<Character> contents;
     boolean isConfirmed = true;
 
     public ConsoleInputStream(final JTextPane textPane) {
-        contents = new LinkedList();
-        final ConsoleInputStream me = this;
+        terminalFilter = new TerminalFilter(this);
+        document = (AbstractDocument) textPane.getDocument();
+        document.setDocumentFilter(terminalFilter);
         
-        textPane.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e)
-            {
-                isConfirmed = false;
-                
-                char c = e.getKeyChar();
-                
-                if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE)
-                    contents.pollLast();
-                else if(c == '\n' || !e.isActionKey())
-                    contents.add(c);
-                
-                if(c == '\n'){
-                    synchronized (me) {
-                        me.notify();
-                    }
-                }
-            }
-        });
+        contents = new LinkedList();
     }
 
     @Override
@@ -54,12 +37,17 @@ public class ConsoleInputStream
             }
             
             try {
+                terminalFilter.unlock();
                 this.wait(); // Wait until input
-            } catch(InterruptedException e) {
+                contents = terminalFilter.lock(document);
+            }
+            catch(InterruptedException e) {
                 if(Debug.isEnabled())
                     e.printStackTrace();
             }
         }
+        
+        isConfirmed = false;
         
         return contents.poll();
     }

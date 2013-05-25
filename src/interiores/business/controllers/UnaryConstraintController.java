@@ -12,6 +12,7 @@ import interiores.business.models.constraints.unary.DepthConstraint;
 import interiores.business.models.constraints.unary.MaterialConstraint;
 import interiores.business.models.constraints.unary.ModelConstraint;
 import interiores.business.models.constraints.unary.OrientationConstraint;
+import interiores.business.models.constraints.unary.PositionConstraint;
 import interiores.business.models.constraints.unary.PriceConstraint;
 import interiores.business.models.constraints.unary.WallConstraint;
 import interiores.business.models.constraints.unary.WidthConstraint;
@@ -97,10 +98,7 @@ public class UnaryConstraintController
     }
     
     public void addPositionAtConstraint(String furnitureId, int x, int y) {
-        List<Point> validPositions = new ArrayList();
-        validPositions.add(new Point(x, y));
-        
-        addPositionConstraint(furnitureId, validPositions);
+        addConstraint(furnitureId, new PositionConstraint(new Point(x, y)));
     }
     
     public void addPositionRangeConstraint(String furnitureId, int x1, int y1, int x2, int y2) {

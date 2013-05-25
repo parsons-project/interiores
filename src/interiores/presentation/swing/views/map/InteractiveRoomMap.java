@@ -69,6 +69,11 @@ public class InteractiveRoomMap
         return names;
     }
     
+    public void translateSelected(int dx, int dy) {
+        for(RoomElement element : selected)
+            element.translate(dx, dy);
+    }
+    
     public int getDistanceToWall(Orientation orientation, Point p) {
         switch (orientation) {
             case N:
@@ -101,5 +106,9 @@ public class InteractiveRoomMap
     
     public Point normalize(int x, int y) {
         return new Point((int)(x / SCALE), (int)(y / SCALE));
+    }
+    
+    public Point normalize(Point p) {
+        return normalize(p.x, p.y);
     }
 }

@@ -20,10 +20,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Collection;
 import javax.swing.JPanel;
 
 /**
@@ -40,6 +40,8 @@ public class RoomMapPanel extends JPanel
     
     private InteractiveRoomMap map;
     private RoomMapDebuggerFrame debuggerGui;
+    
+    private Point previous;
 
     /**
      * Creates new form RoomMap
@@ -58,6 +60,8 @@ public class RoomMapPanel extends JPanel
         
         if(Debug.isEnabled())
             debuggerGui = presentation.get(RoomMapDebuggerFrame.class);
+        
+        previous = new Point(0, 0);
         
         initMap();
     }
@@ -91,9 +95,20 @@ public class RoomMapPanel extends JPanel
 
         addMouseListener(new java.awt.event.MouseAdapter()
         {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
+            public void mousePressed(java.awt.event.MouseEvent evt)
             {
-                formMouseClicked(evt);
+                formMousePressed(evt);
+            }
+        });
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter()
+        {
+            public void mouseDragged(java.awt.event.MouseEvent evt)
+            {
+                formMouseDragged(evt);
+            }
+            public void mouseMoved(java.awt.event.MouseEvent evt)
+            {
+                formMouseMoved(evt);
             }
         });
         addKeyListener(new java.awt.event.KeyAdapter()
@@ -106,8 +121,35 @@ public class RoomMapPanel extends JPanel
         setLayout(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseClicked
-    {//GEN-HEADEREND:event_formMouseClicked
+    private void formKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_formKeyReleased
+    {//GEN-HEADEREND:event_formKeyReleased
+        if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            for(String id : map.getSelected())
+                ftController.unselect(id);
+        }
+    }//GEN-LAST:event_formKeyReleased
+
+    private void formMouseDragged(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseDragged
+    {//GEN-HEADEREND:event_formMouseDragged
+        Point current = map.normalize(evt.getPoint());
+        
+        int dx = current.x - previous.x;
+        int dy = current.y - previous.y;
+        
+        map.translateSelected(dx, dy);
+        
+        previous = current;
+        
+        repaint();
+    }//GEN-LAST:event_formMouseDragged
+
+    private void formMouseMoved(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseMoved
+    {//GEN-HEADEREND:event_formMouseMoved
+        previous = map.normalize(evt.getPoint());
+    }//GEN-LAST:event_formMouseMoved
+
+    private void formMousePressed(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMousePressed
+    {//GEN-HEADEREND:event_formMousePressed
         requestFocus();
         switch (evt.getButton()) {
             case MouseEvent.BUTTON1: // left click
@@ -131,15 +173,7 @@ public class RoomMapPanel extends JPanel
         }
         Debug.println("Nearest Wall: " + map.getNearestWall(evt.getX(), evt.getY()));        
         repaint();
-    }//GEN-LAST:event_formMouseClicked
-
-    private void formKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_formKeyReleased
-    {//GEN-HEADEREND:event_formKeyReleased
-        if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
-            for(String id : map.getSelected())
-                ftController.unselect(id);
-        }
-    }//GEN-LAST:event_formKeyReleased
+    }//GEN-LAST:event_formMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

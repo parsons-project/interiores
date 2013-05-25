@@ -15,6 +15,7 @@
 # Built files
 /build/
 /dist/
+/customBuild/
 
 # Data files
 /data/

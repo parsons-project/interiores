@@ -248,13 +248,10 @@ public class MainAppFrame extends JFrame
     public void showFurnitureAndMap() {
         unloadComponent(welcome);
         
+        MapEditorPanel editorPanel = presentation.getNew(MapEditorPanel.class);
+        loadComponent(editorPanel, BorderLayout.CENTER);
+        
         saveMenuItem.setEnabled(true);
-        
-        RoomMapPanel map = presentation.getNew(RoomMapPanel.class);
-        WishListPanel wishListPanel = presentation.getNew(WishListPanel.class);
-        
-        loadComponent(map, BorderLayout.CENTER);
-        loadComponent(wishListPanel, BorderLayout.LINE_END);
     }
     
     private void unloadCurrentView() {

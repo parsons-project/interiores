@@ -46,7 +46,7 @@ public class MaxDistanceConstraint
     public void trim2(FurnitureVariable variable) {
         Area modelArea = new Area(otherVariable.assignedValue.getArea());
         Area validArea = modelArea.rectangleAround(distance);
-        variable.trimExcept(validArea);
+        variable.trimExceptP(validArea);
     }
 
     /**

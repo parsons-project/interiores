@@ -247,13 +247,30 @@ public class Stage {
      * @param validPositions
      * @return 
      */
-    Area intersection(Area area) {
+    Area intersectionP(Area area) {
         Area startingPositions = new Area(positions);
         positions.intersection(area);
         startingPositions.difference(positions);
         return startingPositions;
     }
 
+    /**
+     * Makes the intersection of models and returns the models not
+     * contained in the intersection.
+     * @param validPositions
+     * @return 
+     */
+    HashSet<FurnitureModel> intersectionM(HashSet<FurnitureModel> validModels) {
+        HashSet<FurnitureModel> notContainedModels = new HashSet<FurnitureModel>();
+        for (FurnitureModel model : models) {
+            if (! validModels.contains(model)) {
+                notContainedModels.add(model);
+                models.remove(model);
+            }
+        }
+        return notContainedModels;
+    }
+    
     void unionP(Area area) {
         positions.union(area);
     }
@@ -341,4 +358,5 @@ public class Stage {
             if (! validOrientations.contains(it.next()))
                 it.remove();
     }
+
 }

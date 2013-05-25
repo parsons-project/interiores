@@ -5,6 +5,7 @@ import interiores.business.exceptions.ConstraintException;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.BacktrackingTimeTrimmer;
+import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.GlobalInexhaustiveConstraint;
 
 /**
@@ -14,7 +15,7 @@ import interiores.business.models.constraints.room.GlobalInexhaustiveConstraint;
  * @author Nil
  */
 public class ConnectivityConstraint
-    extends GlobalInexhaustiveConstraint implements BacktrackingTimeTrimmer {
+    extends GlobalConstraint implements BacktrackingTimeTrimmer {
 
 
     @Override

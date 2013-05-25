@@ -24,8 +24,8 @@ import java.util.List;
  * @author nmamano
  */
 public class BudgetConstraint
-    extends GlobalConstraint implements GlobalInexhaustiveConstraint,
-        GlobalPreliminarTrimmer, GlobalBacktrackingTimeTrimmer {
+    extends GlobalConstraint
+    implements GlobalPreliminarTrimmer, GlobalBacktrackingTimeTrimmer {
     
     private double maxBudget;
     private double currentBudget;
@@ -63,6 +63,7 @@ public class BudgetConstraint
      */
     @Override
     public void preliminarTrim(List<FurnitureVariable> variables, List<FurnitureConstant> fixedFurniture) {
+        //I implemented this somewhere else. I'll update when i come across it lols
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

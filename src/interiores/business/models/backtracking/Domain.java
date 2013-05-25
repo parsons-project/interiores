@@ -107,12 +107,19 @@ public class Domain {
     }
     
     
-    void trimExcept(Area validPositions, int iteration) {
+    void trimExceptP(Area validPositions, int iteration) {
         //modify domain[iteration+1]
-        Area discardedPositions = domain[iteration+1].intersection(validPositions);
+        Area discardedPositions = domain[iteration+1].intersectionP(validPositions);
         //modify domain[iteration]
         domain[iteration].unionP(discardedPositions);
         
+    }
+    
+    void trimExceptM(HashSet<FurnitureModel> validModels, int iteration) {
+        //modify domain[iteration+1]
+        HashSet<FurnitureModel> discardedModels = domain[iteration+1].intersection(validModels);
+        //modify domain[iteration]
+        domain[iteration].unionM(discardedModels);
     }
     
     void trim(Area invalidPositions, int iteration) {
@@ -189,6 +196,8 @@ public class Domain {
 //
 //        domain[iteration].merge(domain[iteration+1]);
 //    }
+
+
 
     
 }

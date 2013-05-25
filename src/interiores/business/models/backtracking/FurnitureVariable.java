@@ -260,8 +260,8 @@ public class FurnitureVariable
      * parameter is trimmed (moved to the previous iteration)
      * @param validArea 
      */
-    public void trimExcept(Area validArea) {
-        domain.trimExcept(validArea, iteration);
+    public void trimExceptP(Area validArea) {
+        domain.trimExceptP(validArea, iteration);
     }
 
     public void eliminateExceptM(HashSet<FurnitureModel> validModels) {
@@ -270,6 +270,10 @@ public class FurnitureVariable
 
     public void eliminateExceptO(HashSet<Orientation> validOrientations) {
         domain.eliminateExceptO(validOrientations);
+    }
+
+    public void trimExceptM(HashSet<FurnitureModel> validModels) {
+        domain.trimExceptM(validModels, iteration);
     }
     
     

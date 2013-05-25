@@ -35,9 +35,6 @@ public class TerminalFilter
         String readString = "";
         
         try {
-            Debug.println("Lock document - Lock offset: " + lockOffset);
-            Debug.println("Document length: " + document.getLength());
-            
             readString = document.getText(lockOffset, lineLength);
             
             lockOffset += lineLength;
@@ -78,9 +75,6 @@ public class TerminalFilter
             throws BadLocationException
     {
         int totalOffset = offset + string.length();
-        
-        Debug.println("Insert string - Offset: " + offset + " - Total offset: " + totalOffset + " "
-                + "- Lock offset: " + lockOffset);
         
         if(isLocked) {
             if(totalOffset > lockOffset)

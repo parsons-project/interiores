@@ -312,10 +312,14 @@ public class FurnitureVariableSet
     }
     
     
-    //note: preliminar implementation. Final implementation should take more
-    //things into consideration (e.g., not blocking paths)
+
     @Override
     protected boolean canAssignToActual(Value value) {
+        
+        actual.assignValue(value);
+        if (! actual.constraintsSatisfied()) return false;
+        
+        
         // Check constant constraints!
         // @TODO Transform to preliminar trims?
         for(FurnitureConstant constant : constants) {

@@ -224,7 +224,7 @@
  * 
  * 
  * 
- * Part 5: the flow of the algoritm.
+ * Part 5: the flow of the algorithm.
  * 
  * The algorithm receives two lists of already created constraints:
  * one for furniture constraints and one for room constraints.
@@ -264,8 +264,9 @@
  * Constraints do not come back into play again until a value is tried to
  * assign to a variable v. This means that v is the "actual" variable.
  * When such event happens, the isSatisfied() method of
- * all furniture constraints associated with v is triggered with v as parameter,
- * and the same with the isSatisfied()) method of all room constraints, with
+ * all furniture constraints associated with v is triggered with v as parameter
+ * (with the candidate value assigned to v)
+ * and the same with the isSatisfied() method of all room constraints, with
  * v as the actual variable.
  * 
  * If the assignment is successful, it will be followed by a round of

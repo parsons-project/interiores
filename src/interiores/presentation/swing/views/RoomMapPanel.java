@@ -131,45 +131,40 @@ public class RoomMapPanel extends JPanel
 
     private void formMouseDragged(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseDragged
     {//GEN-HEADEREND:event_formMouseDragged
-        Point current = map.normalize(evt.getPoint());
+        Point current = evt.getPoint();
         
-        int dx = current.x - previous.x;
-        int dy = current.y - previous.y;
-        
-        map.translateSelected(dx, dy);
-        
-        previous = current;
+        if(map.translateSelected(previous, current))
+            previous = current; // Only if there has been some translation
         
         repaint();
     }//GEN-LAST:event_formMouseDragged
 
     private void formMouseMoved(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseMoved
     {//GEN-HEADEREND:event_formMouseMoved
-        previous = map.normalize(evt.getPoint());
+        previous = evt.getPoint(); // This is only called when no mouse buttons are pressed :D
     }//GEN-LAST:event_formMouseMoved
 
     private void formMousePressed(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMousePressed
     {//GEN-HEADEREND:event_formMousePressed
         requestFocus();
+        int x = evt.getX();
+        int y = evt.getY();
+                
         switch (evt.getButton()) {
             case MouseEvent.BUTTON1: // left click
                 if(!evt.isControlDown())
                     map.unselectAll();
 
-                map.select(evt.getX(), evt.getY());
+                map.select(x, y);
                 break;
             case MouseEvent.BUTTON3: // Right click
-                int x = evt.getX();
-                int y = evt.getY();
                 if (map.select(x, y)) {
-                    ArrayList<String> selected = new ArrayList(map.getSelected());
                     ConstraintEditorFrame cef = swing.getNew(ConstraintEditorFrame.class);
-                    cef.setSelectedId(selected.get(selected.size() - 1));
+                    cef.setSelectedId(map.getLastSelected());
                     cef.setVisible(true);
                 }
                 map.unselect(x, y);
                 break;
-                
         }
         Debug.println("Nearest Wall: " + map.getNearestWall(evt.getX(), evt.getY()));        
         repaint();

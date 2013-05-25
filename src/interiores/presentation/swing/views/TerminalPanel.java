@@ -7,10 +7,11 @@ package interiores.presentation.swing.views;
 import interiores.core.business.BusinessController;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.TerminalController;
-import interiores.core.presentation.swing.terminal.ConsoleInputStream;
-import interiores.core.presentation.swing.terminal.ConsolePrintStream;
+import interiores.core.presentation.swing.terminal.SwingTerminalStream;
 import interiores.presentation.InterioresTerminal;
 import java.awt.Color;
+import java.io.InputStream;
+import java.io.PrintStream;
 import javax.swing.JPanel;
 
 /**
@@ -26,8 +27,10 @@ public class TerminalPanel
     public TerminalPanel(SwingController swing) {
         initComponents();
         
-        ConsoleInputStream istream = new ConsoleInputStream(jTextPane1);
-        ConsolePrintStream ostream = new ConsolePrintStream(jTextPane1, Color.white);
+        SwingTerminalStream terminalStream = new SwingTerminalStream(jTextPane1, Color.white);
+        
+        InputStream istream = terminalStream.getInputStream();
+        PrintStream ostream = terminalStream.getPrintStream();
         TerminalController terminal = new InterioresTerminal(istream, ostream);
         
         for(BusinessController controller : swing.getBusinessControllers())

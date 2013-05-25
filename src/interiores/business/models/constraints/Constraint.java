@@ -328,7 +328,8 @@
  * 
  * 
  * Apart from this methods, Constaints might invoke getters to the varirable to
- * get the information they need, such as getDomain().
+ * get the information they need, such as getDomain() or getAssignedValue(), in
+ * the case of isSatisfied().
  * 
  * 
  * The whole process of trimming a variable consists on:

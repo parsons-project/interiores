@@ -81,6 +81,8 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         loadCatalogButton = new javax.swing.JButton();
         removeCatalogButton = new javax.swing.JButton();
         saveCatalogButton = new javax.swing.JButton();
+        newButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Room Types Catalog Editor");
@@ -95,6 +97,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
 
         jScrollPane1.setBorder(null);
         jScrollPane1.setMinimumSize(new java.awt.Dimension(900, 0));
+        jScrollPane1.setViewportView(null);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setAutoscrolls(true);
@@ -143,6 +146,19 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             }
         });
 
+        ImageIcon im = new javax.swing.ImageIcon("src/resources/add_element.png");
+        im.setImage( im.getImage().getScaledInstance(35,35,java.awt.Image.SCALE_SMOOTH) );
+        newButton.setIcon(im); // NOI18N
+        newButton.setBorder(BorderFactory.createEmptyBorder());
+        newButton.setContentAreaFilled(false);
+        newButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Add a new type of room");
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -154,21 +170,29 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(newCatalogButton)
-                        .add(18, 18, 18)
-                        .add(loadCatalogButton))
-                    .add(title1))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(layout.createSequentialGroup()
-                        .add(saveCatalogButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(removeCatalogButton))
-                    .add(layout.createSequentialGroup()
-                        .add(currentCatalogLabel)
+                        .add(6, 6, 6)
+                        .add(newButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .add(jLabel1)
+                        .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(layout.createSequentialGroup()
+                                .add(newCatalogButton)
+                                .add(18, 18, 18)
+                                .add(loadCatalogButton))
+                            .add(title1))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(layout.createSequentialGroup()
+                                .add(saveCatalogButton)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(removeCatalogButton))
+                            .add(layout.createSequentialGroup()
+                                .add(currentCatalogLabel)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -185,7 +209,11 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                     .add(removeCatalogButton)
                     .add(saveCatalogButton))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(newButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jLabel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(25, 25, 25)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -211,12 +239,19 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         newCat.setVisible(true);
     }//GEN-LAST:event_newCatalogButtonActionPerformed
 
+    private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
+        NewCatalogDialog newCat = new NewCatalogDialog(rtcController);
+        newCat.setVisible(true);
+    }//GEN-LAST:event_newButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentCatalogLabel;
     private javax.swing.JComboBox currentCatalogSelect;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton loadCatalogButton;
+    private javax.swing.JButton newButton;
     private javax.swing.JButton newCatalogButton;
     private javax.swing.JButton removeCatalogButton;
     private javax.swing.JButton saveCatalogButton;

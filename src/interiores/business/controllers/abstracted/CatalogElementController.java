@@ -41,9 +41,4 @@ abstract public class CatalogElementController<I extends PersistentIdObject>
         return getActiveCatalog().getObjects();
     }
     
-    public Collection<String> getCatalogObjectNames() {
-        Collection<String> cs = new LinkedList();
-        for (I i : getCatalogObjects() ) cs.add(i.getId());
-        return cs;
-    }
 }

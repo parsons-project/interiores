@@ -1,6 +1,7 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogElementController;
+import interiores.business.events.catalogs.RTModifiedEvent;
 import interiores.business.events.catalogs.RTSetModifiedEvent;
 import interiores.business.models.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
@@ -58,6 +59,8 @@ public class RoomTypeController
         FurnitureType furnitureType = getFurnitureType(furnitureTypeName);
         
         roomType.addToMandatory(furnitureType);
+        
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     /**
@@ -70,6 +73,8 @@ public class RoomTypeController
         RoomType roomType = getForWrite(roomTypeName);
         
         roomType.removeFromMandatory(furnitureTypeName);
+        
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     public void setMandatory(String roomTypeName, String[] mandatory) {
@@ -79,6 +84,8 @@ public class RoomTypeController
         // Now, if everything went alright
         roomType.clearMandatory();
         for (FurnitureType ft : cft) roomType.addToMandatory(ft);
+        
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     public void setForbidden(String roomTypeName, String[] forbidden) {
@@ -88,6 +95,8 @@ public class RoomTypeController
         // Now, if everything went alright
         roomType.clearForbidden();
         for (FurnitureType ft : cft) roomType.addToForbidden(ft);
+        
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     /**
@@ -101,6 +110,8 @@ public class RoomTypeController
         FurnitureType furnitureType = getFurnitureType(furnitureTypeName);
         
         roomType.addToForbidden(furnitureType);
+        
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     /**
@@ -113,6 +124,8 @@ public class RoomTypeController
         RoomType roomType = getForWrite(roomTypeName);
         
         roomType.removeFromForbidden(furnitureTypeName);
+        
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     /**
@@ -157,12 +170,15 @@ public class RoomTypeController
     }
     
     public void setMinWidth(String roomTypeName, int w) {
-        
-        getForWrite(roomTypeName).setMinWidth(w);
+        RoomType roomType = getForWrite(roomTypeName);
+        roomType.setMinWidth(w);
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     public void setMinDepth(String roomTypeName, int d) {
-        getForWrite(roomTypeName).setMinDepth(d);
+        RoomType roomType = getForWrite(roomTypeName);
+        roomType.setMinDepth(d);
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     /**

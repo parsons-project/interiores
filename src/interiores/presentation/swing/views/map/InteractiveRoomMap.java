@@ -103,34 +103,23 @@ public class InteractiveRoomMap
             element.translate(dx, dy);
     }
     
-    public int getDistanceToWall(Orientation orientation, Point p) {
-        switch (orientation) {
-            case N:
-                return Math.abs(PADDING - p.y);
-            case S:
-                return Math.abs(PADDING + depth - p.y);
-            case W:
-                return Math.abs(PADDING - p.x);
-            case E:
-                return Math.abs(PADDING + width - p.x);
-            default:
-                return -1;
-        }
-    }
-    
     public Orientation getNearestWall(int x, int y) {
         Point p = normalize(x, y);
         Orientation orientation  = Orientation.N;
-        int distance = getDistanceToWall(Orientation.N, p);
+        int distance = walls.getDistanceToWall(Orientation.N, p);
         int curDistance;
         for (Orientation o : Orientation.values()) {
-            curDistance = getDistanceToWall(o, p);
-            if (distance > curDistance) {
+            curDistance = walls.getDistanceToWall(o, p);
+            if (distance > curDistance) { 
                 orientation = o;
                 distance = curDistance;
             }
         }
         return orientation;
+    }
+    
+    public Point unpad(Point p) {
+        return new Point(p.x - getPadding(), p.y - getPadding());
     }
     
     public Point normalize(int x, int y) {

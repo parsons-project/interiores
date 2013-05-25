@@ -31,7 +31,7 @@ public class RoomMap
     protected Dimension size; // Total size of the map
     private Map<String, RoomElement> furnitures;
     private Map<String, RoomElement> pillars;
-    private Walls walls;
+    protected Walls walls;
     private String status;
     private String time;
     

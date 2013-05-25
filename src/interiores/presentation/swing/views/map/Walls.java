@@ -97,6 +97,21 @@ public class Walls implements Drawable {
         return p;
     }
     
+    public int getDistanceToWall(Orientation orientation, Point p) {
+        switch (orientation) {
+            case N:
+                return Math.abs(RoomMap.getPadding() - p.y);
+            case S:
+                return Math.abs(RoomMap.getPadding() + depth - p.y);
+            case W:
+                return Math.abs(RoomMap.getPadding() - p.x);
+            case E:
+                return Math.abs(RoomMap.getPadding() + width - p.x);
+            default:
+                return -1;
+        }
+    }
+    
     public void addDoor(WantedFixed door) {        
         Point key = door.getPosition();
         

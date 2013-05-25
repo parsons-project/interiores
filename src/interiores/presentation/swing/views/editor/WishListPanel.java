@@ -1,4 +1,4 @@
-package interiores.presentation.swing.views;
+package interiores.presentation.swing.views.editor;
 
 import interiores.business.controllers.DesignController;
 import interiores.business.controllers.FurnitureTypeController;
@@ -7,6 +7,7 @@ import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
+import interiores.presentation.swing.views.ConstraintEditorFrame;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import javax.swing.DefaultListModel;
@@ -105,9 +106,10 @@ public class WishListPanel extends JPanel {
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Selectable Types");
         selectable.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         selectable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        selectable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-
+        selectable.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
                 selectableMouseClicked(evt);
             }
         });
@@ -120,8 +122,10 @@ public class WishListPanel extends JPanel {
                 selectedMouseClicked(evt);
             }
         });
-        selected.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+        selected.addKeyListener(new java.awt.event.KeyAdapter()
+        {
+            public void keyPressed(java.awt.event.KeyEvent evt)
+            {
                 selectedKeyPressed(evt);
             }
         });

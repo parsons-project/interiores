@@ -1,4 +1,4 @@
-package interiores.presentation.swing.views;
+package interiores.presentation.swing.views.editor;
 
 import interiores.business.controllers.DesignController;
 import interiores.business.controllers.FixedElementController;
@@ -13,6 +13,7 @@ import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
+import interiores.presentation.swing.views.ConstraintEditorFrame;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
 import interiores.presentation.swing.views.map.RoomMap;
 import interiores.presentation.swing.views.map.RoomMapDebugger;
@@ -41,6 +42,7 @@ public class RoomMapPanel extends JPanel
     private InteractiveRoomMap map;
     private RoomMapDebuggerFrame debuggerGui;
     
+    private EditorTool activeTool;
     private Point previous;
 
     /**
@@ -83,6 +85,10 @@ public class RoomMapPanel extends JPanel
         updateFixed();
         updateDesign();
     }
+    
+    public void setActiveTool(EditorTool activeTool) {
+        this.activeTool = activeTool;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this
@@ -123,51 +129,38 @@ public class RoomMapPanel extends JPanel
 
     private void formKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_formKeyReleased
     {//GEN-HEADEREND:event_formKeyReleased
+        boolean shouldRepaint = false;
         if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
             for(String id : map.getSelected())
                 ftController.unselect(id);
+            
+            shouldRepaint = true;
         }
+        
+        if(shouldRepaint || activeTool.keyReleased(evt, map))
+            repaint();
     }//GEN-LAST:event_formKeyReleased
 
     private void formMouseDragged(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseDragged
     {//GEN-HEADEREND:event_formMouseDragged
-        Point current = evt.getPoint();
+        requestFocus();
         
-        if(map.translateSelected(previous, current))
-            previous = current; // Only if there has been some translation
-        
-        repaint();
+        if(activeTool.mouseDragged(evt, map))
+            repaint();
     }//GEN-LAST:event_formMouseDragged
 
     private void formMouseMoved(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseMoved
     {//GEN-HEADEREND:event_formMouseMoved
-        previous = evt.getPoint(); // This is only called when no mouse buttons are pressed :D
+        if(activeTool.mouseMoved(evt, map))
+            repaint();
     }//GEN-LAST:event_formMouseMoved
 
     private void formMousePressed(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMousePressed
     {//GEN-HEADEREND:event_formMousePressed
         requestFocus();
-        int x = evt.getX();
-        int y = evt.getY();
-                
-        switch (evt.getButton()) {
-            case MouseEvent.BUTTON1: // left click
-                if(!evt.isControlDown())
-                    map.unselectAll();
-
-                map.select(x, y);
-                break;
-            case MouseEvent.BUTTON3: // Right click
-                if (map.select(x, y)) {
-                    ConstraintEditorFrame cef = swing.getNew(ConstraintEditorFrame.class);
-                    cef.setSelectedId(map.getLastSelected());
-                    cef.setVisible(true);
-                }
-                map.unselect(x, y);
-                break;
-        }
-        Debug.println("Nearest Wall: " + map.getNearestWall(evt.getX(), evt.getY()));        
-        repaint();
+        
+        if(activeTool.mousePressed(evt, map))        
+            repaint();
     }//GEN-LAST:event_formMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

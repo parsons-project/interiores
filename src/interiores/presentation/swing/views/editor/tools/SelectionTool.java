@@ -42,10 +42,7 @@ public class SelectionTool
                 
                 map.unselect(x, y);
                 break;
-        }
-        
-        Debug.println("Nearest Wall: " + map.getNearestWall(evt.getX(), evt.getY()));
-        
+        }        
         return true; // Always repaint
     }
 }

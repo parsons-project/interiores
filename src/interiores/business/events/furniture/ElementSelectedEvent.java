@@ -6,12 +6,12 @@ import interiores.core.Event;
  *
  * @author hector
  */
-public class FurnitureTypeSelectedEvent
+public class ElementSelectedEvent
     implements Event
 {
     private String name;
     
-    public FurnitureTypeSelectedEvent(String name) {
+    public ElementSelectedEvent(String name) {
         this.name = name;
     }
     

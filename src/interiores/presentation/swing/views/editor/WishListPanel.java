@@ -2,8 +2,8 @@ package interiores.presentation.swing.views.editor;
 
 import interiores.business.controllers.DesignController;
 import interiores.business.controllers.FurnitureTypeController;
-import interiores.business.events.furniture.FurnitureTypeSelectedEvent;
-import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
+import interiores.business.events.furniture.ElementSelectedEvent;
+import interiores.business.events.furniture.ElementUnselectedEvent;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
@@ -69,13 +69,13 @@ public class WishListPanel extends JPanel {
              listModel.addElement(element);
     }
     
-    @Listen(FurnitureTypeSelectedEvent.class)
-    public void addSelected(FurnitureTypeSelectedEvent evt) {
+    @Listen(ElementSelectedEvent.class)
+    public void addSelected(ElementSelectedEvent evt) {
         listModel.addElement(evt.getName());
     }
     
-    @Listen(FurnitureTypeUnselectedEvent.class)
-    public void removeSelected(FurnitureTypeUnselectedEvent evt) {
+    @Listen(ElementUnselectedEvent.class)
+    public void removeSelected(ElementUnselectedEvent evt) {
         listModel.removeElement(evt.getName());
     }
     
@@ -92,8 +92,7 @@ public class WishListPanel extends JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         scrollSelectable = new javax.swing.JScrollPane();
         selectable = new javax.swing.JTree();
@@ -103,29 +102,23 @@ public class WishListPanel extends JPanel {
         debugCheckBox = new javax.swing.JCheckBox();
         timeCheckBox = new javax.swing.JCheckBox();
 
-        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Selectable Types");
+        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Furniture");
         selectable.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         selectable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        selectable.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        selectable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 selectableMouseClicked(evt);
             }
         });
         scrollSelectable.setViewportView(selectable);
 
-        selected.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
+        selected.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 selectedMouseClicked(evt);
             }
         });
-        selected.addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyPressed(java.awt.event.KeyEvent evt)
-            {
+        selected.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
                 selectedKeyPressed(evt);
             }
         });
@@ -133,10 +126,8 @@ public class WishListPanel extends JPanel {
 
         solveButton.setText("Solve design");
         solveButton.setActionCommand("solve");
-        solveButton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        solveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 solveButtonActionPerformed(evt);
             }
         });

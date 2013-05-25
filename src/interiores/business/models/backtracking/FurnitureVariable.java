@@ -3,6 +3,7 @@ package interiores.business.models.backtracking;
 import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.Area.Area;
+import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
@@ -20,10 +21,10 @@ public class FurnitureVariable
     /**
     * Represents the iteration of the algorithm.
     */
-    public int iteration;
+    public int iteration;  
     
+    List<Constraint> furnitureConstraints;
     
-    protected Collection<UnaryConstraint> unaryConstraints;
     protected Domain domain;
     
     /**

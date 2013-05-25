@@ -8,7 +8,9 @@ import interiores.business.models.WantedFurniture;
 import interiores.business.models.WishList;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.catalogs.NamedCatalog;
+import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.BinaryConstraint;
+import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
@@ -34,23 +36,7 @@ public class FurnitureVariableSet
      * Represents the number of variables.
      */
     private int variableCount;
-    private int constantCount;
-    
-    /**
-     * Contains all the variables of the variable set.
-     * Moreover, it gives information about what variables have an assigned
-     * value and, in such cases, in which iteration of the algorithm they
-     * were assigned:
-     * At any given iteration i (depth = i) of the algorithm, the first i
-     * elements of the vector have assigned values, and they were assigned in
-     * the iteration correspondent to their position in the vector.
-     * Variables beyond the first i positions have no assigned value yet.
-     * 
-     * The vector size never changes and is equal to the amount of variables
-     * (which is also the number of iterations of the algorithm), but their
-     * elements might be reallocated.
-     */
-    
+
     /**
      * This list contains the variables which do not have an assigned value yet.
      */
@@ -68,9 +54,7 @@ public class FurnitureVariableSet
      */
     protected FurnitureVariable actual;
     
-    private FurnitureConstant[] constants;
-    
-
+    List<FurnitureConstant> constants;
     
     /**
      * Indicates whether all variables have an assigned value.
@@ -81,18 +65,22 @@ public class FurnitureVariableSet
      * Contains the room rectangle
      */
     private OrientedRectangle roomArea;
-    
-    /**
-     * Indicates restrictions amongst two variables.
-     */
-    private VariableConstraintSet binaryConstraints;
-   
+
     /**
      * Indicates restrictions amongst all variables.
      */
-    Map<String, RoomInexhaustiveTrimmer> globalConstraints;
+   List<GlobalConstraint> globalConstraints;
     
-    private List<PreliminarTrimmer> preliminarTrimmers;
+   /**
+    * Holds informatinon about the relationship between constraints of
+    * different variables.
+    * The first string identifies the ID of the variable that, when assigned,
+    * the domain of the variable identified by the second string, will be
+    * trimmed proportionally to the dependence stored in this matrix.
+    * 
+    * Detailed explanation in the header of Constraint class.
+    */
+   Map<Entry<String, String>, Integer> matrixOfDependence;
     
     /**
      * constants to calibrate the selection of the next actual variable.
@@ -104,43 +92,80 @@ public class FurnitureVariableSet
     private static final int BINARY_CONSTRAINTS_FACTOR = 12;
     
     /**
-     * Default Constructor.
+     * Constructor.
+     * This constructor does all the initilization work:
+     * 
+     * roomArea is initialized with the room rectangle.
+     * 
+     * variableCount is initialized with the number of variables.
+     * 
+     * allAssigned is initialized false.
+     * 
+     * assignedVariables is initialized empty.
+     * 
+     * actual is initialized null.
+     * 
+     * unassignedVariables is initialized with all variables.
+     * Each variable is initialized with:
+     * - all the models available for its furniture type.
+     * - all the orientations
+     * - all the positions of the room (roomArea)
+     * - the list of unary constraints it is associated with.
+     * 
+     * constants is initialized with all FurnitureConstants.
+     * 
+     * globalConstraints is initialized with all global constraints.
+     * The TrimUnfitModelsPseudoContraint is placed last in the list.
+     * 
+     * The matrix of dependence is built
      */
     public FurnitureVariableSet(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog)
-            throws BusinessException
-    {
+            throws BusinessException {
+
         Dimension roomSize = wishList.getRoom().getDimension();
         roomArea = new OrientedRectangle(new Point(0, 0), roomSize, Orientation.S);
         
         variableCount = wishList.getUnfixedSize();
-        constantCount = wishList.getFixedSize();
-        
-        unassignedVariables = new ArrayList();
-        assignedVariables = new ArrayList();
-        constants = new FurnitureConstant[constantCount];
-        
-        preliminarTrimmers = new ArrayList();
-        
-        addConstants(wishList);
-        addVariables(wishList, furnitureCatalog, roomSize);
-        addBinaryConstraints(wishList);
         
         allAssigned = false;
+   
+        assignedVariables = new ArrayList<FurnitureVariable>();
+        
         actual = null;
+        
+        unassignedVariables = new ArrayList<FurnitureVariable>();
+        addVariables(wishList, furnitureCatalog, roomSize);
+        
+        constants = new ArrayList<FurnitureConstant>();
+        addConstants(wishList);
+        
+        globalConstraints = new ArrayList<GlobalConstraint>();
+        addGlobalConstraints();
+        
+        buildMatrixOfDependence();
+
     }
     
+    /**
+     * Invoked in the constructor to initialize constants.
+     * @param wishList 
+     */
     private void addConstants(WishList wishList) {
-        int i = 0;
         for(WantedFixed wantedFixed : wishList.getWantedFixed()) {
             String constantName = wantedFixed.getName();
             FurnitureValue value = new FurnitureValue(wantedFixed.getPosition(), wantedFixed.getModel(),
                     wantedFixed.getOrientation());
             
-            constants[i] = new FurnitureConstant(constantName, value);
-            i++;
+            constants.add(new FurnitureConstant(constantName, value));
         }
     }
     
+    /**
+     * Invoked in the constructor to initialize variables.
+     * @param wishList
+     * @param furnitureCatalog
+     * @param roomSize 
+     */
     private void addVariables(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog,
             Dimension roomSize) {   
            
@@ -154,20 +179,14 @@ public class FurnitureVariableSet
         }
     }
     
-    private void addBinaryConstraints(WishList wishList) {
-        binaryConstraints = new VariableConstraintSet();
-
-        for(BinaryConstraintAssociation bca : wishList.getBinaryConstraints()) {
-            Debug.println("Adding Binary constraint " + bca.toString());
-            Debug.println("Element1 is " + getVariable(bca.furniture1).getID());
-            Debug.println("Element2 is " + getVariable(bca.furniture2).getID());
-            Debug.println("Constraint is " + bca.constraint.toString());
-
-            binaryConstraints.addConstraint(getVariable(bca.furniture1),
-                    getVariable(bca.furniture2), bca.constraint);
-        }
+    /**
+     * Invoked in the constructor to initialize global constraints.
+     */
+    private void addGlobalConstraints() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
+
     /**
      * Selects a variable from variables[depth..variableCount-1] and sets it
      * as actual variable.
@@ -183,14 +202,11 @@ public class FurnitureVariableSet
      * be adjusted.
      * 
      * The iterators of the actual variable are reset.
-     */
-    //note: trivial implementation. To be optimized.
-    
-    
+     */ 
     @Override
     protected void setActualVariable() {
         
-        if (unassignedVariables.size() == 0)
+        if (unassignedVariables.isEmtpy())
             allAssigned = true;
         else {
             int maxDomainSize = -1;
@@ -406,6 +422,42 @@ public class FurnitureVariableSet
         return values;
     }
  
+    // Algorithm to build the matrix of dependence:
+    // Initialize mod to all 0.
+    // For each binary constraint bc:
+    //      //assume v is the variable associated with bc
+    //      //and w is the otherVariable of bc (bc.getOtherVariable())
+    //      mod[w][v] = bc.getWeight()
+    //      //this means that if w is assigned a value, the domain of v will be
+    //      //restricted proportionally to the weight of bc.
+    private void buildMatrixOfDependence() {
+
+        for (FurnitureVariable v : unassignedVariables) {
+            for (Constraint constraint : v.furnitureConstraints) {
+                if (constraint instanceof BinaryConstraint) {
+                    BinaryConstraint bc = (BinaryConstraint) constraint;
+                    
+                    InterioresVariable otherVariable = bc.getOtherVariable();
+                    if (otherVariable instanceof FurnitureVariable) {
+                        FurnitureVariable w = (FurnitureVariable) otherVariable;
+
+                        Entry e = new SimpleEntry(w.getID(), v.getID());
+                        matrixOfDependence.put(e, bc.getWeight());
+                    }
+                }
+            }
+        }
+    }
+    
+    private int getDependence(FurnitureVariable variable1, FurnitureVariable variable2) {
+        Entry e = new SimpleEntry(variable1.getID(), variable2.getID());
+        if (! matrixOfDependence.containsKey(e))
+            return 0;
+        else return matrixOfDependence.get(e);
+    }
+    
+    
+    
     
 //    @Override
 //    public String toString() {
@@ -432,5 +484,9 @@ public class FurnitureVariableSet
 //
 //        return result.toString();
 //    }
+
+
+
+
 
 }

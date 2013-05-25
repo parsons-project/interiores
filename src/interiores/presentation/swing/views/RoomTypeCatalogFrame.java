@@ -4,15 +4,17 @@
  */
 package interiores.presentation.swing.views;
 
+import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.RoomTypeController;
 import interiores.business.controllers.RoomTypesCatalogController;
 import interiores.business.events.catalogs.RTCatalogChangedEvent;
 import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
 import interiores.business.events.catalogs.RTChangedEvent;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.helpers.FileChooser;
+import interiores.utils.Range;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.Collection;
@@ -22,6 +24,8 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -33,6 +37,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
      private SwingController swing;
      private RoomTypeController rtController;
      private RoomTypesCatalogController rtcController;
+     private FurnitureTypeController ftController;
      private JFileChooser fileChooser;
      
     
@@ -47,9 +52,12 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         this.swing = presentation;
         rtController = swing.getBusinessController(RoomTypeController.class);
         rtcController = swing.getBusinessController(RoomTypesCatalogController.class);
+        ftController = swing.getBusinessController(FurnitureTypeController.class);
         fileChooser = new FileChooser();
         
         catElements = new HashMap();
+        UIManager.put("ToolTip.background", Color.white);
+        ToolTipManager.sharedInstance().setInitialDelay(0);
         
         // Initially, we load the current catalog
         refreshCatalog();
@@ -79,9 +87,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
         setBounds(new java.awt.Rectangle(0, 0, 900, 600));
-        setMaximumSize(new java.awt.Dimension(900, 600));
         setMinimumSize(new java.awt.Dimension(900, 600));
-        setPreferredSize(new java.awt.Dimension(900, 600));
 
         title1.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
         title1.setText("Room types catalog editor");
@@ -96,6 +102,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jPanel1);
 
         currentCatalogSelect.setBackground(new java.awt.Color(255, 255, 255));
+        currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         currentCatalogSelect.setMaximumSize(new java.awt.Dimension(130, 32767));
         currentCatalogSelect.setMinimumSize(new java.awt.Dimension(90, 27));
         currentCatalogSelect.setPreferredSize(new java.awt.Dimension(130, 27));
@@ -177,8 +184,8 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
                     .add(loadCatalogButton)
                     .add(removeCatalogButton)
                     .add(saveCatalogButton))
-                .add(31, 31, 31)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -279,7 +286,6 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         private javax.swing.JLabel measureLabel3 = new javax.swing.JLabel();
         
         public RTC_Element(String aName, String rname, Integer width, Integer depth, String mandatory, String forbidden) {
-            
             actualName = aName;
             
             ImageIcon im = new javax.swing.ImageIcon("src/resources/remove_element.png");
@@ -311,18 +317,15 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             measureField1.addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
                 public void focusLost(java.awt.event.FocusEvent evt) {
-                    widthModification();
-                }
-
-                private void widthModification() {
                     String str = measureField1.getText();
-                    if (str.matches("[0-9]+") && Integer.parseInt(str)!=0)
+                    Range r = rtController.getWidthRange(actualName);
+                    if (str.matches("[0-9]+") && Integer.parseInt(str) > 0 && Integer.parseInt(str) <= r.max)
                         rtController.setMinWidth(actualName, Integer.parseInt(str));
                     else {
-                        JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,"Width should be a number different from 0","Error",JOptionPane.WARNING_MESSAGE);
+                        String msg = "Width should be a positive number between 0 and " + r.max;
+                        JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
                         measureField1.setText(String.valueOf(rtController.getWidthRange(actualName).min));
                     }
-                        
                 }
             });
 
@@ -331,17 +334,15 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             measureField2.addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
                 public void focusLost(java.awt.event.FocusEvent evt) {
-                    depthModification();
-                }
-                private void depthModification() {
                     String str = measureField2.getText();
-                    if (str.matches("[0-9]+") && Integer.parseInt(str)!=0)
+                    Range r = rtController.getDepthRange(actualName);
+                    if (str.matches("[0-9]+") && Integer.parseInt(str) > 0 && Integer.parseInt(str) <= r.max)
                         rtController.setMinDepth(actualName, Integer.parseInt(str));
                     else {
-                        JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,"Depth should be a number different from 0","Error",JOptionPane.WARNING_MESSAGE);
+                        String msg = "Depth should be a positive number between 0 and " + r.max;
+                        JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
                         measureField2.setText(String.valueOf(rtController.getDepthRange(actualName).min));
                     }
-                        
                 }
             });
             
@@ -352,27 +353,46 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             mandatoryField.addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
                 public void focusLost(java.awt.event.FocusEvent evt) {
-                    mandatoryModification();
-                }
-                private void mandatoryModification() {
-                    String str = measureField2.getText();
+                    String str = mandatoryField.getText();
                     str = str.replace(" ","");
                     String[] mand = str.split(",");
-                    try { rtController.setMandatory(actualName, mand); }
-                    catch (ElementNotFoundBusinessException e) {
-                        e.getMessage();
-                        String mm = rtController.getMandatory(actualName).toString();
-                        mm = (String) mm.subSequence(1, mm.length()-1);
+                    String mm = rtController.getMandatory(actualName).toString();
+                    try {
+                        rtController.setMandatory(actualName, mand);
+                        updateTooltips();
+                    }
+                    catch (Exception e) {
+                        JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,e.getMessage(),"Invalid value",JOptionPane.ERROR_MESSAGE);
+                        mm = mm.substring(1, mm.length()-1);
                         mandatoryField.setText(mm);
                     }
-                        
                 }
             });
+            
             
             forbiddenLabel.setText("Forbidden furniture:");
             forbiddenField.setText(forbidden);
             forbiddenField.setColumns(30);
+            forbiddenField.addFocusListener(new java.awt.event.FocusAdapter() {
+                @Override
+                public void focusLost(java.awt.event.FocusEvent evt) {
+                    String str = forbiddenField.getText();
+                    str = str.replace(" ","");
+                    String[] forb = str.split(",");
+                    String ff = rtController.getForbidden(actualName).toString();
+                    try {
+                        rtController.setForbidden(actualName, forb);
+                        updateTooltips();
+                    }
+                    catch (Exception e) {
+                        JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,e.getMessage(),"Invalid value",JOptionPane.ERROR_MESSAGE);
+                        ff = ff.substring(1, ff.length()-1);
+                        forbiddenField.setText(ff);
+                    }
+                }
+            });
             
+            updateTooltips();
 
             org.jdesktop.layout.GroupLayout innerPanelLayout = new org.jdesktop.layout.GroupLayout(innerPanel);
             innerPanel.setLayout(innerPanelLayout);
@@ -462,8 +482,15 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             jPanel1.remove(outerPanel);
         }
         
+        private void updateTooltips() {
+            Collection<String> cs = ftController.getUncategorizedFurniture(actualName);
+            String s = "<html><em>Available furniture:</em><br>";
+            for(String f : cs) s += f + "<br>"; s += "</html>";
+            mandatoryField.setToolTipText(s);
+            forbiddenField.setToolTipText(s);
+        }
+        
     }
-
 
     private void addElement(String key, String rtn) {
         int width = rtController.getWidthRange(rtn).min;

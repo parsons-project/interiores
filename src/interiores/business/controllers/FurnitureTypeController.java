@@ -3,7 +3,9 @@ package interiores.business.controllers;
 import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.business.events.furniture.FurnitureTypeSelectedEvent;
 import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
+import interiores.business.models.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.room.FurnitureType;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
@@ -89,5 +91,22 @@ public class FurnitureTypeController
         Collection<String> forbidden = getRoom().getType().getForbidden();
         selectable.removeAll(forbidden);
         return selectable;
+    }
+    
+    public Collection getUncategorizedFurniture(String rtype) {
+        Collection<String> u = new ArrayList();
+        for (FurnitureType ft : getCatalogObjects()) u.add(ft.getName());
+        
+        Collection<String> forbidden = getRoomType(rtype).getForbidden();
+        u.removeAll(forbidden);
+        Collection<String> mandatory = getRoomType(rtype).getMandatory();
+        u.removeAll(mandatory);
+        
+        return u;
+    }
+    
+    private RoomType getRoomType(String name) {
+        NamedCatalog<RoomType> rtCatalog = (NamedCatalog) getCatalog(AvailableCatalog.ROOM_TYPES);
+        return rtCatalog.get(name);
     }
 }

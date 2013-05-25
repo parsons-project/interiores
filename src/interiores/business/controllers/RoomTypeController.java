@@ -2,7 +2,6 @@ package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.business.events.catalogs.RTChangedEvent;
-import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
@@ -10,6 +9,7 @@ import interiores.business.models.room.FurnitureType;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Range;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -74,14 +74,20 @@ public class RoomTypeController
     
     public void setMandatory(String roomTypeName, String[] mandatory) {
         RoomType roomType = getForWrite(roomTypeName);
+        Collection<FurnitureType> cft = new LinkedList();
+        for (String s : mandatory) cft.add(getFurnitureType(s));
+        // Now, if everything went alright
         roomType.clearMandatory();
-        for (String s : mandatory) roomType.addToMandatory(getFurnitureType(s));
+        for (FurnitureType ft : cft) roomType.addToMandatory(ft);
     }
     
     public void setForbidden(String roomTypeName, String[] forbidden) {
         RoomType roomType = getForWrite(roomTypeName);
+        Collection<FurnitureType> cft = new LinkedList();
+        for (String s : forbidden) cft.add(getFurnitureType(s));
+        // Now, if everything went alright
         roomType.clearForbidden();
-        for (String s : forbidden) roomType.addToForbidden(getFurnitureType(s));
+        for (FurnitureType ft : cft) roomType.addToForbidden(ft);
     }
     
     /**

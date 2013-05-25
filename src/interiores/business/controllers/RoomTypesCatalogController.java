@@ -31,11 +31,10 @@ public class RoomTypesCatalogController
         loadedCatalogs.put(defaultCatalog.getName(), defaultCatalog);
         
         // Now, we create a "session" catalog that can be manipulated, and set it active
-        //NamedCatalog sessionCatalog = new NamedCatalog("session", defaultCatalog);
-        //loadedCatalogs.put("session", sessionCatalog);
+        NamedCatalog sessionCatalog = new NamedCatalog("session", defaultCatalog);
+        loadedCatalogs.put("session", sessionCatalog);
         
-        setActiveCatalog(defaultCatalog);
-        create("session"); checkout("session");
+        setActiveCatalog(sessionCatalog);
     }
     
     @Override

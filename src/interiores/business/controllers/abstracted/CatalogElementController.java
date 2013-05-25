@@ -6,6 +6,7 @@ import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.PersistentIdObject;
 import interiores.core.data.JAXBDataController;
 import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  *
@@ -38,5 +39,11 @@ abstract public class CatalogElementController<I extends PersistentIdObject>
     
     public Collection<I> getCatalogObjects() {
         return getActiveCatalog().getObjects();
+    }
+    
+    public Collection<String> getCatalogObjectNames() {
+        Collection<String> cs = new LinkedList();
+        for (I i : getCatalogObjects() ) cs.add(i.getId());
+        return cs;
     }
 }

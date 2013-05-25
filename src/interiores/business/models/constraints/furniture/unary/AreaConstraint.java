@@ -3,6 +3,7 @@ package interiores.business.models.constraints.furniture.unary;
 import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.constraints.furniture.InexhaustiveConstraint;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -47,7 +48,8 @@ public class AreaConstraint
      * @param variable The variable to be checked.
      */
     @Override
-    public void eliminateInvalidValues(Domain domain) {
+    public void preliminarTrim(FurnitureVariable variable) {
+        variable.eliminate()
         domain.getPositions(0).intersection(validPositions);
     }
     
@@ -72,5 +74,15 @@ public class AreaConstraint
         }
         result.append(NEW_LINE);
         return result.toString();
+    }
+
+    @Override
+    public void preliminarTrim(FurnitureVariable variable) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isSatisfied(FurnitureVariable variable) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

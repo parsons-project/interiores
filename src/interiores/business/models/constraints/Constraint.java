@@ -309,19 +309,23 @@
  * To perform trimes and preliminarTrims, constraints trigger methods upon
  * variables.
  * 
- * The methods are:
- * eliminate(values vs):
- * Where vs is either an Area (a collection of positions), a colletion of
- * Models or a collection of Orientations.
- * If any value of the variables' stage[0] is in vs, it is removed.
+ * Assume for the next methods that vs is either an Area (a collection of
+ * positions), a colletion of Models or a collection of Orientations.
  * 
- * setValidOnly(values vs):
+ * eliminate(values vs):
+ * If any value of the variable's stage[0] is in vs, it is removed.
+ * 
+ * eliminateExcept(values vs):
+ * If any value of the variable's stage[0] is not in vs, it is removed.
+ * 
+ * trim(values vs):
+ * If any value of the variables' stage[iteration+1] is in vs, it is moved to
+ * stage[iteration].
+ * 
+ * trimExcept(values vs):
  * If any value of the varirables' stage[iteration+1] is not in vs, it is moved
  * to stage[iteration].
  * 
- * exclude(values vs):
- * If any value of the variables' stage[iteration+1] is in vs, it is moved to
- * stage[iteration].
  * 
  * The whole process of trimming a variable consists on:
  * 1) moving all values of stage[iteration] to stage[iteration+1]. This is

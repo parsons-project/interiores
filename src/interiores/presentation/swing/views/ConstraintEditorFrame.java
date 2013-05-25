@@ -14,6 +14,7 @@ import interiores.core.presentation.annotation.Listen;
 import interiores.utils.BinaryConstraintAssociation;
 import interiores.utils.CoolColor;
 import interiores.utils.Material;
+import interiores.utils.Range;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,6 +59,7 @@ public class ConstraintEditorFrame extends JFrame {
         components.add(rangePanel);
         components.add(propertyLabel);
         components.add(wallPanel);
+        components.add(positionPanel);
         
     }
     
@@ -84,9 +86,9 @@ public class ConstraintEditorFrame extends JFrame {
        updateActiveConstraintsList();
     }
     
-    private void showOnly(Collection<JComponent> components) {
+    private void showOnly(Collection<JComponent> toShowComponents) {
         for (JComponent component : this.components) {
-            if (components.contains(component))
+            if (toShowComponents.contains(component))
                 component.setVisible(true);
             else
                 component.setVisible(false);
@@ -153,8 +155,8 @@ public class ConstraintEditorFrame extends JFrame {
         propertyLabel = new javax.swing.JLabel();
         integerSpinner = new javax.swing.JSpinner();
         rangePanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        rangeMinLabel = new javax.swing.JLabel();
+        rangeMaxLabel = new javax.swing.JLabel();
         minSpinner = new javax.swing.JSpinner();
         maxSpinner = new javax.swing.JSpinner();
         wallPanel = new javax.swing.JPanel();
@@ -162,6 +164,15 @@ public class ConstraintEditorFrame extends JFrame {
         WCheckBox = new javax.swing.JCheckBox();
         SCheckBox = new javax.swing.JCheckBox();
         ECheckBox = new javax.swing.JCheckBox();
+        positionPanel = new javax.swing.JPanel();
+        minXSpinner = new javax.swing.JSpinner();
+        minYSpinner = new javax.swing.JSpinner();
+        maxXSpinner = new javax.swing.JSpinner();
+        maxYSpinner = new javax.swing.JSpinner();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -213,6 +224,12 @@ public class ConstraintEditorFrame extends JFrame {
         selectedElementLabel.setFocusable(false);
         selectedElementLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        relatableCombo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                relatableComboActionPerformed(evt);
+            }
+        });
+
         activeUnaries.setModel(new javax.swing.AbstractListModel() {
             String[] strings = {};
             public int getSize() { return strings.length; }
@@ -247,9 +264,9 @@ public class ConstraintEditorFrame extends JFrame {
         integerSpinner.setBounds(130, 40, 80, 20);
         constPropEditor.add(integerSpinner, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jLabel1.setText("min:");
+        rangeMinLabel.setText("min:");
 
-        jLabel2.setText("max:");
+        rangeMaxLabel.setText("max:");
 
         javax.swing.GroupLayout rangePanelLayout = new javax.swing.GroupLayout(rangePanel);
         rangePanel.setLayout(rangePanelLayout);
@@ -258,11 +275,11 @@ public class ConstraintEditorFrame extends JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, rangePanelLayout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(rangePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
+                    .addComponent(rangeMinLabel)
                     .addComponent(minSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(53, 53, 53)
                 .addGroup(rangePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
+                    .addComponent(rangeMaxLabel)
                     .addComponent(maxSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(69, Short.MAX_VALUE))
         );
@@ -271,8 +288,8 @@ public class ConstraintEditorFrame extends JFrame {
             .addGroup(rangePanelLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(rangePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+                    .addComponent(rangeMinLabel)
+                    .addComponent(rangeMaxLabel))
                 .addGap(18, 18, 18)
                 .addGroup(rangePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(maxSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -292,7 +309,6 @@ public class ConstraintEditorFrame extends JFrame {
         WCheckBox.setLabel("W");
 
         SCheckBox.setText("S");
-        SCheckBox.setActionCommand("S");
         SCheckBox.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         SCheckBox.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
@@ -320,11 +336,9 @@ public class ConstraintEditorFrame extends JFrame {
                     .addGroup(wallPanelLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addGroup(wallPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(wallPanelLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(wallPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(WCheckBox)
-                                    .addComponent(ECheckBox)))
+                            .addGroup(wallPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(WCheckBox)
+                                .addComponent(ECheckBox))
                             .addGroup(wallPanelLayout.createSequentialGroup()
                                 .addGap(15, 15, 15)
                                 .addComponent(SCheckBox))))
@@ -336,6 +350,66 @@ public class ConstraintEditorFrame extends JFrame {
 
         wallPanel.setBounds(0, 0, 247, 132);
         constPropEditor.add(wallPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        jLabel3.setText("x:");
+
+        jLabel4.setText("y:");
+
+        jLabel5.setText("Min:");
+
+        jLabel6.setText("Max:");
+
+        javax.swing.GroupLayout positionPanelLayout = new javax.swing.GroupLayout(positionPanel);
+        positionPanel.setLayout(positionPanelLayout);
+        positionPanelLayout.setHorizontalGroup(
+            positionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, positionPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(positionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(positionPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(1, 1, 1)))
+                .addGap(16, 16, 16)
+                .addGroup(positionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(positionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(minYSpinner)
+                        .addComponent(minXSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE))
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(positionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(positionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(maxXSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                        .addComponent(maxYSpinner))
+                    .addComponent(jLabel6))
+                .addGap(156, 156, 156))
+        );
+        positionPanelLayout.setVerticalGroup(
+            positionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(positionPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(positionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, positionPanelLayout.createSequentialGroup()
+                        .addGroup(positionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(positionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(minXSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(13, 13, 13)
+                        .addGroup(positionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(minYSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, positionPanelLayout.createSequentialGroup()
+                        .addComponent(maxXSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)
+                        .addComponent(maxYSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        positionPanel.setBounds(0, 0, 299, 104);
+        constPropEditor.add(positionPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -416,14 +490,12 @@ private void addConstraintButtonActionPerformed(java.awt.event.ActionEvent evt) 
     else if (unaryConstraintRadio.isSelected()) {
         String type = (String) constraintTypeList.getSelectedItem();
         String value = (String) relatableCombo.getSelectedItem();
-        int intValue = (Integer) integerSpinner.getValue();
         float floatValue = (Float) floatSpinner.getValue();
-        int minValue = (Integer) minSpinner.getValue();
-        int maxValue = (Integer) maxSpinner.getValue();
+        Range range = new Range((Integer) minSpinner.getValue(), (Integer) maxSpinner.getValue());
+        Range posX = new Range((Integer) minXSpinner.getValue(), (Integer) maxXSpinner.getValue());
+        Range posY = new Range((Integer) minYSpinner.getValue(), (Integer) maxYSpinner.getValue());
         
-        addUnaryConstraint(type, value, floatValue, minValue, maxValue, getOrientations());
-        //wall;
-        //position;          
+        addUnaryConstraint(type, value, floatValue, range, posX, posY, getOrientations());         
     }
     updateActiveConstraintsList();
 }//GEN-LAST:event_addConstraintButtonActionPerformed
@@ -484,6 +556,21 @@ private void unaryConstraintRadioActionPerformed(java.awt.event.ActionEvent evt)
         updateUnaryView();
     }
 }//GEN-LAST:event_unaryConstraintRadioActionPerformed
+
+private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_relatableComboActionPerformed
+    boolean unarySelected = unaryConstraintRadio.isSelected();
+    String type = (String) relatableCombo.getSelectedItem();
+    if (unarySelected && type != null) {
+        if (type.equals("at")) {
+            positionPanel.setVisible(false);
+            prepareRangePanel("x:", "y:");
+        }
+        else if (type.equals("area")) {
+            positionPanel.setVisible(true);
+            rangePanel.setVisible(false);
+        }
+    }
+}//GEN-LAST:event_relatableComboActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox ECheckBox;
@@ -500,15 +587,24 @@ private void unaryConstraintRadioActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JComboBox constraintTypeList;
     private javax.swing.JSpinner floatSpinner;
     private javax.swing.JSpinner integerSpinner;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPanel2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JSpinner maxSpinner;
+    private javax.swing.JSpinner maxXSpinner;
+    private javax.swing.JSpinner maxYSpinner;
     private javax.swing.JSpinner minSpinner;
+    private javax.swing.JSpinner minXSpinner;
+    private javax.swing.JSpinner minYSpinner;
+    private javax.swing.JPanel positionPanel;
     private javax.swing.JLabel propertyLabel;
+    private javax.swing.JLabel rangeMaxLabel;
+    private javax.swing.JLabel rangeMinLabel;
     private javax.swing.JPanel rangePanel;
     private javax.swing.JComboBox relatableCombo;
     private javax.swing.JLabel selectedElementLabel;
@@ -517,6 +613,12 @@ private void unaryConstraintRadioActionPerformed(java.awt.event.ActionEvent evt)
     // End of variables declaration//GEN-END:variables
 
 
+    private void prepareRangePanel(String left, String right) {
+        rangeMinLabel.setText(left);
+        rangeMaxLabel.setText(right);
+        rangePanel.setVisible(true);
+    }
+    
     private void addBinaryConstraint(String otherId, String type, int dist) {
         if (type.equals("distance-max"))
             binaryConstraintController.addMaxDistanceConstraint(selectedId, otherId, dist);
@@ -529,7 +631,7 @@ private void unaryConstraintRadioActionPerformed(java.awt.event.ActionEvent evt)
     }
 
     private void addUnaryConstraint(String type, String value, float floatValue,
-                                    int minimum, int maximum, Orientation[] orientations) {
+                                    Range range, Range posX, Range posY, Orientation[] orientations) {
         if (type.equals("color"))
             unaryConstraintController.addColorConstraint(selectedId, value);
         else if (type.equals("model"))
@@ -541,11 +643,15 @@ private void unaryConstraintRadioActionPerformed(java.awt.event.ActionEvent evt)
         else if (type.equals("price"))
             unaryConstraintController.addPriceConstraint(selectedId, floatValue);
         else if (type.equals("width"))
-            unaryConstraintController.addWidthConstraint(selectedId, minimum, maximum);
+            unaryConstraintController.addWidthConstraint(selectedId, range.min, range.max);
         else if (type.equals("depth"))
-            unaryConstraintController.addDepthConstraint(selectedId, minimum, maximum);
-        else if (type.equals("position"))
-            unaryConstraintController.addPositionAtConstraint(selectedId, WIDTH, WIDTH);
+            unaryConstraintController.addDepthConstraint(selectedId, range.min, range.max);
+        else if (type.equals("position")) {
+            if (value.equals("area"))
+                unaryConstraintController.addPositionRangeConstraint(selectedId, posX.min, posY.min, posX.max, posY.max);
+            else if (value.equals("at"))
+                unaryConstraintController.addPositionAtConstraint(selectedId, range.min, range.max);        
+        }
         else if (type.equals("wall"))
             unaryConstraintController.addWallConstraint(selectedId, orientations);
     }
@@ -556,7 +662,13 @@ private void unaryConstraintRadioActionPerformed(java.awt.event.ActionEvent evt)
         showOnly(visibleComponents);
     }
     
-   private void rangeConstraintView() {
+    private void positionConstraintView() {
+        updateComboBox(relatableCombo, new String[]{"area", "at"});
+        showOnly((Collection) Arrays.asList(constPropEditor, positionPanel, relatableCombo));
+    }
+    
+    private void rangeConstraintView() {
+        prepareRangePanel("min:", "max:");
         showOnly((Collection) Arrays.asList(constPropEditor,rangePanel));
     }
     
@@ -594,6 +706,8 @@ private void unaryConstraintRadioActionPerformed(java.awt.event.ActionEvent evt)
                 rangeConstraintView();
             else if (type.equals("wall"))
                 wallsConstraintView();
+            else if (type.equals("position"))
+                positionConstraintView();
         }
     }
 

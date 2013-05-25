@@ -52,6 +52,12 @@ public class NewRoomTypeDialog extends javax.swing.JDialog {
 
         jLabel3.setText("Min. Dimensions:");
 
+        widthField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                widthFieldKeyTyped(evt);
+            }
+        });
+
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -60,6 +66,7 @@ public class NewRoomTypeDialog extends javax.swing.JDialog {
         });
 
         createButton.setText("Create");
+        createButton.setEnabled(false);
         createButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createButtonActionPerformed(evt);
@@ -67,6 +74,18 @@ public class NewRoomTypeDialog extends javax.swing.JDialog {
         });
 
         jLabel6.setText("x");
+
+        depthField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                depthFieldKeyTyped(evt);
+            }
+        });
+
+        nameField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                nameFieldKeyTyped(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,6 +153,18 @@ public class NewRoomTypeDialog extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_createButtonActionPerformed
 
+    private void nameFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameFieldKeyTyped
+        verifyFields();
+    }//GEN-LAST:event_nameFieldKeyTyped
+
+    private void widthFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_widthFieldKeyTyped
+        verifyFields();
+    }//GEN-LAST:event_widthFieldKeyTyped
+
+    private void depthFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_depthFieldKeyTyped
+        verifyFields();
+    }//GEN-LAST:event_depthFieldKeyTyped
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton createButton;
@@ -145,4 +176,16 @@ public class NewRoomTypeDialog extends javax.swing.JDialog {
     private javax.swing.JTextField nameField;
     private javax.swing.JTextField widthField;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Checks whether all the fields contain valid information, and if so, enables the create button
+     */
+    private void verifyFields() {
+        boolean nf, wf, df;
+        nf = !"".equals(nameField.getText());
+        wf = widthField.getText().matches("[0-9]+");
+        df = depthField.getText().matches("[0-9]+");
+        
+        createButton.setEnabled(nf && wf && df);
+    }
 }

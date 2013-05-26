@@ -85,7 +85,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
         newButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Furniture Types Catalog Editor");
+        setTitle("Furniture Models Catalog Editor");
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
         setBounds(new java.awt.Rectangle(0, 0, 900, 600));
@@ -136,7 +136,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Add a new type of furniture");
+        jLabel1.setText("Add a new furniture model");
 
         ImageIcon im = new javax.swing.ImageIcon("src/resources/add_element.png");
         im.setImage( im.getImage().getScaledInstance(35,35,java.awt.Image.SCALE_SMOOTH) );
@@ -229,7 +229,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
      * properties of the new element, and creates it.
      */
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        NewFurnitureModelDialog fmd = new NewFurnitureModelDialog(fmController);
+        NewFurnitureModelDialog fmd = new NewFurnitureModelDialog(fmController,currentCatalogSelect.getSelectedItem().toString());
         fmd.setVisible(true);
     }//GEN-LAST:event_newButtonActionPerformed
 
@@ -429,6 +429,10 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
         private boolean hasPriceChanged = false;
         private boolean hasPassiveSpaceChanged = false;
                 
+        
+        private final Color fieldBackground = new java.awt.Color(255, 255, 204);
+        private final javax.swing.border.LineBorder selectorForeground = 
+                new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 204), 2, true);
         /**
          * Builds a visual representation of the item in the currently active catalog
          * whose name is 'actname'
@@ -708,8 +712,8 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
             depthField.setBackground(Color.white);
             priceField.setBackground(Color.white);
             passiveSpaceField.setBackground(Color.white);
-            colorSelector.setForeground(Color.black);
-            materialSelector.setForeground(Color.black);
+            colorSelector.setBorder(BorderFactory.createEmptyBorder());
+            materialSelector.setBorder(BorderFactory.createEmptyBorder());
 
             saveButton.setVisible(false);
         }
@@ -717,7 +721,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
         private void widthChange() {
             if (!hasWidthChanged) {
                 hasWidthChanged = true;
-                widthField.setBackground(Color.yellow);
+                widthField.setBackground(fieldBackground);
                 saveButton.setVisible(true);
             }
         }
@@ -725,7 +729,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
         private void depthChange() {
             if (!hasDepthChanged) {
                 hasDepthChanged = true;
-                depthField.setBackground(Color.yellow);
+                depthField.setBackground(fieldBackground);
                 saveButton.setVisible(true);
             }
         }
@@ -733,7 +737,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
         private void materialChange() {
             if (!hasMaterialChanged) {
                 hasMaterialChanged = true;
-                materialSelector.setForeground(Color.yellow);
+                materialSelector.setBorder(selectorForeground);
                 saveButton.setVisible(true);
             }
         }
@@ -741,7 +745,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
         private void colorChange() {
             if (!hasColorChanged) {
                 hasColorChanged = true;
-                colorSelector.setForeground(Color.yellow);
+                colorSelector.setBorder(selectorForeground);
                 saveButton.setVisible(true);
             }
         }
@@ -749,7 +753,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
         private void priceChange() {
             if (!hasPriceChanged) {
                 hasPriceChanged = true;
-                priceField.setBackground(Color.yellow);
+                priceField.setBackground(fieldBackground);
                 saveButton.setVisible(true);
             }
         }
@@ -757,7 +761,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
         private void passiveSpaceChange() {
             if (!hasPassiveSpaceChanged) {
                 hasPassiveSpaceChanged = true;
-                passiveSpaceField.setBackground(Color.yellow);
+                passiveSpaceField.setBackground(fieldBackground);
                 saveButton.setVisible(true);
             }
         }

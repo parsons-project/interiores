@@ -42,8 +42,6 @@ public class Domain {
         for (int i = 1; i < variableCount+1; ++i) {
             domain[i] = new Stage();
         }
-        
-        
     }
     
     public static Domain empty() {
@@ -62,11 +60,6 @@ public class Domain {
     public boolean hasMoreValues(int iteration) {
         return domain[iteration].hasMoreValues();
     }
-
-    
-
-    
-
     
     public HashSet<FurnitureModel> getModels(int iteration) {
         return domain[iteration].getModels();
@@ -79,8 +72,6 @@ public class Domain {
     public HashSet<Orientation> getOrientations(int iteration) {
         return domain[iteration].getOrientations();
     }
-
-
 
     /**
      * Returns the size of the domain.

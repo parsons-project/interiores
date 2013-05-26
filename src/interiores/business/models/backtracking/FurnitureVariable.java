@@ -90,6 +90,9 @@ public class FurnitureVariable
      * variables' domains, for the iteration "iteration" of the algorithm.
      */
     public void resetIterators(int iteration) {
+        // update internal iteration
+        this.iteration = iteration;
+        
         domain.resetIterators(iteration);
     }
     
@@ -120,9 +123,8 @@ public class FurnitureVariable
     //
     @Override
     public void trimDomain(Variable variable, int iteration) {
-        // 0) update internal iteration
-        this.iteration = iteration + 1;
-        
+        // ITERATION IS NOT NEEDED HERE
+        this.iteration = iteration;
         // 1) preliminar move of all positions
         forwardIteration();
                
@@ -144,7 +146,7 @@ public class FurnitureVariable
     //     trimDomain or -1 if it was undoTrimDomain).
     @Override
     public void undoTrimDomain(Variable variable, Value value, int iteration) {
-        domain.reverseIteration(iteration);       
+        domain.reverseIteration(iteration);  
     }
     
     public Domain getDomain() {

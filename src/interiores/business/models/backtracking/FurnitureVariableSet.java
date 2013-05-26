@@ -196,6 +196,7 @@ public class FurnitureVariableSet
      * 
      * Before setting a new actual variable, the previous one is stored in the
      * list of assignedVariables.
+     * 
      * The variable is chosen according to 3 factors:
      * 1) The domain size: the smallest the better
      * 2) The binary constraints with variables that have not been set: the more
@@ -213,6 +214,11 @@ public class FurnitureVariableSet
         if (unassignedVariables.isEmpty())
             allAssigned = true;
         else {
+            
+            //move actual to assigned, unless it is the first iteration
+            if (actual != null)
+                assignedVariables.add(actual);
+            
             int maxDomainSize = -1;
             int maxBinaryConstraints = -1;
             int maxSmallestModelArea = -1;
@@ -337,15 +343,11 @@ public class FurnitureVariableSet
     @Override
     protected void assignToActual(Value value) {        
         actual.assignValue(value);
-        //assignedVariables.add(actual);
     }
 
     
     @Override
     protected void undoAssignToActual() {
-        if (depth >= 0) {
-            actual = variables[depth];
-        }
         actual.undoAssignValue();
     }
     
@@ -404,7 +406,8 @@ public class FurnitureVariableSet
     // For each binary constraint bc:
     //      //assume v is the variable associated with bc
     //      //and w is the otherVariable of bc (bc.getOtherVariable())
-    //      mod[w][v] = bc.getWeight()
+    //      if w is not a constant:
+    //          mod[w][v] = bc.getWeight()
     //      //this means that if w is assigned a value, the domain of v will be
     //      //restricted proportionally to the weight of bc.
     private void buildMatrixOfDependence() {

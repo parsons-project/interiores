@@ -45,7 +45,7 @@ public class FurnitureVariable
      * @pre the iteration of the variableSet is 0
      */
     public FurnitureVariable(String id, List<FurnitureModel> models, Dimension roomSize,
-            Collection<UnaryConstraint> unaryConstraints, int variableCount)
+            List<Constraint> furnitureConstraints, int variableCount)
     {
         super(id);
         
@@ -53,7 +53,7 @@ public class FurnitureVariable
     
         domain = new Domain(models, roomSize, variableCount);
         
-        this.unaryConstraints = unaryConstraints;
+        this.furnitureConstraints = furnitureConstraints;
         
         //minPrice not calculated yet
         minPrice = -1;

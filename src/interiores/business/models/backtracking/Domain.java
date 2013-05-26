@@ -102,9 +102,12 @@ public class Domain {
         domain[iteration+1].union(domain[iteration]);
         
         //swap domains
-        Stage aux = domain[iteration];
-        domain[iteration] = domain[iteration+1];
-        domain[iteration+1] = aux;
+        domain[iteration].swapPositions(domain[iteration+1]);
+        domain[iteration].swapModels(domain[iteration+1]);
+        domain[iteration].swapOrientations(domain[iteration+1]);
+        
+        //empty domain of next iteration
+        domain[iteration+1] = new Stage();
     }
     
     

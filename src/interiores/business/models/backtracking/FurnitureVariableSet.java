@@ -14,6 +14,7 @@ import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedFixed;
 import interiores.business.models.room.elements.WantedFurniture;
+import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
@@ -195,8 +196,19 @@ public class FurnitureVariableSet
      * 
      * The iterators of the actual variable are reset.
      */ 
+    int SetActualVariableDebugCount = 0;
     @Override
     protected void setActualVariable() {
+        
+        Debug.println("==========================");        
+        Debug.println("Start of setActualVariable: " + SetActualVariableDebugCount);
+        Debug.println("Depth: " + depth);
+        Debug.println("Current actual: ");
+        if (actual == null) Debug.println("null\n");
+        else Debug.println(actual.getName());
+        Debug.println("unassignedVariables.size() = " + unassignedVariables.size());
+        Debug.println("assignedVariables.size() = " + assignedVariables.size());
+        ++SetActualVariableDebugCount;
         
         if (unassignedVariables.isEmpty())
             allAssigned = true;
@@ -277,6 +289,16 @@ public class FurnitureVariableSet
             //reset iterators
             actual.resetIterators(depth);
         }
+        
+        Debug.println("...running SetActualVariable...");
+        Debug.println("End of setActualVariable:\n" +
+                "Depth: " + depth + "\n" +
+                "Current actual: ");
+        if (actual == null) Debug.println("null\n");
+        else Debug.println(actual.getName());
+        Debug.println("unassignedVariables.size() = " + unassignedVariables.size());
+        Debug.println("assignedVariables.size() = " + assignedVariables.size());
+        Debug.println("==========================");
     }
  
     @Override

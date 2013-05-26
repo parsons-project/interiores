@@ -7,7 +7,7 @@ import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
-import interiores.business.models.constraints.furniture.BinaryConstraint;
+import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 
 /**
@@ -15,7 +15,7 @@ import interiores.business.models.constraints.furniture.PreliminarTrimmer;
  * @author alvaro
  */
 public class PartialFacingConstraint
-    extends BinaryConstraint implements PreliminarTrimmer {
+    extends BinaryConstraintEnd implements PreliminarTrimmer {
     
     private int maxDist;
     

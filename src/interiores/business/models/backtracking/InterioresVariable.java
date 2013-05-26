@@ -1,37 +1,57 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.backtracking.Area.Area;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlID;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  *
  * @author hector
  */
-abstract public class InterioresVariable implements Variable
+@XmlRootElement
+@XmlSeeAlso({FurnitureConstant.class, FurnitureVariable.class})
+@XmlAccessorType(XmlAccessType.FIELD)
+abstract public class InterioresVariable
+    implements Variable
 {
-    private String identifier;
+    @XmlAttribute
+    @XmlID
+    protected String name;
     
-    /**
-    * Represents the value taken by the variable, in case it is assigned.
-    * Only valid when isAssigned is true.
-    */
+    @XmlAttribute
+    protected String typeName;
+    
+    @XmlElement
     public FurnitureValue assignedValue;
-    private boolean isAssigned;
     
-    public InterioresVariable(String idenitifer) {
-        this.identifier = idenitifer;
+    public InterioresVariable() {
         
-        isAssigned = false;
     }
     
-    public String getID() {
-        return identifier;
+    public InterioresVariable(String name, String typeName) {
+        this.name = name;
+        this.typeName = name;
+        
+        assignedValue = null;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public String getTypeName() {
+        return typeName;
     }
     
     @Override
     public boolean isAssigned() {
-        return isAssigned;
+        return assignedValue != null;
     }
     
     @Override
@@ -41,15 +61,14 @@ abstract public class InterioresVariable implements Variable
        
     @Override
     public void assignValue(Value value) {
-        isAssigned = true;
         assignedValue = (FurnitureValue) value;
     }
 
     
     @Override
     public void undoAssignValue() {
-        isAssigned = false;
         assignedValue = null;        
     }
-
+    
+    abstract public boolean isConstant();
 }

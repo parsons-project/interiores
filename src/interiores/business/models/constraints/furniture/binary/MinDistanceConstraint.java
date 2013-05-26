@@ -7,7 +7,7 @@ import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
-import interiores.business.models.constraints.furniture.BinaryConstraint;
+import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.core.Debug;
 import interiores.utils.Dimension;
@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class MinDistanceConstraint 
-    extends BinaryConstraint implements PreliminarTrimmer {
+    extends BinaryConstraintEnd implements PreliminarTrimmer {
     
     @XmlAttribute
     private int distance; // The minimum distance between the two variables

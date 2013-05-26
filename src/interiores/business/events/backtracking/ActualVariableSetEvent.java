@@ -19,6 +19,6 @@ public class ActualVariableSetEvent
     
     public String getVariableName()
     {
-        return variable.getID();
+        return variable.getName();
     }
 }

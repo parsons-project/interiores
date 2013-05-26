@@ -1,6 +1,6 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.constraints.furniture.BinaryConstraint;
+import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,13 +58,13 @@ public class VariableConstraintSet {
     }
     
     // The set itself. A pair of variable can have multilple restrictions
-    private HashMap<UnorderedInterioresVariablePair, List<BinaryConstraint>>binConstraintsSet;
+    private HashMap<UnorderedInterioresVariablePair, List<BinaryConstraintEnd>>binConstraintsSet;
     
     /**
      * Void constructor
      */
     public VariableConstraintSet() {
-        this.binConstraintsSet = new HashMap<UnorderedInterioresVariablePair, List<BinaryConstraint>>();
+        this.binConstraintsSet = new HashMap<UnorderedInterioresVariablePair, List<BinaryConstraintEnd>>();
     }
     
     /**
@@ -83,12 +83,12 @@ public class VariableConstraintSet {
      * @return True if everything went correctly
      */
     public boolean addConstraint(InterioresVariable fvariable1, InterioresVariable fvariable2,
-            BinaryConstraint bc) {
+            BinaryConstraintEnd bc) {
         
         UnorderedInterioresVariablePair pair = new UnorderedInterioresVariablePair(fvariable1,fvariable2);
         
         if (binConstraintsSet.get(pair) == null) {
-            List<BinaryConstraint> list = new ArrayList<BinaryConstraint>();
+            List<BinaryConstraintEnd> list = new ArrayList<BinaryConstraintEnd>();
             list.add(bc);
             binConstraintsSet.put(pair, list);        
         }
@@ -110,8 +110,8 @@ public class VariableConstraintSet {
         
         // If the list is void we should return true
         if (binConstraintsSet.containsKey(pair)) {
-            List<BinaryConstraint> binConsL = binConstraintsSet.get(pair);
-            for (BinaryConstraint bc : binConsL) {
+            List<BinaryConstraintEnd> binConsL = binConstraintsSet.get(pair);
+            for (BinaryConstraintEnd bc : binConsL) {
                 if (! bc.isSatisfied(fvariable1, fvariable2)) return false;
             }
         }

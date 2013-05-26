@@ -16,27 +16,46 @@ import interiores.utils.Dimension;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FurnitureVariable
 	extends InterioresVariable
 {
-    /**
+    @XmlElementWrapper
+    protected Map<Class, Constraint> furnitureConstraints;
+    
+    @XmlTransient
+    protected Domain domain;
+    
+   /**
     * Represents the iteration of the algorithm.
     */
-    public int iteration;  
-    
-    List<Constraint> furnitureConstraints;
-    
-    protected Domain domain;
+    @XmlTransient
+    public int iteration = 0;  
     
     /**
      * Value of the cheapest model
      */
-    private float minPrice;
+    @XmlTransient
+    private float minPrice = -1; // minPrice not calculated yet
     
+    /**
+     * Default constructor.
+     * JAXB needs it!
+     */
+    public FurnitureVariable()
+    { }
     
     /**
      * Default Constructor. The resulting variable has as domain the models in
@@ -44,25 +63,42 @@ public class FurnitureVariable
      * The set of restrictions is "unaryConstraints". Its resolution defaults to 5.
      * @pre the iteration of the variableSet is 0
      */
+<<<<<<< HEAD
     public FurnitureVariable(String id, List<FurnitureModel> models, Dimension roomSize,
             List<Constraint> furnitureConstraints, int variableCount)
+=======
+    public FurnitureVariable(String id, String typeName)
+>>>>>>> 90c6180a810f51fb59cfdf50f2740b893b472545
     {
-        super(id);
+        super(id, typeName);
         
-        iteration = 0;
-    
-        domain = new Domain(models, roomSize, variableCount);
-        
+<<<<<<< HEAD
         this.furnitureConstraints = furnitureConstraints;
         
         //minPrice not calculated yet
         minPrice = -1;
+=======
+        furnitureConstraints = new HashMap();
+>>>>>>> 90c6180a810f51fb59cfdf50f2740b893b472545
     }
     
-    public FurnitureVariable(String id, int variableCount, FurnitureValue value) {
-        this(id, new ArrayList(), new Dimension(0, 0), new ArrayList(), variableCount);
+    public FurnitureVariable(String id, String typeName, FurnitureValue value) {
+        this(id, typeName);
         
         assignValue(value);
+    }
+    
+    @Override
+    public boolean isConstant() {
+        return false;
+    }
+    
+    public void createDomain(List<FurnitureModel> models, Dimension roomSize, int variableCount) {
+        domain = new Domain(models, roomSize, variableCount);
+    }
+    
+    public Collection<Constraint> getConstraints() {
+        return furnitureConstraints.values();
     }
     
     /**
@@ -138,10 +174,6 @@ public class FurnitureVariable
     @Override
     public void undoTrimDomain(Variable variable, Value value, int iteration) {
         domain.undoTrimDomain(iteration);       
-    }
-        
-    public Collection<UnaryConstraint> getUnaryConstraints() {
-        return unaryConstraints;
     }
     
     public Domain getDomain() {
@@ -247,7 +279,7 @@ public class FurnitureVariable
     //CONSTRAINT - VARIABLE INTERFACE
     
     public void eliminateExceptP(Area validPositions) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     

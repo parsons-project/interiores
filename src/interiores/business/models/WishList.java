@@ -3,7 +3,7 @@ package interiores.business.models;
 import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.MandatoryFurnitureException;
 import interiores.business.exceptions.WantedElementNotFoundException;
-import interiores.business.models.constraints.furniture.BinaryConstraint;
+import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.BinaryConstraintSet;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.utils.BinaryConstraintAssociation;
@@ -32,9 +32,6 @@ public class WishList
     @XmlElementWrapper
     private TreeMap<String, Integer> typesCount;
     
-    @XmlElementWrapper
-    private BinaryConstraintSet binaryConstraints;
-    
     /**
      * Default constructor.
      */
@@ -45,8 +42,6 @@ public class WishList
         furniture = new TreeMap();
         fixed = new TreeMap();
         typesCount = new TreeMap();
-        binaryConstraints = new BinaryConstraintSet(
-                new OrientedRectangle(new Point(0, 0), room.getDimension(), Orientation.S));
         
         for(String mandatoryType : room.getMandatoryFurniture())
             addWithoutChecking(mandatoryType);
@@ -118,7 +113,7 @@ public class WishList
     // This is an abstraction for both furnitures and fixed elements
     private boolean removeWantedElement(String elementId, TreeMap map) 
             throws MandatoryFurnitureException {
-        String typeName = ((WantedElement) map.get(elementId)).getTypeName();
+        String typeName = ((WantedFurniture) map.get(elementId)).getTypeName();
         int typeCount = typesCount.get(typeName);
         
         // if only one is remaining...
@@ -182,7 +177,7 @@ public class WishList
      * @param f1 First WantedFurniture affected by this constraint
      * @param f2 Second WantedFurniture affected by this constraint
      */
-    public void addBinaryConstraint(BinaryConstraint bc, String f1, String f2)
+    public void addBinaryConstraint(BinaryConstraintEnd bc, String f1, String f2)
             throws WantedElementNotFoundException {
         if(!containsElement(f1))
             throw new WantedElementNotFoundException(f1);
@@ -200,7 +195,7 @@ public class WishList
      * @param f1 First WantedFurniture affected by this constraint
      * @param f2 Second WantedFurniture affected by this constraint
      */
-    public void removeBinaryConstraint(Class<? extends BinaryConstraint> binaryConstraintClass, String f1,
+    public void removeBinaryConstraint(Class<? extends BinaryConstraintEnd> binaryConstraintClass, String f1,
             String f2)
     {
         binaryConstraints.remove(binaryConstraintClass, f1, f2);
@@ -270,15 +265,15 @@ public class WishList
      * @return The wanted element in the wishList with identifier id
      * @throws WantedElementNotFoundException 
      */
-    private WantedElement getWantedElement(String id) 
+    private WantedFurniture getWantedElement(String id) 
             throws WantedElementNotFoundException {
         if(!furniture.containsKey(id)) {
             if (!fixed.containsKey(id))
                 throw new WantedElementNotFoundException(id);
-            return (WantedElement) fixed.get(id);
+            return (WantedFurniture) fixed.get(id);
         }
                    
-        return (WantedElement) furniture.get(id);
+        return (WantedFurniture) furniture.get(id);
     }
     
     /**
@@ -288,12 +283,12 @@ public class WishList
      * @return The wanted element in the map with identifier id
      * @throws WantedElementNotFoundException 
      */
-    private WantedElement getWantedElement(String id, TreeMap map) 
+    private WantedFurniture getWantedElement(String id, TreeMap map) 
             throws WantedElementNotFoundException {
         if(!map.containsKey(id))
             throw new WantedElementNotFoundException(id);
                 
-        return (WantedElement) map.get(id);
+        return (WantedFurniture) map.get(id);
     }
     
     /**

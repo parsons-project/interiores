@@ -1,7 +1,7 @@
 package interiores.business.models;
 
 import interiores.business.models.catalogs.PersistentIdObject;
-import interiores.business.models.constraints.furniture.BinaryConstraint;
+import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.core.Utils;
 import interiores.core.business.BusinessException;
@@ -41,7 +41,7 @@ public class FurnitureType
     private ArrayList<UnaryConstraint> unaryConstraints;
     
     @XmlElementWrapper
-    private HashMap<String, ArrayList<BinaryConstraint>> binaryConstraints;
+    private HashMap<String, ArrayList<BinaryConstraintEnd>> binaryConstraints;
     
     @XmlElementWrapper
     private TreeMap<String, FurnitureModel> models;
@@ -89,7 +89,7 @@ public class FurnitureType
      * Returns the binary constraints defined for this type
      * @return A map of binary constraints defined between this type and another
      */
-    public Map<String, ArrayList<BinaryConstraint>> getBinaryConstraints() {
+    public Map<String, ArrayList<BinaryConstraintEnd>> getBinaryConstraints() {
         return binaryConstraints;
     }
     
@@ -114,7 +114,7 @@ public class FurnitureType
      * @param other The other type of furniture
      * @param binaryConstraint The binary constraint to add 
      */
-    public void addBinaryConstraint(FurnitureType other, BinaryConstraint binaryConstraint) {
+    public void addBinaryConstraint(FurnitureType other, BinaryConstraintEnd binaryConstraint) {
         if(! binaryConstraints.containsKey(other.getId()))
             binaryConstraints.put(other.getId(), new ArrayList());
             

@@ -34,27 +34,31 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        widthField = new javax.swing.JTextField();
+        minWidthField = new javax.swing.JTextField();
         cancelButton = new javax.swing.JButton();
         createButton = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        depthField = new javax.swing.JTextField();
+        maxWidthField = new javax.swing.JTextField();
         nameField = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        minDepthField = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        maxDepthField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New room type");
         setAlwaysOnTop(true);
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jLabel1.setText("Select the properties the new room will have:");
+        jLabel1.setText("Select the properties the new furniture type will have:");
 
         jLabel2.setText("Name:");
 
-        jLabel3.setText("Min. Dimensions:");
+        jLabel3.setText("Width should range from");
 
-        widthField.addKeyListener(new java.awt.event.KeyAdapter() {
+        minWidthField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                widthFieldKeyTyped(evt);
+                minWidthFieldKeyTyped(evt);
             }
         });
 
@@ -73,17 +77,33 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
             }
         });
 
-        jLabel6.setText("x");
+        jLabel6.setText("to");
 
-        depthField.addKeyListener(new java.awt.event.KeyAdapter() {
+        maxWidthField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                depthFieldKeyTyped(evt);
+                maxWidthFieldKeyTyped(evt);
             }
         });
 
         nameField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 nameFieldKeyTyped(evt);
+            }
+        });
+
+        jLabel4.setText("Depth should range from");
+
+        minDepthField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                minDepthFieldKeyTyped(evt);
+            }
+        });
+
+        jLabel7.setText("to");
+
+        maxDepthField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                maxDepthFieldKeyTyped(evt);
             }
         });
 
@@ -108,13 +128,20 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
                             .add(layout.createSequentialGroup()
                                 .add(jLabel3)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                .add(widthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(minWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                                 .add(jLabel6)
                                 .add(12, 12, 12)
-                                .add(depthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 78, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .add(0, 0, Short.MAX_VALUE)))
-                .add(0, 3, Short.MAX_VALUE))
+                                .add(maxWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 78, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(layout.createSequentialGroup()
+                                .add(jLabel4)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(minDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 72, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(jLabel7)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 78, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -128,10 +155,16 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel3)
-                    .add(widthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(minWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel6)
-                    .add(depthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(maxWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel4)
+                    .add(minDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jLabel7)
+                    .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(20, 20, 20)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(cancelButton)
                     .add(createButton))
@@ -147,9 +180,12 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
 
     private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createButtonActionPerformed
         String name = nameField.getText();
-        Integer minW = Integer.parseInt(widthField.getText());
-        Integer minD = Integer.parseInt(depthField.getText());
-        //rtController.add(name, minW, minD);
+        int minW = Integer.parseInt(minWidthField.getText());
+        int maxW = Integer.parseInt(maxWidthField.getText());
+        int minD = Integer.parseInt(minDepthField.getText());
+        int maxD = Integer.parseInt(maxDepthField.getText());
+        
+        ftController.add(name, minW, maxW, minD, maxD);
         dispose();
     }//GEN-LAST:event_createButtonActionPerformed
 
@@ -157,24 +193,36 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
         verifyFields();
     }//GEN-LAST:event_nameFieldKeyTyped
 
-    private void widthFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_widthFieldKeyTyped
+    private void minWidthFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_minWidthFieldKeyTyped
         verifyFields();
-    }//GEN-LAST:event_widthFieldKeyTyped
+    }//GEN-LAST:event_minWidthFieldKeyTyped
 
-    private void depthFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_depthFieldKeyTyped
+    private void maxWidthFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_maxWidthFieldKeyTyped
         verifyFields();
-    }//GEN-LAST:event_depthFieldKeyTyped
+    }//GEN-LAST:event_maxWidthFieldKeyTyped
+
+    private void minDepthFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_minDepthFieldKeyTyped
+        verifyFields();
+    }//GEN-LAST:event_minDepthFieldKeyTyped
+
+    private void maxDepthFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_maxDepthFieldKeyTyped
+        verifyFields();
+    }//GEN-LAST:event_maxDepthFieldKeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton createButton;
-    private javax.swing.JTextField depthField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JTextField maxDepthField;
+    private javax.swing.JTextField maxWidthField;
+    private javax.swing.JTextField minDepthField;
+    private javax.swing.JTextField minWidthField;
     private javax.swing.JTextField nameField;
-    private javax.swing.JTextField widthField;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -183,8 +231,8 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
     private void verifyFields() {
         boolean nf, wf, df;
         nf = !"".equals(nameField.getText());
-        wf = widthField.getText().matches("[0-9]+");
-        df = depthField.getText().matches("[0-9]+");
+        wf = minWidthField.getText().matches("[0-9]+") && maxWidthField.getText().matches("[0-9]+");
+        df = minDepthField.getText().matches("[0-9]+") && maxDepthField.getText().matches("[0-9]+");
         
         createButton.setEnabled(nf && wf && df);
     }

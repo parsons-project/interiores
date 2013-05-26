@@ -1,16 +1,13 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogAccessController;
-import interiores.business.exceptions.DefaultCatalogOverwriteException;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
-import interiores.business.models.FurnitureModel;
-import interiores.business.models.FurnitureType;
 import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.AvailableCatalog;
-import interiores.core.business.BusinessException;
+import interiores.business.models.room.FurnitureModel;
+import interiores.business.models.room.FurnitureType;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Dimension;
-import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -41,7 +38,6 @@ public class FurnitureModelController
      */
     public void add(String furnitureTypeName, String name, int width, int depth, float price,
             String color, String material, int[] passiveOffsets)
-            throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException, BusinessException
     {
         FurnitureType furnitureType = getForWrite(furnitureTypeName);
         
@@ -59,12 +55,8 @@ public class FurnitureModelController
      * Removes a model of a specific type
      * @param furnitureTypeName The name of the type of furniture the model belongs to
      * @param name The name of the model
-     * @throws ElementNotFoundBusinessException
-     * @throws DefaultCatalogOverwriteException
-     * @throws BusinessException 
      */
     public void rm(String furnitureTypeName, String name)
-            throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException, BusinessException
     {
         FurnitureType furnitureType = getForWrite(furnitureTypeName);
         
@@ -75,21 +67,21 @@ public class FurnitureModelController
      * Gets all the models of a certain type
      * @param furnitureTypeName The name of the type of furniture
      * @return A collection of furniture models
-     * @throws ElementNotFoundBusinessException 
      */
     public Collection<FurnitureModel> getFurnitureModels(String furnitureTypeName)
-            throws ElementNotFoundBusinessException
     {
         FurnitureType furnitureType = get(furnitureTypeName);
         
         return furnitureType.getFurnitureModels();
     }
     
-    private Color decodeColor(String color) throws Exception {
-        try {
-            return (Color) Class.forName("java.awt.Color").getField(color).get(null);
-        } catch (Exception e) {
-            throw new Exception("The color " + color + " is not available.");
+    public Collection<String> getFurnitureModelNames(String furnitureTypeName) {
+        Collection<FurnitureModel> fmodels = getFurnitureModels(furnitureTypeName);
+        
+        Collection<String> furnitureNames = new ArrayList();
+        for (FurnitureModel fm : fmodels) {
+            furnitureNames.add(fm.getName());
         }
+        return furnitureNames;
     }
 }

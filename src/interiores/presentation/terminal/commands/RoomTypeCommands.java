@@ -1,8 +1,6 @@
 package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.RoomTypeController;
-import interiores.business.exceptions.DefaultCatalogOverwriteException;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
 import interiores.presentation.terminal.commands.abstracted.CatalogElementCommands;
@@ -25,18 +23,14 @@ public class RoomTypeCommands
     }
     
     @Command("Add a room type to the catalog")
-    public void add()
-            throws DefaultCatalogOverwriteException
-    {
+    public void add() {
         String name = readString("Enter the name of the room type you want to add:");
         
         rTypeController.add(name);
     }
     
     @Command("Mark a type of furniture as mandatory or forbidden for a room type")
-    public void put()
-            throws DefaultCatalogOverwriteException, ElementNotFoundBusinessException
-    {
+    public void put() {
         String roomTypeName = readString("Enter the name of the room type where you want to add the "
                 + "furniture types:");
         
@@ -56,9 +50,7 @@ public class RoomTypeCommands
     }
     
     @Command("Release a type of furniture as mandatory or forbidden for a room type")
-    public void release()
-            throws DefaultCatalogOverwriteException, ElementNotFoundBusinessException
-    {
+    public void release() {
         String roomTypeName = readString("Enter the name of the room type where you want to release the "
                 + "furniture types:");
         
@@ -78,9 +70,7 @@ public class RoomTypeCommands
     }
     
     @Command("List the mandatory and forbidden types of furniture of a room type")
-    public void types()
-            throws ElementNotFoundBusinessException
-    {
+    public void types() {
         String roomTypeName = readString("Enter the name of the room type you want to list the"
                 + "furniture types:");
         

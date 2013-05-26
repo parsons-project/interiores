@@ -34,4 +34,27 @@ public class Utils
     public static String padRight(String s, int n) {
         return String.format("%1$-" + n + "s", s);
     }
+    
+    public static String timeString(long time) {
+    // This might be ugly
+        String[] scale = {"ns", "us", "ms", "s"};
+        int iters = 0;
+        float d_time = time;
+        while (d_time > 100 && iters < 3) {
+            d_time /= 1000.0;
+            ++iters;
+        }
+        String timeString;
+        if (d_time > 100) {
+            //we are in the minutes range
+            int min = (int)d_time / 60;
+            d_time %= 60;
+            timeString = String.valueOf(min) + "m" + String.valueOf(d_time) + "s";
+        }
+        else {
+            timeString = String.valueOf(d_time) + scale[iters];
+        }
+        
+        return timeString;
+    }
 }

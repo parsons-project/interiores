@@ -21,13 +21,11 @@ public class InterioresController
         super(data);
     }
     
-    protected Room getRoom()
-            throws NoRoomCreatedException
-    {
+    protected Room getRoom() {
         return getWishList().getRoom();
     }
     
-    protected WishList getWishList() throws NoRoomCreatedException {
+    protected WishList getWishList() {
         if(! data.has(KEY_WISH_LIST))
             throw new NoRoomCreatedException();
         

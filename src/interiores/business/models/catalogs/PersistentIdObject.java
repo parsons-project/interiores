@@ -1,7 +1,7 @@
 package interiores.business.models.catalogs;
 
 import horarios.shared.IdObject;
-import interiores.business.models.FurnitureType;
+import interiores.business.models.room.FurnitureType;
 import interiores.business.models.RoomType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;

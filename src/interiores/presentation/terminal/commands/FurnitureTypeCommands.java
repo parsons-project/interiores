@@ -1,15 +1,9 @@
 package interiores.presentation.terminal.commands;
 
-import interiores.presentation.terminal.commands.abstracted.CatalogElementCommands;
-import horarios.shared.ElementNotFoundException;
 import interiores.business.controllers.FurnitureTypeController;
-import interiores.business.exceptions.DefaultCatalogOverwriteException;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
-import interiores.business.exceptions.ForbiddenFurnitureException;
-import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
+import interiores.presentation.terminal.commands.abstracted.CatalogElementCommands;
 import java.util.Collection;
 
 /**
@@ -29,7 +23,7 @@ public class FurnitureTypeCommands
     }
     
     @Command("Add a furniture type to the type catalog")
-    public void add() throws DefaultCatalogOverwriteException {
+    public void add() {
         String name = readString("Enter the name of the furniture type you want to add");
         
         int minWidth = readInt("Enter the minimum width of the type");
@@ -42,9 +36,7 @@ public class FurnitureTypeCommands
     }
     
     @Command("Select a furniture type you want for your room")
-    public void select()
-            throws ElementNotFoundBusinessException, NoRoomCreatedException, ElementNotFoundException, ForbiddenFurnitureException
-    {
+    public void select() {
         Collection<String> names = readStrings("Enter the name of the furniture types you want to select");
         
         for(String name : names) {
@@ -56,17 +48,13 @@ public class FurnitureTypeCommands
     }
     
     @Command("Remove a furniture type from the list of wanted furniture")
-    public void unselect()
-            throws NoRoomCreatedException, BusinessException, ElementNotFoundException
-    {        
+    public void unselect() {        
         String name = readString("Please, enter the name of the furniture type you want to unselect");
         fTypeController.unselect(name);
     }
     
     @Command("Obtain a list containing all the selected furniture")
-    public void selected()
-            throws NoRoomCreatedException
-    {
+    public void selected() {
         Collection types = fTypeController.getRoomFurniture();
         
         if(types.isEmpty())
@@ -78,9 +66,7 @@ public class FurnitureTypeCommands
     }
     
     @Command("List all the types of furniture you can place in the current room")
-    public void selectable()
-            throws NoRoomCreatedException
-    {
+    public void selectable() {
         Collection types = fTypeController.getSelectableFurniture();
         
         if(types.isEmpty())
@@ -90,5 +76,4 @@ public class FurnitureTypeCommands
             print(types);
         }
     }
-    
 }

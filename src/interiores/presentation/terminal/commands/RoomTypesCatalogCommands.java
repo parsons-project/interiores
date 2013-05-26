@@ -1,8 +1,8 @@
 package interiores.presentation.terminal.commands;
 
-import interiores.presentation.terminal.commands.abstracted.CatalogCommands;
 import interiores.business.controllers.RoomTypesCatalogController;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
+import interiores.presentation.terminal.commands.abstracted.CatalogCommands;
 
 /**
  *

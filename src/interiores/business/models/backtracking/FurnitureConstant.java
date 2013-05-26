@@ -2,16 +2,21 @@ package interiores.business.models.backtracking;
 
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author hector
  */
+@XmlRootElement
 public class FurnitureConstant
     extends InterioresVariable
 {
-    public FurnitureConstant(String name, String typeName, FurnitureValue value) {
-        super(name, typeName);
+    public FurnitureConstant()
+    { }
+    
+    public FurnitureConstant(String typeName, FurnitureValue value) {
+        super(typeName);
         
         assignValue(value);
     }

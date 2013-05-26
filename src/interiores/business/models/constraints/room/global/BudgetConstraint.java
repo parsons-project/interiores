@@ -5,17 +5,12 @@
 package interiores.business.models.constraints.room.global;
 
 
-import interiores.business.exceptions.ConstraintException;
-import interiores.business.models.FurnitureModel;
-import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureConstant;
-import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
-import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
+import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
-import interiores.core.business.BusinessException;
+import interiores.business.models.room.FurnitureModel;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -52,7 +47,11 @@ public class BudgetConstraint
      * @return 
      */
     @Override
-    public boolean isSatisfied(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
+    public boolean isSatisfied(List<FurnitureVariable> assignedVariables,
+        List<FurnitureVariable> unassignedVariables,
+        List<FurnitureConstant> fixedFurniture,
+        FurnitureVariable actual)
+    {
         currentBudget += actual.getAssignedValue().getModel().getPrice();
         return currentBudget <= maxBudget;
     }
@@ -96,7 +95,11 @@ public class BudgetConstraint
      * @param actual 
      */
     @Override
-    public void trim(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
+    public void trim(List<FurnitureVariable> assignedVariables,
+        List<FurnitureVariable> unassignedVariables,
+        List<FurnitureConstant> fixedFurniture,
+        FurnitureVariable actual)
+    {
         
     }
   

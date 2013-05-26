@@ -1,6 +1,8 @@
 package interiores.presentation.swing.views.map.doors;
 
 import interiores.business.models.Orientation;
+import interiores.business.models.room.FurnitureModel;
+import java.awt.Point;
 
 /**
  *
@@ -9,14 +11,16 @@ import interiores.business.models.Orientation;
 public class LeftDoor
     extends DoorOpenOriented
 {
-    public LeftDoor(int size) {
-        super(size);
+    public LeftDoor(String name, FurnitureModel model, Point position, Orientation orientation) {
+        super(name, model);
+        
+        setPosition(x, y, orientation);
     }
     
     @Override
-    public void setPosition(int x, int y, Orientation orientation) {
+    public final void setPosition(int x, int y, Orientation orientation) {
         super.setPosition(x, y, orientation);
         
-        reposition(Orientation.S, Orientation.W);
+        reposition(Orientation.N, Orientation.E);
     }
 }

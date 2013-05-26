@@ -4,7 +4,7 @@ import interiores.business.events.backtracking.ActualVariableSetEvent;
 import interiores.business.events.backtracking.NextValueEvent;
 import interiores.business.events.backtracking.ValueAssignedEvent;
 import interiores.business.events.backtracking.ValueUnassignedEvent;
-import interiores.business.models.FurnitureType;
+import interiores.business.models.room.FurnitureType;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.Debug;
@@ -97,8 +97,8 @@ public class FurnitureVariableSetDebugger
     }
     
     @Override
-    public void undoSetActual() {
-        super.undoSetActual();
+    public void undoSetActualVariable() {
+        super.undoSetActualVariable();
         
         notify(new ActualVariableSetEvent(actual));
     }

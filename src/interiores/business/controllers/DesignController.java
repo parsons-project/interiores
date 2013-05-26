@@ -1,21 +1,23 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogAccessController;
-import interiores.business.events.room.DebugRoomDesignStartedEvent;
-import interiores.business.events.room.RoomDesignFinishedEvent;
-import interiores.business.events.room.RoomDesignStartedEvent;
-import interiores.business.models.FurnitureType;
+import interiores.business.events.backtracking.DebugSolveDesignStartedEvent;
+import interiores.business.events.backtracking.SolveDesignFinishedEvent;
+import interiores.business.events.backtracking.SolveDesignStartedEvent;
+import interiores.business.events.room.RoomDesignChangedEvent;
+import interiores.business.exceptions.SolverNotFinishedException;
+import interiores.business.models.RoomDesign;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
-import interiores.business.models.constraints.room.global.SpaceRespectingConstraint;
-import interiores.business.models.backtracking.trimmers.preliminar.UnaryConstraintsPreliminarTrimmer;
-import interiores.business.models.constraints.room.global.UnfitModelsPseudoConstraint;
 import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.business.models.constraints.room.global.SpaceRespectingConstraint;
+import interiores.business.models.constraints.room.global.UnfitModelsPseudoConstraint;
+import interiores.business.models.room.FurnitureType;
 import interiores.core.Observer;
-import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
+import java.util.Set;
 
 
 /**
@@ -28,7 +30,6 @@ public class DesignController
 {
     private boolean solutionFound = false;
     private long time = -1;
-    private String lastSolution;
     private Thread solver;
     
     /**
@@ -45,6 +46,9 @@ public class DesignController
      * case, returns the solution.
      */
     public void solve(boolean timeIt) {
+        if(isSolving())
+            throw new SolverNotFinishedException();
+                
         WishList wishList = getWishList();
         FurnitureVariableSet furVarSet = new FurnitureVariableSet(wishList, getActiveCatalog());
         
@@ -52,20 +56,20 @@ public class DesignController
     }
     
     public void debug(boolean timeIt) {
+        if(isSolving())
+            throw new SolverNotFinishedException();
+        
         WishList wishList = getWishList();
         FurnitureVariableSetDebugger furVarSetDebug = new FurnitureVariableSetDebugger(wishList,
                 getActiveCatalog());
         furVarSetDebug.addListener(this);
         
-        notify(new DebugRoomDesignStartedEvent());
+        notify(new DebugSolveDesignStartedEvent());
         computeSolution(furVarSetDebug, timeIt);
     }
     
     private void computeSolution(final FurnitureVariableSet furVarSet, final boolean timeIt)
     {
-        if(isSolving())
-            throw new BusinessException("There is already a search in progress!");
-        
         final DesignController me = this;
         
         solver = new Thread(){
@@ -76,25 +80,26 @@ public class DesignController
                 furVarSet.addPreliminarTrimmer(new UnaryConstraintsPreliminarTrimmer());
                 furVarSet.addPreliminarTrimmer(new UnfitModelsPseudoConstraint());
 
-                final RoomDesignFinishedEvent roomDesigned = new RoomDesignFinishedEvent();
+                final SolveDesignFinishedEvent solveFinished = new SolveDesignFinishedEvent();
 
                 if (timeIt) time = System.nanoTime();
                 // And try to solve it
                 try {
-                    me.notify(new RoomDesignStartedEvent());
+                    me.notify(new SolveDesignStartedEvent());
                     furVarSet.solve();
                     solutionFound = true;
-                    lastSolution = furVarSet.toString();
+                    solveFinished.solutionFound();
 
-
-                    roomDesigned.setDesign(furVarSet.getValues());
+                    getRoom().setDesign(new RoomDesign(furVarSet.getVariableValues()));
+                    
+                    me.notify(new RoomDesignChangedEvent());
                 }
                 catch (NoSolutionException nse) {
                     solutionFound = false;
                 }
 
-                if (timeIt) roomDesigned.setTime(System.nanoTime() - time);
-                me.notify(roomDesigned);
+                if (timeIt) solveFinished.setTime(System.nanoTime() - time);
+                me.notify(solveFinished);
             }
         };
         
@@ -113,8 +118,12 @@ public class DesignController
      * Gets a text representation of the generated design
      * @return A String containing a text representation of the design
      */
-    public String getDesign() {
-        return lastSolution;
+    public RoomDesign getDesign() {
+        return getRoom().getDesign();
+    }
+    
+    public Set getDesignFurniture() {
+        return getDesign().getEntries();
     }
     
     public void resumeSolver()
@@ -135,7 +144,7 @@ public class DesignController
         return (solver.getState() == Thread.State.WAITING);
     }
     
-    private boolean isSolving()
+    public boolean isSolving()
     {
         return (solver != null && solver.isAlive());
     }

@@ -3,7 +3,9 @@ package interiores.core.presentation;
 import interiores.core.Event;
 import interiores.core.business.BusinessController;
 import interiores.core.presentation.swing.SwingException;
+import interiores.core.presentation.swing.SwingExceptionHandler;
 import java.awt.Component;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +38,8 @@ public class SwingController extends PresentationController
         this.mainView = mainView;
         vloader = new ViewLoader(this);
         businessControllers = new HashMap();
+        
+        SwingExceptionHandler.enable();
     }
     
     /**
@@ -49,7 +53,7 @@ public class SwingController extends PresentationController
     }
     
     /**
-     * Recieves an event and notifies it to the views that are listening to that event.
+     * Receives an event and notifies it to the views that are listening to that event.
      * @param name Name of the event
      * @param data Data related with the event
      */
@@ -76,13 +80,20 @@ public class SwingController extends PresentationController
         return (T) businessControllers.get(controllerClass);
     }
     
+    public Collection<BusinessController> getBusinessControllers() {
+        return businessControllers.values();
+    }
+    
     /**
      * Loads a view on memory given its name.
      * @param viewClass The class of the view to load
      * @throws Exception 
      */
     public void load(Class<? extends Component> viewClass)
-    {            
+    {
+        if(vloader.isLoaded(viewClass))
+            vloader.get(viewClass).setVisible(false);
+        
         vloader.load(viewClass);
     }
     

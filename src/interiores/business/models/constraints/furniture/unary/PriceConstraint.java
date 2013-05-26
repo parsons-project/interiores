@@ -1,6 +1,6 @@
 package interiores.business.models.constraints.furniture.unary;
 
-import interiores.business.models.FurnitureModel;
+import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
@@ -56,6 +56,7 @@ public class PriceConstraint
     
     @Override
     public String toString() {
-        return this.getClass().getName() + " Max price[" + maxPrice + "]";
+        return "Max price: " + maxPrice;
+        //return this.getClass().getName() + " Max price[" + maxPrice + "]";
     }
 }

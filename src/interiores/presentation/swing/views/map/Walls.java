@@ -1,6 +1,8 @@
 package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
+import interiores.business.models.room.elements.WantedFixed;
+import interiores.presentation.swing.views.map.doors.RightDoor;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -95,17 +97,41 @@ public class Walls implements Drawable {
         return p;
     }
     
-    public void addDoor(Door door, Orientation wall, int displacement) {        
-        Point key = getPosition(wall, displacement);
-        door.setPosition(key.x, key.y, door.hasToOpenOutwards() ? wall : wall.complementary());
-        
-        elements.put(key, door);
+    public int getDistanceToWall(Orientation orientation, Point p) {
+        switch (orientation) {
+            case N:
+                return Math.abs(RoomMap.getPadding() - p.y);
+            case S:
+                return Math.abs(RoomMap.getPadding() + depth - p.y);
+            case W:
+                return Math.abs(RoomMap.getPadding() - p.x);
+            case E:
+                return Math.abs(RoomMap.getPadding() + width - p.x);
+            default:
+                return -1;
+        }
     }
     
-    public void addWindow(Window window, Orientation wall, int displacement) {
-        Point key = getPosition(wall, displacement);
-        window.setPosition(key.x, key.y, wall.rotateRight());
+    public void addDoor(WantedFixed door) {        
+        Point key = door.getPosition();
         
-        elements.put(key, window);
+        // Only right doors for now :/
+        RightDoor mapDoor = new RightDoor(door.getName(), door.getModel(), door.getPosition(),
+                door.getOrientation());
+        
+        elements.put(key, mapDoor);
+    }
+    
+    public void addWindow(WantedFixed window) {
+        Point key = window.getPosition();
+        
+        MapWindow mapWindow = new MapWindow(window.getName(), window.getModel(), window.getPosition(),
+                window.getOrientation());
+        
+        elements.put(key, mapWindow);
+    }
+    
+    public void clear() {
+        elements.clear();
     }
 }

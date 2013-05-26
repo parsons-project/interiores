@@ -1,8 +1,8 @@
 package drivers;
 
-import interiores.business.models.FurnitureModel;
+import interiores.business.models.room.FurnitureModel;
 import interiores.utils.Dimension;
-import interiores.business.models.FurnitureType;
+import interiores.business.models.room.FurnitureType;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.Room;

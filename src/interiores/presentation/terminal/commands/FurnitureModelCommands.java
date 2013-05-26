@@ -1,10 +1,7 @@
 package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.FurnitureModelController;
-import interiores.business.exceptions.DefaultCatalogOverwriteException;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
-import interiores.business.models.FurnitureModel;
-import interiores.core.business.BusinessException;
+import interiores.business.models.room.FurnitureModel;
 import interiores.core.presentation.terminal.AdvancedCommandGroup;
 import interiores.core.presentation.terminal.annotation.Command;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
@@ -25,9 +22,7 @@ public class FurnitureModelCommands
     }
     
     @Command("Add a furniture model to the current furniture type catalog")
-    public void add()
-            throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException, BusinessException
-    {
+    public void add() {
         String fTypeName = readString("Enter the name of the furniture type to which you want to add the "
                 + "model:");
         
@@ -45,9 +40,7 @@ public class FurnitureModelCommands
     }
     
     @Command("Remove a furniture model from the type catalog")
-    public void rm()
-            throws ElementNotFoundBusinessException, DefaultCatalogOverwriteException, BusinessException
-    {
+    public void rm() {
         String fTypeName = readString("Enter the name of the furniture type to which you want to remove the "
                 + "model:");
         
@@ -57,9 +50,7 @@ public class FurnitureModelCommands
     }
     
     @Command("Obtain a list of particular models belonging to a type")
-    public void list()
-            throws ElementNotFoundBusinessException
-    {
+    public void list() {
         String fTypeName = readString("Enter the name of the furniture type you want to list the models:");
         
         Collection<FurnitureModel> models = fModelController.getFurnitureModels(fTypeName);

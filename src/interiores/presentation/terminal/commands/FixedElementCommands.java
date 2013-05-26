@@ -73,7 +73,7 @@ public class FixedElementCommands extends AdvancedCommandGroup {
     
     @Command("List the current selected fixed types")
     public void selected() {
-        Collection selected = fixedElementController.getFixedFurniture();
+        Collection selected = fixedElementController.getFixedNames();
         
         if(selected.isEmpty())
             println("You have not selected any fixed element yet");

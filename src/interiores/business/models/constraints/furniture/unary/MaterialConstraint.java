@@ -1,9 +1,8 @@
 package interiores.business.models.constraints.furniture.unary;
 
-import interiores.business.models.FurnitureModel;
-import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
+import interiores.business.models.room.FurnitureModel;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -29,7 +28,8 @@ public class MaterialConstraint
     }
     
     /**
-     * Creates a material constraint such that only those pieces of furniture matching "material" will satisfy it
+     * Creates a material constraint such that only those pieces of furniture matching "material" will satisfy
+     * it
      * @param material The material that will define the constraint
      */
     public MaterialConstraint(String material) {
@@ -65,13 +65,7 @@ public class MaterialConstraint
     
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
-
-        result.append(this.getClass().getName() + NEW_LINE);
-
-        result.append("Material: " + material + NEW_LINE);
-        return result.toString();
+        return "Material: " + material;
     }
     
 }

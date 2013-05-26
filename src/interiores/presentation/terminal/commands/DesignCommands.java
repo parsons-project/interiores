@@ -5,9 +5,6 @@
 package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.DesignController;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
-import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.core.Options;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.AdvancedCommandGroup;
@@ -29,9 +26,7 @@ public class DesignCommands extends AdvancedCommandGroup {
    
    @Command("Generate a valid design for the room")
    @CommandOptions({"debug", "time"})
-   public void solve(Options options)
-           throws BusinessException
-   {
+   public void solve(Options options) {
        if(options.isEnabled("debug")) {
            println("Solving in debug mode");
            designController.debug(options.isEnabled("time"));
@@ -39,13 +34,16 @@ public class DesignCommands extends AdvancedCommandGroup {
        else {
            designController.solve(options.isEnabled("time"));
        }
-       
-       if (designController.hasSolution()) {
-           println(designController.getDesign());
-       }
-       else {
-           println("Solution not found");
-       }
    }
-    
+   
+   @Command("Show the last design")
+   public void show() {
+       if(designController.isSolving())
+           throw new BusinessException("The solver is still trying to find a solution...");
+       
+       if(designController.hasSolution())
+           println(designController.getDesign().toString());
+       else
+           println("No solution found :(");
+   }
 }

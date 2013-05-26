@@ -26,15 +26,18 @@ import javax.xml.bind.JAXBException;
  */
 public class MainAppFrame extends JFrame
 {
+    private static int TOOLS_INDEX = 2;
+    
     private SwingController presentation;
     private RoomController roomController;
     private WelcomePanel welcome;
     private TerminalPanel terminal;
     private RoomTypeCatalogPanel rtCatalogPanel;
-    private MapEditorPanel editorPanel;
     
     private List<Component> previousViews, currentViews;
     private JFileChooser fileChooser;
+    
+    private boolean toolsEnabled = false;
     
     /**
      * Creates new form MainView
@@ -293,11 +296,17 @@ private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//
     public void showFurnitureAndMap() {
         unloadComponent(welcome);
         
-        editorPanel = presentation.getNew(MapEditorPanel.class);
+        MapEditorPanel editorPanel = presentation.getNew(MapEditorPanel.class);
         loadComponent(editorPanel, BorderLayout.CENTER);
         
         saveMenuItem.setEnabled(true);
-        menuBar.add(editorPanel.getToolsMenu(), 2);        
+        
+        if(toolsEnabled)
+            menuBar.remove(TOOLS_INDEX);
+        else
+            toolsEnabled = true;
+        
+        menuBar.add(editorPanel.getToolsMenu(), TOOLS_INDEX);
     }
     
     private void unloadCurrentView() {

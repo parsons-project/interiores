@@ -8,6 +8,7 @@ import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.core.presentation.swing.SwingException;
 import interiores.presentation.swing.helpers.FileChooser;
+import interiores.utils.OpenDefaultBrowser;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Desktop;
@@ -321,11 +322,11 @@ private void pillarToolMenuActionPerformed(java.awt.event.ActionEvent evt) {//GE
 }//GEN-LAST:event_pillarToolMenuActionPerformed
 
 private void generalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generalHelpMenuActionPerformed
-    openURL("/help/general.html");  
+    openHelp("general.html");  
 }//GEN-LAST:event_generalHelpMenuActionPerformed
 
 private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalHelpMenuActionPerformed
-    openURL("/help/terminal.html");
+    openHelp("terminal/manual.html");
 }//GEN-LAST:event_terminalHelpMenuActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -413,6 +414,10 @@ private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//
         pack();
     }
     
+    private void openHelp(String relPath) {
+        String helpPath = help.Help.class.getResource(".").getPath();
+        OpenDefaultBrowser.openURL(helpPath + relPath);
+    }
     
     private void printComponents() {
         Debug.println("Components in the container: " + getComponentCount());
@@ -420,15 +425,4 @@ private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//
             Debug.println("Component: " + c.toString());
     }
     
-    private void openURL(String url) {
-        Desktop desktop = Desktop.getDesktop();
-    if(desktop.isSupported(Desktop.Action.BROWSE)) {
-        try {
-            desktop.browse(new URI(url));
-        }
-        catch (Exception exc) {
-            throw new SwingException("Desktop api not supported", exc);
-        }
-    }
-    }
 }

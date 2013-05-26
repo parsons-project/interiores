@@ -70,6 +70,7 @@ public class MainAppFrame extends JFrame
         jMenu2 = new javax.swing.JMenu();
         rtcMenuItem = new javax.swing.JMenuItem();
         ftcMenuItem = new javax.swing.JMenuItem();
+        fmcMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Interior design");
@@ -120,7 +121,7 @@ public class MainAppFrame extends JFrame
         jMenu2.setText("Edit");
 
         rtcMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
-        rtcMenuItem.setText("Room type catalog");
+        rtcMenuItem.setText("Room types catalog");
         rtcMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rtcMenuItemActionPerformed(evt);
@@ -129,13 +130,22 @@ public class MainAppFrame extends JFrame
         jMenu2.add(rtcMenuItem);
 
         ftcMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
-        ftcMenuItem.setText("Furniture type catalog");
+        ftcMenuItem.setText("Furniture types catalog");
         ftcMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ftcMenuItemActionPerformed(evt);
             }
         });
         jMenu2.add(ftcMenuItem);
+
+        fmcMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        fmcMenuItem.setText("Furniture models catalog");
+        fmcMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fmcMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu2.add(fmcMenuItem);
 
         jMenuBar1.add(jMenu2);
 
@@ -184,8 +194,13 @@ public class MainAppFrame extends JFrame
         presentation.showNew(FurnitureTypeCatalogFrame.class);
     }//GEN-LAST:event_ftcMenuItemActionPerformed
 
+    private void fmcMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fmcMenuItemActionPerformed
+        presentation.showNew(FurnitureModelCatalogFrame.class);
+    }//GEN-LAST:event_fmcMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem exitMenuItem;
+    private javax.swing.JMenuItem fmcMenuItem;
     private javax.swing.JMenuItem ftcMenuItem;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;

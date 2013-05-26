@@ -389,7 +389,10 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
     @Listen({RTSetModifiedEvent.class})
     public void updateCatalogElementSet(RTSetModifiedEvent evt) {
         if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
-        else removeElement(evt.getFullName());
+        else {
+            removeElement(evt.getFullName());
+            if (catElements.isEmpty()) showEmptyCatalogMessage();
+        }
         refresh();
     }
     
@@ -435,10 +438,13 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         // Retrieve all the elements in the catalog
         Map<String,String> rtypes = rtController.getFullNamesMap();
         
-        // Each 'key' has the full name of the furniture, which in turn is accessed by its short name
-        for (String key : rtypes.keySet()) {
-            String rtn = rtypes.get(key); // 'rtn' is the short name (its actual name within the program)
-            addElement(key, rtn);
+        if (rtypes.isEmpty()) showEmptyCatalogMessage();
+        else {
+            // Each 'key' has the full name of the furniture, which in turn is accessed by its short name
+            for (String key : rtypes.keySet()) {
+                String rtn = rtypes.get(key); // 'rtn' is the short name (its actual name within the program)
+                addElement(key, rtn);
+            }
         }
         refresh();
     }
@@ -538,6 +544,14 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         String curr = (String) currentCatalogSelect.getSelectedItem();
         if (choice == JOptionPane.NO_OPTION) discardChanges(curr);
         else saveChanges(curr);
+    }
+    
+    private void showEmptyCatalogMessage() {
+        javax.swing.JLabel emptyLabel = new javax.swing.JLabel();
+        emptyLabel.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
+        emptyLabel.setText("There isn't any room type defined in catalog "
+                + currentCatalogSelect.getSelectedItem().toString() );
+        jPanel1.add(emptyLabel);
     }
 
     /**

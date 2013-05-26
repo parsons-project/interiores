@@ -213,7 +213,7 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
                                 .add(currentCatalogLabel)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                                 .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .add(66, 66, 66))
+                        .addContainerGap())
                     .add(layout.createSequentialGroup()
                         .add(discardChangesButton)
                         .add(181, 181, 181)
@@ -390,7 +390,10 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
     @Listen({FTSetModifiedEvent.class})
     public void updateCatalogElementSet(FTSetModifiedEvent evt) {
         if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
-        else removeElement(evt.getFullName());
+        else {
+            removeElement(evt.getFullName());
+            if (catElements.isEmpty()) showEmptyCatalogMessage();
+        }
         refresh();
     }
     
@@ -436,10 +439,13 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
         // Retrieve all the elements in the catalog
         Map<String,String> ftypes = ftController.getFullNamesMap();
         
-        // Each 'key' has the full name of the furniture, which in turn is accessed by its short name
-        for (String key : ftypes.keySet()) {
-            String ftn = ftypes.get(key); // 'ftn' is the short name (its actual name within the program)
-            addElement(key, ftn);
+        if (ftypes.isEmpty()) showEmptyCatalogMessage();
+        else {
+            // Each 'key' has the full name of the furniture, which in turn is accessed by its short name
+            for (String key : ftypes.keySet()) {
+                String ftn = ftypes.get(key); // 'ftn' is the short name (its actual name within the program)
+                addElement(key, ftn);
+            }
         }
         refresh();
     }
@@ -538,6 +544,14 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
         String curr = (String) currentCatalogSelect.getSelectedItem();
         if (choice == JOptionPane.NO_OPTION) discardChanges(curr);
         else saveChanges(curr);
+    }
+    
+    private void showEmptyCatalogMessage() {
+        javax.swing.JLabel emptyLabel = new javax.swing.JLabel();
+        emptyLabel.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
+        emptyLabel.setText("There isn't any furniture type defined in catalog "
+                + currentCatalogSelect.getSelectedItem().toString() );
+        jPanel1.add(emptyLabel);
     }
 
     /**

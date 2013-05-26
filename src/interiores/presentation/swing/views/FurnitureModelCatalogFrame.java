@@ -3,29 +3,22 @@ package interiores.presentation.swing.views;
 
 import interiores.business.controllers.FurnitureModelController;
 import interiores.business.controllers.FurnitureTypeController;
-import interiores.business.controllers.FurnitureTypesCatalogController;
-import interiores.business.events.catalogs.FTCatalogCheckoutEvent;
-import interiores.business.events.catalogs.FTCatalogSetModifiedEvent;
-import interiores.business.events.catalogs.FTModifiedEvent;
+import interiores.business.events.catalogs.FMSetModifiedEvent;
 import interiores.business.events.catalogs.FTSetModifiedEvent;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
-import interiores.presentation.swing.helpers.FileChooser;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.xml.bind.JAXBException;
 
 /**
  * This class represents the furniture model catalog editor, where the user can edit
@@ -44,12 +37,8 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
     // activer catalog. This map is modified everytime the catalog changes
     // or a particular element does. Changes from any other presentation layer
     // are automatically reflected
-    private Map<String,FTC_Element> catElements;
-    
-    // The frame also stores the changes made to the current catalog so far,
-    // so that one can save them or discard them
-    boolean hasBeenModified = false;
-    
+    private Map<String,FMC_Element> catElements;
+        
     /**
      * Creates the very FMC editor frame
      * @param presentation 
@@ -68,9 +57,9 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
         
         // We load the list with all catalogs, set the required visual settings,
         // and load all the elements in the catalog
-        initCatalogList();
         initVisualSettings();
-        refreshCatalog();
+        boolean thereAreElements = initCatalogList();
+        if (thereAreElements) refreshCatalog();
     }
 
     /**
@@ -90,8 +79,8 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
         removeCatalogButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         newButton = new javax.swing.JButton();
-        saveChangesButton = new javax.swing.JButton();
         discardChangesButton = new javax.swing.JButton();
+        saveChangesButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Furniture Types Catalog Editor");
@@ -158,19 +147,9 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
             }
         });
 
-        saveChangesButton.setText("Save changes");
-        saveChangesButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveChangesButtonActionPerformed(evt);
-            }
-        });
-
         discardChangesButton.setText("Discard changes");
-        discardChangesButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                discardChangesButtonActionPerformed(evt);
-            }
-        });
+
+        saveChangesButton.setText("Save changes");
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -189,16 +168,16 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
                             .add(layout.createSequentialGroup()
                                 .add(currentCatalogLabel)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
+                                .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
                     .add(layout.createSequentialGroup()
                         .add(discardChangesButton)
-                        .add(181, 181, 181)
+                        .add(185, 185, 185)
                         .add(newButton)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jLabel1)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(saveChangesButton))))
+                        .add(saveChangesButton)))
+                .addContainerGap())
             .add(layout.createSequentialGroup()
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 900, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 0, Short.MAX_VALUE))
@@ -218,13 +197,12 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 515, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(saveChangesButton))
                     .add(discardChangesButton)
-                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                        .add(newButton)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(saveChangesButton))))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, newButton))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -233,7 +211,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
      * Triggers when a different catalog is selected. It basically performs a checkout to the selected catalog
      */
     private void currentCatalogSelectItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_currentCatalogSelectItemStateChanged
-        if (!hasBeenModified) refreshCatalog();
+        refreshCatalog();
     }//GEN-LAST:event_currentCatalogSelectItemStateChanged
 
     /**
@@ -241,11 +219,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
      * and checks out the default one (which cannot be modified or removed)
      */
     private void removeCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeCatalogButtonActionPerformed
-        if (!hasBeenModified) {
-            ftcController.checkout("default");
-            ftcController.remove(currentCatalogSelect.getSelectedItem().toString());
-        }
-        else showModificationWarning();
+        ftController.rm( currentCatalogSelect.getSelectedItem().toString() );
     }//GEN-LAST:event_removeCatalogButtonActionPerformed
 
     /**
@@ -253,11 +227,8 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
      * properties of the new catalog, and creates it.
      */
     private void newCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCatalogButtonActionPerformed
-        if (!hasBeenModified) {
-            NewCatalogDialog newCat = new NewCatalogDialog(ftcController);
-            newCat.setVisible(true);
-        }
-        else showModificationWarning();
+        NewFurnitureTypeDialog ftd = new NewFurnitureTypeDialog(ftController);
+        ftd.setVisible(true);
     }//GEN-LAST:event_newCatalogButtonActionPerformed
 
     /**
@@ -265,29 +236,9 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
      * properties of the new element, and creates it.
      */
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        performModification();
-        NewFurnitureTypeDialog ftd = new NewFurnitureTypeDialog(ftController);
-        ftd.setVisible(true);
+        NewFurnitureModelDialog fmd = new NewFurnitureModelDialog(fmController);
+        fmd.setVisible(true);
     }//GEN-LAST:event_newButtonActionPerformed
-
-    /**
-     * Triggers when the "Discard changes" button is pressed. It forgets about all the changes,
-     * eliminates the temporarily modified catalog (if any), and closes the window
-     */
-    private void discardChangesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discardChangesButtonActionPerformed
-        if (hasBeenModified) discardChanges((String) currentCatalogSelect.getSelectedItem());
-        dispose();
-    }//GEN-LAST:event_discardChangesButtonActionPerformed
-
-    /**
-     * Triggers when the "Save changes" button is pressed. It merges all the changes,
-     * done in the temporarily modified catalog "name(mod)" with the actual catalog,
-     * eliminates 'name(mod)', and closes the window
-     */
-    private void saveChangesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveChangesButtonActionPerformed
-        if (hasBeenModified) saveChanges((String) currentCatalogSelect.getSelectedItem());
-        dispose();
-    }//GEN-LAST:event_saveChangesButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentCatalogLabel;
@@ -303,84 +254,36 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
     private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
 
-    /**
-     * Shows a fileChooser open dialog and lets the user select the file
-     * from which a new catalog is to be loaded
-     */
-    private void loadCatalog() {
-        int status = fileChooser.showOpenDialog(this);
-        
-        if(status == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            
-            try {
-                ftcController.load(file.getAbsolutePath());
-            }
-            catch(JAXBException e) {
-            }
-        }
-    }
-    
-    /**
-     * Shows a fileChooser save dialog and lets the user select the file
-     * to where the current catalog is to be saved
-     */
-    private void saveCatalog() {
-        int status = fileChooser.showSaveDialog(this);
-        
-        if(status == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            
-            try {
-                ftcController.save(file.getAbsolutePath());
-            }
-            catch(JAXBException e) {
-                
-            }
-        }
-    }
     
     /**
      * This function is invoked whenever a particular element of the catalog
      * is added or removed, so that those changes reflect upon this frame
      * @param evt The tell-tale event
      */
+    @Listen({FMSetModifiedEvent.class})
+    public void updateCatalogElementSet(FMSetModifiedEvent evt) {
+        if ( evt.getFurniture().equals(currentCatalogSelect.getSelectedItem().toString()) ) {
+            if (evt.isAdded()) addElement(evt.getName());
+            else {
+                removeElement(evt.getName());
+                if (catElements.isEmpty()) showEmptyCatalogMessage();
+            }
+            refresh();
+        }
+    }
+    
+    /**
+     * This function is invoked whenever the list of available catalogs changes,
+     * so that those changes reflect upon this frame
+     * @param evt The tell-tale event
+     */
     @Listen({FTSetModifiedEvent.class})
-    public void updateCatalogElementSet(FTSetModifiedEvent evt) {
-        if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
-        else removeElement(evt.getFullName());
-        refresh();
-    }
-    
-     /**
-     * This function is invoked whenever a particular element of the catalog
-     * is modified, so that those changes reflect upon this frame
-     * @param evt The tell-tale event
-     */
-    @Listen({FTModifiedEvent.class})
-    public void updateCatalogElement(FTModifiedEvent evt) {
-        catElements.get(evt.getFullName()).updateChanges();
-    }
-
-    /**
-     * This function is invoked whenever the list of available catalog changes,
-     * so that those changes reflect upon this frame
-     * @param evt The tell-tale event
-     */
-    @Listen({FTCatalogSetModifiedEvent.class})
-    public void updateCatalogList(FTCatalogSetModifiedEvent evt) {
-        if (evt.isAdded()) currentCatalogSelect.addItem(evt.getName());
+    public void updateCatalogList(FTSetModifiedEvent evt) {
+        if (evt.isAdded()) {
+            currentCatalogSelect.addItem(evt.getName());
+            currentCatalogSelect.setSelectedItem(evt.getName());
+        }
         else currentCatalogSelect.removeItem(evt.getName());
-    }
-    
-    /**
-     * This function is invoked whenever the currently selected catalog changes,
-     * so that those changes reflect upon this frame
-     * @param evt The tell-tale event
-     */
-    @Listen({FTCatalogCheckoutEvent.class})
-    public void updateSelectedCatalog(FTCatalogCheckoutEvent evt) {
-        
     }
     
     /**
@@ -391,35 +294,32 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
         clearElements();
         
         // Retrieve all the elements in the catalog
-        Map<String,String> ftypes = ftController.getFullNamesMap();
+        Collection<String> fmodels = fmController.getFurnitureModelNames(currentCatalogSelect.getSelectedItem().toString());
         
-        // Each 'key' has the full name of the furniture, which in turn is accessed by its short name
-        for (String key : ftypes.keySet()) {
-            String ftn = ftypes.get(key); // 'ftn' is the short name (its actual name within the program)
-            addElement(key, ftn);
-        }
+        if (fmodels.isEmpty()) showEmptyCatalogMessage();
+        else for (String fm : fmodels) addElement(fm);
+        
         refresh();
     }
 
     /**
      * Loads a new element to the current catalog display
-     * @param key The full name of the element (e.g. Single Bed)
-     * @param ftn The short (internal) id of the element (e.g. singleBed)
+     * @param fm The name of the element
      */
-    private void addElement(String key, String ftn) {
-        FTC_Element ftcInstance = new FTC_Element(ftn,key);
-        ftcInstance.addToPanel();
-        catElements.put(key, ftcInstance);
+    private void addElement(String fm) {
+        FMC_Element fmcInstance = new FMC_Element(currentCatalogSelect.getSelectedItem().toString(),fm);
+        fmcInstance.addToPanel();
+        catElements.put(fm, fmcInstance);
     }
     
     /**
      * Removes a specific element from the current catalog display
-     * @param key The key the element has in the internal data structure of the frame
+     * @param fm The name of the element
      */
-    private void removeElement(String key) {
-        if (catElements.containsKey(key)) {
-            catElements.get(key).removeFromPanel();
-            catElements.remove(key);
+    private void removeElement(String fm) {
+        if (catElements.containsKey(fm)) {
+            catElements.get(fm).removeFromPanel();
+            catElements.remove(fm);
         }
     }
     
@@ -435,19 +335,22 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
     /**
      * It loads the available catalogs into the frame
      */
-    private void initCatalogList() {
-        Collection<String> catalogs = ftcController.getNamesLoadedCatalogs();
-        Object[] s = catalogs.toArray();
-        currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(s) );
-        currentCatalogSelect.setSelectedItem("session");
+    private boolean initCatalogList() {
+        Collection<String> catalogs = ftController.getFullNamesMap().values();
+        if (catalogs.isEmpty()) return false;
+        else {
+            Object[] s = catalogs.toArray();
+            currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(s) );
+            currentCatalogSelect.setSelectedIndex(0);
+            return true;
+        }
     }
     
     /**
      * Groups all the custom visual setting this frame has to initialize when loading
      */
     private void initVisualSettings() {
-        UIManager.put("ToolTip.background", Color.white);
-        ToolTipManager.sharedInstance().setInitialDelay(0);
+        
     }
 
     /**
@@ -459,43 +362,17 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
         jPanel1.repaint();
     }
     
-    private void performModification() {
-        if (!hasBeenModified) {
-            hasBeenModified = true;
-            String currM = (String) currentCatalogSelect.getSelectedItem() + "(mod)";
-            ftcController.create(currM);
-            ftcController.checkout(currM);
-        }        
+    private boolean showRemovalWarning() {
+        String msg = "Are you sure you want to remove this model from the catalog?";
+        int choice = JOptionPane.showConfirmDialog(this,msg,"Confirmation warning", JOptionPane.YES_NO_OPTION);
+        return (choice == JOptionPane.YES_OPTION);
     }
-    
-    /**
-     * Given the name of a modified catalog, it saves all the changes and erases the modified version
-     * @param modCat The name of the modified catalog (e.g. session(mod) )
-     */
-    private void saveChanges(String modCat) {
-        hasBeenModified = false;
-        ftcController.checkout(modCat.substring(0, modCat.length()-5));
-        ftcController.replace(modCat);
-        ftcController.remove(modCat);
-    }
-    
-    /**
-     * Given the name of a modified catalog, it discards all the changes and erases the modified version
-     * @param modCat The name of the modified catalog (e.g. session(mod) )
-     */
-    private void discardChanges(String modCat) {
-        hasBeenModified = false;
-        ftcController.checkout(modCat.substring(0,modCat.length()-5));
-        ftcController.remove(modCat);
-    }
-    
-    private void showModificationWarning() {
-        int choice = JOptionPane.showConfirmDialog(this,"The current catalog has been modified. Do you want to save those changes?",
-                                                    "Save changes", JOptionPane.YES_NO_OPTION);
-        
-        String curr = (String) currentCatalogSelect.getSelectedItem();
-        if (choice == JOptionPane.NO_OPTION) discardChanges(curr);
-        else saveChanges(curr);
+
+    private void showEmptyCatalogMessage() {
+        javax.swing.JLabel emptyLabel = new javax.swing.JLabel();
+        emptyLabel.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
+        emptyLabel.setText("There are no particular models of " + currentCatalogSelect.getSelectedItem().toString() + "s.");
+        jPanel1.add(emptyLabel);
     }
 
     /**
@@ -503,11 +380,12 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
      * It serves as an auxiliary data structure to hold a whole information pane
      * with its own features, events, and properties.
      */
-    class FTC_Element {
-        // The actual name of the element contains its internal name within the application
+    class FMC_Element {
+        // The name of the element
         private String actualName;
+        
         // ftname, on the other hand, contains a visually clearer name
-        private javax.swing.JLabel ftname = new javax.swing.JLabel();
+        private javax.swing.JLabel fmname = new javax.swing.JLabel();
         
         // The outer panel holds the remove button and the inner panel
         private javax.swing.JPanel outerPanel = new javax.swing.JPanel();
@@ -515,25 +393,27 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
             private javax.swing.JPanel innerPanel = new javax.swing.JPanel();
         
         // The inner panel holds all the labels and text fields related to the properties of an element
-        private javax.swing.JLabel widthLabel = new javax.swing.JLabel();
-        private javax.swing.JLabel widthLabel2 = new javax.swing.JLabel();
-        private javax.swing.JLabel widthLabel3 = new javax.swing.JLabel();
-        private javax.swing.JTextField minWidthField = new javax.swing.JTextField();
-        private javax.swing.JTextField maxWidthField = new javax.swing.JTextField();
+        private javax.swing.JLabel measureLabel1 = new javax.swing.JLabel();
+        private javax.swing.JLabel measureLabel2 = new javax.swing.JLabel();
+        private javax.swing.JLabel measureLabel3 = new javax.swing.JLabel();
+        private javax.swing.JTextField widthField = new javax.swing.JTextField();
+        private javax.swing.JTextField depthField = new javax.swing.JTextField();
         
-        private javax.swing.JLabel depthLabel = new javax.swing.JLabel();
-        private javax.swing.JLabel depthLabel2 = new javax.swing.JLabel();
-        private javax.swing.JLabel depthLabel3 = new javax.swing.JLabel();
-        private javax.swing.JTextField minDepthField = new javax.swing.JTextField();
-        private javax.swing.JTextField maxDepthField = new javax.swing.JTextField();
-
+        private javax.swing.JLabel materialLabel = new javax.swing.JLabel();
+        private javax.swing.JComboBox materialSelector = new javax.swing.JComboBox();
+        
+        private javax.swing.JLabel colorLabel = new javax.swing.JLabel();
+        private javax.swing.JComboBox colorSelector = new javax.swing.JComboBox();
+        
         private javax.swing.JLabel passiveSpaceLabel = new javax.swing.JLabel();
         private javax.swing.JLabel passiveSpaceHint = new javax.swing.JLabel();
         private javax.swing.JTextField passiveSpaceField = new javax.swing.JTextField();
         
-        private boolean hasWidthChanged = false;
-        private boolean hasDepthChanged = false;
-        private boolean hasPassiveSpaceChanged = false;
+        private javax.swing.JLabel priceLabel = new javax.swing.JLabel();
+        private javax.swing.JLabel priceLabel2 = new javax.swing.JLabel();
+        private javax.swing.JTextField priceField = new javax.swing.JTextField();
+        
+        
                 
         /**
          * Builds a visual representation of the item in the currently active catalog
@@ -541,16 +421,16 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
          * @param actname The actual (internal) id of the element
          * @param fullname A visually clearer name for such an element
          */
-        public FTC_Element(String actname, String fullname) {
-
-            actualName = actname;
+        public FMC_Element(String ft, String fm) {
+            // First of all, we give the element a name
+            actualName = fm;
             
             // We set the properties of the outer panel
             outerPanel.setBackground(new java.awt.Color(255, 255, 255));
-            outerPanel.setPreferredSize(new Dimension(750,250));
-            outerPanel.setSize(new Dimension(750, 250));
-            outerPanel.setMinimumSize(new Dimension(750, 250));
-            outerPanel.setMaximumSize(new Dimension(750, 250));
+            outerPanel.setPreferredSize(new Dimension(750,200));
+            outerPanel.setSize(new Dimension(750, 200));
+            outerPanel.setMinimumSize(new Dimension(750, 200));
+            outerPanel.setMaximumSize(new Dimension(750, 200));
             
             // These lines substitute the default aspect of a button with a custom icon
             ImageIcon im = new javax.swing.ImageIcon("src/resources/remove_element.png");
@@ -561,8 +441,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
             removeButton.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    performModification();
-                    ftController.rm(actualName);
+                    if (showRemovalWarning()) fmController.rm(currentCatalogSelect.getSelectedItem().toString(), actualName);
                 }
             });
             
@@ -571,159 +450,108 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
             innerPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
             
             // Name of the element
-            ftname.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
-            ftname.setText(fullname + ":");
+            fmname.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
+            fmname.setText(actualName + ":");
             
-            // Width setup and events
-            widthLabel.setText("This furniture should have a width between");
-            widthLabel2.setText("and");
-            widthLabel3.setText("cm");
-            minWidthField.setText(Integer.toString(ftController.getWidthRange(actualName).min));
-            maxWidthField.setText(Integer.toString(ftController.getWidthRange(actualName).max));
-            minWidthField.getDocument().addDocumentListener(new DocumentListener() {
-                @Override
-                public void changedUpdate(DocumentEvent e) { hasWidthChanged = true; }
-                @Override
-                public void insertUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
-                @Override
-                public void removeUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
-             });
-            maxWidthField.getDocument().addDocumentListener(new DocumentListener() {
-                @Override
-                public void changedUpdate(DocumentEvent e) {  hasWidthChanged = true; }
-                @Override
-                public void insertUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
-                @Override
-                public void removeUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
-             });
-            minWidthField.addFocusListener(new java.awt.event.FocusAdapter() {
-                @Override
-                public void focusLost(java.awt.event.FocusEvent evt) { if (hasWidthChanged) widthRangeUpdate(); }
-            });
-            maxWidthField.addFocusListener(new java.awt.event.FocusAdapter() {
-                @Override
-                public void focusLost(java.awt.event.FocusEvent evt) { if (hasWidthChanged) widthRangeUpdate(); }
-            });
             
-            // Depth setup and events
-            depthLabel.setText("And a depth between");
-            depthLabel2.setText("and");
-            depthLabel3.setText("cm");
-            minDepthField.setText(Integer.toString(ftController.getDepthRange(actualName).min));
-            maxDepthField.setText(Integer.toString(ftController.getDepthRange(actualName).max));
-            minDepthField.getDocument().addDocumentListener(new DocumentListener() {
-                @Override
-                public void changedUpdate(DocumentEvent e) { hasDepthChanged = true; }
-                @Override
-                public void insertUpdate(DocumentEvent e) { hasDepthChanged = true; }
-                @Override
-                public void removeUpdate(DocumentEvent e) { hasDepthChanged = true; }
-             });
-            maxDepthField.getDocument().addDocumentListener(new DocumentListener() {
-                @Override
-                public void changedUpdate(DocumentEvent e) { hasDepthChanged = true; }
-                @Override
-                public void insertUpdate(DocumentEvent e) { hasDepthChanged = true; }
-                @Override
-                public void removeUpdate(DocumentEvent e) { hasDepthChanged = true; }
-             });
-            minDepthField.addFocusListener(new java.awt.event.FocusAdapter() {
-                @Override
-                public void focusLost(java.awt.event.FocusEvent evt) { if (hasDepthChanged) depthRangeUpdate(); }
-            });
-            maxDepthField.addFocusListener(new java.awt.event.FocusAdapter() {
-                @Override
-                public void focusLost(java.awt.event.FocusEvent evt) { if (hasDepthChanged) depthRangeUpdate(); }
-            });
             
-            // Passive space fields
-            passiveSpaceLabel.setText("It should always have the following free space to its sides:");
-            passiveSpaceHint.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
-            passiveSpaceHint.setForeground(new java.awt.Color(153, 153, 153));
-            passiveSpaceHint.setText("Format: N,E,S,W. e.g. 10,0,0,20");
-            passiveSpaceField.setText(getFormattedPassiveSpace());
-            passiveSpaceField.getDocument().addDocumentListener(new DocumentListener() {
-                @Override
-                public void changedUpdate(DocumentEvent e) { hasPassiveSpaceChanged = true; }
-                @Override
-                public void insertUpdate(DocumentEvent e) { hasPassiveSpaceChanged = true; }
-                @Override
-                public void removeUpdate(DocumentEvent e) { hasPassiveSpaceChanged = true; }
-             });
-            passiveSpaceField.addFocusListener(new java.awt.event.FocusAdapter() {
-                @Override
-                public void focusLost(java.awt.event.FocusEvent evt) { if (hasPassiveSpaceChanged) passiveSpaceUpdate(); }
-            });
+            measureLabel1.setText("This model is");
 
-            // Finally, we lay out all the visual components, assemble them and finish
-            org.jdesktop.layout.GroupLayout innerPanelLayout = new org.jdesktop.layout.GroupLayout(innerPanel);
+        measureLabel2.setText("cm wide, and ");
+
+        materialLabel.setText("It is made from");
+
+        colorLabel.setText("and painted in");
+
+        measureLabel3.setText("cm deep");
+
+        passiveSpaceLabel.setText("It should always have the following free space to its sides:");
+
+        passiveSpaceHint.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
+        passiveSpaceHint.setForeground(new java.awt.Color(153, 153, 153));
+        passiveSpaceHint.setText("Format: N,E,S,W. e.g. 10,0,0,20");
+
+        materialSelector.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        colorSelector.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        priceLabel.setText("Price");
+
+        priceLabel2.setText("€");
+
+        org.jdesktop.layout.GroupLayout innerPanelLayout = new org.jdesktop.layout.GroupLayout(innerPanel);
             innerPanel.setLayout(innerPanelLayout);
             innerPanelLayout.setHorizontalGroup(
                 innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(innerPanelLayout.createSequentialGroup()
                     .addContainerGap()
-                    .add(ftname)
-                    .add(62, 62, 62)
+                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(fmname)
+                        .add(priceLabel)
+                        .add(priceField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 69, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                    .add(priceLabel2)
+                    .add(18, 42, Short.MAX_VALUE)
                     .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                         .add(innerPanelLayout.createSequentialGroup()
-                            .add(11, 11, 11)
                             .add(passiveSpaceHint, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 207, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(33, 33, 33)
+                            .add(18, 18, 18)
                             .add(passiveSpaceField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 128, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(org.jdesktop.layout.GroupLayout.TRAILING, innerPanelLayout.createSequentialGroup()
-                            .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                .add(innerPanelLayout.createSequentialGroup()
-                                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                        .add(depthLabel)
-                                        .add(widthLabel))
-                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                        .add(minWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                        .add(minDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                        .add(innerPanelLayout.createSequentialGroup()
-                                            .add(widthLabel2)
-                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                            .add(maxWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                            .add(widthLabel3))
-                                        .add(innerPanelLayout.createSequentialGroup()
-                                            .add(depthLabel2)
-                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                            .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                            .add(depthLabel3))))
-                                .add(innerPanelLayout.createSequentialGroup()
-                                    .add(passiveSpaceLabel)
-                                    .add(81, 81, 81)))
-                            .add(15, 15, 15)))
-                    .add(6, 6, 6))
+                        .add(passiveSpaceLabel)
+                        .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(innerPanelLayout.createSequentialGroup()
+                                .add(measureLabel1)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(widthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(measureLabel2)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(depthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(measureLabel3)
+                                .add(0, 0, Short.MAX_VALUE))
+                            .add(innerPanelLayout.createSequentialGroup()
+                                .add(materialLabel)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(materialSelector, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(colorLabel)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 11, Short.MAX_VALUE)
+                                .add(colorSelector, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(0, 16, Short.MAX_VALUE)))))
             );
             innerPanelLayout.setVerticalGroup(
                 innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(innerPanelLayout.createSequentialGroup()
                     .addContainerGap()
                     .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(ftname)
-                        .add(widthLabel)
-                        .add(minWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(widthLabel2)
-                        .add(maxWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(widthLabel3))
+                        .add(fmname)
+                        .add(measureLabel1)
+                        .add(widthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(measureLabel2)
+                        .add(depthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(measureLabel3))
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                     .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(depthLabel)
-                        .add(minDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(depthLabel2)
-                        .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(depthLabel3))
+                        .add(materialLabel)
+                        .add(colorLabel)
+                        .add(materialSelector, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(colorSelector, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                    .add(passiveSpaceLabel)
-                    .add(18, 18, 18)
                     .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                        .add(passiveSpaceField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(passiveSpaceHint))
+                        .add(passiveSpaceLabel)
+                        .add(priceLabel))
+                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(innerPanelLayout.createSequentialGroup()
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                            .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                .add(passiveSpaceHint)
+                                .add(passiveSpaceField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(innerPanelLayout.createSequentialGroup()
+                            .add(4, 4, 4)
+                            .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                                .add(priceField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .add(priceLabel2))))
                     .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
 
@@ -732,11 +560,11 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
             outerPanelLayout.setHorizontalGroup(
                 outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(org.jdesktop.layout.GroupLayout.TRAILING, outerPanelLayout.createSequentialGroup()
-                    .addContainerGap(18, Short.MAX_VALUE)
+                    .addContainerGap(58, Short.MAX_VALUE)
                     .add(removeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 51, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                     .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    )
+                    .add(53, 53, 53))
             );
             outerPanelLayout.setVerticalGroup(
                 outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -747,6 +575,13 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
                         .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .addContainerGap())
             );
+
+            
+            
+            
+            
+            
+            
         }
 
         /**
@@ -767,45 +602,10 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
          * Consults all over again the information of the item and updates its state
          */
         public void updateChanges() {
-            minWidthField.setText(Integer.toString(ftController.getWidthRange(actualName).min));
-            maxWidthField.setText(Integer.toString(ftController.getWidthRange(actualName).max));
-            minDepthField.setText(Integer.toString(ftController.getDepthRange(actualName).min));
-            maxDepthField.setText(Integer.toString(ftController.getDepthRange(actualName).max));
-            passiveSpaceField.setText(getFormattedPassiveSpace());
+            
         }     
         
-        private void widthRangeUpdate() {
-            hasWidthChanged = false;
-            String min = minWidthField.getText();
-            String max = maxWidthField.getText();
-            if (min.matches("[0-9]+") && max.matches("[0-9]+")) {
-                performModification();
-                ftController.setWidthRange(actualName, Integer.parseInt(min), Integer.parseInt(max));
-            }
-            else {
-                String msg = "Width should be a positive number";
-                JOptionPane.showMessageDialog(FurnitureModelCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
-                minWidthField.setText(Integer.toString(ftController.getWidthRange(actualName).min));
-                maxWidthField.setText(Integer.toString(ftController.getWidthRange(actualName).max));
-            }
-        }
-        
-        private void depthRangeUpdate() {
-            hasDepthChanged = false;
-            String min = minDepthField.getText();
-            String max = maxDepthField.getText();
-            if (min.matches("[0-9]+") && max.matches("[0-9]+")) {
-                performModification();
-                ftController.setDepthRange(actualName, Integer.parseInt(min), Integer.parseInt(max));
-            }
-            else {
-                String msg = "Depth should be a positive number";
-                JOptionPane.showMessageDialog(FurnitureModelCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
-                minDepthField.setText(Integer.toString(ftController.getDepthRange(actualName).min));
-                maxDepthField.setText(Integer.toString(ftController.getDepthRange(actualName).max));
-            }
-        }
-        
+        /*
         private void passiveSpaceUpdate() {
             hasPassiveSpaceChanged = false;
             String str = passiveSpaceField.getText();
@@ -828,7 +628,7 @@ public class FurnitureModelCatalogFrame extends javax.swing.JFrame {
             int[] ps = ftController.getPassiveSpace(actualName);
             return ps[0] + ", " + ps[1] + ", " + ps[2] + ", " + ps[3];
         }
-        
+        */
     }
     /*
      * End of RTC_Element Class

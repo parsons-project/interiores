@@ -4,7 +4,7 @@
  */
 package interiores.utils;
 
-import interiores.business.models.constraints.furniture.BinaryConstraint;
+import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,19 +24,19 @@ public class BinaryConstraintAssociation
     public String furniture2;
     
     @XmlElement
-    public BinaryConstraint constraint;
+    public BinaryConstraintEnd constraint;
     
     public BinaryConstraintAssociation() {
         
     }
     
-    public BinaryConstraintAssociation(BinaryConstraint constraint, String furniture1, String furniture2) {
+    public BinaryConstraintAssociation(BinaryConstraintEnd constraint, String furniture1, String furniture2) {
         this.constraint = constraint;
         this.furniture1 = furniture1;
         this.furniture2 = furniture2;
     }
     
-    public BinaryConstraint getConstraint() {
+    public BinaryConstraintEnd getConstraint() {
         return constraint;
     }
     

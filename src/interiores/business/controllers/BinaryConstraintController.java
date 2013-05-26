@@ -3,7 +3,7 @@ package interiores.business.controllers;
 import interiores.business.controllers.abstracted.InterioresController;
 import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.exceptions.WantedElementNotFoundException;
-import interiores.business.models.constraints.furniture.BinaryConstraint;
+import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.PartialFacingConstraint;
@@ -36,8 +36,8 @@ public class BinaryConstraintController
         enableConstraint("facing", "partial", PartialFacingConstraint.class);
     }
     
-    private void enableConstraint(String name, String type, Class<? extends BinaryConstraint> bClass) {
-        BinaryConstraint.addConstraintClass(name + SEPARATOR_CONSTRAINT_TYPE + type, bClass);
+    private void enableConstraint(String name, String type, Class<? extends BinaryConstraintEnd> bClass) {
+        BinaryConstraintEnd.addConstraintClass(name + SEPARATOR_CONSTRAINT_TYPE + type, bClass);
     }
     
     public String getConstraintTypeSeparator() {
@@ -71,13 +71,13 @@ public class BinaryConstraintController
     public void removeConstraint(String furnitureId1, String furnitureId2, String constraintAlias)
             throws NoRoomCreatedException, BusinessException
     {
-        Class binaryConstraintClass = BinaryConstraint.getConstraintClass(constraintAlias);
+        Class binaryConstraintClass = BinaryConstraintEnd.getConstraintClass(constraintAlias);
         
         removeConstraint(furnitureId1, furnitureId2, binaryConstraintClass);
     }
     
     public void removeConstraint(String furnitureId1, String furnitureId2,
-            Class<? extends BinaryConstraint> binaryConstraintClass)
+            Class<? extends BinaryConstraintEnd> binaryConstraintClass)
             throws NoRoomCreatedException
     {
         getWishList().removeBinaryConstraint(binaryConstraintClass, furnitureId1, furnitureId2);
@@ -90,7 +90,7 @@ public class BinaryConstraintController
     }
     
     public Collection<String> getAvailableConstraints() {
-        return BinaryConstraint.getConstraintClasses();
+        return BinaryConstraintEnd.getConstraintClasses();
     }
     
 }

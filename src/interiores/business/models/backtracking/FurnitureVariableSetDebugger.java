@@ -93,10 +93,14 @@ public class FurnitureVariableSetDebugger
         if(shouldStop())
             throw new NoSolutionException("Solver stopped manually");
         
-        super.backtracking();
+        super.backtracking();    
+    }
+    
+    @Override
+    public void undoSetActual() {
+        super.undoSetActual();
         
-        if(depth > 0)
-            notify(new ActualVariableSetEvent(variables[depth-1]));
+        notify(new ActualVariableSetEvent(actual));
     }
     
     @Override

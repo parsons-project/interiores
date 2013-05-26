@@ -1,5 +1,6 @@
 package interiores.business.models.constraints.furniture;
 
+import interiores.business.models.WantedFurniture;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.Constraint;
@@ -18,22 +19,22 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  */
 @XmlRootElement
 @XmlSeeAlso({MaxDistanceConstraint.class, MinDistanceConstraint.class})
-public abstract class BinaryConstraint
+public abstract class BinaryConstraintEnd
     extends Constraint
     implements InexhaustiveTrimmer, BacktrackingTimeTrimmer
 {
     
     private static Map<String, Class<? extends Constraint>> availableConstraints = new TreeMap();
     
-    public static void addConstraintClass(String name, Class<? extends BinaryConstraint> constraintClass)
+    public static void addConstraintClass(String name, Class<? extends BinaryConstraintEnd> constraintClass)
     {
         addConstraintClass(availableConstraints, name, constraintClass);
     }
     
-    public static Class<? extends BinaryConstraint> getConstraintClass(String name)
+    public static Class<? extends BinaryConstraintEnd> getConstraintClass(String name)
             throws BusinessException
     {
-        return (Class<? extends BinaryConstraint>) getConstraintClass(availableConstraints, name, "binary");
+        return (Class<? extends BinaryConstraintEnd>) getConstraintClass(availableConstraints, name, "binary");
     }
     
     public static Collection<String> getConstraintClasses() {
@@ -46,7 +47,7 @@ public abstract class BinaryConstraint
     
     protected InterioresVariable otherVariable;
     
-    protected BinaryConstraint(InterioresVariable otherVariable) {
+    protected BinaryConstraintEnd(InterioresVariable otherVariable) {
         this.otherVariable = otherVariable;
     }
     
@@ -84,5 +85,27 @@ public abstract class BinaryConstraint
     public final InterioresVariable getOtherVariable() {
         return otherVariable;
     }
-
+    
+    public void bound(WantedFurniture start) throws CloneNotSupportedException {
+        if(otherVariable.isConstant())
+            return;
+        
+        WantedFurniture end = (WantedFurniture) otherVariable;
+        
+        if(end.isBounding())
+            return;
+        
+        BinaryConstraintEnd otherEnd = (BinaryConstraintEnd) clone();
+        otherEnd.otherVariable = start;
+        
+        end.addBinaryConstraint(otherEnd);
+    }
+    
+    public void unbound() {
+        if(otherVariable.isConstant())
+            return;
+        
+        WantedFurniture end = (WantedFurniture) otherVariable;
+        end.removeBinaryConstraint(getClass());
+    }
 }

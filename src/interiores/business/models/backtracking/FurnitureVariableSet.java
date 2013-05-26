@@ -6,27 +6,22 @@ import interiores.business.models.OrientedRectangle;
 import interiores.business.models.WantedFixed;
 import interiores.business.models.WantedFurniture;
 import interiores.business.models.WishList;
-import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.constraints.Constraint;
-import interiores.business.models.constraints.furniture.BinaryConstraint;
+import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
+import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
-import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
-import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
-import interiores.utils.BinaryConstraintAssociation;
 import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.PriorityQueue;
 
 public class FurnitureVariableSet
 	extends VariableSet
@@ -72,7 +67,7 @@ public class FurnitureVariableSet
    List<GlobalConstraint> globalConstraints;
     
    /**
-    * Holds informatinon about the relationship between constraints of
+    * Holds information about the relationship between constraints of
     * different variables.
     * The first string identifies the ID of the variable that, when assigned,
     * the domain of the variable identified by the second string, will be
@@ -206,7 +201,7 @@ public class FurnitureVariableSet
     @Override
     protected void setActualVariable() {
         
-        if (unassignedVariables.isEmtpy())
+        if (unassignedVariables.isEmpty())
             allAssigned = true;
         else {
             int maxDomainSize = -1;
@@ -225,7 +220,7 @@ public class FurnitureVariableSet
                 // the weight of all binary constraints between this variable and
                 // other variables which have not been assigned yet.
                 binaryConstraintsLoad[i] = 0;
-                for (BinaryConstraint bc : binaryConstraints.getConstraints(variable)) {
+                for (BinaryConstraintEnd bc : binaryConstraints.getConstraints(variable)) {
                     if (bc.getOtherVariable(variable).isAssigned())
                         binaryConstraintsLoad[i] += bc.getWeight(roomArea);
                 }
@@ -397,10 +392,10 @@ public class FurnitureVariableSet
     
     private InterioresVariable getVariable(String name) {
         for (FurnitureVariable variable : unassignedVariables)
-            if (variable.getID().equals(name)) return variable;
+            if (variable.getName().equals(name)) return variable;
         for (FurnitureVariable variable : assignedVariables)
-            if (variable.getID().equals(name)) return variable;
-        if (actual.getID().equals(name)) return actual;
+            if (variable.getName().equals(name)) return variable;
+        if (actual.getName().equals(name)) return actual;
             
         
         throw new BusinessException(name + " variable not found.");
@@ -411,13 +406,13 @@ public class FurnitureVariableSet
         Map<String, FurnitureValue> values = new HashMap();
         
         for(FurnitureConstant constant : constants)
-            values.put(constant.getID(), constant.getAssignedValue());
+            values.put(constant.getName(), constant.getAssignedValue());
         
         for(FurnitureVariable variable : unassignedVariables)
-            values.put(variable.getID(), variable.getAssignedValue());
+            values.put(variable.getName(), variable.getAssignedValue());
      
         for(FurnitureVariable variable : assignedVariables)
-            values.put(variable.getID(), variable.getAssignedValue());
+            values.put(variable.getName(), variable.getAssignedValue());
         
         return values;
     }
@@ -434,14 +429,14 @@ public class FurnitureVariableSet
 
         for (FurnitureVariable v : unassignedVariables) {
             for (Constraint constraint : v.furnitureConstraints) {
-                if (constraint instanceof BinaryConstraint) {
-                    BinaryConstraint bc = (BinaryConstraint) constraint;
+                if (constraint instanceof BinaryConstraintEnd) {
+                    BinaryConstraintEnd bc = (BinaryConstraintEnd) constraint;
                     
                     InterioresVariable otherVariable = bc.getOtherVariable();
                     if (otherVariable instanceof FurnitureVariable) {
                         FurnitureVariable w = (FurnitureVariable) otherVariable;
 
-                        Entry e = new SimpleEntry(w.getID(), v.getID());
+                        Entry e = new SimpleEntry(w.getName(), v.getName());
                         matrixOfDependence.put(e, bc.getWeight());
                     }
                 }
@@ -450,7 +445,7 @@ public class FurnitureVariableSet
     }
     
     private int getDependence(FurnitureVariable variable1, FurnitureVariable variable2) {
-        Entry e = new SimpleEntry(variable1.getID(), variable2.getID());
+        Entry e = new SimpleEntry(variable1.getName(), variable2.getName());
         if (! matrixOfDependence.containsKey(e))
             return 0;
         else return matrixOfDependence.get(e);
@@ -470,7 +465,7 @@ public class FurnitureVariableSet
 //        
 //        result.append("Variables: " + NEW_LINE);
 //        for (FurnitureVariable variable : assignedVariables) {
-//            result.append(variable.getID() + ": ");
+//            result.append(variable.getName() + ": ");
 //            result.append(variable.getAssignedValue().toString() + NEW_LINE);
 //        }
 //        result.append("Actual variable:" + NEW_LINE);

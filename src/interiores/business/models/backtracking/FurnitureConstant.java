@@ -10,10 +10,15 @@ import interiores.shared.backtracking.Variable;
 public class FurnitureConstant
     extends InterioresVariable
 {
-    public FurnitureConstant(String identifier, FurnitureValue value) {
-        super(identifier);
+    public FurnitureConstant(String name, String typeName, FurnitureValue value) {
+        super(name, typeName);
         
         assignValue(value);
+    }
+    
+    @Override
+    public boolean isConstant() {
+        return true;
     }
     
     @Override

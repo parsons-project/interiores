@@ -29,11 +29,13 @@ public class RoomMap
     protected int width;
     protected int depth;
     protected Dimension size; // Total size of the map
-    private Map<String, RoomElement> furnitures;
-    private Map<String, RoomElement> pillars;
+    protected Map<String, RoomElement> pillars;
+    protected String pillarKey;
+    private Map<String, RoomElement> furnitures;   
     protected Walls walls;
     private String status;
     private String time;
+    
     
     public RoomMap(int roomWidth, int roomDepth) {
         width = roomWidth + getPadding() * 2;
@@ -151,6 +153,12 @@ public class RoomMap
     }
     
     protected void drawPillars(Graphics2D g) {
+        
+        if(pillarKey != null) {
+            pillars.remove(pillarKey);
+            pillarKey = null;
+        }
+        
         for(Drawable pillar : pillars.values())
             pillar.draw(g);
     }

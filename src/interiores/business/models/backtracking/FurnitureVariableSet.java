@@ -11,7 +11,14 @@ import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
+<<<<<<< HEAD
+import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
+import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
+import interiores.core.Debug;
+=======
+>>>>>>> 90c6180a810f51fb59cfdf50f2740b893b472545
 import interiores.core.business.BusinessException;
+import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
 import interiores.utils.Dimension;
@@ -19,6 +26,7 @@ import java.awt.Point;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -183,10 +191,12 @@ public class FurnitureVariableSet
     
 
     /**
-     * Selects a variable from variables[depth..variableCount-1] and sets it
+     * Selects a variable from unassignedVariables and sets it
      * as actual variable.
-     * In order for the actual variable to be set it has to be moved to the
-     * position depth of variables.
+     * 
+     * Before setting a new actual variable, the previous one is stored in the
+     * list of assignedVariables.
+     * 
      * The variable is chosen according to 3 factors:
      * 1) The domain size: the smallest the better
      * 2) The binary constraints with variables that have not been set: the more
@@ -204,6 +214,11 @@ public class FurnitureVariableSet
         if (unassignedVariables.isEmpty())
             allAssigned = true;
         else {
+            
+            //move actual to assigned, unless it is the first iteration
+            if (actual != null)
+                assignedVariables.add(actual);
+            
             int maxDomainSize = -1;
             int maxBinaryConstraints = -1;
             int maxSmallestModelArea = -1;
@@ -220,9 +235,14 @@ public class FurnitureVariableSet
                 // the weight of all binary constraints between this variable and
                 // other variables which have not been assigned yet.
                 binaryConstraintsLoad[i] = 0;
+<<<<<<< HEAD
+                for (FurnitureVariable otherVariable : unassignedVariables) {
+                    binaryConstraintsLoad[i] += getDependence(variable, otherVariable);
+=======
                 for (BinaryConstraintEnd bc : binaryConstraints.getConstraints(variable)) {
                     if (bc.getOtherVariable(variable).isAssigned())
                         binaryConstraintsLoad[i] += bc.getWeight(roomArea);
+>>>>>>> 90c6180a810f51fb59cfdf50f2740b893b472545
                 }
                 
                 if (binaryConstraintsLoad[i] > maxBinaryConstraints)
@@ -231,7 +251,6 @@ public class FurnitureVariableSet
                 smallestModelSize[i] = variable.smallestModelSize();
                 if (smallestModelSize[i] > maxSmallestModelArea)
                     maxSmallestModelArea = smallestModelSize[i];
-
             }
 
             //calculate the weight of each factor for each variable and the final
@@ -307,37 +326,22 @@ public class FurnitureVariableSet
     }
     
     
-    //note: preliminar implementation. Final implementation should take more
-    //things into consideration (e.g., not blocking paths)
+
     @Override
     protected boolean canAssignToActual(Value value) {
-        // Check constant constraints!
-        // @TODO Transform to preliminar trims?
-        for(FurnitureConstant constant : constants) {
-            if(! binaryConstraints.isSatisfied(actual, constant))
-                return false;
-        }
         
-        FurnitureValue actual_fv = (FurnitureValue) value;
-        // A little explanation: fv.getArea() gets the ACTIVE area of actual_fv
-        // while fv.getWholeArea() gets the PASSIVE + ACTIVE area of actual_fv
-        
-        if (! roomArea.contains(actual_fv.getWholeArea())) return false;
-
+        //temporal assignment
         actual.assignValue(value);
-        for (int i = 0; i < depth; ++i) {
-            FurnitureValue other_fv = variables[i].getAssignedValue();
-            
-            if (!binaryConstraints.isSatisfied(actual, variables[i])
-                || actual_fv.getArea().intersects(other_fv.getWholeArea())
-                || actual_fv.getWholeArea().intersects(other_fv.getArea()) )
-            {
-                actual.undoAssignValue();
+        
+        //1) check that furniture constraints are satisfied
+        if (! actual.constraintsSatisfied()) return false;
+        
+        //2) check that room constraints are satisfied
+        for (GlobalConstraint constraint : globalConstraints) {
+            if (! ((RoomInexhaustiveTrimmer) constraint).isSatisfied(
+                assignedVariables, unassignedVariables, constants, actual))
                 return false;
-            }
-
-        }
-        actual.undoAssignValue();
+        } 
         return true;
     }
 
@@ -345,48 +349,34 @@ public class FurnitureVariableSet
     @Override
     protected void assignToActual(Value value) {        
         actual.assignValue(value);
-        //assignedVariables.add(actual);
     }
 
     
     @Override
     protected void undoAssignToActual() {
-        if (depth >= 0) {
-            actual = variables[depth];
-        }
         actual.undoAssignValue();
-    }
-    
-    
-    public void addPreliminarTrimmer(PreliminarTrimmer preliminarTrimmer) {
-        preliminarTrimmers.add(preliminarTrimmer);
     }
     
     //note: trivial implementation. To be optimized.
     @Override
     protected void preliminarTrimDomains() {
-        for(PreliminarTrimmer preliminarTrimmer : preliminarTrimmers)
-            preliminarTrimmer.preliminarTrim(constants, variables);
         
-        // @TODO Refactorize
-        //3) remove furniture too expensive
-        /*float minBudget = 0;
-        for (int i = 0; i < variableCount; ++i)
-            minBudget += variables[i].getMinPrice();
-       
-        for (int i = 0; i < variableCount; ++i) {
-            //if a model from this variable is more expensive than maxPrice,
-            //there is no possible assignmentment to variables such that
-            //variables[i] has assigned this model and the maxBudget is not exceeded 
-            float maxPrice = maxBudget - ( minBudget - variables[i].getMinPrice());
-            variables[i].trimTooExpensiveModels(maxPrice);
+        //1) each variable triggers its own preliminar trimmers
+        for (FurnitureVariable variable : unassignedVariables)
+            variable.triggerPreliminarTrimmers();
+        
+        //2) global constraints that implement the preliminar trimmer interface
+        //are triggered
+        Iterator<GlobalConstraint> it = globalConstraints.iterator();
+        while(it.hasNext()) {
+            GlobalConstraint constraint = it.next();
+            if (constraint instanceof RoomPreliminarTrimmer) {
+                ((RoomPreliminarTrimmer) constraint).preliminarTrim(unassignedVariables, constants);
+            }
+            //ditch it if it doesn't implement any other interface
+            if (! (constraint instanceof RoomInexhaustiveTrimmer))
+                it.remove();
         }
-        
-        //4) remove positions such that no model fit there due to walls and
-        //topology elements
-        for (int i = 0; i < variableCount; ++i)
-            variables[i].trimObstructedPositions();*/
-        
     }
     
     
@@ -422,7 +412,8 @@ public class FurnitureVariableSet
     // For each binary constraint bc:
     //      //assume v is the variable associated with bc
     //      //and w is the otherVariable of bc (bc.getOtherVariable())
-    //      mod[w][v] = bc.getWeight()
+    //      if w is not a constant:
+    //          mod[w][v] = bc.getWeight()
     //      //this means that if w is assigned a value, the domain of v will be
     //      //restricted proportionally to the weight of bc.
     private void buildMatrixOfDependence() {
@@ -444,6 +435,7 @@ public class FurnitureVariableSet
         }
     }
     
+    
     private int getDependence(FurnitureVariable variable1, FurnitureVariable variable2) {
         Entry e = new SimpleEntry(variable1.getName(), variable2.getName());
         if (! matrixOfDependence.containsKey(e))
@@ -451,8 +443,17 @@ public class FurnitureVariableSet
         else return matrixOfDependence.get(e);
     }
     
+    @Override
+    protected void backtracking() throws NoSolutionException {
+        super.backtracking();
+        undoSetActualVariable();
+    }
     
-    
+    private void undoSetActualVariable() {
+        unassignedVariables.add(actual);
+        actual = assignedVariables.get(assignedVariables.size()-1);
+        assignedVariables.remove(assignedVariables.size()-1);
+    }
     
 //    @Override
 //    public String toString() {
@@ -479,6 +480,8 @@ public class FurnitureVariableSet
 //
 //        return result.toString();
 //    }
+
+
 
 
 

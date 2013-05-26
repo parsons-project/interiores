@@ -1,6 +1,7 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogAccessController;
+import interiores.business.events.catalogs.FMSetModifiedEvent;
 import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.room.FurnitureModel;
@@ -49,6 +50,8 @@ public class FurnitureModelController
                 passiveSpace);
         
         furnitureType.addFurnitureModel(furnitureModel);
+        
+        notify(new FMSetModifiedEvent(furnitureTypeName, name, true));
     }
     
     /**
@@ -61,6 +64,8 @@ public class FurnitureModelController
         FurnitureType furnitureType = getForWrite(furnitureTypeName);
         
         furnitureType.removeFurnitureModel(name);
+        
+        notify(new FMSetModifiedEvent(furnitureTypeName, name, false));
     }
     
     /**
@@ -84,4 +89,5 @@ public class FurnitureModelController
         }
         return furnitureNames;
     }
+    
 }

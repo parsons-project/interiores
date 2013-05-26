@@ -101,6 +101,10 @@ public class FurnitureModel {
         return size;
     }
     
+    public void setSize(Dimension d) {
+        size = d;
+    }
+    
     public OrientedRectangle getActiveArea(Point position, Orientation orientation) {
         OrientedRectangle activeArea = new OrientedRectangle(position, getSize(), Orientation.S);
         activeArea.setOrientation(orientation);
@@ -127,6 +131,10 @@ public class FurnitureModel {
     public Color getColor() {
         return color.getColor();
     }
+    
+    public void setColor(CoolColor c) {
+        color = c;
+    }
 
     /**
      * Gets the material of the furniture model
@@ -135,6 +143,10 @@ public class FurnitureModel {
     public String getMaterial() {
         return material.name();
     }
+    
+    public void setMaterial(Material m) {
+        material = m;
+    }
 
     /**
      * Gets the price of the furniture model
@@ -142,6 +154,10 @@ public class FurnitureModel {
      */
     public float getPrice() {
         return price;
+    }
+    
+    public void setPrice(Float p) {
+        price = p;
     }
     
     @Override

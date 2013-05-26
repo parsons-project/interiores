@@ -489,8 +489,7 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
      * Groups all the custom visual setting this frame has to initialize when loading
      */
     private void initVisualSettings() {
-        UIManager.put("ToolTip.background", Color.white);
-        ToolTipManager.sharedInstance().setInitialDelay(0);
+        
     }
 
     /**

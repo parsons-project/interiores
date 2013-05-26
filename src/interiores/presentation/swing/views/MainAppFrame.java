@@ -10,12 +10,16 @@ import interiores.core.presentation.swing.SwingException;
 import interiores.presentation.swing.helpers.FileChooser;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.xml.bind.JAXBException;
+import sun.org.mozilla.javascript.ast.CatchClause;
 
 /**
  *
@@ -215,10 +219,20 @@ public class MainAppFrame extends JFrame
 
         generalHelpMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         generalHelpMenu.setText("General");
+        generalHelpMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generalHelpMenuActionPerformed(evt);
+            }
+        });
         helpMenu.add(generalHelpMenu);
 
         terminalHelpMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         terminalHelpMenu.setText("Terminal");
+        terminalHelpMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                terminalHelpMenuActionPerformed(evt);
+            }
+        });
         helpMenu.add(terminalHelpMenu);
 
         aboutHelpMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
@@ -305,6 +319,14 @@ private void pillarToolMenuActionPerformed(java.awt.event.ActionEvent evt) {//GE
         editorPanel.setActiveButton("pillar");
     }
 }//GEN-LAST:event_pillarToolMenuActionPerformed
+
+private void generalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generalHelpMenuActionPerformed
+    openURL("/help/general.html");  
+}//GEN-LAST:event_generalHelpMenuActionPerformed
+
+private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalHelpMenuActionPerformed
+    openURL("/help/terminal.html");
+}//GEN-LAST:event_terminalHelpMenuActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutHelpMenu;
@@ -396,5 +418,17 @@ private void pillarToolMenuActionPerformed(java.awt.event.ActionEvent evt) {//GE
         Debug.println("Components in the container: " + getComponentCount());
         for (Component c : getComponents())
             Debug.println("Component: " + c.toString());
+    }
+    
+    private void openURL(String url) {
+        Desktop desktop = Desktop.getDesktop();
+    if(desktop.isSupported(Desktop.Action.BROWSE)) {
+        try {
+            desktop.browse(new URI(url));
+        }
+        catch (Exception exc) {
+            throw new SwingException("Desktop api not supported", exc);
+        }
+    }
     }
 }

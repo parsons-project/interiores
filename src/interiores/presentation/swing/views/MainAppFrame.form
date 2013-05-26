@@ -179,6 +179,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="General"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="generalHelpMenuActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="terminalHelpMenu">
               <Properties>
@@ -187,6 +190,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Terminal"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="terminalHelpMenuActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="aboutHelpMenu">
               <Properties>

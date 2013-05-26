@@ -3,10 +3,12 @@ package interiores.presentation.swing.views;
 import interiores.business.controllers.RoomController;
 import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomLoadedEvent;
+import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.core.presentation.swing.SwingException;
 import interiores.presentation.swing.helpers.FileChooser;
+import interiores.utils.OpenDefaultBrowser;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Desktop;
@@ -239,14 +241,13 @@ public class MainAppFrame extends JFrame
             unloadComponent(terminal);
     }//GEN-LAST:event_terminalMenuCheckboxActionPerformed
 
-    private void generalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generalHelpMenuActionPerformed
-        openURL("/help/general.html");  
-    }//GEN-LAST:event_generalHelpMenuActionPerformed
+private void generalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generalHelpMenuActionPerformed
+    openHelp("general.html");  
+}//GEN-LAST:event_generalHelpMenuActionPerformed
 
-    private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalHelpMenuActionPerformed
-        openURL("/help/terminal.html");
-    }//GEN-LAST:event_terminalHelpMenuActionPerformed
-
+private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalHelpMenuActionPerformed
+    openHelp("terminal/manual.html");
+}//GEN-LAST:event_terminalHelpMenuActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutHelpMenu;
     private javax.swing.JMenuItem exitMenuItem;
@@ -326,15 +327,15 @@ public class MainAppFrame extends JFrame
         pack();
     }
     
-    private void openURL(String url) {
-        Desktop desktop = Desktop.getDesktop();
-        if(desktop.isSupported(Desktop.Action.BROWSE)) {
-            try {
-                desktop.browse(new URI(url));
-            }
-            catch (Exception exc) {
-                throw new SwingException("Desktop api not supported", exc);
-            }
-        }
+    private void openHelp(String relPath) {
+        String helpPath = help.Help.class.getResource(".").getPath();
+        OpenDefaultBrowser.openURL(helpPath + relPath);
     }
+    
+    private void printComponents() {
+        Debug.println("Components in the container: " + getComponentCount());
+        for (Component c : getComponents())
+            Debug.println("Component: " + c.toString());
+    }
+    
 }

@@ -97,8 +97,8 @@ public class FurnitureVariableSetDebugger
     }
     
     @Override
-    public void undoSetActual() {
-        super.undoSetActual();
+    public void undoSetActualVariable() {
+        super.undoSetActualVariable();
         
         notify(new ActualVariableSetEvent(actual));
     }

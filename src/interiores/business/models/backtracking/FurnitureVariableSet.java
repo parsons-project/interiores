@@ -9,14 +9,9 @@ import interiores.business.models.WishList;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
-import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
-<<<<<<< HEAD
 import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
-import interiores.core.Debug;
-=======
->>>>>>> 90c6180a810f51fb59cfdf50f2740b893b472545
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
@@ -235,14 +230,9 @@ public class FurnitureVariableSet
                 // the weight of all binary constraints between this variable and
                 // other variables which have not been assigned yet.
                 binaryConstraintsLoad[i] = 0;
-<<<<<<< HEAD
+                
                 for (FurnitureVariable otherVariable : unassignedVariables) {
                     binaryConstraintsLoad[i] += getDependence(variable, otherVariable);
-=======
-                for (BinaryConstraintEnd bc : binaryConstraints.getConstraints(variable)) {
-                    if (bc.getOtherVariable(variable).isAssigned())
-                        binaryConstraintsLoad[i] += bc.getWeight(roomArea);
->>>>>>> 90c6180a810f51fb59cfdf50f2740b893b472545
                 }
                 
                 if (binaryConstraintsLoad[i] > maxBinaryConstraints)
@@ -449,7 +439,7 @@ public class FurnitureVariableSet
         undoSetActualVariable();
     }
     
-    private void undoSetActualVariable() {
+    protected void undoSetActualVariable() {
         unassignedVariables.add(actual);
         actual = assignedVariables.get(assignedVariables.size()-1);
         assignedVariables.remove(assignedVariables.size()-1);

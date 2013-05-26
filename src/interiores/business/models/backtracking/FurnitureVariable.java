@@ -7,14 +7,10 @@ import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
-import interiores.business.models.constraints.room.GlobalConstraint;
-import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
-import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,23 +59,13 @@ public class FurnitureVariable
      * The set of restrictions is "unaryConstraints". Its resolution defaults to 5.
      * @pre the iteration of the variableSet is 0
      */
-<<<<<<< HEAD
-    public FurnitureVariable(String id, List<FurnitureModel> models, Dimension roomSize,
-            List<Constraint> furnitureConstraints, int variableCount)
-=======
     public FurnitureVariable(String id, String typeName)
->>>>>>> 90c6180a810f51fb59cfdf50f2740b893b472545
     {
         super(id, typeName);
         
-<<<<<<< HEAD
-        this.furnitureConstraints = furnitureConstraints;
-        
         //minPrice not calculated yet
         minPrice = -1;
-=======
         furnitureConstraints = new HashMap();
->>>>>>> 90c6180a810f51fb59cfdf50f2740b893b472545
     }
     
     public FurnitureVariable(String id, String typeName, FurnitureValue value) {

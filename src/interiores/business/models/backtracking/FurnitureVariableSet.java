@@ -10,7 +10,6 @@ import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
 import interiores.business.models.constraints.room.global.SpaceRespectingConstraint;
-import interiores.business.models.constraints.room.global.UnfitModelsPseudoConstraint;
 import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedFixed;
@@ -159,8 +158,8 @@ public class FurnitureVariableSet
      * @param roomSize 
      */
     private void addVariables(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog,
-            Dimension roomSize) {   
-           
+            Dimension roomSize)
+    {   
         for(WantedFurniture wantedFurniture : wishList.getWantedFurniture()) {
             HashSet<FurnitureModel> models = new HashSet(
                     furnitureCatalog.get(wantedFurniture.getTypeName()).getFurnitureModels());
@@ -280,7 +279,6 @@ public class FurnitureVariableSet
         }
     }
  
-    
     @Override
     protected void trimDomains() {
         for (FurnitureVariable variable : unassignedVariables) {
@@ -288,7 +286,6 @@ public class FurnitureVariableSet
         }
     }
 
-    
     @Override
     protected void undoTrimDomains(Value value) {
         for (FurnitureVariable variable : unassignedVariables) {
@@ -296,7 +293,6 @@ public class FurnitureVariableSet
         }
     }
 
-    
     @Override
     protected boolean allAssigned() {
         if (unassignedVariables.isEmpty() && actual.isAssigned()) {
@@ -305,20 +301,16 @@ public class FurnitureVariableSet
         return allAssigned;
     }
 
-    
     @Override
     protected boolean actualHasMoreValues() {
         return actual.hasMoreValues();
     }
-    
     
     @Override
     protected Value getNextActualDomainValue() {
         return actual.getNextDomainValue();
     }
     
-    
-
     @Override
     protected boolean canAssignToActual(Value value) {
         

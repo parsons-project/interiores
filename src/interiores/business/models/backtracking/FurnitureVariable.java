@@ -201,8 +201,8 @@ public class FurnitureVariable
         }
     }
 
-    boolean constraintsSatisfied() {
-        for (Map.Entry<Class, Constraint> constraint : furnitureConstraints.entrySet())
+    public boolean constraintsSatisfied() {
+        for (Constraint constraint : furnitureConstraints.values())
             if (! ((InexhaustiveTrimmer) constraint).isSatisfied(this))
                 return false;
         return true;
@@ -215,9 +215,6 @@ public class FurnitureVariable
     public int getMaxDepth() {
         return maxDepth;
     }
-    
-    
-    
     
     //FUNCTIONS TO MODIFY THE DOMAIN
     //forwardIteration(), and consfraint - variable interface

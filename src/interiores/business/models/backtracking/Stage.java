@@ -1,24 +1,18 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.Orientation;
-import interiores.business.models.OrientedRectangle;
 import interiores.business.models.backtracking.Area.Area;
-import interiores.core.Debug;
+import interiores.business.models.room.FurnitureModel;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
-import interiores.utils.ExtendedArea;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * A Stage represents a subset of the domain with the values that were

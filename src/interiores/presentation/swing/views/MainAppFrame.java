@@ -62,9 +62,10 @@ public class MainAppFrame extends JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
-        jMenuBar1 = new javax.swing.JMenuBar();
+        menuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         newRoom = new javax.swing.JMenuItem();
         openMenuItem = new javax.swing.JMenuItem();
@@ -72,12 +73,6 @@ public class MainAppFrame extends JFrame
         exitMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         rtCatalog = new javax.swing.JMenuItem();
-        toolsMenu = new javax.swing.JMenu();
-        selectionToolMenu = new javax.swing.JMenuItem();
-        moveToolMenu = new javax.swing.JMenuItem();
-        doorToolMenu = new javax.swing.JMenuItem();
-        windowToolMenu = new javax.swing.JMenuItem();
-        pillarToolMenu = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         terminalMenuCheckbox = new javax.swing.JCheckBoxMenuItem();
         helpMenu = new javax.swing.JMenu();
@@ -94,8 +89,10 @@ public class MainAppFrame extends JFrame
 
         newRoom.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         newRoom.setText("New room design...");
-        newRoom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        newRoom.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 newRoomActionPerformed(evt);
             }
         });
@@ -103,8 +100,10 @@ public class MainAppFrame extends JFrame
 
         openMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         openMenuItem.setText("Open room design...");
-        openMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        openMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 openMenuItemActionPerformed(evt);
             }
         });
@@ -113,8 +112,10 @@ public class MainAppFrame extends JFrame
         saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         saveMenuItem.setText("Save room design...");
         saveMenuItem.setEnabled(false);
-        saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        saveMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 saveMenuItemActionPerformed(evt);
             }
         });
@@ -122,94 +123,45 @@ public class MainAppFrame extends JFrame
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 exitMenuItemActionPerformed(evt);
             }
         });
         jMenu1.add(exitMenuItem);
 
-        jMenuBar1.add(jMenu1);
+        menuBar.add(jMenu1);
 
         jMenu2.setText("Edit");
 
         rtCatalog.setText("Room type catalog");
-        rtCatalog.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        rtCatalog.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 rtCatalogActionPerformed(evt);
             }
         });
         jMenu2.add(rtCatalog);
 
-        jMenuBar1.add(jMenu2);
-
-        toolsMenu.setText("Tools");
-        toolsMenu.setEnabled(false);
-
-        selectionToolMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, 0));
-        selectionToolMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/cursor.png"))); // NOI18N
-        selectionToolMenu.setText("Selection");
-        selectionToolMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                selectionToolMenuActionPerformed(evt);
-            }
-        });
-        toolsMenu.add(selectionToolMenu);
-
-        moveToolMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, 0));
-        moveToolMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/move.png"))); // NOI18N
-        moveToolMenu.setText("Move");
-        moveToolMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                moveToolMenuActionPerformed(evt);
-            }
-        });
-        toolsMenu.add(moveToolMenu);
-
-        doorToolMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, 0));
-        doorToolMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/door.png"))); // NOI18N
-        doorToolMenu.setText("Add Door");
-        doorToolMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                doorToolMenuActionPerformed(evt);
-            }
-        });
-        toolsMenu.add(doorToolMenu);
-
-        windowToolMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, 0));
-        windowToolMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/window.png"))); // NOI18N
-        windowToolMenu.setText("Add Window");
-        windowToolMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                windowToolMenuActionPerformed(evt);
-            }
-        });
-        toolsMenu.add(windowToolMenu);
-
-        pillarToolMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, 0));
-        pillarToolMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/cube.png"))); // NOI18N
-        pillarToolMenu.setText("Add Pillar");
-        pillarToolMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                pillarToolMenuActionPerformed(evt);
-            }
-        });
-        toolsMenu.add(pillarToolMenu);
-
-        jMenuBar1.add(toolsMenu);
+        menuBar.add(jMenu2);
 
         jMenu3.setText("View");
 
         terminalMenuCheckbox.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
         terminalMenuCheckbox.setText("Terminal");
-        terminalMenuCheckbox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        terminalMenuCheckbox.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 terminalMenuCheckboxActionPerformed(evt);
             }
         });
         jMenu3.add(terminalMenuCheckbox);
 
-        jMenuBar1.add(jMenu3);
+        menuBar.add(jMenu3);
 
         helpMenu.setText("Help");
 
@@ -225,9 +177,9 @@ public class MainAppFrame extends JFrame
         aboutHelpMenu.setText("About");
         helpMenu.add(aboutHelpMenu);
 
-        jMenuBar1.add(helpMenu);
+        menuBar.add(helpMenu);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(menuBar);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -276,57 +228,21 @@ public class MainAppFrame extends JFrame
             unloadComponent(terminal);
     }//GEN-LAST:event_terminalMenuCheckboxActionPerformed
 
-private void moveToolMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveToolMenuActionPerformed
-    if (editorPanel != null) {
-        editorPanel.setActiveButton("move");
-    }
-}//GEN-LAST:event_moveToolMenuActionPerformed
-
-private void selectionToolMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectionToolMenuActionPerformed
-    if (editorPanel != null) {
-        editorPanel.setActiveButton("selection");
-    }
-}//GEN-LAST:event_selectionToolMenuActionPerformed
-
-private void doorToolMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doorToolMenuActionPerformed
-    if (editorPanel != null) {
-        editorPanel.setActiveButton("door");
-    }
-}//GEN-LAST:event_doorToolMenuActionPerformed
-
-private void windowToolMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_windowToolMenuActionPerformed
-    if (editorPanel != null) {
-        editorPanel.setActiveButton("window");
-    }
-}//GEN-LAST:event_windowToolMenuActionPerformed
-
-private void pillarToolMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pillarToolMenuActionPerformed
-    if (editorPanel != null) {
-        editorPanel.setActiveButton("pillar");
-    }
-}//GEN-LAST:event_pillarToolMenuActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutHelpMenu;
-    private javax.swing.JMenuItem doorToolMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenuItem generalHelpMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem moveToolMenu;
+    private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem newRoom;
     private javax.swing.JMenuItem openMenuItem;
-    private javax.swing.JMenuItem pillarToolMenu;
     private javax.swing.JMenuItem rtCatalog;
     private javax.swing.JMenuItem saveMenuItem;
-    private javax.swing.JMenuItem selectionToolMenu;
     private javax.swing.JMenuItem terminalHelpMenu;
     private javax.swing.JCheckBoxMenuItem terminalMenuCheckbox;
-    private javax.swing.JMenu toolsMenu;
-    private javax.swing.JMenuItem windowToolMenu;
     // End of variables declaration//GEN-END:variables
 
     
@@ -361,7 +277,7 @@ private void pillarToolMenuActionPerformed(java.awt.event.ActionEvent evt) {//GE
         loadComponent(editorPanel, BorderLayout.CENTER);
         
         saveMenuItem.setEnabled(true);
-        toolsMenu.setEnabled(true);
+        menuBar.add(editorPanel.getToolsMenu(), 2);        
     }
     
     private void unloadCurrentView() {

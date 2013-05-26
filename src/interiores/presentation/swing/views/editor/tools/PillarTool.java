@@ -1,13 +1,11 @@
 package interiores.presentation.swing.views.editor.tools;
 
 import interiores.business.controllers.FixedElementController;
-import interiores.business.models.Orientation;
 import interiores.core.presentation.SwingController;
-import interiores.presentation.swing.views.editor.EditorTool;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
-import interiores.presentation.swing.views.map.RoomMap;
 import interiores.utils.Dimension;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
@@ -21,6 +19,7 @@ public class PillarTool
     private Point position;
     
     public PillarTool(SwingController swing) {
+        super("Pillar", "cube.png", KeyEvent.VK_P);
         fixedController = swing.getBusinessController(FixedElementController.class);
     }
     

@@ -34,7 +34,9 @@ public class SpaceRespectingConstraint
      */
     @Override
     public void preliminarTrim(List<FurnitureVariable> variables, List<FurnitureConstant> fixedFurniture) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (FurnitureConstant fixed : fixedFurniture)
+            for (FurnitureVariable variable : variables)
+                variable.trimP(new Area(fixed.getAssignedValue().getWholeArea()));
     }
 
     /**

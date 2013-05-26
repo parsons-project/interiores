@@ -40,7 +40,6 @@ import java.util.Set;
  * @author nil.mamano
  */
 public class Stage {
-    private int resolution;
     
     private Area positions; // The set of valid positions
     private Area iterablePositions; // The set of points through which we
@@ -61,24 +60,13 @@ public class Stage {
         //which we will iteate
     private Iterator<FurnitureModel> modelIterator; // Iterator through the valid models
     private FurnitureModel currentModel; // The current model under consideration
-
-    private boolean firstValueIteration;
-    
-
-    /**
-     * Empty constructor so that this class does not raise persistency issues (DO NOT USE)
-     */
-    public Stage() {}
-    
     
     /**
      * Builds a Stage with all positions, a list of models and the 4 default orientations.
      * This constructor is used for the stage correspondent to the first iteration.
      */
-    public Stage(HashSet<FurnitureModel> models, Dimension roomSize, int resolution) {
-        
-        this.resolution = resolution;
-        
+    public Stage(HashSet<FurnitureModel> models, Dimension roomSize) {
+           
         // initialize models
         this.models = models;
         
@@ -90,16 +78,13 @@ public class Stage {
     }
     
     /**
-     * Constructor. Empty stage.
+     * Default constructor. Empty stage.
      * This constructor is used for all stages except thet first one.
      */
-    public Stage(int resolution) {
-        this.resolution = resolution;
-        
+    public Stage() {        
         models = new HashSet();
         positions = new Area();
-        orientations = new HashSet();
-        
+        orientations = new HashSet();      
     }
     
     /**

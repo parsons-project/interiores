@@ -59,8 +59,8 @@ public class MinDistanceConstraint
 
     @Override
     public void trim2(FurnitureVariable variable) {
-        Area modelArea = new Area(otherVariable.assignedValue.getArea());
-        Area invalidArea = modelArea.rectangleAround(distance);
+        Area invalidArea = new Area(otherVariable.assignedValue.getArea());
+        invalidArea.expand(distance/2);
         variable.trimP(invalidArea);
     }
 

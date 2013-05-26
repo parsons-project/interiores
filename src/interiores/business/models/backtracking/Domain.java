@@ -18,9 +18,7 @@ import java.util.List;
  * @author nil.mamano
  */
 public class Domain {
-   
-    private static final int RESOLUTION = 5;
-    
+      
     /**
      * The domain has a stage for each iteration.
      * It gives information about what values have been discarded and,
@@ -39,10 +37,10 @@ public class Domain {
         
         domain = new Stage[variableCount];
         
-        domain[0] = new Stage(models, roomSize, RESOLUTION);
+        domain[0] = new Stage(models, roomSize);
         
         for (int i = 1; i < variableCount; ++i) {
-            domain[i] = new Stage(RESOLUTION);
+            domain[i] = new Stage();
         }
         
         

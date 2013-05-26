@@ -299,7 +299,7 @@ public class FurnitureVariableSet
     
     @Override
     protected boolean allAssigned() {
-        if (unassignedVariables.isEmpty() && actual.isAssigned()) {
+        if (unassignedVariables.size() == 1 && actual.isAssigned()) {
             allAssigned = true;
         }
         return allAssigned;
@@ -446,8 +446,10 @@ public class FurnitureVariableSet
     
     protected void undoSetActualVariable() {
         unassignedVariables.add(actual);
-        actual = assignedVariables.get(assignedVariables.size()-1);
-        assignedVariables.remove(assignedVariables.size()-1);
+        if (! assignedVariables.isEmpty()) {
+            actual = assignedVariables.get(assignedVariables.size()-1);
+            assignedVariables.remove(assignedVariables.size()-1);
+        }
     }
 
     // @TODO DELETE COMMENT

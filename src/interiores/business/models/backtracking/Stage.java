@@ -385,7 +385,7 @@ public class Stage {
     }
     
     void union(Stage stage) {
-        unionP(stage.iterablePositions);
+        unionP(stage.positions);
         unionM(stage.models);
         unionO(stage.orientations);
     }

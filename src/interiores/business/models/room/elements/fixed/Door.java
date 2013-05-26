@@ -9,10 +9,14 @@ import interiores.utils.Dimension;
  */
 public class Door
     extends WallFixedElement
-{  
+{
+    public static String getColor() {
+        return "brown";
+    }
+    
     public Door(String wall, int displacement, int length, Dimension roomSize)
     {
-        super("door", "brown", "wood", new SpaceAround(0, 0, length, 0), wall, displacement, length,
+        super("door", getColor(), "wood", new SpaceAround(0, 0, length, 0), wall, displacement, length,
                 roomSize);
     }  
 }

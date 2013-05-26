@@ -1,7 +1,10 @@
 package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
+import interiores.business.models.OrientedRectangle;
 import interiores.business.models.room.FurnitureModel;
+import interiores.utils.Dimension;
+import java.awt.Color;
 import java.awt.Point;
 
 /**
@@ -15,13 +18,18 @@ abstract public class WallElement
     protected int y;
     protected int size;
     
-    public WallElement(String name, FurnitureModel model) {
-        super(name, model.getActiveArea(new Point(0, 0), Orientation.S));
+    public WallElement(String name, Dimension size, Color color) {
+        super(name, new OrientedRectangle(new Point(0, 0), size, Orientation.S));
         
         x = 0;
         y = 0;
-        size = model.getSize().width;
-        color = model.getColor();
+        
+        this.size = size.width;
+        this.color = color;
+    }
+    
+    public WallElement(String name, FurnitureModel model) {
+        this(name, model.getSize(), model.getColor());
     }
     
     public int getSize() {

@@ -3,6 +3,7 @@ package interiores.presentation.swing.views.map;
 import interiores.business.models.Orientation;
 import interiores.business.models.room.elements.WantedFixed;
 import interiores.presentation.swing.views.map.doors.RightDoor;
+import interiores.utils.CoolColor;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -19,6 +20,7 @@ public class Walls implements Drawable {
     private int width;
     private int depth;
     private Map<Point, WallElement> elements;
+    private Point previewKey;
     
     public Walls(int width, int height) {
         this.width = width;
@@ -46,6 +48,11 @@ public class Walls implements Drawable {
         
         for(WallElement element : elements.values())
             element.draw(g);
+        
+        if(previewKey != null) {
+            elements.remove(previewKey);
+            previewKey = null;
+        }
     }
     
     public void drawHorizontalWall(Graphics2D g, int y, int valign) {
@@ -120,6 +127,15 @@ public class Walls implements Drawable {
                 door.getOrientation());
         
         elements.put(key, mapDoor);
+    }
+       
+    public void previewDoor(Orientation wall, int displacement, int length) {
+        Point position = getPosition(wall, displacement);
+        
+        RightDoor previewDoor = new RightDoor("preview", length, CoolColor.BROWN.getColor(), position, wall);
+        
+        elements.put(position, previewDoor);
+        previewKey = position;
     }
     
     public void addWindow(WantedFixed window) {

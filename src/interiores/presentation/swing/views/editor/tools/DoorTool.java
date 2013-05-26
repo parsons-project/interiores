@@ -30,38 +30,55 @@ public class DoorTool
     
     @Override
     public boolean mouseReleased(MouseEvent evt, InteractiveRoomMap map) {
-        Point p = map.normDiscretize(evt.getPoint());
-
-        if (position != null) {
-            Point posDisNorm = map.normDiscretize(position);
-            int distance = (int) posDisNorm.distance(p);
-            switch (wallWhere) {
-                case E:
-                case W:
-                    fixedController.addDoor(wallWhere.toString(false), posDisNorm.y - RoomMap.getPadding(),
-                            distance);
-                    break;
-                case N:
-                case S:
-                    fixedController.addDoor(wallWhere.toString(false), posDisNorm.x - RoomMap.getPadding(),
-                            distance);
-                    break;
-            }
+        if(position == null)
+            return false;
+        
+        int length = getLength(map.normDiscretize(evt.getPoint()));
+        
+        if(length == 0)
             return true;
-        }
-        return false;
+        
+        int displacement = getDisplacement();
+        
+        fixedController.addDoor(wallWhere.toString(false), displacement, length);
+        
+        return true;
     }
     
-    @Override 
+    @Override
     public boolean mouseDragged(MouseEvent evt, InteractiveRoomMap map) {
-        return false;
+        if(position == null)
+            return false;
+        
+        int length = getLength(map.normDiscretize(evt.getPoint()));
+        
+        if(length == 0)
+            return true;
+        
+        int displacement = getDisplacement();
+        
+        map.previewDoor(wallWhere, displacement, length);
+        return true;
     }
     
     @Override
     public boolean mousePressed(MouseEvent evt, InteractiveRoomMap map) {
-        position  = new Point(evt.getX(), evt.getY());
-        wallWhere = map.getNearestWall(position.x, position.y);
+        position  = map.normDiscretize(evt.getPoint());
+        wallWhere = map.getNearestWall(evt.getX(), evt.getY());
    
         return false;
+    }
+    
+    private int getLength(Point normPos) {
+        int distance = (int) position.distance(normPos);
+        
+        return distance - distance % RoomMap.getResolution();
+    }
+    
+    private int getDisplacement() {
+        if(wallWhere == Orientation.E || wallWhere == Orientation.W)
+            return position.y - RoomMap.getPadding();
+            
+        return position.x - RoomMap.getPadding();
     }
 }

@@ -37,11 +37,13 @@ public class WindowTool
             switch (wallWhere) {
                 case E:
                 case W:
-                    fixedController.addWindow(wallWhere.toString(false), posDisNorm.y - RoomMap.getPadding(), distance);
+                    fixedController.addWindow(wallWhere.toString(false), posDisNorm.y - RoomMap.getPadding(),
+                            distance);
                     break;
                 case N:
                 case S:
-                    fixedController.addWindow(wallWhere.toString(false), posDisNorm.x - RoomMap.getPadding(), distance);
+                    fixedController.addWindow(wallWhere.toString(false), posDisNorm.x - RoomMap.getPadding(),
+                            distance);
                     break;
             }
             return true;

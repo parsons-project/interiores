@@ -114,20 +114,4 @@ public class BudgetConstraint
         variable.eliminateExceptM(validModels);
     }
 
-//Deprecated methods and field: notify system not used.
-    
-//    @Override
-//    public void notifyAssignment(FurnitureValue fv) throws ConstraintException {
-//        if ( current_budget + fv.getModel().getPrice() <= max_budget )
-//            current_budget += fv.getModel().getPrice();
-//        else
-//            throw new ConstraintException("Current budget (" + current_budget + "€) exceeds maximum budget ("
-//                    + max_budget + "€)");
-//    }
-//
-//    @Override
-//    public void notifyUnassignment(FurnitureValue fv) {
-//        current_budget -= fv.getModel().getPrice();
-//    }
-
 }

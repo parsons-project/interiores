@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * The variable must be placed next to a wall identified by an orientation
  * in orientations.
- * @author hector0193
+ * @author nmamano
  */
 public class WallConstraint
     extends UnaryConstraint implements InexhaustiveTrimmer {

@@ -149,21 +149,4 @@ public class SameColorConstraint
         return set2;
     }
     
-//    @ TODO REMOVE COMMENT!    
-//    @Override
-//    public void notifyAssignment(FurnitureValue fv) throws ConstraintException {
-//        
-//        if (assignments == 0) current_color = fv.getModel().getColor();
-//        else if ( current_color != fv.getModel().getColor() )
-//            throw new ConstraintException("Trying to assign a " + fv.getModel().getColor()
-//                    + " furniture to a room which can only contain " + current_color + " ones.");
-//        
-//        assignments++;
-//    }
-//
-//    @Override
-//    public void notifyUnassignment(FurnitureValue fv) {
-//        
-//        assignments--;
-//    }
 }

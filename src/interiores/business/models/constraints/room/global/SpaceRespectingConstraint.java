@@ -1,6 +1,7 @@
 package interiores.business.models.constraints.room.global;
 
 import interiores.business.models.OrientedRectangle;
+import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
@@ -47,11 +48,13 @@ public class SpaceRespectingConstraint
      */
     @Override
     public void trim(List<FurnitureVariable> assignedVariables,
-        List<FurnitureVariable> unassignedVariables,
-        List<FurnitureConstant> fixedFurniture,
-        FurnitureVariable actual)
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
+            List<FurnitureVariable> unassignedVariables,
+            List<FurnitureConstant> fixedFurniture,
+            FurnitureVariable actual) {
+        
+        for (FurnitureVariable variable : unassignedVariables) {
+            variable.trimP(new Area(actual.getAssignedValue().getWholeArea()));
+        }
     }
 
     /**

@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package interiores.business.models.constraints.room.global;
 
 import interiores.business.models.backtracking.FurnitureConstant;
@@ -145,25 +142,5 @@ public class SameMaterialConstraint
             if (! set1.contains(material))
                 set2.remove(material);
         return set2;
-    }
-
-//    @ TODO REMOVE COMMENT!
-//    @Override
-//    public void notifyAssignment(FurnitureValue fv) throws ConstraintException {
-//        
-//        if (assignments == 0) current_material = fv.getModel().getMaterial();
-//        else if ( ! current_material.equals(fv.getModel().getMaterial()) )
-//            throw new ConstraintException("Trying to assign a furniture made in " + fv.getModel().getMaterial()
-//                    + " to a room whose furniture should be made in " + current_material);
-//        
-//        assignments++;
-//        
-//    }
-//
-//    @Override
-//    public void notifyUnassignment(FurnitureValue fv) {
-//        assignments--;
-//    }
-
-    
+    }    
 }

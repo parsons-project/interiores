@@ -35,8 +35,6 @@ public class MaxDistanceConstraint
         return "Maximum distance = " + distance + "cm constraint";
     }
 
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::    
-    
     /**
      * Trims the domain of variable according to the value of
      * the other variable and the restriction.

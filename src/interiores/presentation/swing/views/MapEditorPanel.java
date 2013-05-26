@@ -2,7 +2,6 @@
  */
 package interiores.presentation.swing.views;
 
-import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.presentation.swing.views.editor.EditorTool;
 import interiores.presentation.swing.views.editor.RoomMapPanel;
@@ -13,12 +12,10 @@ import interiores.presentation.swing.views.editor.tools.PillarTool;
 import interiores.presentation.swing.views.editor.tools.SelectionTool;
 import interiores.presentation.swing.views.editor.tools.WindowTool;
 import java.awt.BorderLayout;
-import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
-import javax.swing.KeyStroke;
 
 /**
  *
@@ -28,7 +25,7 @@ public class MapEditorPanel extends JPanel
 {
     private RoomMapPanel mapPanel;
     private Map<JToggleButton, EditorTool> tools;
-    private Map<Integer, JToggleButton> keys;
+    private Map<String, JToggleButton> names;
     private JToggleButton activeButton;
     
     /**
@@ -48,29 +45,35 @@ public class MapEditorPanel extends JPanel
         wishListPanel.setVisible(true);
         
         tools = new HashMap();
-        keys = new HashMap();
+        names = new HashMap();
         addTools(swing);
         setActiveButton(selectionButton);  
     }
     
     private void addTools(SwingController swing) {
-        addTool(selectionButton, new SelectionTool(swing), KeyEvent.VK_S);
-        addTool(moveButton, new MoveTool(), KeyEvent.VK_M);
-        addTool(doorButton, new DoorTool(swing), KeyEvent.VK_D);
-        addTool(windowButton, new WindowTool(swing), KeyEvent.VK_W);
-        addTool(pillarButton, new PillarTool(swing), KeyEvent.VK_P);
+        addTool(selectionButton, new SelectionTool(swing), "selection");
+        addTool(moveButton, new MoveTool(), "move");
+        addTool(doorButton, new DoorTool(swing), "door");
+        addTool(windowButton, new WindowTool(swing), "window");
+        addTool(pillarButton, new PillarTool(swing), "pillar");
     }
     
-    private void addTool(JToggleButton button, EditorTool tool, Integer keyCode) {
+    private void addTool(JToggleButton button, EditorTool tool, String name) {
         tools.put(button, tool);
-        keys.put(keyCode, button);
+        names.put(name, button);
     }
     
     private void setActiveButton(JToggleButton button) {
         activeButton = button;
         activeButton.setSelected(true);
         mapPanel.setActiveTool(tools.get(activeButton));
+    } 
+    
+    public void setActiveButton(String name) {
+        if (names.containsKey(name))
+            setActiveButton(names.get(name));
     }
+   
     
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this
@@ -88,11 +91,6 @@ public class MapEditorPanel extends JPanel
         windowButton = new javax.swing.JToggleButton();
         pillarButton = new javax.swing.JToggleButton();
 
-        addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                formKeyPressed(evt);
-            }
-        });
         setLayout(new java.awt.BorderLayout());
 
         toolBar.setFloatable(false);
@@ -189,10 +187,6 @@ private void doorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 private void windowButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_windowButtonActionPerformed
     setActiveButton((JToggleButton) evt.getSource());
 }//GEN-LAST:event_windowButtonActionPerformed
-
-private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-    setActiveButton((JToggleButton) keys.get(evt.getKeyCode()));
-}//GEN-LAST:event_formKeyPressed
 
 private void pillarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pillarButtonActionPerformed
     setActiveButton((JToggleButton) evt.getSource());

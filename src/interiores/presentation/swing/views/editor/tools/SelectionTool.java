@@ -1,10 +1,9 @@
 package interiores.presentation.swing.views.editor.tools;
 
-import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.presentation.swing.views.ConstraintEditorFrame;
-import interiores.presentation.swing.views.editor.EditorTool;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
@@ -17,6 +16,7 @@ public class SelectionTool
     private SwingController swing;
     
     public SelectionTool(SwingController swing) {
+        super("Selection", "cursor.png", KeyEvent.VK_S);
         this.swing = swing;
     }
     
@@ -33,7 +33,7 @@ public class SelectionTool
                 map.select(x, y);
                 break;
                 
-            case MouseEvent.BUTTON3: // Right click
+            case MouseEvent.BUTTON3: // right click
                 if (map.select(x, y)) {
                     ConstraintEditorFrame cef = swing.getNew(ConstraintEditorFrame.class);
                     cef.setSelectedId(map.getLastSelected());

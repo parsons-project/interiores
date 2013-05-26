@@ -1,5 +1,6 @@
 package interiores.presentation.swing.views.editor;
 
+import interiores.presentation.swing.views.editor.tools.EditorTool;
 import interiores.business.controllers.DesignController;
 import interiores.business.controllers.FixedElementController;
 import interiores.business.controllers.FurnitureTypeController;
@@ -13,6 +14,7 @@ import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
+import interiores.presentation.swing.views.editor.tools.ToolManageable;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
 import interiores.presentation.swing.views.map.RoomMap;
 import interiores.presentation.swing.views.map.RoomMapDebugger;
@@ -28,7 +30,9 @@ import javax.swing.JPanel;
  *
  * @author hector
  */
-public class RoomMapPanel extends JPanel
+public class RoomMapPanel
+    extends JPanel
+    implements ToolManageable
 {
     private RoomController roomController;
     private FurnitureTypeController ftController;
@@ -83,6 +87,7 @@ public class RoomMapPanel extends JPanel
         updateDesign();
     }
     
+    @Override
     public void setActiveTool(EditorTool activeTool) {
         this.activeTool = activeTool;
     }

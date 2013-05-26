@@ -295,6 +295,13 @@ public class FurnitureVariable
                 it.remove();
         }
     }
+
+    boolean constraintsSatisfied() {
+        for (Constraint constraint : furnitureConstraints)
+            if (! ((InexhaustiveTrimmer) constraint).isSatisfied(this))
+                return false;
+        return true;
+    }
     
     
 }

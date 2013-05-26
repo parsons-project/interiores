@@ -1,6 +1,8 @@
 package interiores.business.models.constraints.room.global;
 
+import interiores.business.models.OrientedRectangle;
 import interiores.business.models.backtracking.FurnitureConstant;
+import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
@@ -19,6 +21,11 @@ import java.util.List;
 public class SpaceRespectingConstraint
     extends GlobalConstraint
     implements RoomPreliminarTrimmer, RoomBacktrackingTimeTrimmer {
+    
+    /**
+     * Contains the room rectangle
+     */
+    private OrientedRectangle roomArea;
     
     /**
      * For each furniture variable, the area assigned to a furniture constant
@@ -57,6 +64,21 @@ public class SpaceRespectingConstraint
      */
     @Override
     public boolean isSatisfied(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
-        throw new UnsupportedOperationException("Not supported yet.");
+               
+        FurnitureValue actualValue = actual.getAssignedValue();
+        // A little explanation: fv.getArea() gets the ACTIVE area of actual_fv
+        // while fv.getWholeArea() gets the PASSIVE + ACTIVE area of actual_fv
+        
+        //actual must be within the bounds of the room
+        if (! roomArea.contains(actualValue.getWholeArea())) return false;
+
+        for (FurnitureVariable variable : assignedVariables) {
+            FurnitureValue otherValue = variable.getAssignedValue();
+            
+            if (actualValue.getArea().intersects(otherValue.getWholeArea()) ||
+                actualValue.getWholeArea().intersects(otherValue.getArea()))
+                return false;
+        }
+        return true;
     }
 }

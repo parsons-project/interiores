@@ -15,6 +15,7 @@ import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
+import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
 import interiores.utils.BinaryConstraintAssociation;
@@ -190,10 +191,11 @@ public class FurnitureVariableSet
     
 
     /**
-     * Selects a variable from variables[depth..variableCount-1] and sets it
+     * Selects a variable from unassignedVariables and sets it
      * as actual variable.
-     * In order for the actual variable to be set it has to be moved to the
-     * position depth of variables.
+     * 
+     * Before setting a new actual variable, the previous one is stored in the
+     * list of assignedVariables.
      * The variable is chosen according to 3 factors:
      * 1) The domain size: the smallest the better
      * 2) The binary constraints with variables that have not been set: the more
@@ -316,37 +318,18 @@ public class FurnitureVariableSet
     @Override
     protected boolean canAssignToActual(Value value) {
         
+        //temporal assignment
         actual.assignValue(value);
+        
+        //1) check that furniture constraints are satisfied
         if (! actual.constraintsSatisfied()) return false;
         
-        
-        // Check constant constraints!
-        // @TODO Transform to preliminar trims?
-        for(FurnitureConstant constant : constants) {
-            if(! binaryConstraints.isSatisfied(actual, constant))
+        //2) check that room constraints are satisfied
+        for (GlobalConstraint constraint : globalConstraints) {
+            if (! ((RoomInexhaustiveTrimmer) constraint).isSatisfied(
+                assignedVariables, unassignedVariables, constants, actual))
                 return false;
-        }
-        
-        FurnitureValue actual_fv = (FurnitureValue) value;
-        // A little explanation: fv.getArea() gets the ACTIVE area of actual_fv
-        // while fv.getWholeArea() gets the PASSIVE + ACTIVE area of actual_fv
-        
-        if (! roomArea.contains(actual_fv.getWholeArea())) return false;
-
-        actual.assignValue(value);
-        for (int i = 0; i < depth; ++i) {
-            FurnitureValue other_fv = variables[i].getAssignedValue();
-            
-            if (!binaryConstraints.isSatisfied(actual, variables[i])
-                || actual_fv.getArea().intersects(other_fv.getWholeArea())
-                || actual_fv.getWholeArea().intersects(other_fv.getArea()) )
-            {
-                actual.undoAssignValue();
-                return false;
-            }
-
-        }
-        actual.undoAssignValue();
+        } 
         return true;
     }
 
@@ -380,9 +363,7 @@ public class FurnitureVariableSet
         while(it.hasNext()) {
             GlobalConstraint constraint = it.next();
             if (constraint instanceof RoomPreliminarTrimmer) {
-                RoomPreliminarTrimmer preliminarTrimmer =
-                        (RoomPreliminarTrimmer) constraint;
-                preliminarTrimmer.preliminarTrim(unassignedVariables, constants);
+                ((RoomPreliminarTrimmer) constraint).preliminarTrim(unassignedVariables, constants);
             }
             //ditch it if it doesn't implement any other interface
             if (! (constraint instanceof RoomInexhaustiveTrimmer))
@@ -445,6 +426,7 @@ public class FurnitureVariableSet
         }
     }
     
+    
     private int getDependence(FurnitureVariable variable1, FurnitureVariable variable2) {
         Entry e = new SimpleEntry(variable1.getID(), variable2.getID());
         if (! matrixOfDependence.containsKey(e))
@@ -452,8 +434,17 @@ public class FurnitureVariableSet
         else return matrixOfDependence.get(e);
     }
     
+    @Override
+    protected void backtracking() throws NoSolutionException {
+        super.backtracking();
+        undoSetActualVariable();
+    }
     
-    
+    private void undoSetActualVariable() {
+        unassignedVariables.add(actual);
+        actual = assignedVariables.get(assignedVariables.size()-1);
+        assignedVariables.remove(assignedVariables.size()-1);
+    }
     
 //    @Override
 //    public String toString() {
@@ -480,6 +471,8 @@ public class FurnitureVariableSet
 //
 //        return result.toString();
 //    }
+
+
 
 
 

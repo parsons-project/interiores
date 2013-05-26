@@ -4,9 +4,9 @@ import interiores.business.events.backtracking.ActualVariableSetEvent;
 import interiores.business.events.backtracking.NextValueEvent;
 import interiores.business.events.backtracking.ValueAssignedEvent;
 import interiores.business.events.backtracking.ValueUnassignedEvent;
-import interiores.business.models.room.FurnitureType;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.NamedCatalog;
+import interiores.business.models.room.FurnitureType;
 import interiores.core.Debug;
 import interiores.core.Event;
 import interiores.core.Observable;
@@ -38,7 +38,9 @@ public class FurnitureVariableSetDebugger
     protected void setActualVariable() {
         super.setActualVariable();
         
-        if(! allAssigned)
+        Debug.println(actual.getName());
+        
+        if(! allAssigned())
             notify(new ActualVariableSetEvent(actual));
     }
     
@@ -60,9 +62,7 @@ public class FurnitureVariableSetDebugger
         synchronized (current) {
             if(!shouldStop()) { 
                 try {
-                    Debug.println("Pausing solver...");
                     current.wait();
-                    Debug.println("Solver resumed!");
                 }
                 catch(Exception e) {
                     e.printStackTrace();

@@ -203,7 +203,7 @@ public class FurnitureVariableSet
             allAssigned = true;
         else {
             
-            //move actual to assigned, unless it is the first iteration
+            //move previousactual to assigned, unless it is the first iteration
             if (actual != null)
                 assignedVariables.add(actual);
             
@@ -299,7 +299,7 @@ public class FurnitureVariableSet
     
     @Override
     protected boolean allAssigned() {
-        if (unassignedVariables.size() == 1 && actual.isAssigned()) {
+        if (unassignedVariables.size() == 0 && actual.isAssigned()) {
             allAssigned = true;
         }
         return allAssigned;
@@ -334,6 +334,8 @@ public class FurnitureVariableSet
                 assignedVariables, unassignedVariables, constants, actual))
                 return false;
         }
+        
+        actual.undoAssignValue();
         
         return true;
     }

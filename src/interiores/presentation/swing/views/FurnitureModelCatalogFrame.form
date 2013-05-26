@@ -56,13 +56,11 @@
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="discardChangesButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="185" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="333" max="-2" attributes="0"/>
                       <Component id="newButton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="saveChangesButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -91,14 +89,10 @@
               <Component id="jScrollPane1" min="-2" pref="515" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel1" alignment="3" min="-2" pref="29" max="-2" attributes="0"/>
-                      <Component id="saveChangesButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="discardChangesButton" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel1" min="-2" pref="29" max="-2" attributes="0"/>
                   <Component id="newButton" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="7" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -207,16 +201,6 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="ImageIcon im = new javax.swing.ImageIcon(&quot;src/resources/add_element.png&quot;);&#xa;im.setImage( im.getImage().getScaledInstance(35,35,java.awt.Image.SCALE_SMOOTH) );&#xa;newButton.setIcon(im); // NOI18N&#xa;newButton.setBorder(BorderFactory.createEmptyBorder());&#xa;newButton.setContentAreaFilled(false);"/>
       </AuxValues>
-    </Component>
-    <Component class="javax.swing.JButton" name="discardChangesButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Discard changes"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="saveChangesButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Save changes"/>
-      </Properties>
     </Component>
   </SubComponents>
 </Form>

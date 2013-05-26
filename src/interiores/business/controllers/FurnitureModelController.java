@@ -8,6 +8,7 @@ import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.room.FurnitureType;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Dimension;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -18,6 +19,10 @@ import java.util.Collection;
 public class FurnitureModelController
     extends CatalogAccessController<FurnitureType>
 {
+    
+    // Since there is no easy way to obtain the properties of an element by its name
+    // in constant time, we will cache the last model accessed.
+    private FurnitureModel cached_fm = null;
     
     /**
      * Creates a particular instance of the furniture model controller
@@ -88,6 +93,40 @@ public class FurnitureModelController
             furnitureNames.add(fm.getName());
         }
         return furnitureNames;
+    }
+    
+    // Particular getters
+    public Dimension getSize(String furnitureTypeName, String name) {
+        return getModel(furnitureTypeName, name).getSize();
+    }
+    
+    public String getMaterial(String furnitureTypeName, String name) {
+        return getModel(furnitureTypeName, name).getMaterial();
+    }
+    
+    public Color getColor(String furnitureTypeName, String name) {
+        return getModel(furnitureTypeName, name).getColor();
+    }
+    
+    public float getPrice(String furnitureTypeName, String name) {
+        return getModel(furnitureTypeName, name).getPrice();
+    }
+    
+    public int[] getPassiveSpace(String furnitureTypeName, String name) {
+        return getModel(furnitureTypeName, name).getPassiveSpace().getOffsets();
+    }
+    
+    
+    
+    private FurnitureModel getModel(String furnitureTypeName, String name) {
+        // If the model is chached, we return it
+        if (cached_fm != null && cached_fm.getType().equals(furnitureTypeName) && cached_fm.getName().equals(name) );
+        // Else, we find it and cache it!
+        else
+            for (FurnitureModel fm : getFurnitureModels(furnitureTypeName))
+                if (fm.getName().equals(name)) cached_fm = fm;
+        
+        return cached_fm;
     }
     
 }

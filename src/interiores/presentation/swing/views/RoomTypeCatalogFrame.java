@@ -51,7 +51,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
     
     // The frame also stores the changes made to the current catalog so far,
     // so that one can save them or discard them
-    boolean hasBeenModified = false;
+    private boolean hasBeenModified = false;
     
     /**
      * Creates the very RTC editor frame

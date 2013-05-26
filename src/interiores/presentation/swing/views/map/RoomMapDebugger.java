@@ -171,5 +171,6 @@ public class RoomMapDebugger
         furnitures.clear();
         points.clear();
         colors.clear();
+        areas.clear();
     }
 }

@@ -299,7 +299,7 @@ public class FurnitureVariableSet
     
     @Override
     protected boolean allAssigned() {
-        if (unassignedVariables.size() == 0 && actual.isAssigned()) {
+        if (unassignedVariables.isEmpty() && actual.isAssigned()) {
             allAssigned = true;
         }
         return allAssigned;
@@ -332,11 +332,13 @@ public class FurnitureVariableSet
         for (GlobalConstraint constraint : globalConstraints) {
             if (! ((RoomInexhaustiveTrimmer) constraint).isSatisfied(
                 assignedVariables, unassignedVariables, constants, actual))
+            {
+                actual.undoAssignValue();
                 return false;
+            }
         }
         
         actual.undoAssignValue();
-        
         return true;
     }
 
@@ -443,7 +445,9 @@ public class FurnitureVariableSet
     @Override
     protected void backtracking() throws NoSolutionException {
         super.backtracking();
-        undoSetActualVariable();
+        
+        if(!allAssigned())
+            undoSetActualVariable();
     }
     
     protected void undoSetActualVariable() {

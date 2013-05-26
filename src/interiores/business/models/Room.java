@@ -25,9 +25,6 @@ public class Room
     @XmlElement
     private Dimension size;
     
-    @XmlElement
-    private RoomDesign design;
-    
     public Room() {
         
     }
@@ -50,7 +47,6 @@ public class Room
         
         this.type = type;
         this.size = size;
-        design = new RoomDesign();
     }
     
     /**
@@ -112,13 +108,5 @@ public class Room
     
     public int getDepth() {
         return size.depth;
-    }
-    
-    public RoomDesign getDesign() {
-        return design;
-    }
-    
-    public void setDesign(RoomDesign design) {
-        this.design = design;
     }
 }

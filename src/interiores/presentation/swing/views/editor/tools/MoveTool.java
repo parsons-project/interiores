@@ -1,8 +1,8 @@
 package interiores.presentation.swing.views.editor.tools;
 
-import interiores.presentation.swing.views.editor.EditorTool;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
@@ -13,6 +13,10 @@ public class MoveTool
     extends EditorTool
 {
     private Point previous;
+    
+    public MoveTool() {
+        super("Move", "move.png", KeyEvent.VK_M);
+    }
     
     @Override
     public boolean mouseDragged(MouseEvent evt, InteractiveRoomMap map) {

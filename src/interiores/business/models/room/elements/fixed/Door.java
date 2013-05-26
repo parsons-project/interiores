@@ -10,10 +10,10 @@ import interiores.utils.Dimension;
  */
 public class Door
     extends WallFixedElement
-{  
+{
     public Door(String wall, int displacement, int length, Dimension roomSize)
     {
         super("door", "brown", "wood", new SpaceAround(0, 0, length, 0), Orientation.getEnum(wall),
                 displacement, length, roomSize);
-    }  
+    }
 }

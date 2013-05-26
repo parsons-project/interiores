@@ -96,13 +96,13 @@ public class RoomMap
         furnitures.put(name, furniture);
     }
     
-    public void addFurniture(Set<Entry<String, FurnitureValue>> furnitures) {
-        for(Entry<String, FurnitureValue> entry : furnitures) {
-            String name = entry.getKey();
-            Color color = entry.getValue().getModel().getColor();
-
-            addFurniture(name, entry.getValue().getArea(), color);
-        }
+    public void addFurniture(String name, FurnitureValue value) {
+        if(value == null)
+            return;
+        
+        Color color = value.getModel().getColor();
+        
+        addFurniture(name, value.getArea(), color);
     }
     
     public void removeFurniture(String name) {

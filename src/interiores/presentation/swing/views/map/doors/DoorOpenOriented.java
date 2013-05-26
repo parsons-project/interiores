@@ -3,6 +3,7 @@ package interiores.presentation.swing.views.map.doors;
 import interiores.business.models.Orientation;
 import interiores.business.models.room.FurnitureModel;
 import interiores.presentation.swing.views.map.MapDoor;
+import java.awt.Color;
 
 /**
  *
@@ -11,6 +12,10 @@ import interiores.presentation.swing.views.map.MapDoor;
 abstract public class DoorOpenOriented
     extends MapDoor
 {
+    public DoorOpenOriented(String name, int length, Color color) {
+        super(name, length, color);
+    }
+    
     public DoorOpenOriented(String name, FurnitureModel model) {
         super(name, model);
     }

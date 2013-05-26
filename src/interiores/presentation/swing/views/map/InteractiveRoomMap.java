@@ -147,4 +147,8 @@ public class InteractiveRoomMap
     public Point normDiscretize(Point p) {
         return discretize(normalize(p));
     }
+    
+    public void previewDoor(Orientation wall, int displacement, int length) {
+        walls.previewDoor(wall, displacement, length);
+    }
 }

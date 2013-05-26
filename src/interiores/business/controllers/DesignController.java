@@ -12,9 +12,11 @@ import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.room.FurnitureType;
+import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
+import java.util.Collection;
 import java.util.Set;
 
 
@@ -83,8 +85,6 @@ public class DesignController
                     solutionFound = true;
                     solveFinished.solutionFound();
 
-                    getRoom().setDesign(new RoomDesign(furVarSet.getVariableValues()));
-                    
                     me.notify(new RoomDesignChangedEvent());
                 }
                 catch (NoSolutionException nse) {
@@ -107,16 +107,8 @@ public class DesignController
         return solutionFound;
     }
     
-    /**
-     * Gets a text representation of the generated design
-     * @return A String containing a text representation of the design
-     */
-    public RoomDesign getDesign() {
-        return getRoom().getDesign();
-    }
-    
-    public Set getDesignFurniture() {
-        return getDesign().getEntries();
+    public Collection<WantedFurniture> getDesignFurniture() {
+        return getWishList().getWantedFurniture();
     }
     
     public void resumeSolver()

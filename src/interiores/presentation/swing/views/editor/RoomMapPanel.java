@@ -1,5 +1,6 @@
 package interiores.presentation.swing.views.editor;
 
+import interiores.presentation.swing.views.editor.tools.EditorTool;
 import interiores.business.controllers.DesignController;
 import interiores.business.controllers.FixedElementController;
 import interiores.business.controllers.FurnitureTypeController;
@@ -10,9 +11,11 @@ import interiores.business.events.furniture.ElementUnselectedEvent;
 import interiores.business.events.room.RoomDesignChangedEvent;
 import interiores.business.events.room.WantedFixedChangedEvent;
 import interiores.business.models.OrientedRectangle;
+import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
+import interiores.presentation.swing.views.editor.tools.ToolManageable;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
 import interiores.presentation.swing.views.map.RoomMap;
 import interiores.presentation.swing.views.map.RoomMapDebugger;
@@ -28,7 +31,9 @@ import javax.swing.JPanel;
  *
  * @author hector
  */
-public class RoomMapPanel extends JPanel
+public class RoomMapPanel
+    extends JPanel
+    implements ToolManageable
 {
     private RoomController roomController;
     private FurnitureTypeController ftController;
@@ -83,6 +88,7 @@ public class RoomMapPanel extends JPanel
         updateDesign();
     }
     
+    @Override
     public void setActiveTool(EditorTool activeTool) {
         this.activeTool = activeTool;
     }
@@ -187,7 +193,9 @@ private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event
     @Listen(RoomDesignChangedEvent.class)
     public void updateDesign() {
         map.clearFurniture();
-        map.addFurniture(designController.getDesignFurniture());
+        
+        for(WantedFurniture wf : designController.getDesignFurniture())
+            map.addFurniture(wf.getName(), wf.getAssignedValue());
 
         repaint();
     }

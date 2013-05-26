@@ -5,6 +5,7 @@
 package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.DesignController;
+import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.Options;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.AdvancedCommandGroup;
@@ -41,8 +42,10 @@ public class DesignCommands extends AdvancedCommandGroup {
        if(designController.isSolving())
            throw new BusinessException("The solver is still trying to find a solution...");
        
-       if(designController.hasSolution())
-           println(designController.getDesign().toString());
+       if(designController.hasSolution()) {
+           for(WantedFurniture wf : designController.getDesignFurniture())
+               println(wf.toString());
+       }
        else
            println("No solution found :(");
    }

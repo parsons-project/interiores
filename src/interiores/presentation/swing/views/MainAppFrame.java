@@ -8,9 +8,12 @@ import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.core.presentation.swing.SwingException;
 import interiores.presentation.swing.helpers.FileChooser;
+import interiores.utils.OpenDefaultBrowser;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
@@ -28,6 +31,7 @@ public class MainAppFrame extends JFrame
     private WelcomePanel welcome;
     private TerminalPanel terminal;
     private RoomTypeCatalogPanel rtCatalogPanel;
+    private MapEditorPanel editorPanel;
     
     private List<Component> previousViews, currentViews;
     private JFileChooser fileChooser;
@@ -64,7 +68,7 @@ public class MainAppFrame extends JFrame
     private void initComponents()
     {
 
-        jMenuBar1 = new javax.swing.JMenuBar();
+        menuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         newRoom = new javax.swing.JMenuItem();
         openMenuItem = new javax.swing.JMenuItem();
@@ -74,6 +78,10 @@ public class MainAppFrame extends JFrame
         rtCatalog = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         terminalMenuCheckbox = new javax.swing.JCheckBoxMenuItem();
+        helpMenu = new javax.swing.JMenu();
+        generalHelpMenu = new javax.swing.JMenuItem();
+        terminalHelpMenu = new javax.swing.JMenuItem();
+        aboutHelpMenu = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Interior design");
@@ -127,7 +135,7 @@ public class MainAppFrame extends JFrame
         });
         jMenu1.add(exitMenuItem);
 
-        jMenuBar1.add(jMenu1);
+        menuBar.add(jMenu1);
 
         jMenu2.setText("Edit");
 
@@ -141,7 +149,7 @@ public class MainAppFrame extends JFrame
         });
         jMenu2.add(rtCatalog);
 
-        jMenuBar1.add(jMenu2);
+        menuBar.add(jMenu2);
 
         jMenu3.setText("View");
 
@@ -156,9 +164,35 @@ public class MainAppFrame extends JFrame
         });
         jMenu3.add(terminalMenuCheckbox);
 
-        jMenuBar1.add(jMenu3);
+        menuBar.add(jMenu3);
 
-        setJMenuBar(jMenuBar1);
+        helpMenu.setText("Help");
+
+        generalHelpMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
+        generalHelpMenu.setText("General");
+        generalHelpMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generalHelpMenuActionPerformed(evt);
+            }
+        });
+        helpMenu.add(generalHelpMenu);
+
+        terminalHelpMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
+        terminalHelpMenu.setText("Terminal");
+        terminalHelpMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                terminalHelpMenuActionPerformed(evt);
+            }
+        });
+        helpMenu.add(terminalHelpMenu);
+
+        aboutHelpMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
+        aboutHelpMenu.setText("About");
+        helpMenu.add(aboutHelpMenu);
+
+        menuBar.add(helpMenu);
+
+        setJMenuBar(menuBar);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -207,16 +241,27 @@ public class MainAppFrame extends JFrame
             unloadComponent(terminal);
     }//GEN-LAST:event_terminalMenuCheckboxActionPerformed
 
+private void generalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generalHelpMenuActionPerformed
+    openHelp("general.html");  
+}//GEN-LAST:event_generalHelpMenuActionPerformed
+
+private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalHelpMenuActionPerformed
+    openHelp("terminal/manual.html");
+}//GEN-LAST:event_terminalHelpMenuActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem aboutHelpMenu;
     private javax.swing.JMenuItem exitMenuItem;
+    private javax.swing.JMenuItem generalHelpMenu;
+    private javax.swing.JMenu helpMenu;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem newRoom;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem rtCatalog;
     private javax.swing.JMenuItem saveMenuItem;
+    private javax.swing.JMenuItem terminalHelpMenu;
     private javax.swing.JCheckBoxMenuItem terminalMenuCheckbox;
     // End of variables declaration//GEN-END:variables
 
@@ -248,10 +293,11 @@ public class MainAppFrame extends JFrame
     public void showFurnitureAndMap() {
         unloadComponent(welcome);
         
-        MapEditorPanel editorPanel = presentation.getNew(MapEditorPanel.class);
+        editorPanel = presentation.getNew(MapEditorPanel.class);
         loadComponent(editorPanel, BorderLayout.CENTER);
         
         saveMenuItem.setEnabled(true);
+        menuBar.add(editorPanel.getToolsMenu(), 2);        
     }
     
     private void unloadCurrentView() {
@@ -281,10 +327,15 @@ public class MainAppFrame extends JFrame
         pack();
     }
     
+    private void openHelp(String relPath) {
+        String helpPath = help.Help.class.getResource(".").getPath();
+        OpenDefaultBrowser.openURL(helpPath + relPath);
+    }
     
     private void printComponents() {
         Debug.println("Components in the container: " + getComponentCount());
         for (Component c : getComponents())
             Debug.println("Component: " + c.toString());
     }
+    
 }

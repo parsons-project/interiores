@@ -3,10 +3,10 @@ package interiores.presentation.swing.views.editor.tools;
 import interiores.business.controllers.FixedElementController;
 import interiores.business.models.Orientation;
 import interiores.core.presentation.SwingController;
-import interiores.presentation.swing.views.editor.EditorTool;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
 import interiores.presentation.swing.views.map.RoomMap;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
@@ -22,6 +22,7 @@ public class WindowTool
     private Orientation wallWhere;
     
     public WindowTool(SwingController swing) {
+        super("Window", "window.png", KeyEvent.VK_W);
         this.swing = swing;
         fixedController = swing.getBusinessController(FixedElementController.class);
     }
@@ -36,11 +37,13 @@ public class WindowTool
             switch (wallWhere) {
                 case E:
                 case W:
-                    fixedController.addWindow(wallWhere.toString(false), posDisNorm.y - RoomMap.getPadding(), distance);
+                    fixedController.addWindow(wallWhere.toString(false), posDisNorm.y - RoomMap.getPadding(),
+                            distance);
                     break;
                 case N:
                 case S:
-                    fixedController.addWindow(wallWhere.toString(false), posDisNorm.x - RoomMap.getPadding(), distance);
+                    fixedController.addWindow(wallWhere.toString(false), posDisNorm.x - RoomMap.getPadding(),
+                            distance);
                     break;
             }
             return true;

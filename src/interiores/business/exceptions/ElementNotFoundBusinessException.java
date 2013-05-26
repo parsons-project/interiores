@@ -15,4 +15,10 @@ public class ElementNotFoundBusinessException
         super("The " + catalogName + " catalog has no element named: " + elementName);
         initCause(cause);
     }
+    
+    public ElementNotFoundBusinessException(
+            ElementNotFoundException cause) {
+        super("The requested element couldn't be found");
+        initCause(cause);
+    }
 }

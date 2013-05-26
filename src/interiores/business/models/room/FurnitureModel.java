@@ -132,6 +132,10 @@ public class FurnitureModel {
         return color.getColor();
     }
     
+    public String getColorName() {
+        return color.name();
+    }
+    
     public void setColor(CoolColor c) {
         color = c;
     }

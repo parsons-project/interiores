@@ -20,7 +20,7 @@ import java.util.List;
  * domains without compromising correctness.
  * 
  * This preliminar trimmer has an important singularity: it has to be called
- * after all others preliminar trimmers. For example, this method could trim
+ * after all others preliminar trimmers. For example, this method could trimP
  * a furniture model such when there is a constraint that says that the user
  * wants that particular model.
  * 

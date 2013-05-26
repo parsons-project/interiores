@@ -83,11 +83,11 @@ public class BudgetConstraint
      * currentBudget is the sum of the prices of the variables of assignedVariables
      * plus thet price of actual.
      * 
-     * For each unassigned variable, we trim all values such that their price plus
+     * For each unassigned variable, we trimP all values such that their price plus
      * the currentBudget plus the price of the cheapest model of other unassigned
      * variable is higher than maxBudget.
      * 
-     * Not implemented. Not sure if this trim is efficient.
+     * Not implemented. Not sure if this trimP is efficient.
      * 
      * @param assignedVariables
      * @param unassignedVariables

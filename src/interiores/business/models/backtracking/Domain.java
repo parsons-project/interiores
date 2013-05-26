@@ -34,7 +34,7 @@ public class Domain {
     private Stage[] domain;
     
     
-    public Domain(List<FurnitureModel> models, Dimension roomSize,
+    public Domain(HashSet<FurnitureModel> models, Dimension roomSize,
             int variableCount) {
         
         domain = new Stage[variableCount];
@@ -49,11 +49,11 @@ public class Domain {
     }
     
     public static Domain empty() {
-        return new Domain(new ArrayList(), new Dimension(0, 0), 0);
+        return new Domain(new HashSet(), new Dimension(0, 0), 0);
     }
     
     public void resetIterators(int iteration) {
-        domain[iteration].resetIterators();
+        domain[iteration].initializeIterators();
     }
     
     //Pre: we have not iterated through all domain values yet.
@@ -93,14 +93,20 @@ public class Domain {
         return domain[iteration].size();
     }
 
-    int smallestModelSize(int iteration) {
-        return domain[iteration].smallestModelSize();
-    }
-
     void forwardIteration(int iteration) {
         domain[iteration].swapPositions(domain[iteration+1]);
         domain[iteration].swapModels(domain[iteration+1]);
         domain[iteration].swapOrientations(domain[iteration+1]);
+    }
+    
+    void reverseIteration(int iteration) {
+        //preliminarily move them all forward
+        domain[iteration+1].union(domain[iteration]);
+        
+        //swap domains
+        Stage aux = domain[iteration];
+        domain[iteration] = domain[iteration+1];
+        domain[iteration+1] = aux;
     }
     
     
@@ -119,7 +125,7 @@ public class Domain {
         domain[iteration].unionM(discardedModels);
     }
     
-    void trim(Area invalidPositions, int iteration) {
+    void trimP(Area invalidPositions, int iteration) {
         //modify domain[iteration+1]
         Area discardedPositions = domain[iteration+1].difference(invalidPositions);
         //modify domain[iteration]
@@ -136,72 +142,15 @@ public class Domain {
         domain[0].eliminateExceptO(validOrientations);
     }
     
+    void eliminateExceptP(Area validPositions) {
+        domain[0].eliminateExceptP(validPositions);
+    }
+    
      void trimExceptO(HashSet<Orientation> validOrientations, int iteration) {
         //modify domain[iteration+1]
         HashSet<Orientation> discardedModels = domain[iteration+1].intersectionO(validOrientations);
         //modify domain[iteration]
         domain[iteration].unionO(discardedModels);
     }
-    
-    
-    
-    
-    //DEPRECATED METHODS
-    
-    //deprecated methods: substituted by forwardIteration()
-    public void saveAllPositions(int iteration) {
-        domain[iteration].swapPositions(domain[iteration+1]);
-    }
         
-    public void saveAllModels(int iteration) {
-        domain[iteration].swapModels(domain[iteration+1]);
-    }
-
-    public void saveAllOrientations(int iteration) {
-        domain[iteration].swapOrientations(domain[iteration+1]);
-    }
-
-    
-
-    
-//    /**
-//     * Moves the positions from the current iteration to the next iteration,
-//     * and leaves the set of positions of the current iteration empty.
-//     * @param iteration 
-//     */
-//    public void pushPositions(int iteration) {
-//        domain[iteration+1].setPositions(domain[iteration].getPositions());
-//        domain[iteration].setPositions(new ArrayList<Point>());
-//    }
-
-
-
-//    /**
-//     * Pushes positions from the iteration i+1 to iteration i.
-//     * @param invalidArea
-//     * @param iteration 
-//     */
-//    public void trimAndPushInvalidRectangle(Rectangle invalidRectangle, int iteration) {
-//        Collection<Point> trimedPositions = trimInvalidRectangle(invalidRectangle, iteration + 1);
-//        
-//        domain[iteration].addPositions(trimedPositions);
-//    }
-//    
-//    public Collection<Point> trimInvalidRectangle(Rectangle invalidRectangle, int iteration) {
-//        return domain[iteration].trimInvalidRectangle(invalidRectangle);
-//    }
-//    
-//    /**
-//     * merges stage iteration+1 into stage iteration.
-//     */
-//    void undoTrimDomain(int iteration) {
-//
-//        domain[iteration].merge(domain[iteration+1]);
-//    }
-
-   
-
-
-
-    
 }

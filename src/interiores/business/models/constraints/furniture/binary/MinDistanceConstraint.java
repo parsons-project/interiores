@@ -61,7 +61,7 @@ public class MinDistanceConstraint
     public void trim2(FurnitureVariable variable) {
         Area modelArea = new Area(otherVariable.assignedValue.getArea());
         Area invalidArea = modelArea.rectangleAround(distance);
-        variable.trim(invalidArea);
+        variable.trimP(invalidArea);
     }
 
     

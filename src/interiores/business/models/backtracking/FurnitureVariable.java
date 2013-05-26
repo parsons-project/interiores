@@ -3,6 +3,7 @@ package interiores.business.models.backtracking;
 import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.constraints.Constraint;
+import interiores.business.models.constraints.furniture.BacktrackingTimeTrimmer;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
@@ -40,13 +41,11 @@ public class FurnitureVariable
     @XmlTransient
     public int iteration = 0;  
     
-    /**
-     * Value of the cheapest model
-     */
     @XmlTransient
-    private float minPrice = -1;
-    private int maxWidth = -1;
-    private int maxDepth = -1;
+    private float minPrice;
+    private int maxWidth;
+    private int maxDepth;
+    private int minSize;
     
     /**
      * Default constructor.
@@ -65,8 +64,7 @@ public class FurnitureVariable
     {
         super(typeName);
         
-        //minPrice not calculated yet
-        minPrice = -1;
+        initializeMaxMinFields();
         furnitureConstraints = new HashMap();
     }
     
@@ -81,7 +79,7 @@ public class FurnitureVariable
         return false;
     }
     
-    public void createDomain(List<FurnitureModel> models, Dimension roomSize, int variableCount) {
+    public void createDomain(HashSet<FurnitureModel> models, Dimension roomSize, int variableCount) {
         domain = new Domain(models, roomSize, variableCount);
     }
     
@@ -112,13 +110,8 @@ public class FurnitureVariable
     /**
      * Moves positions, models and orientations which are still valid to the
      * next level.
-     * All positions from the HashSet at the position "iteration" which are
-     * still valid must be moved to the HashSet in the position "iteration"+1.
-     * To do this operation, we move all positions preliminarily, and then move
-     * back those that are not valid. We estimate this reduces the amount of
-     * HashSet operations.
-     * All models from the List at the position "iteration" which are still 
-     * valid must be moved to the List in the position "iteration"+1.
+     * To do this operation, we move all values preliminarily, and then move
+     * back those that are not valid.
      */
     //pre: variable has an assigned value.
     //pre: if trimDomain or undoTrimDomain has already been called once,
@@ -132,21 +125,14 @@ public class FurnitureVariable
         // 0) update internal iteration
         this.iteration = iteration + 1;
         
-        // Prepare next iteration
         // 1) preliminar move of all positions
         forwardIteration();
                
-        // 2) send the affected positions back
-        FurnitureValue value = (FurnitureValue) variable.getAssignedValue();
-        Rectangle invalidRectangle = value.getWholeArea();
-        
-        domain.trimAndPushInvalidRectangle(invalidRectangle, iteration);        
-        
-        // 3) move all models
-        domain.saveAllModels(iteration);
-        
-        // 4) move all orientations
-        domain.saveAllOrientations(iteration);
+        // 2) Run trimmers
+        for (Map.Entry<Class, Constraint> constraint : furnitureConstraints.entrySet()) {
+            if (constraint instanceof BacktrackingTimeTrimmer)
+                ((BacktrackingTimeTrimmer) constraint).trim(this);
+        }
     }
 
     
@@ -161,7 +147,7 @@ public class FurnitureVariable
     //     trimDomain or -1 if it was undoTrimDomain).
     @Override
     public void undoTrimDomain(Variable variable, Value value, int iteration) {
-        domain.undoTrimDomain(iteration);       
+        domain.reverseIteration(iteration);       
     }
     
     public Domain getDomain() {
@@ -180,6 +166,7 @@ public class FurnitureVariable
         minPrice = -1;
         maxWidth = 0;
         maxDepth = 0;
+        minSize = -1;
         for (FurnitureModel model : domain.getModels(0)) {
             if (minPrice == -1 || model.getPrice() < minPrice)
                 minPrice = model.getPrice();
@@ -187,54 +174,12 @@ public class FurnitureVariable
                 maxWidth = model.getSize().width;
             if (model.getSize().depth > maxDepth)
                 maxDepth = model.getSize().depth;
+            if (minSize == -1 || model.areaSize() < minSize)
+                minSize = model.areaSize();
+            
         }
         if (minPrice == -1) minPrice = 0;
-    }
-    
-    void trimTooExpensiveModels(float maxPrice) {
-        Iterator<FurnitureModel> it = domain.getModels(0).iterator();        
-        while (it.hasNext()) {
-            FurnitureModel model = it.next();
-            if (model.getPrice() > maxPrice) it.remove();
-        }
-    }
-    
-    
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
-
-        result.append(this.getClass().getName() + ":" + NEW_LINE);
-        result.append("Assigned value: ");
-        if (isAssigned()) result.append(assignedValue.toString() + NEW_LINE);
-        else result.append("none" + NEW_LINE);
-        
-        //result.append(" Models available" + NEW_LINE);
-        //for (FurnitureModel model : domainModels)
-        //        result.append(model.getName() + " ");
-        
-        
-//        result.append(" Positions available by iteration" + NEW_LINE);
-//        result.append("iteration    positions" + NEW_LINE);
-//        for (int i = 0; i < domainPositions.length && domainPositions[i] != null; ++i) {
-//            result.append(i + "             [ ");
-//            for (Point point : domainPositions[i]) {
-//                result.append("(" + point.x + "," + point.y + ") ");
-//            }
-//             result.append("]" + NEW_LINE);    
-//        }        
-        
-        result.append(" Constraints:" + NEW_LINE);
-        for (UnaryConstraint constraint : unaryConstraints) {
-            result.append(constraint.toString());
-        }
-
-        return result.toString();
-    }
-
-    void trimObstructedPositions() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if (minSize == -1) minSize = 0;
     }
 
     int domainSize() {
@@ -242,9 +187,38 @@ public class FurnitureVariable
     }
 
     int smallestModelSize() {
-        return domain.smallestModelSize(iteration);
+        return minSize;
     }
 
+        void triggerPreliminarTrimmers() {
+        for (Map.Entry<Class, Constraint> constraint : furnitureConstraints.entrySet()) {
+            if (constraint instanceof PreliminarTrimmer) {
+                PreliminarTrimmer preliminarTrimmer = (PreliminarTrimmer) constraint;
+                preliminarTrimmer.preliminarTrim(this);
+            }
+            //ditch it if it doesn't implement any other interface
+            if (! (constraint instanceof InexhaustiveTrimmer))
+//IS THIS CORRECT???????!!??!?!?!?!?!??!?!!?******************************************************************************
+                furnitureConstraints.remove(constraint.getClass());
+        }
+    }
+
+    boolean constraintsSatisfied() {
+        for (Map.Entry<Class, Constraint> constraint : furnitureConstraints.entrySet())
+            if (! ((InexhaustiveTrimmer) constraint).isSatisfied(this))
+                return false;
+        return true;
+    }
+
+    public int getMaxWidth() {
+        return maxWidth;
+    }
+
+    public int getMaxDepth() {
+        return maxDepth;
+    }
+    
+    
     
     
     //FUNCTIONS TO MODIFY THE DOMAIN
@@ -261,7 +235,7 @@ public class FurnitureVariable
     //CONSTRAINT - VARIABLE INTERFACE
     
     public void eliminateExceptP(Area validPositions) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        domain.eliminateExceptP(validPositions);
     }
 
     
@@ -270,8 +244,8 @@ public class FurnitureVariable
      * parameter is trimmed (moved to the previous iteration)
      * @param invalidArea 
      */
-    public void trim(Area invalidArea) {
-        domain.trim(invalidArea, iteration);
+    public void trimP(Area invalidArea) {
+        domain.trimP(invalidArea, iteration);
     }
     
     
@@ -299,35 +273,5 @@ public class FurnitureVariable
     public void trimExceptO(HashSet<Orientation> validOrientations) {
         domain.trimExceptO(validOrientations, iteration);
     }
-        
-    void triggerPreliminarTrimmers() {
-        Iterator<Constraint> it = furnitureConstraints.iterator();
-        while(it.hasNext()) {
-            Constraint constraint = it.next();
-            if (constraint instanceof PreliminarTrimmer) {
-                PreliminarTrimmer preliminarTrimmer = (PreliminarTrimmer) constraint;
-                preliminarTrimmer.preliminarTrim(this);
-            }
-            //ditch it if it doesn't implement any other interface
-            if (! (constraint instanceof InexhaustiveTrimmer))
-                it.remove();
-        }
-    }
-
-    boolean constraintsSatisfied() {
-        for (Constraint constraint : furnitureConstraints)
-            if (! ((InexhaustiveTrimmer) constraint).isSatisfied(this))
-                return false;
-        return true;
-    }
-
-    public int getMaxWidth() {
-        return maxWidth;
-    }
-
-    public int getMaxDepth() {
-        return maxDepth;
-    }
-    
     
 }

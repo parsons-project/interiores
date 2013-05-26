@@ -410,7 +410,7 @@ public class FurnitureVariableSet
     private void buildMatrixOfDependence() {
 
         for (FurnitureVariable v : unassignedVariables) {
-            for (Constraint constraint : v.furnitureConstraints) {
+            for (Map.Entry<Class, Constraint> constraint : v.furnitureConstraints.entrySet()) {
                 if (constraint instanceof BinaryConstraintEnd) {
                     BinaryConstraintEnd bc = (BinaryConstraintEnd) constraint;
                     

@@ -4,7 +4,6 @@
  */
 package interiores.utils;
 
-import interiores.business.models.FurnitureModel;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;

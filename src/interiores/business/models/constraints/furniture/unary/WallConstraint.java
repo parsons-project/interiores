@@ -35,7 +35,7 @@ public class WallConstraint
      * This restriction has the following particularity: as the position
      * of a variable is identified by the position of its top left corner,
      * its trivial to find the valid positions when the variable has to be
-     * attached to the north or west walls. The trim for this cases is
+     * attached to the north or west walls. The trimP for this cases is
      * exhaustive.
      * On the other hand, for east and south walls, the distance between the
      * top left corner of a variable and the wall depend on the size of the

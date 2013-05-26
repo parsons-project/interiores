@@ -4,16 +4,12 @@
  */
 package interiores.business.models.constraints.room.global;
 
-import interiores.business.exceptions.ConstraintException;
-import interiores.business.models.FurnitureModel;
-import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureConstant;
-import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
-import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
+import interiores.business.models.room.FurnitureModel;
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -81,7 +77,11 @@ public class SameMaterialConstraint
      * @param actual 
      */
     @Override
-    public void trim(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
+    public void trim(List<FurnitureVariable> assignedVariables,
+        List<FurnitureVariable> unassignedVariables,
+        List<FurnitureConstant> fixedFurniture,
+        FurnitureVariable actual)
+    {
         if (assignedVariables.isEmpty()) {
             Color validColor = actual.getAssignedValue().getModel().getColor();
             for (FurnitureVariable variable : unassignedVariables) {
@@ -110,7 +110,11 @@ public class SameMaterialConstraint
      * @return 
      */
     @Override
-    public boolean isSatisfied(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
+    public boolean isSatisfied(List<FurnitureVariable> assignedVariables,
+        List<FurnitureVariable> unassignedVariables,
+        List<FurnitureConstant> fixedFurniture,
+        FurnitureVariable actual)
+    {
         if (assignedVariables.isEmpty())
             return true; //first assignment can't violate same-color restriction
         else
@@ -142,7 +146,8 @@ public class SameMaterialConstraint
                 set2.remove(material);
         return set2;
     }
-    
+
+//    @ TODO REMOVE COMMENT!
 //    @Override
 //    public void notifyAssignment(FurnitureValue fv) throws ConstraintException {
 //        

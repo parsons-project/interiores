@@ -4,7 +4,6 @@ import interiores.business.exceptions.DefaultCatalogOverwriteException;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.PersistentIdObject;
-import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import java.util.Collection;
 
@@ -19,9 +18,7 @@ abstract public class CatalogElementController<I extends PersistentIdObject>
         super(data, catalog);
     }
     
-    protected void add(I element)
-            throws DefaultCatalogOverwriteException
-    {
+    protected void add(I element) {
         NamedCatalog<I> activeCatalog = getActiveCatalog();
         
         if(activeCatalog.isDefault())
@@ -30,9 +27,7 @@ abstract public class CatalogElementController<I extends PersistentIdObject>
         activeCatalog.add(element);
     }
     
-    public void rm(String elementName)
-            throws BusinessException
-    {
+    public void rm(String elementName) {
         NamedCatalog<I> activeCatalog = getActiveCatalog();
         
         if(activeCatalog.isDefault())

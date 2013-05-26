@@ -74,7 +74,7 @@ public enum Orientation {
     
     @Override
     public String toString() {
-        return this.toString(true);
+        return this.toString(false);
     }
     
     public String toString(boolean longName) {

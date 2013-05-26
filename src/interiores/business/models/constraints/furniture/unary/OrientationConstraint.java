@@ -75,17 +75,10 @@ public class OrientationConstraint
     
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
+        String ors = "";
+        for (Orientation orientation : validOrientations) ors += orientation + ", ";
+        return "Valid orientations: " + ors.substring(0,ors.length()-2);
         
-        result.append(this.getClass().getName() + NEW_LINE);
-        
-        result.append("Valid orientations: ");
-        for (Orientation orientation : validOrientations) {
-            result.append(orientation.toString() + " ");
-        }
-        result.append(NEW_LINE);
-        return result.toString();
     }
 }
 

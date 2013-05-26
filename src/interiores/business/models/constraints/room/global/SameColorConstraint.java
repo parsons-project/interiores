@@ -4,18 +4,13 @@
  */
 package interiores.business.models.constraints.room.global;
 
-import interiores.business.exceptions.ConstraintException;
-import interiores.business.models.FurnitureModel;
-import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureConstant;
-import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
-import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
+import interiores.business.models.room.FurnitureModel;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -28,8 +23,8 @@ import java.util.List;
  */
 public class SameColorConstraint 
     extends GlobalConstraint
-    implements RoomPreliminarTrimmer, RoomBacktrackingTimeTrimmer {
-    
+    implements RoomPreliminarTrimmer, RoomBacktrackingTimeTrimmer
+{
     public SameColorConstraint() { }
 
     /**
@@ -103,7 +98,11 @@ public class SameColorConstraint
      * @return 
      */
     @Override
-    public boolean isSatisfied(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
+    public boolean isSatisfied(List<FurnitureVariable> assignedVariables,
+        List<FurnitureVariable> unassignedVariables,
+        List<FurnitureConstant> fixedFurniture,
+        FurnitureVariable actual)
+    {
         if (assignedVariables.isEmpty())
             return true; //first assignment can't violate same-color restriction
         else
@@ -150,6 +149,7 @@ public class SameColorConstraint
         return set2;
     }
     
+//    @ TODO REMOVE COMMENT!    
 //    @Override
 //    public void notifyAssignment(FurnitureValue fv) throws ConstraintException {
 //        
@@ -166,7 +166,4 @@ public class SameColorConstraint
 //        
 //        assignments--;
 //    }
-
-
-    
 }

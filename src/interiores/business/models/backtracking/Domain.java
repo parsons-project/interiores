@@ -1,15 +1,12 @@
 
 package interiores.business.models.backtracking;
 
-import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.Area.Area;
+import interiores.business.models.room.FurnitureModel;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package interiores.business.models.catalogs.factories;
 
-import interiores.business.models.FurnitureModel;
-import interiores.business.models.FurnitureType;
+import interiores.business.models.room.FurnitureModel;
+import interiores.business.models.room.FurnitureType;
 import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessException;
@@ -91,7 +91,7 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.addFurnitureModel(new FurnitureModel("BJOJANA", new Dimension(90, 205), 169.99f, "glazed",
                 "pine"));
         ft.addFurnitureModel(new FurnitureModel("DAMMH", new Dimension(80, 190), 169.99f, "glazed",
-                "puno"));
+                "pine"));
         ft.addFurnitureModel(new FurnitureModel("BJERNNT", new Dimension(80, 205), 169.99f, "glazed",
                 "pine"));
         ft.addFurnitureModel(new FurnitureModel("RR", new Dimension(80, 205), 189.99f, "glazed",

@@ -17,7 +17,7 @@ import java.util.Map.Entry;
 import javax.swing.SwingUtilities;
 
 /**
- * A ViewLoader has the responsability of loading and managing views on memory.
+ * A ViewLoader has the responsibility of loading and managing views on memory.
  * @author hector
  */
 public class ViewLoader

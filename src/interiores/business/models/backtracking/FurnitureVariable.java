@@ -1,12 +1,12 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
+import interiores.business.models.room.FurnitureModel;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
@@ -59,9 +59,9 @@ public class FurnitureVariable
      * The set of restrictions is "unaryConstraints". Its resolution defaults to 5.
      * @pre the iteration of the variableSet is 0
      */
-    public FurnitureVariable(String id, String typeName)
+    public FurnitureVariable(String typeName)
     {
-        super(id, typeName);
+        super(typeName);
         
         //minPrice not calculated yet
         minPrice = -1;
@@ -69,7 +69,7 @@ public class FurnitureVariable
     }
     
     public FurnitureVariable(String id, String typeName, FurnitureValue value) {
-        this(id, typeName);
+        this(typeName);
         
         assignValue(value);
     }

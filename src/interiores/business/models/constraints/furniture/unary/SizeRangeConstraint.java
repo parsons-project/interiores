@@ -1,9 +1,8 @@
 package interiores.business.models.constraints.furniture.unary;
 
-import interiores.business.models.FurnitureModel;
-import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
+import interiores.business.models.room.FurnitureModel;
 import interiores.utils.Dimension;
 import interiores.utils.Range;
 import java.util.HashSet;
@@ -26,6 +25,9 @@ abstract public class SizeRangeConstraint
     
     @XmlElement
     private Range range;
+    
+    public SizeRangeConstraint()
+    { }
     
     public SizeRangeConstraint(Dimension.Component component, Range range) {
         this.component = component;
@@ -53,6 +55,7 @@ abstract public class SizeRangeConstraint
     
     @Override
     public String toString() {
-        return getClass().getName() + " Range[" + range + "]";
+        return "Range: " + range;
+        //return getClass().getName() + " Range[" + range + "]";
     }
 }

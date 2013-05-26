@@ -4,12 +4,11 @@
  */
 package interiores.business.models.constraints.room.global;
 
-import interiores.business.models.FurnitureModel;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
+import interiores.business.models.room.FurnitureModel;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;

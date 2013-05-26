@@ -1,6 +1,6 @@
 package interiores.business.models.constraints.furniture;
 
-import interiores.business.models.WantedFurniture;
+import interiores.business.models.room.elements.WantedFurniture;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.Constraint;

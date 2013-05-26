@@ -3,13 +3,17 @@ package interiores.utils;
 import interiores.core.business.BusinessException;
 import interiores.data.adapters.ColorAdapter;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  *
  * @author hector
  */
+@XmlRootElement
 public enum CoolColor {
     
     BLACK("#000000"),
@@ -23,21 +27,24 @@ public enum CoolColor {
     YELLOW("#FFAE4B"),
     GLAZED("#FFFACD");
     
-    private static final String BLACK_HEX = "#000000";
-    
     @XmlAttribute
     @XmlJavaTypeAdapter(ColorAdapter.class)
     private Color color;
     
     private CoolColor(String hexColor) {
-        if(hexColor.equals(BLACK_HEX))
-            color = Color.black;
-        else
-            this.color = Color.decode(hexColor);
+        this.color = Color.decode(hexColor);
     }
     
     public Color getColor() {
         return color;
+    }
+    
+    public static Collection<String> getNames() {
+        Collection<String> names = new ArrayList();
+        for(CoolColor coolColor : values()) {
+            names.add(coolColor.name().toLowerCase());
+        }
+        return names;
     }
     
     public static CoolColor getEnum(String name) throws BusinessException {

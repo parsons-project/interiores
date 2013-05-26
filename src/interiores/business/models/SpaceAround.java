@@ -1,14 +1,21 @@
 package interiores.business.models;
 
 import java.awt.Rectangle;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author hector
  */
+@XmlRootElement
 public class SpaceAround
 {
+    @XmlAttribute
     private int[] passiveOffsets;
+    
+    public SpaceAround()
+    { }
     
     public SpaceAround(int north, int east, int south, int west) {
         passiveOffsets = new int[]{ north, east, south, west };

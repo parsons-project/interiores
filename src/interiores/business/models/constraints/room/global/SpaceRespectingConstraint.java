@@ -4,11 +4,9 @@ import interiores.business.models.OrientedRectangle;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.constraints.furniture.PreliminarTrimmer;
-import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
+import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
-import java.awt.Rectangle;
 import java.util.List;
 
 /**
@@ -20,8 +18,8 @@ import java.util.List;
  */
 public class SpaceRespectingConstraint
     extends GlobalConstraint
-    implements RoomPreliminarTrimmer, RoomBacktrackingTimeTrimmer {
-    
+    implements RoomPreliminarTrimmer, RoomBacktrackingTimeTrimmer
+{
     /**
      * Contains the room rectangle
      */
@@ -48,7 +46,11 @@ public class SpaceRespectingConstraint
      * @param actual 
      */
     @Override
-    public void trim(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
+    public void trim(List<FurnitureVariable> assignedVariables,
+        List<FurnitureVariable> unassignedVariables,
+        List<FurnitureConstant> fixedFurniture,
+        FurnitureVariable actual)
+    {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -63,8 +65,11 @@ public class SpaceRespectingConstraint
      * @return 
      */
     @Override
-    public boolean isSatisfied(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
-               
+    public boolean isSatisfied(List<FurnitureVariable> assignedVariables,
+        List<FurnitureVariable> unassignedVariables,
+        List<FurnitureConstant> fixedFurniture,
+        FurnitureVariable actual)
+    {  
         FurnitureValue actualValue = actual.getAssignedValue();
         // A little explanation: fv.getArea() gets the ACTIVE area of actual_fv
         // while fv.getWholeArea() gets the PASSIVE + ACTIVE area of actual_fv

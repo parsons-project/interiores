@@ -1,10 +1,7 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.models.FurnitureType;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
-import interiores.business.models.WantedFixed;
-import interiores.business.models.WantedFurniture;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.constraints.Constraint;
@@ -12,6 +9,9 @@ import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
+import interiores.business.models.room.FurnitureType;
+import interiores.business.models.room.elements.WantedFixed;
+import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
@@ -331,7 +331,8 @@ public class FurnitureVariableSet
             if (! ((RoomInexhaustiveTrimmer) constraint).isSatisfied(
                 assignedVariables, unassignedVariables, constants, actual))
                 return false;
-        } 
+        }
+        
         return true;
     }
 
@@ -382,7 +383,7 @@ public class FurnitureVariableSet
     }
    
     
-    public Map<String, FurnitureValue> getValues() {
+    public Map<String, FurnitureValue> getVariableValues() {
         Map<String, FurnitureValue> values = new HashMap();
         
         for(FurnitureConstant constant : constants)

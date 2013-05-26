@@ -15,7 +15,7 @@ public class ForbiddenFurnitureException
     extends BusinessException {
     
     public ForbiddenFurnitureException(String fname, String rtype) {
-        super(fname + " cannot belong to a " + rtype + ".");
+        super(fname + " is in " + rtype + "'s forbidden furniture list.");
     }
     
 }

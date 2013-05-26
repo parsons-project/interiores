@@ -1,27 +1,27 @@
 package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
-import interiores.business.models.OrientedRectangle;
+import interiores.business.models.room.FurnitureModel;
+import java.awt.Point;
 
 /**
  *
  * @author hector
  */
 abstract public class WallElement
-    implements Drawable
+    extends RoomElement
 {
     protected int x;
     protected int y;
     protected int size;
-    protected OrientedRectangle rectangle;
     
-    public WallElement(int x, int y, int size, int depth) {
-        this.x = x;
-        this.y = y;
-        this.size = size;
+    public WallElement(String name, FurnitureModel model) {
+        super(name, model.getActiveArea(new Point(0, 0), Orientation.S));
         
-        rectangle = new OrientedRectangle(x + RoomMap.getPadding(), y + RoomMap.getPadding(), depth, size,
-                Orientation.S);
+        x = 0;
+        y = 0;
+        size = model.getSize().width;
+        color = model.getColor();
     }
     
     public int getSize() {

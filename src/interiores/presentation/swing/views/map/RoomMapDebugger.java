@@ -1,6 +1,5 @@
 package interiores.presentation.swing.views.map;
 
-import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -15,7 +14,7 @@ import java.util.Map;
  * @author hector
  */
 public class RoomMapDebugger
-    extends RoomMap
+    extends InteractiveRoomMap
 {
     private static final Color COLOR_GRID = Color.decode("#EEEEEE");
     private static final String[] COLOR_POINTS = new String[]{
@@ -33,6 +32,7 @@ public class RoomMapDebugger
     
     private boolean isGridEnabled;
     private boolean shouldDrawFurniture;
+    private boolean shouldDrawPillars;
     private List<String> furnitures;
     private Map<String, List<Point>> points;
     private Map<String, Color> colors;
@@ -43,6 +43,7 @@ public class RoomMapDebugger
         
         isGridEnabled = Debug.isEnabled();
         shouldDrawFurniture = true;
+        shouldDrawPillars = true;
         furnitures = new ArrayList();
         points = new HashMap();
         colors = new HashMap();
@@ -68,8 +69,20 @@ public class RoomMapDebugger
         shouldDrawFurniture = false;
     }
     
+    public void enableDrawPillars() {
+        shouldDrawPillars = true;
+    }
+    
+    public void disableDrawPillars() {
+        shouldDrawPillars = false;
+    }
+    
     public boolean shouldDrawFurniture() {
         return shouldDrawFurniture;
+    }
+    
+    public boolean shouldDrawPillars() {
+        return shouldDrawPillars;
     }
     
     public void addPoint(Point p) {
@@ -105,25 +118,29 @@ public class RoomMapDebugger
         if(isGridEnabled)
             drawGrid(g);
         
+        drawWalls(g);
+        
         if(shouldDrawFurniture)
-            super.drawElements(g);
+            drawFurniture(g);
+        
+        if(shouldDrawPillars)
+            drawPillars(g);
     }
     
-    private void drawGrid(Graphics2D g) {
-        int rows = width / RESOLUTION;
-        int cols = depth / RESOLUTION;
-        
+    private void drawGrid(Graphics2D g) {        
         g.setColor(COLOR_GRID);
         
-        for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < cols; j++)
-                g.drawRect(i* RESOLUTION, j * RESOLUTION, RESOLUTION, RESOLUTION);
-        }
+        for(int i = 0; i < size.width; i += RESOLUTION)
+            g.drawLine(i, 0, i, size.depth);
+        
+        for(int i = 0; i < size.depth; i += RESOLUTION)
+            g.drawLine(0, i, size.width, i);
     }
 
+    @Override
     public void clear()
     {
-        super.clearFurniture();
+        clearFurniture();
         
         furnitures.clear();
         points.clear();

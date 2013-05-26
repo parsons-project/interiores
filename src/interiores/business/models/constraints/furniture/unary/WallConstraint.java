@@ -1,19 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package interiores.business.models.constraints.furniture.unary;
 
-import interiores.business.models.FurnitureModel;
 import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
-import java.awt.Point;
+import interiores.business.models.room.FurnitureModel;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,11 +18,11 @@ import java.util.List;
 public class WallConstraint
     extends UnaryConstraint implements InexhaustiveTrimmer {
     
-    List<Orientation> orientations;
+    Orientation[] orientations;
     int roomWidth;
     int roomDepth;
     
-    public WallConstraint(int roomWidth, int roomDepth, List<Orientation> orientations) {
+    public WallConstraint(int roomWidth, int roomDepth, Orientation[] orientations) {
         this.orientations = orientations;
         this.roomWidth = roomWidth;
         this.roomDepth = roomDepth;

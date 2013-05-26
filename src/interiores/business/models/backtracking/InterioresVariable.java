@@ -34,11 +34,19 @@ abstract public class InterioresVariable
         
     }
     
+    public InterioresVariable(String typeName) {
+        this(typeName, typeName);
+    }
+    
     public InterioresVariable(String name, String typeName) {
         this.name = name;
         this.typeName = name;
         
         assignedValue = null;
+    }
+        
+    public void setName(String name) {
+        this.name = name;
     }
     
     public String getName() {

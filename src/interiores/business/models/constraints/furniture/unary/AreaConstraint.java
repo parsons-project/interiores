@@ -4,9 +4,9 @@ import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
-import java.awt.Point;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  * 
@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * a piece of furniture.
  */
 @XmlRootElement
+@XmlSeeAlso({PositionConstraint.class, WallConstraint.class})
 public class AreaConstraint
     extends UnaryConstraint implements InexhaustiveTrimmer {
     
@@ -65,21 +66,9 @@ public class AreaConstraint
                 new Area(variable.getAssignedValue().getArea().getRectangle()));
     }
     
-    
-    
-    
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        String NEW_LINE = System.getProperty("line.separator");
-        
-        result.append(this.getClass().getName() + NEW_LINE);
-        
-        result.append("Valid positions: ");
-        for (Point point : validPositions) {
-            result.append("(" + point.x + "," + point.y + ") ");
-        }
-        result.append(NEW_LINE);
-        return result.toString();
+        // @TODO Implement toString method in AreaConstraint
+        return super.toString();
     }
 }

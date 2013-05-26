@@ -3,13 +3,11 @@ package interiores.business.controllers;
 import interiores.business.controllers.abstracted.CatalogAccessController;
 import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomLoadedEvent;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
-import interiores.business.exceptions.NoRoomCreatedException;
 import interiores.business.models.Room;
 import interiores.business.models.RoomType;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.AvailableCatalog;
-import interiores.core.business.BusinessException;
+import interiores.core.Debug;
 import interiores.core.data.JAXBDataController;
 import javax.xml.bind.JAXBException;
 
@@ -34,11 +32,8 @@ public class RoomController
      * @param typeName The type of room to create
      * @param width The width of the new room
      * @param depth The depth of the new room
-     * @throws ElementNotFoundBusinessException
-     * @throws BusinessException 
      */
     public void create(String typeName, int width, int depth)
-            throws ElementNotFoundBusinessException, BusinessException
     {
         RoomType type = get(typeName);
         Room room = new Room(type, width, depth);
@@ -53,11 +48,14 @@ public class RoomController
      * Stores the current room in disk, under a specific path
      * @param path The path where we want to store the room
      * @throws JAXBException
-     * @throws NoRoomCreatedException 
      */
-    public void save(String path) throws JAXBException, NoRoomCreatedException
-    {   
-        data.save(getRoom(), path);
+    public void save(String path) throws JAXBException
+    {
+        Debug.println("Saving:" + path);
+        
+        data.save(getWishList(), path);
+        
+        Debug.println("Saved successfully.");
     }
     
     /**
@@ -67,14 +65,25 @@ public class RoomController
      */
     public void load(String path) throws JAXBException
     {
-        WishList wishList = (WishList) data.load(WishList.class, path);
+        Debug.println("Loading: " + path);
         
+        WishList wishList = (WishList) data.load(WishList.class, path);
         setWishList(wishList);
         
         notify(new RoomLoadedEvent(wishList.getRoom()));
+        
+        Debug.println("Loaded successfully.");
     }
     
     public int getResolution() {
         return Room.getResolution();
+    }
+    
+    public int getWidth() {
+        return getRoom().getWidth();
+    }
+    
+    public int getDepth() {
+        return getRoom().getDepth();
     }
 }

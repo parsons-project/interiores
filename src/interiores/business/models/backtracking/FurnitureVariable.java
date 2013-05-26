@@ -110,7 +110,7 @@ public class FurnitureVariable
         
         // Prepare next iteration
         // 1) preliminar move of all positions
-        domain.saveAllPositions(iteration);
+        forwardIteration();
                
         // 2) send the affected positions back
         FurnitureValue value = (FurnitureValue) variable.getAssignedValue();

@@ -2,13 +2,10 @@ package interiores.business.models.constraints.furniture.binary;
 
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
-import interiores.business.models.Room;
 import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
-import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import java.util.HashSet;
 
 /**
@@ -20,17 +17,14 @@ import java.util.HashSet;
  * @author alvaro
  */
 public class PartialFacingConstraint
-    extends BinaryConstraintEnd {
-    
+    extends BinaryConstraintEnd
+{
     private int maxDist;
     
-    
-    
-    public PartialFacingConstraint(InterioresVariable otherVariable, int distance) {
-        super(otherVariable);
+    public PartialFacingConstraint(int distance) {
+        super();
         maxDist = distance;
     }
-    
     
     @Override
     public boolean isSatisfied2(FurnitureVariable variable) {

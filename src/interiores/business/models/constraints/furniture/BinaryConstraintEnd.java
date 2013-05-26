@@ -1,11 +1,11 @@
 package interiores.business.models.constraints.furniture;
 
-import interiores.business.models.room.elements.WantedFurniture;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
+import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.business.BusinessException;
 import java.util.Collection;
 import java.util.Map;
@@ -47,7 +47,17 @@ public abstract class BinaryConstraintEnd
     
     protected InterioresVariable otherVariable;
     
-    protected BinaryConstraintEnd(InterioresVariable otherVariable) {
+    public BinaryConstraintEnd()
+    { }
+    
+    public BinaryConstraintEnd(InterioresVariable otherVariable) {
+        this.otherVariable = otherVariable;
+    }
+    
+    public void setOtherVariable(InterioresVariable otherVariable) {
+        if(this.otherVariable != null)
+            throw new UnsupportedOperationException("You can only set the other variable once.");
+        
         this.otherVariable = otherVariable;
     }
     

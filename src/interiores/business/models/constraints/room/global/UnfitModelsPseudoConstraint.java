@@ -27,7 +27,7 @@ import java.util.List;
  * In order to be efficient, it needs information about what other constraints
  * will use.
  * 
- * @author hector0193
+ * @author nil
  */
 public class UnfitModelsPseudoConstraint
     extends GlobalConstraint

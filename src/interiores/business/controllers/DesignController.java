@@ -11,8 +11,6 @@ import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
 import interiores.business.models.catalogs.AvailableCatalog;
-import interiores.business.models.constraints.room.global.SpaceRespectingConstraint;
-import interiores.business.models.constraints.room.global.UnfitModelsPseudoConstraint;
 import interiores.business.models.room.FurnitureType;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
@@ -75,11 +73,6 @@ public class DesignController
         solver = new Thread(){
             @Override
             public void run() {
-                // @TODO Refactorize. Create a FurnitureVariableSetFactory
-                furVarSet.addPreliminarTrimmer(new SpaceRespectingConstraint());
-                furVarSet.addPreliminarTrimmer(new UnaryConstraintsPreliminarTrimmer());
-                furVarSet.addPreliminarTrimmer(new UnfitModelsPseudoConstraint());
-
                 final SolveDesignFinishedEvent solveFinished = new SolveDesignFinishedEvent();
 
                 if (timeIt) time = System.nanoTime();

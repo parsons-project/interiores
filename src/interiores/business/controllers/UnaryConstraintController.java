@@ -94,7 +94,8 @@ public class UnaryConstraintController
     }
     
     public void addPositionConstraint(String furnitureId, List<Point> validPositions) {
-        addConstraint(furnitureId, new AreaConstraint(validPositions));
+        throw new UnsupportedOperationException("Not supported yet.");
+        // @TODO Redefine this method
     }
     
     public void addPositionAtConstraint(String furnitureId, int x, int y) {

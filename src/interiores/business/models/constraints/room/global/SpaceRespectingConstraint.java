@@ -26,6 +26,10 @@ public class SpaceRespectingConstraint
      */
     private OrientedRectangle roomArea;
     
+    public SpaceRespectingConstraint(OrientedRectangle roomArea) {
+        this.roomArea = roomArea;
+    }
+    
     /**
      * For each furniture variable, the area assigned to a furniture constant
      * or its passive space is eliminated.

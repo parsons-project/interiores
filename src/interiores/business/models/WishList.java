@@ -2,7 +2,9 @@ package interiores.business.models;
 
 import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.MandatoryFurnitureException;
+import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.business.exceptions.WantedFurnitureNotFoundException;
+import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.business.models.room.elements.WantedElementSet;
@@ -106,11 +108,14 @@ public class WishList
      * @param bc The specific binary constraint to add
      * @param f1 First WantedFurniture affected by this constraint
      */
-    public void addBinaryConstraint(BinaryConstraintEnd bc, String f1) {
-        if(!containsElement(f1))
-            throw new WantedFurnitureNotFoundException(f1);
+    public void addBinaryConstraint(BinaryConstraintEnd bc, String furnitureId, String elementId) {
+        if(! furniture.containsElement(furnitureId))
+            throw new WantedFurnitureNotFoundException(furnitureId);
         
-        getWantedFurniture(f1).addBinaryConstraint(bc);
+        InterioresVariable element = getElement(elementId);
+        bc.setOtherVariable(element);
+        
+        getWantedFurniture(furnitureId).addBinaryConstraint(bc);
     }
     
     /**
@@ -166,6 +171,16 @@ public class WishList
         elementTypes.addAll(fixed.getTypeNames());
         
         return elementTypes;
+    }
+    
+    public InterioresVariable getElement(String id) {
+        if(furniture.containsElement(id))
+            return furniture.get(id);
+        
+        if(fixed.containsElement(id))
+            return fixed.get(id);
+        
+        throw new WantedElementNotFoundException("element", id);
     }
     
     public WantedFurniture getWantedFurniture(String id)

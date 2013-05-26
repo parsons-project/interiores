@@ -9,6 +9,9 @@ import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
+import interiores.business.models.constraints.room.global.SpaceRespectingConstraint;
+import interiores.business.models.constraints.room.global.UnfitModelsPseudoConstraint;
+import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedFixed;
 import interiores.business.models.room.elements.WantedFurniture;
@@ -21,6 +24,7 @@ import java.awt.Point;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -58,11 +62,6 @@ public class FurnitureVariableSet
      * Indicates whether all variables have an assigned value.
      */
     protected boolean allAssigned;
-
-    /**
-     * Contains the room rectangle
-     */
-    private OrientedRectangle roomArea;
 
     /**
      * Indicates restrictions amongst all variables.
@@ -121,7 +120,7 @@ public class FurnitureVariableSet
             throws BusinessException {
 
         Dimension roomSize = wishList.getRoom().getDimension();
-        roomArea = new OrientedRectangle(new Point(0, 0), roomSize, Orientation.S);
+        OrientedRectangle roomArea = new OrientedRectangle(new Point(0, 0), roomSize, Orientation.S);
         
         variableCount = wishList.getUnfixedSize();
         
@@ -138,7 +137,7 @@ public class FurnitureVariableSet
         addConstants(wishList);
         
         globalConstraints = new ArrayList<GlobalConstraint>();
-        addGlobalConstraints();
+        addGlobalConstraints(roomArea);
         
         buildMatrixOfDependence();
 
@@ -149,13 +148,8 @@ public class FurnitureVariableSet
      * @param wishList 
      */
     private void addConstants(WishList wishList) {
-        for(WantedFixed wantedFixed : wishList.getWantedFixed()) {
-            String constantName = wantedFixed.getName();
-            FurnitureValue value = new FurnitureValue(wantedFixed.getPosition(), wantedFixed.getModel(),
-                    wantedFixed.getOrientation());
-            
-            constants.add(new FurnitureConstant(constantName, value));
-        }
+        for(WantedFixed wantedFixed : wishList.getWantedFixed())
+            constants.add(wantedFixed);
     }
     
     /**
@@ -168,20 +162,19 @@ public class FurnitureVariableSet
             Dimension roomSize) {   
            
         for(WantedFurniture wantedFurniture : wishList.getWantedFurniture()) {
-            String variableName = wantedFurniture.getName();
-            FurnitureType furnitureType = furnitureCatalog.get(wantedFurniture.getTypeName());
+            HashSet<FurnitureModel> models = new HashSet(
+                    furnitureCatalog.get(wantedFurniture.getTypeName()).getFurnitureModels());
             
-            unassignedVariables.add(new FurnitureVariable(variableName,
-                    furnitureType.getFurnitureModels(), roomSize,
-                    wantedFurniture.getUnaryConstraints(), variableCount));
+            wantedFurniture.createDomain(models, roomSize, variableCount);
+            unassignedVariables.add(wantedFurniture);
         }
     }
     
     /**
      * Invoked in the constructor to initialize global constraints.
      */
-    private void addGlobalConstraints() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    private void addGlobalConstraints(OrientedRectangle roomArea) {
+        globalConstraints.add(new SpaceRespectingConstraint(roomArea));
     }
     
 
@@ -445,7 +438,8 @@ public class FurnitureVariableSet
         actual = assignedVariables.get(assignedVariables.size()-1);
         assignedVariables.remove(assignedVariables.size()-1);
     }
-    
+
+    // @TODO DELETE COMMENT
 //    @Override
 //    public String toString() {
 //        StringBuilder result = new StringBuilder();

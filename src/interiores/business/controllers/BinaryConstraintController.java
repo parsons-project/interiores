@@ -3,7 +3,6 @@ package interiores.business.controllers;
 import interiores.business.controllers.abstracted.InterioresController;
 import interiores.business.events.constraints.BinaryConstraintAddedEvent;
 import interiores.business.events.constraints.BinaryConstraintRemovedEvent;
-import interiores.business.models.constraints.BinaryConstraint;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
@@ -56,33 +55,33 @@ public class BinaryConstraintController
         notify(new BinaryConstraintAddedEvent());
     }
     
-    public void addStraightFacingConstraint(String furnitureId1, String furnitureId2)
+    public void addStraightFacingConstraint(String furnitureId1, String furnitureId2, int distance)
     {
-        getWishList().addBinaryConstraint(new StraightFacingConstraint(), furnitureId1, furnitureId2);
+        getWishList().addBinaryConstraint(new StraightFacingConstraint(distance), furnitureId1, furnitureId2);
         notify(new BinaryConstraintAddedEvent());
     }
     
-    public void addPartialFacingConstraint(String furnitureId1, String furnitureId2)
+    public void addPartialFacingConstraint(String furnitureId1, String furnitureId2, int distance)
     {
-        getWishList().addBinaryConstraint(new PartialFacingConstraint(), furnitureId1, furnitureId2);
+        getWishList().addBinaryConstraint(new PartialFacingConstraint(distance), furnitureId1, furnitureId2);
         notify(new BinaryConstraintAddedEvent());
     }
     
-    public void removeConstraint(String furnitureId1, String furnitureId2, String constraintAlias)
+    public void removeConstraint(String furnitureId, String constraintAlias)
     {
         Class binaryConstraintClass = BinaryConstraintEnd.getConstraintClass(constraintAlias);
         
-        removeConstraint(furnitureId1, furnitureId2, binaryConstraintClass);
+        removeConstraint(furnitureId, binaryConstraintClass);
     }
     
-    public void removeConstraint(String furnitureId1, String furnitureId2,
-            Class<? extends BinaryConstraint> binaryConstraintClass)
+    public void removeConstraint(String furnitureId,
+            Class<? extends BinaryConstraintEnd> binaryConstraintClass)
     {
-        getWishList().removeBinaryConstraint(binaryConstraintClass, furnitureId1, furnitureId2);
+        getWishList().removeBinaryConstraint(binaryConstraintClass, furnitureId);
         notify(new BinaryConstraintRemovedEvent());
     }
 
-    public Collection<BinaryConstraintAssociation> getConstraints(String furn)
+    public Collection<BinaryConstraintEnd> getConstraints(String furn)
     {
         return getWishList().getBinaryConstraints(furn);
     }

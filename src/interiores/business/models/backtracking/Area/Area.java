@@ -872,7 +872,7 @@ public class Area
             yMax = yMin + boundingRectangle.height;
             
             currentSquare = new Square(xMin - RES, yMin);
-            advance_to_next();
+            advanceToNext();
         }
 
         @Override
@@ -884,7 +884,7 @@ public class Area
         public Point next() {            
             if (contains(currentSquare)) {
                 Point ret = new Point(currentSquare.x, currentSquare.y);
-                advance_to_next();
+                advanceToNext();
                 return ret;
             }
             else throw new NoSuchElementException();
@@ -895,7 +895,7 @@ public class Area
             throw new UnsupportedOperationException("Removal of a particular element in the domain is not supported");
         }
         
-        private void advance_to_next() {
+        private void advanceToNext() {
             // First, we advance towards the next position
             currentSquare.x += RES;
             

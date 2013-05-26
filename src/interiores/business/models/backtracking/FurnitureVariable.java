@@ -127,10 +127,9 @@ public class FurnitureVariable
         forwardIteration();
                
         // 2) Run trimmers
-        for (Map.Entry<Class, Constraint> constraint : furnitureConstraints.entrySet()) {
+        for (Constraint constraint : furnitureConstraints.values())
             if (constraint instanceof BacktrackingTimeTrimmer)
                 ((BacktrackingTimeTrimmer) constraint).trim(this);
-        }
     }
 
     
@@ -189,20 +188,20 @@ public class FurnitureVariable
     }
 
         void triggerPreliminarTrimmers() {
-        for (Map.Entry<Class, Constraint> constraint : furnitureConstraints.entrySet()) {
+        for (Constraint constraint : furnitureConstraints.values()) {
             if (constraint instanceof PreliminarTrimmer) {
                 PreliminarTrimmer preliminarTrimmer = (PreliminarTrimmer) constraint;
                 preliminarTrimmer.preliminarTrim(this);
             }
             //ditch it if it doesn't implement any other interface
-            if (! (constraint instanceof InexhaustiveTrimmer))
-//IS THIS CORRECT???????!!??!?!?!?!?!??!?!!?******************************************************************************
-                furnitureConstraints.remove(constraint.getClass());
+            if (! (constraint instanceof InexhaustiveTrimmer));
+                //removing constraints unhabilitated
+                //furnitureConstraints.remove(constraint.getClass());
         }
     }
 
     boolean constraintsSatisfied() {
-        for (Map.Entry<Class, Constraint> constraint : furnitureConstraints.entrySet())
+        for (Constraint constraint : furnitureConstraints.values())
             if (! ((InexhaustiveTrimmer) constraint).isSatisfied(this))
                 return false;
         return true;

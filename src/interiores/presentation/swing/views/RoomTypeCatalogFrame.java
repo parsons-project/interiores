@@ -24,6 +24,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -255,14 +257,6 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Triggers when a different catalog is selected. It basically performs a checkout to the selected catalog
-     */
-    private void currentCatalogSelectItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_currentCatalogSelectItemStateChanged
-        if (!hasBeenModified) rtcController.checkout(currentCatalogSelect.getSelectedItem().toString());
-        //else showModificationWarning();
-    }//GEN-LAST:event_currentCatalogSelectItemStateChanged
-
-    /**
      * Triggers when the "Load catalog" button is pressed. It opens a fileChooser dialog and loads the selected catalog
      */
     private void loadCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadCatalogButtonActionPerformed
@@ -329,6 +323,10 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         if (hasBeenModified) saveChanges((String) currentCatalogSelect.getSelectedItem());
         dispose();
     }//GEN-LAST:event_saveChangesButtonActionPerformed
+
+    private void currentCatalogSelectItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_currentCatalogSelectItemStateChanged
+        if (!hasBeenModified) rtcController.checkout(currentCatalogSelect.getSelectedItem().toString());
+    }//GEN-LAST:event_currentCatalogSelectItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentCatalogLabel;
@@ -401,7 +399,7 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
      * @param evt The tell-tale event
      */
     @Listen({RTModifiedEvent.class})
-    public void updateCatalogElementSet(RTModifiedEvent evt) {
+    public void updateCatalogElement(RTModifiedEvent evt) {
         catElements.get(evt.getFullName()).updateChanges();
     }
 
@@ -570,6 +568,11 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
         private javax.swing.JLabel forbiddenLabel = new javax.swing.JLabel();
         private javax.swing.JTextField forbiddenField = new javax.swing.JTextField();
         
+        private boolean hasWidthChanged = false;
+        private boolean hasDepthChanged = false;
+        private boolean hasMandatoryListChanged = false;
+        private boolean hasForbiddenListChanged = false;
+        
         /**
          * Builds a visual representation of the item in the currently active catalog
          * whose name is 'actname'
@@ -611,39 +614,31 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             // Measure fields (1: width, 2:depth)
             measureLabel1.setText("This room should measure more than");
             measureField1.setText(Integer.toString(rtController.getWidthRange(actualName).min) );
+            measureField1.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) { hasWidthChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
+                @Override
+                public void removeUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
+             });
             measureField1.addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
-                public void focusLost(java.awt.event.FocusEvent evt) {
-                    String str = measureField1.getText();
-                    Range r = rtController.getWidthRange(actualName);
-                    if (str.matches("[0-9]+") && Integer.parseInt(str) > 0 && Integer.parseInt(str) <= r.max) {
-                        performModification();
-                        rtController.setMinWidth(actualName, Integer.parseInt(str));
-                    }
-                    else {
-                        String msg = "Width should be a positive number between 0 and " + r.max;
-                        JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
-                        measureField1.setText(String.valueOf(rtController.getWidthRange(actualName).min));
-                    }
-                }
+                public void focusLost(java.awt.event.FocusEvent evt) { if(hasWidthChanged) widthUpdate(); }
             });
             measureLabel2.setText("cm wide and");
             measureField2.setText(Integer.toString(rtController.getDepthRange(actualName).min) );
+            measureField1.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) { hasDepthChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) {  hasDepthChanged = true;  }
+                @Override
+                public void removeUpdate(DocumentEvent e) {  hasDepthChanged = true;  }
+             });
             measureField2.addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
-                public void focusLost(java.awt.event.FocusEvent evt) {
-                    String str = measureField2.getText();
-                    Range r = rtController.getDepthRange(actualName);
-                    if (str.matches("[0-9]+") && Integer.parseInt(str) > 0 && Integer.parseInt(str) <= r.max) {
-                        performModification();
-                        rtController.setMinDepth(actualName, Integer.parseInt(str));
-                    }
-                    else {
-                        String msg = "Depth should be a positive number between 0 and " + r.max;
-                        JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
-                        measureField2.setText(String.valueOf(rtController.getDepthRange(actualName).min));
-                    }
-                }
+                public void focusLost(java.awt.event.FocusEvent evt) { if(hasDepthChanged) depthUpdate(); }
             });
             measureLabel3.setText("cm deep");
             
@@ -652,48 +647,36 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             String mandatory = rtController.getMandatory(actualName).toString();
             mandatoryField.setText(mandatory.substring(1, mandatory.length()-1));
             mandatoryField.setColumns(30);
+            mandatoryField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) { hasMandatoryListChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) {  hasMandatoryListChanged = true;  }
+                @Override
+                public void removeUpdate(DocumentEvent e) {  hasMandatoryListChanged = true;  }
+             });
             mandatoryField.addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
-                public void focusLost(java.awt.event.FocusEvent evt) {
-                    String str = mandatoryField.getText();
-                    str = str.replace(" ","");
-                    String[] mand = str.split(",");
-                    String mandatory = rtController.getMandatory(actualName).toString();
-                    try {
-                        performModification();
-                        rtController.setMandatory(actualName, mand);
-                        updateTooltips();
-                    }
-                    catch (Exception e) {
-                        JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,e.getMessage(),"Invalid value",JOptionPane.ERROR_MESSAGE);
-                        mandatory = mandatory.substring(1, mandatory.length()-1);
-                        mandatoryField.setText(mandatory);
-                    }
-                }
+                public void focusLost(java.awt.event.FocusEvent evt) { if (hasMandatoryListChanged) mandatoryUpdate(); }
             });
             forbiddenLabel.setText("Forbidden furniture:");
             String forbidden = rtController.getForbidden(actualName).toString();
             forbiddenField.setText(forbidden.substring(1, forbidden.length()-1));
             forbiddenField.setColumns(30);
+            forbiddenField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) { hasForbiddenListChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) {  hasForbiddenListChanged = true;  }
+                @Override
+                public void removeUpdate(DocumentEvent e) {  hasForbiddenListChanged = true;  }
+             });
             forbiddenField.addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
-                public void focusLost(java.awt.event.FocusEvent evt) {
-                    String str = forbiddenField.getText();
-                    str = str.replace(" ","");
-                    String[] forb = str.split(",");
-                    String forbidden = rtController.getForbidden(actualName).toString();
-                    try {
-                        performModification();
-                        rtController.setForbidden(actualName, forb);
-                        updateTooltips();
-                    }
-                    catch (Exception e) {
-                        JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,e.getMessage(),"Invalid value",JOptionPane.ERROR_MESSAGE);
-                        forbidden = forbidden.substring(1, forbidden.length()-1);
-                        forbiddenField.setText(forbidden);
-                    }
-                }
+                public void focusLost(java.awt.event.FocusEvent evt) { if (hasForbiddenListChanged) forbiddenUpdate(); }
             });
+            
+            
             // We update the tooltips at construction time, in order to initialize them
             updateTooltips();
 
@@ -802,6 +785,72 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
             String forbidden = rtController.getForbidden(actualName).toString();
             forbiddenField.setText(forbidden.substring(1, forbidden.length()-1));
         }               
+        
+        private void widthUpdate() {
+            hasWidthChanged = false;
+            String str = measureField1.getText();
+            Range r = rtController.getWidthRange(actualName);
+            if (str.matches("[0-9]+") && Integer.parseInt(str) <= r.max) {
+                performModification();
+                rtController.setMinWidth(actualName, Integer.parseInt(str));
+            }
+            else {
+                String msg = "Width should be a positive number between 0 and " + r.max;
+                JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
+                measureField1.setText(String.valueOf(rtController.getWidthRange(actualName).min));
+            }
+        }
+        
+        private void depthUpdate() {
+            hasDepthChanged = false;
+            String str = measureField2.getText();
+            Range r = rtController.getDepthRange(actualName);
+            if (str.matches("[0-9]+") && Integer.parseInt(str) <= r.max) {
+                performModification();
+                rtController.setMinDepth(actualName, Integer.parseInt(str));
+            }
+            else {
+                String msg = "Depth should be a positive number between 0 and " + r.max;
+                JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
+                measureField2.setText(String.valueOf(rtController.getDepthRange(actualName).min));
+            }
+        }
+        
+        private void mandatoryUpdate() {
+            hasMandatoryListChanged = false;
+            String str = mandatoryField.getText();
+            str = str.replace(" ","");
+            String[] mand = str.split(",");
+            String mandatory = rtController.getMandatory(actualName).toString();
+            try {
+                performModification();
+                rtController.setMandatory(actualName, mand);
+                updateTooltips();
+            }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,e.getMessage(),"Invalid value",JOptionPane.ERROR_MESSAGE);
+                mandatory = mandatory.substring(1, mandatory.length()-1);
+                mandatoryField.setText(mandatory);
+            }
+        }
+        
+        private void forbiddenUpdate() {
+            hasForbiddenListChanged = false;
+            String str = forbiddenField.getText();
+            str = str.replace(" ","");
+            String[] forb = str.split(",");
+            String forbidden = rtController.getForbidden(actualName).toString();
+            try {
+                performModification();
+                rtController.setForbidden(actualName, forb);
+                updateTooltips();
+            }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,e.getMessage(),"Invalid value",JOptionPane.ERROR_MESSAGE);
+                forbidden = forbidden.substring(1, forbidden.length()-1);
+                forbiddenField.setText(forbidden);
+            }
+        }
         
         /**
          * Updates the tooltips of the current item with all the necessary information.

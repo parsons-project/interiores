@@ -5,6 +5,7 @@ import interiores.business.events.catalogs.FTModifiedEvent;
 import interiores.business.events.catalogs.FTSetModifiedEvent;
 import interiores.business.events.furniture.FurnitureTypeSelectedEvent;
 import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
+import interiores.business.exceptions.InvalidValueException;
 import interiores.business.models.RoomType;
 import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.AvailableCatalog;
@@ -125,6 +126,9 @@ public class FurnitureTypeController
     }
     
     public void setPassiveSpace(String ftname, int[] ps) {
+        if (ps.length != 4)
+            throw new InvalidValueException("Passive space needs four values");
+        
         SpaceAround sa = new SpaceAround(ps[0],ps[1],ps[2],ps[3]);
         getForWrite(ftname).setPassiveSpace(sa);
         notify(new FTModifiedEvent(get(ftname).getFullName(),ftname));

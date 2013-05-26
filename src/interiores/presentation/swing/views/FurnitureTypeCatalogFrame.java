@@ -3,18 +3,13 @@ package interiores.presentation.swing.views;
 
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.FurnitureTypesCatalogController;
-import interiores.business.controllers.RoomTypeController;
-import interiores.business.controllers.RoomTypesCatalogController;
 import interiores.business.events.catalogs.FTCatalogCheckoutEvent;
 import interiores.business.events.catalogs.FTCatalogSetModifiedEvent;
+import interiores.business.events.catalogs.FTModifiedEvent;
 import interiores.business.events.catalogs.FTSetModifiedEvent;
-import interiores.business.events.catalogs.RTCatalogSetModifiedEvent;
-import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
-import interiores.business.events.catalogs.RTSetModifiedEvent;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.helpers.FileChooser;
-import interiores.utils.Range;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
@@ -264,7 +259,6 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
      */
     private void currentCatalogSelectItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_currentCatalogSelectItemStateChanged
         if (!hasBeenModified) ftcController.checkout(currentCatalogSelect.getSelectedItem().toString());
-        //else showModificationWarning();
     }//GEN-LAST:event_currentCatalogSelectItemStateChanged
 
     /**
@@ -394,10 +388,20 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
      * @param evt The tell-tale event
      */
     @Listen({FTSetModifiedEvent.class})
-    public void updateCatalogElement(FTSetModifiedEvent evt) {
+    public void updateCatalogElementSet(FTSetModifiedEvent evt) {
         if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
         else removeElement(evt.getFullName());
         refresh();
+    }
+    
+     /**
+     * This function is invoked whenever a particular element of the catalog
+     * is modified, so that those changes reflect upon this frame
+     * @param evt The tell-tale event
+     */
+    @Listen({FTModifiedEvent.class})
+    public void updateCatalogElement(FTModifiedEvent evt) {
+        catElements.get(evt.getFullName()).updateChanges();
     }
 
     /**
@@ -853,7 +857,8 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
             String passive = getFormattedPassiveSpace();
             try {
                 performModification();
-                int[] i_ps = new int[4]; for(int i = 0; i < 4; i++) i_ps[i] = Integer.parseInt(s_ps[i]);
+                int[] i_ps = new int[4];
+                for(int i = 0; i < Math.min(4, s_ps.length); i++) i_ps[i] = Integer.parseInt(s_ps[i]);
                 ftController.setPassiveSpace(actualName, i_ps);
             }
             catch (Exception e) {

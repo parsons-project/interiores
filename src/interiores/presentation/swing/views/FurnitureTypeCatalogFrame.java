@@ -100,7 +100,7 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
         discardChangesButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Room Types Catalog Editor");
+        setTitle("Furniture Types Catalog Editor");
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
         setBounds(new java.awt.Rectangle(0, 0, 900, 600));
@@ -210,13 +210,13 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                             .add(layout.createSequentialGroup()
                                 .add(saveCatalogButton)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(removeCatalogButton))
                             .add(layout.createSequentialGroup()
                                 .add(currentCatalogLabel)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                                 .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
+                        .add(66, 66, 66))
                     .add(layout.createSequentialGroup()
                         .add(discardChangesButton)
                         .add(181, 181, 181)
@@ -226,8 +226,8 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(saveChangesButton))))
             .add(layout.createSequentialGroup()
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 770, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(0, 0, Short.MAX_VALUE))
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 900, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(0, 6, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -580,9 +580,10 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
             
             // We set the properties of the outer panel
             outerPanel.setBackground(new java.awt.Color(255, 255, 255));
-            outerPanel.setSize(new Dimension(800, 200));
-            outerPanel.setMinimumSize(new Dimension(800, 200));
-            outerPanel.setMaximumSize(new Dimension(800, 200));
+            outerPanel.setPreferredSize(new Dimension(750,250));
+            outerPanel.setSize(new Dimension(750, 250));
+            outerPanel.setMinimumSize(new Dimension(750, 250));
+            outerPanel.setMaximumSize(new Dimension(750, 250));
             
             // These lines substitute the default aspect of a button with a custom icon
             ImageIcon im = new javax.swing.ImageIcon("src/resources/remove_element.png");
@@ -668,37 +669,42 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
                 .add(innerPanelLayout.createSequentialGroup()
                     .addContainerGap()
                     .add(ftname)
-                    .add(58, 58, 58)
+                    .add(62, 62, 62)
                     .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(innerPanelLayout.createSequentialGroup()
-                        .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(depthLabel)
-                            .add(widthLabel))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(innerPanelLayout.createSequentialGroup()
-                                .add(minWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(widthLabel2)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                .add(maxWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                .add(widthLabel3))
-                            .add(innerPanelLayout.createSequentialGroup()
-                                .add(minDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(depthLabel2)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                .add(depthLabel3))))
-                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
                         .add(innerPanelLayout.createSequentialGroup()
+                            .add(11, 11, 11)
                             .add(passiveSpaceHint, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 207, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(33, 33, 33)
-                            .add(passiveSpaceField))
-                        .add(passiveSpaceLabel)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .add(passiveSpaceField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 128, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, innerPanelLayout.createSequentialGroup()
+                            .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                                .add(innerPanelLayout.createSequentialGroup()
+                                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                                        .add(depthLabel)
+                                        .add(widthLabel))
+                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                        .add(minWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .add(minDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                        .add(innerPanelLayout.createSequentialGroup()
+                                            .add(widthLabel2)
+                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                            .add(maxWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                            .add(widthLabel3))
+                                        .add(innerPanelLayout.createSequentialGroup()
+                                            .add(depthLabel2)
+                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                            .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                            .add(depthLabel3))))
+                                .add(innerPanelLayout.createSequentialGroup()
+                                    .add(passiveSpaceLabel)
+                                    .add(81, 81, 81)))
+                            .add(15, 15, 15)))
+                    .add(6, 6, 6))
             );
             innerPanelLayout.setVerticalGroup(
                 innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -718,40 +724,35 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
                         .add(depthLabel2)
                         .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(depthLabel3))
-                    .add(18, 18, 18)
-                    .add(passiveSpaceLabel)
                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                    .add(passiveSpaceLabel)
+                    .add(18, 18, 18)
                     .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                         .add(passiveSpaceField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(passiveSpaceHint))
                     .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             );
+
             org.jdesktop.layout.GroupLayout outerPanelLayout = new org.jdesktop.layout.GroupLayout(outerPanel);
-                outerPanel.setLayout(outerPanelLayout);
-                outerPanelLayout.setHorizontalGroup(
-                    outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(outerPanelLayout.createSequentialGroup()
-                        .add(removeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 31, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(768, Short.MAX_VALUE))
+            outerPanel.setLayout(outerPanelLayout);
+            outerPanelLayout.setHorizontalGroup(
+                outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(org.jdesktop.layout.GroupLayout.TRAILING, outerPanelLayout.createSequentialGroup()
+                    .addContainerGap(18, Short.MAX_VALUE)
+                    .add(removeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 51, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                    .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    )
+            );
+            outerPanelLayout.setVerticalGroup(
+                outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(org.jdesktop.layout.GroupLayout.TRAILING, outerPanelLayout.createSequentialGroup()
+                    .addContainerGap(27, Short.MAX_VALUE)
                     .add(outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(outerPanelLayout.createSequentialGroup()
-                            .add(0, 93, Short.MAX_VALUE)
-                            .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(0, 93, Short.MAX_VALUE)))
-                );
-                outerPanelLayout.setVerticalGroup(
-                    outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(0, 0, Short.MAX_VALUE)
-                    .add(outerPanelLayout.createSequentialGroup()
-                        .add(26, 26, 26)
-                        .add(removeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(20, Short.MAX_VALUE))
-                    .add(outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(outerPanelLayout.createSequentialGroup()
-                            .add(0, 24, Short.MAX_VALUE)
-                            .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(0, 25, Short.MAX_VALUE)))
-                );
+                        .add(removeButton)
+                        .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .addContainerGap())
+            );
         }
 
         /**

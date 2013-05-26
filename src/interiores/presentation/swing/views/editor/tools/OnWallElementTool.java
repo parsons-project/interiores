@@ -5,6 +5,7 @@ import interiores.business.models.Orientation;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
 import interiores.presentation.swing.views.map.RoomMap;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
@@ -28,6 +29,15 @@ public class OnWallElementTool
         position  = map.normDiscretize(evt.getPoint());
         wallWhere = map.getNearestWall(evt.getX(), evt.getY());
    
+        return false;
+    }
+    
+    @Override
+    public boolean keyReleased(KeyEvent evt, InteractiveRoomMap map) {
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            position = null;
+            return true;
+        }
         return false;
     }
     

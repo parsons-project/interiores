@@ -39,10 +39,13 @@ public class PillarTool
     
     @Override 
     public boolean mouseDragged(MouseEvent evt, InteractiveRoomMap map) {
-        updatePositions(map.unpad(map.normDiscretize(evt.getPoint())));
-        map.previewPillar(minPosition, new Dimension((maxPosition.x - minPosition.x),
-                                                     (maxPosition.y - minPosition.y)));
-        return true;
+        if (minPosition != null && maxPosition != null) {
+            updatePositions(map.unpad(map.normDiscretize(evt.getPoint())));
+            map.previewPillar(minPosition, new Dimension((maxPosition.x - minPosition.x),
+                                                         (maxPosition.y - minPosition.y)));
+            return true;
+        }
+        return false;
     }
     
     @Override
@@ -58,14 +61,26 @@ public class PillarTool
     }
     
     private void updatePositions(Point p) {
-        if (testIn(minPosition.x, maxPosition.x, p.x, MOUSE_THRESHOLD) || p.x < minPosition.x) minPosition.x = p.x;
-        if (testIn(minPosition.y, maxPosition.y, p.y, MOUSE_THRESHOLD) || p.y < minPosition.y) minPosition.y = p.y;
-        if (testIn(maxPosition.x, minPosition.x, p.x, MOUSE_THRESHOLD) || p.x > maxPosition.x) maxPosition.x = p.x;
-        if (testIn(maxPosition.y, minPosition.y, p.y, MOUSE_THRESHOLD) || p.y > maxPosition.y) maxPosition.y = p.y;
+        if (minPosition != null && maxPosition != null) {
+            if (testIn(minPosition.x, maxPosition.x, p.x, MOUSE_THRESHOLD) || p.x < minPosition.x) minPosition.x = p.x;
+            if (testIn(minPosition.y, maxPosition.y, p.y, MOUSE_THRESHOLD) || p.y < minPosition.y) minPosition.y = p.y;
+            if (testIn(maxPosition.x, minPosition.x, p.x, MOUSE_THRESHOLD) || p.x > maxPosition.x) maxPosition.x = p.x;
+            if (testIn(maxPosition.y, minPosition.y, p.y, MOUSE_THRESHOLD) || p.y > maxPosition.y) maxPosition.y = p.y;
+        }
     }
     
     private boolean testIn(int x, int y, int value, int threshold) {
         // We have moved, but are we far enough from x but close enough to y?
         return Math.abs(x - value) < threshold && Math.abs(y - value) > threshold;
+    }
+    
+    @Override
+    public boolean keyReleased(KeyEvent evt, InteractiveRoomMap map) {
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            minPosition = null;
+            maxPosition = null;
+            return true;
+        }
+        return false;
     }
 }

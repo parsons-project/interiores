@@ -770,7 +770,7 @@ public class Area
     public int areaSize() {
         if (vertexs.isEmpty()) return 0;
         
-        Debug.println(this.toString());
+        //Debug.println(this.toString());
         Rectangle boundingRectangle = getBoundingRectangle();
         int xMin = boundingRectangle.x;
         int xMax = boundingRectangle.x + boundingRectangle.width;
@@ -782,13 +782,13 @@ public class Area
         for (int i = 0; i < SAMPLE_SIZE; ++i) {
             int Xrand = xMin + randomGenerator.nextInt(boundingRectangle.width);
             int Yrand = yMin + randomGenerator.nextInt(boundingRectangle.height);
-            Debug.println("Random point: " + Xrand + ","+Yrand);
+            //Debug.println("Random point: " + Xrand + ","+Yrand);
             if (contains(new Square(Xrand, Yrand))) ++squareDensity;
         }
         
         int boundingRectangleSize = (xMax - xMin) * (yMax - yMin);
-        Debug.println("boundingRectangleSize: " + boundingRectangleSize);
-        Debug.println("squareDensity: " + squareDensity + "/" + SAMPLE_SIZE);
+        //Debug.println("boundingRectangleSize: " + boundingRectangleSize);
+        //Debug.println("squareDensity: " + squareDensity + "/" + SAMPLE_SIZE);
         
         return (boundingRectangleSize * squareDensity) / SAMPLE_SIZE;
     }
@@ -872,7 +872,7 @@ public class Area
             yMax = yMin + boundingRectangle.height;
             
             currentSquare = new Square(xMin - RES, yMin);
-            advance_to_next();
+            advanceToNext();
         }
 
         @Override
@@ -884,7 +884,7 @@ public class Area
         public Point next() {            
             if (contains(currentSquare)) {
                 Point ret = new Point(currentSquare.x, currentSquare.y);
-                advance_to_next();
+                advanceToNext();
                 return ret;
             }
             else throw new NoSuchElementException();
@@ -895,7 +895,7 @@ public class Area
             throw new UnsupportedOperationException("Removal of a particular element in the domain is not supported");
         }
         
-        private void advance_to_next() {
+        private void advanceToNext() {
             // First, we advance towards the next position
             currentSquare.x += RES;
             

@@ -202,7 +202,7 @@ public class FurnitureVariableSet
             allAssigned = true;
         else {
             
-            //move actual to assigned, unless it is the first iteration
+            //move previousactual to assigned, unless it is the first iteration
             if (actual != null)
                 assignedVariables.add(actual);
             

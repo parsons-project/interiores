@@ -139,7 +139,7 @@ public class Stage {
      * @return 'true' if there are more positions. 'false' otherwise
      */
     public boolean hasMoreValues() {
-        if( models.isEmpty() || orientations.isEmpty() ) return false;
+        if( iterableModels.isEmpty() || iterableOrientations.isEmpty() ) return false;
         return modelIterator.hasNext() || orientationIterator.hasNext() || positionIterator.hasNext();
     }
     

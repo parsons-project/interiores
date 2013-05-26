@@ -127,10 +127,9 @@ public class FurnitureVariable
         forwardIteration();
                
         // 2) Run trimmers
-        for (Constraint constraint : furnitureConstraints.values()) {
+        for (Constraint constraint : furnitureConstraints.values())
             if (constraint instanceof BacktrackingTimeTrimmer)
                 ((BacktrackingTimeTrimmer) constraint).trim(this);
-        }
     }
 
     
@@ -180,24 +179,24 @@ public class FurnitureVariable
         if (minSize == -1) minSize = 0;
     }
 
-    int domainSize() {
+    public int domainSize() {
         return domain.domainSize(iteration);
     }
 
-    int smallestModelSize() {
+    public int smallestModelSize() {
         return minSize;
     }
 
-        void triggerPreliminarTrimmers() {
+    public void triggerPreliminarTrimmers() {
         for (Constraint constraint : furnitureConstraints.values()) {
             if (constraint instanceof PreliminarTrimmer) {
                 PreliminarTrimmer preliminarTrimmer = (PreliminarTrimmer) constraint;
                 preliminarTrimmer.preliminarTrim(this);
             }
             //ditch it if it doesn't implement any other interface
-            if (! (constraint instanceof InexhaustiveTrimmer))
-//IS THIS CORRECT???????!!??!?!?!?!?!??!?!!?******************************************************************************
-                furnitureConstraints.remove(constraint.getClass());
+            if (! (constraint instanceof InexhaustiveTrimmer));
+                //removing constraints unhabilitated
+                //furnitureConstraints.remove(constraint.getClass());
         }
     }
 

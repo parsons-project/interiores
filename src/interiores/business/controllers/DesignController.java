@@ -6,7 +6,6 @@ import interiores.business.events.backtracking.SolveDesignFinishedEvent;
 import interiores.business.events.backtracking.SolveDesignStartedEvent;
 import interiores.business.events.room.RoomDesignChangedEvent;
 import interiores.business.exceptions.SolverNotFinishedException;
-import interiores.business.models.RoomDesign;
 import interiores.business.models.WishList;
 import interiores.business.models.backtracking.FurnitureVariableSet;
 import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
@@ -17,7 +16,6 @@ import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
 import interiores.shared.backtracking.NoSolutionException;
 import java.util.Collection;
-import java.util.Set;
 
 
 /**

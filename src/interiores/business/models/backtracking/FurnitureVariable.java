@@ -35,7 +35,7 @@ public class FurnitureVariable
     * Represents the iteration of the algorithm.
     */
     @XmlTransient
-    public int iteration = 0;  
+    public int iteration;  
     
     @XmlTransient
     private float minPrice;
@@ -76,7 +76,7 @@ public class FurnitureVariable
     
     public void createDomain(HashSet<FurnitureModel> models, Dimension roomSize, int variableCount) {
         domain = new Domain(models, roomSize, variableCount);
-        
+        iteration = 0;
         initializeMaxMinFields();
         undoAssignValue();
     }

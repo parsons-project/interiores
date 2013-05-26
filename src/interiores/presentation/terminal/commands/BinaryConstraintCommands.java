@@ -2,7 +2,7 @@ package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.BinaryConstraintController;
 import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.exceptions.WantedElementNotFoundException;
+import interiores.business.exceptions.WantedFurnitureNotFoundException;
 import interiores.core.Utils;
 import interiores.core.business.BusinessException;
 import interiores.core.presentation.terminal.AdvancedCommandGroup;
@@ -94,7 +94,7 @@ public class BinaryConstraintCommands
     
     @Command("List binary constraints applied to a piece of furniture")
     public void list()
-            throws NoRoomCreatedException, WantedElementNotFoundException
+            throws NoRoomCreatedException, WantedFurnitureNotFoundException
     {
         String furn = readString("Select the furniture whose constraints you want to show");
         Collection constraints = constraintController.getConstraints(furn);

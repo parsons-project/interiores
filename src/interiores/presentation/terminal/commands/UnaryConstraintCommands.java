@@ -2,7 +2,7 @@ package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.UnaryConstraintController;
 import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.exceptions.WantedElementNotFoundException;
+import interiores.business.exceptions.WantedFurnitureNotFoundException;
 import interiores.business.models.Orientation;
 import interiores.core.Utils;
 import interiores.core.business.BusinessException;
@@ -62,7 +62,7 @@ public class UnaryConstraintCommands extends AdvancedCommandGroup {
     }
     
     public void addSizeConstraint(String type)
-            throws NoRoomCreatedException, WantedElementNotFoundException
+            throws NoRoomCreatedException, WantedFurnitureNotFoundException
     {
         int min = readInt("Enter the minimum " + type + " for this furniture:");
         int max = readInt("Enter the maximum " + type + " for this furniture:");
@@ -77,7 +77,7 @@ public class UnaryConstraintCommands extends AdvancedCommandGroup {
     
     
     public void addPriceConstraint()
-            throws NoRoomCreatedException, WantedElementNotFoundException
+            throws NoRoomCreatedException, WantedFurnitureNotFoundException
     {
         float maxPrice = readFloat("Enter the maximum price you want to pay:");
         
@@ -85,7 +85,7 @@ public class UnaryConstraintCommands extends AdvancedCommandGroup {
     }
     
     public void addPositionConstraint()
-            throws NoRoomCreatedException, WantedElementNotFoundException
+            throws NoRoomCreatedException, WantedFurnitureNotFoundException
     {
         String specific = readString("Enter <at> followed by two coordinates to indicate a certain position."
                 + " Enter <range> followed by four coordinates to indicate a range of positions."
@@ -136,7 +136,7 @@ public class UnaryConstraintCommands extends AdvancedCommandGroup {
     
     @Command("List constraints applied to some selected furniture")
     public void list()
-            throws NoRoomCreatedException, WantedElementNotFoundException
+            throws NoRoomCreatedException, WantedFurnitureNotFoundException
     {
         String furn = readString("Select the furniture whose constraints you want to show");
         Collection constraints = constraintController.getConstraints(furn);

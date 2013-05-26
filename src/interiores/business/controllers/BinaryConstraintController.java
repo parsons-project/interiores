@@ -2,7 +2,7 @@ package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.InterioresController;
 import interiores.business.exceptions.NoRoomCreatedException;
-import interiores.business.exceptions.WantedElementNotFoundException;
+import interiores.business.exceptions.WantedFurnitureNotFoundException;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
@@ -45,25 +45,25 @@ public class BinaryConstraintController
     }
     
     public void addMaxDistanceConstraint(String furnitureId1, String furnitureId2, int distance)
-            throws NoRoomCreatedException, WantedElementNotFoundException
+            throws NoRoomCreatedException, WantedFurnitureNotFoundException
     {
         getWishList().addBinaryConstraint(new MaxDistanceConstraint(distance), furnitureId1, furnitureId2);
     }
     
     public void addMinDistanceConstraint(String furnitureId1, String furnitureId2, int distance)
-            throws NoRoomCreatedException, WantedElementNotFoundException
+            throws NoRoomCreatedException, WantedFurnitureNotFoundException
     {
         getWishList().addBinaryConstraint(new MinDistanceConstraint(distance), furnitureId1, furnitureId2);
     }
     
     public void addStraightFacingConstraint(String furnitureId1, String furnitureId2)
-            throws NoRoomCreatedException, WantedElementNotFoundException
+            throws NoRoomCreatedException, WantedFurnitureNotFoundException
     {
         getWishList().addBinaryConstraint(new StraightFacingConstraint(), furnitureId1, furnitureId2);
     }
     
     public void addPartialFacingConstraint(String furnitureId1, String furnitureId2)
-            throws NoRoomCreatedException, WantedElementNotFoundException
+            throws NoRoomCreatedException, WantedFurnitureNotFoundException
     {
         getWishList().addBinaryConstraint(new PartialFacingConstraint(), furnitureId1, furnitureId2);
     }
@@ -84,7 +84,7 @@ public class BinaryConstraintController
     }
 
     public Collection<BinaryConstraintAssociation> getConstraints(String furn)
-            throws NoRoomCreatedException, WantedElementNotFoundException
+            throws NoRoomCreatedException, WantedFurnitureNotFoundException
     {
         return getWishList().getBinaryConstraints(furn);
     }

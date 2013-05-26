@@ -2,12 +2,12 @@ package interiores.business.models;
 
 import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.MandatoryFurnitureException;
-import interiores.business.exceptions.WantedElementNotFoundException;
+import interiores.business.exceptions.WantedFixedNotFoundException;
+import interiores.business.exceptions.WantedFurnitureNotFoundException;
+import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
-import interiores.business.models.constraints.BinaryConstraintSet;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.utils.BinaryConstraintAssociation;
-import java.awt.Point;
 import java.util.Collection;
 import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlElement;
@@ -175,17 +175,12 @@ public class WishList
      * @param binaryConstraintClass The type of the constraint
      * @param bc The specific binary constraint to add
      * @param f1 First WantedFurniture affected by this constraint
-     * @param f2 Second WantedFurniture affected by this constraint
      */
-    public void addBinaryConstraint(BinaryConstraintEnd bc, String f1, String f2)
-            throws WantedElementNotFoundException {
+    public void addBinaryConstraint(BinaryConstraintEnd bc, String f1) {
         if(!containsElement(f1))
-            throw new WantedElementNotFoundException(f1);
+            throw new WantedFurnitureNotFoundException(f1);
         
-        if(!containsElement(f2))
-            throw new WantedElementNotFoundException(f2);
-        
-        binaryConstraints.add(bc, f1, f2);
+        getWantedFurniture(f1).addBinaryConstraint(bc);
     }
     
     /**
@@ -195,10 +190,9 @@ public class WishList
      * @param f1 First WantedFurniture affected by this constraint
      * @param f2 Second WantedFurniture affected by this constraint
      */
-    public void removeBinaryConstraint(Class<? extends BinaryConstraintEnd> binaryConstraintClass, String f1,
-            String f2)
+    public void removeBinaryConstraint(Class<? extends BinaryConstraintEnd> binaryConstraintClass, String f1)
     {
-        binaryConstraints.remove(binaryConstraintClass, f1, f2);
+        getWantedFurniture(f1).removeBinaryConstraint(binaryConstraintClass);
     }
     
     /**
@@ -206,36 +200,15 @@ public class WishList
      * @param furnitureID the identifier of the WantedFurniture
      * @return the set of constraints
      */
-    public Collection<UnaryConstraint> getUnaryConstraints(String elementId)
-            throws WantedElementNotFoundException
-    {
-        return getWantedElement(elementId).getUnaryConstraints();
+    public Collection<UnaryConstraint> getUnaryConstraints(String elementId) {
+        return getWantedFurniture(elementId).getUnaryConstraints();
     }
     
-    public Collection<BinaryConstraintAssociation> getBinaryConstraints(String elementId)
-            throws WantedElementNotFoundException
-    {
+    public Collection<BinaryConstraintEnd> getBinaryConstraints(String elementId) {
         if(!containsElement(elementId))
-            throw new WantedElementNotFoundException(elementId);
+            throw new WantedFurnitureNotFoundException(elementId);
         
-        return binaryConstraints.getConstraints(elementId);
-    }
-    
-    /**
-     * Returns all the binary constraints.
-     * @return List containing all the binary constraints.
-     */
-    public Collection<BinaryConstraintAssociation> getBinaryConstraints() {
-        return binaryConstraints.getConstraints();
-    }
-    
-    public int getPriority(String furnitureId)
-            throws WantedElementNotFoundException
-    {
-        if(!containsElement(furnitureId))
-            throw new WantedElementNotFoundException(furnitureId);
-        
-        return binaryConstraints.getPriority(furnitureId);
+        return getWantedFurniture(elementId).getBinaryConstraints();
     }
     
     /**
@@ -259,63 +232,34 @@ public class WishList
     }
     
     /**
-     * This is and abstraction to get an element that can be a wantedFurniture
-     * or a wantedFixed.
-     * @param id The identifier of the element
-     * @return The wanted element in the wishList with identifier id
-     * @throws WantedElementNotFoundException 
-     */
-    private WantedFurniture getWantedElement(String id) 
-            throws WantedElementNotFoundException {
-        if(!furniture.containsKey(id)) {
-            if (!fixed.containsKey(id))
-                throw new WantedElementNotFoundException(id);
-            return (WantedFurniture) fixed.get(id);
-        }
-                   
-        return (WantedFurniture) furniture.get(id);
-    }
-    
-    /**
-     * This is and abstraction to get an element from a given TreeMap
-     * @param id The identifier of the element
-     * @param map The TreeMap where to search for the element
-     * @return The wanted element in the map with identifier id
-     * @throws WantedElementNotFoundException 
-     */
-    private WantedFurniture getWantedElement(String id, TreeMap map) 
-            throws WantedElementNotFoundException {
-        if(!map.containsKey(id))
-            throw new WantedElementNotFoundException(id);
-                
-        return (WantedFurniture) map.get(id);
-    }
-    
-    /**
      * Returns a particular WantedFurniture.
      * @param id the identifier 
      * @return the WantedFurniture with the identifier id
      */    
-    public WantedFurniture getWantedFurniture(String id)
-            throws WantedElementNotFoundException {
-        return (WantedFurniture) getWantedElement(id, furniture);
+    public WantedFurniture getWantedFurniture(String id) {
+        if(! furniture.containsKey(id))
+            throw new WantedFurnitureNotFoundException(id);
+        
+        return furniture.get(id);
     }
     
-    public WantedFixed getWantedFixed(String id) 
-            throws WantedElementNotFoundException {
-        return (WantedFixed) getWantedElement(id, fixed);
+    public WantedFixed getWantedFixed(String id) {
+        if(! furniture.containsKey(id))
+            throw new WantedFixedNotFoundException(id);
+        
+        return fixed.get(id);
     }
     
     public void addUnaryConstraint(String elementId, UnaryConstraint unaryConstraint)
-            throws WantedElementNotFoundException
+            throws WantedFurnitureNotFoundException
     {
-        getWantedElement(elementId).addUnaryConstraint(unaryConstraint);
+        getWantedFurniture(elementId).addUnaryConstraint(unaryConstraint);
     }
     
     public void removeUnaryConstraint(String elementId, Class<? extends UnaryConstraint> unaryConstriantClass)
-            throws WantedElementNotFoundException
+            throws WantedFurnitureNotFoundException
     {
-        getWantedElement(elementId).removeUnaryConstraint(unaryConstriantClass);
+        getWantedFurniture(elementId).removeUnaryConstraint(unaryConstriantClass);
     }
     
     /**
@@ -333,5 +277,4 @@ public class WishList
     public Collection<WantedFixed> getWantedFixed() {
         return fixed.values();
     }
-    
 }

@@ -9,7 +9,7 @@ import interiores.core.business.BusinessException;
 public class WantedElementNotFoundException
     extends BusinessException
 {
-    public WantedElementNotFoundException(String wantedElementId) {
-        super("There is no element in your wish list identified as " + wantedElementId);
+    public WantedElementNotFoundException(String elementType, String elementId) {
+        super("There is no " + elementType + " in you wish list identified as " + elementId);
     }
 }

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public abstract class WantedFurniture
+public class WantedFurniture
     extends FurnitureVariable
 {
     @XmlElementWrapper

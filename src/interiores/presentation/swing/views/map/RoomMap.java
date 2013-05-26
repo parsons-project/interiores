@@ -153,14 +153,14 @@ public class RoomMap
     }
     
     protected void drawPillars(Graphics2D g) {
+              
+        for(Drawable pillar : pillars.values())
+            pillar.draw(g);
         
         if(pillarKey != null) {
             pillars.remove(pillarKey);
             pillarKey = null;
         }
-        
-        for(Drawable pillar : pillars.values())
-            pillar.draw(g);
     }
     
     public static int getPadding() {

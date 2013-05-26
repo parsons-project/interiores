@@ -5,6 +5,7 @@
 package interiores.business.models.constraints.unary;
 
 import interiores.business.models.Orientation;
+import interiores.core.business.BusinessException;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +17,17 @@ import java.util.List;
 public class WallConstraint
     extends AreaConstraint
 {
+    private Orientation[] orientations;
+    
     public WallConstraint()
     { }
     
+    
     public WallConstraint(int roomWidth, int roomDepth, Orientation[] orientations) {
         super();
-        
+        if (orientations.length == 0) 
+            throw new BusinessException("This constraint needs at least an orientation");
+        this.orientations = orientations;
         List<Point> validPositions = new ArrayList();
         
         for(Orientation orientation : orientations) {
@@ -45,5 +51,22 @@ public class WallConstraint
             
             changePositions(validPositions);
         }
+        
+    }
+    @Override
+    public String toString() {
+        String string = "";
+        boolean first = true;
+        for (Orientation orientation : orientations) {
+            if (first) {
+                string += orientation.toString();
+                first = false;
+            }
+            else
+                string += ", " + orientation;
+        }
+            
+        return "Walls: " + string;
+        
     }
 }

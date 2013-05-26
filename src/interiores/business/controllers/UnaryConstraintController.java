@@ -1,6 +1,8 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.InterioresController;
+import interiores.business.events.constraints.UnaryConstraintAddedEvent;
+import interiores.business.events.constraints.UnaryConstraintRemovedEvent;
 import interiores.business.models.Orientation;
 import interiores.business.models.Room;
 import interiores.business.models.constraints.UnaryConstraint;
@@ -10,6 +12,7 @@ import interiores.business.models.constraints.unary.DepthConstraint;
 import interiores.business.models.constraints.unary.MaterialConstraint;
 import interiores.business.models.constraints.unary.ModelConstraint;
 import interiores.business.models.constraints.unary.OrientationConstraint;
+import interiores.business.models.constraints.unary.PositionConstraint;
 import interiores.business.models.constraints.unary.PriceConstraint;
 import interiores.business.models.constraints.unary.WallConstraint;
 import interiores.business.models.constraints.unary.WidthConstraint;
@@ -95,10 +98,7 @@ public class UnaryConstraintController
     }
     
     public void addPositionAtConstraint(String furnitureId, int x, int y) {
-        List<Point> validPositions = new ArrayList();
-        validPositions.add(new Point(x, y));
-        
-        addPositionConstraint(furnitureId, validPositions);
+        addConstraint(furnitureId, new PositionConstraint(new Point(x, y)));
     }
     
     public void addPositionRangeConstraint(String furnitureId, int x1, int y1, int x2, int y2) {
@@ -119,6 +119,7 @@ public class UnaryConstraintController
     
     private void addConstraint(String furnitureId, UnaryConstraint unaryConstraint) {
         getWishList().addUnaryConstraint(furnitureId, unaryConstraint);
+        notify(new UnaryConstraintAddedEvent());
     }
     
     public void remove(String furnitureId, String unaryConstraintAlias) {
@@ -130,5 +131,6 @@ public class UnaryConstraintController
     
     public void remove(String furnitureId, Class<? extends UnaryConstraint> unaryConstraintClass) {
         getWishList().removeUnaryConstraint(furnitureId, unaryConstraintClass);
+        notify(new UnaryConstraintRemovedEvent());
     }
 }

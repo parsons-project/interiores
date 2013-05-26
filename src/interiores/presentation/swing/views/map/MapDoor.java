@@ -3,6 +3,7 @@ package interiores.presentation.swing.views.map;
 import interiores.business.models.Orientation;
 import interiores.business.models.room.FurnitureModel;
 import interiores.core.Debug;
+import interiores.utils.Dimension;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -13,13 +14,17 @@ import java.awt.Graphics2D;
 public class MapDoor
     extends WallElement
 {
-    private boolean hasToOpenOutwards;
+    private static final int DEPTH = Walls.getDepth();
+    
+    private boolean hasToOpenOutwards = false;
     protected Orientation orientation;
-        
+    
+    public MapDoor(String name, int length, Color color) {
+        super(name, new Dimension(length, DEPTH), color);
+    }
+    
     public MapDoor(String name, FurnitureModel model) {
         super(name, model);
-        
-        hasToOpenOutwards = false;
     }
     
     public void openOutwards() {

@@ -63,4 +63,8 @@ public class RoomElement
     public void unselect() {
         isSelected = false;
     }
+    
+    public void translate(int dx, int dy) {
+        rectangle.translate(dx, dy);
+    }
 }

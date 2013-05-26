@@ -11,6 +11,8 @@ public class PositionConstraint
     extends AreaConstraint
 {
     
+    private Point position;
+    
     public PositionConstraint()
     { }
     
@@ -20,6 +22,12 @@ public class PositionConstraint
      */
     public PositionConstraint(Point point) {
         super(Arrays.asList(point));
+        position = point;
+    }
+    
+    @Override
+    public String toString() {
+        return "Fixed to:  x = " + position.x + ", y = " + position.y;
     }
     
 }

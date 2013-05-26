@@ -5,6 +5,7 @@ import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.room.elements.WantedFixed;
 import interiores.core.Debug;
 import interiores.core.Utils;
+import interiores.utils.Dimension;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -27,9 +28,10 @@ public class RoomMap
     
     protected int width;
     protected int depth;
+    protected Dimension size; // Total size of the map
     private Map<String, RoomElement> furnitures;
     private Map<String, RoomElement> pillars;
-    private Walls walls;
+    protected Walls walls;
     private String status;
     private String time;
     
@@ -41,6 +43,15 @@ public class RoomMap
         walls = new Walls(roomWidth, roomDepth);
         status = "";
         time = "";
+        size = new Dimension(0, 0);
+    }
+    
+    public void setSize(java.awt.Dimension size) {
+        setSize(new Dimension(size.width, size.height));
+    }
+    
+    public void setSize(Dimension size) {
+        this.size = size;
     }
     
     public void clearFurniture() {
@@ -114,7 +125,7 @@ public class RoomMap
         g.scale(SCALE, SCALE);
         
         g.setColor(Color.white);
-        g.fillRect(0, 0, width, depth);
+        g.fillRect(0, 0, size.width, size.depth);
         
         drawElements(g);
         

@@ -1,18 +1,20 @@
-package interiores.presentation.swing.views;
+package interiores.presentation.swing.views.editor;
 
+import interiores.presentation.swing.views.editor.tools.EditorTool;
 import interiores.business.controllers.DesignController;
 import interiores.business.controllers.FixedElementController;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.RoomController;
 import interiores.business.events.backtracking.SolveDesignFinishedEvent;
 import interiores.business.events.backtracking.SolveDesignStartedEvent;
-import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
+import interiores.business.events.furniture.ElementUnselectedEvent;
 import interiores.business.events.room.RoomDesignChangedEvent;
 import interiores.business.events.room.WantedFixedChangedEvent;
 import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
+import interiores.presentation.swing.views.editor.tools.ToolManageable;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
 import interiores.presentation.swing.views.map.RoomMap;
 import interiores.presentation.swing.views.map.RoomMapDebugger;
@@ -20,17 +22,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Collection;
 import javax.swing.JPanel;
 
 /**
  *
  * @author hector
  */
-public class RoomMapPanel extends JPanel
+public class RoomMapPanel
+    extends JPanel
+    implements ToolManageable
 {
     private RoomController roomController;
     private FurnitureTypeController ftController;
@@ -40,6 +42,9 @@ public class RoomMapPanel extends JPanel
     
     private InteractiveRoomMap map;
     private RoomMapDebuggerFrame debuggerGui;
+    
+    private EditorTool activeTool;
+    private Point previous;
 
     /**
      * Creates new form RoomMap
@@ -58,6 +63,8 @@ public class RoomMapPanel extends JPanel
         
         if(Debug.isEnabled())
             debuggerGui = presentation.get(RoomMapDebuggerFrame.class);
+        
+        previous = new Point(0, 0);
         
         initMap();
     }
@@ -79,6 +86,11 @@ public class RoomMapPanel extends JPanel
         updateFixed();
         updateDesign();
     }
+    
+    @Override
+    public void setActiveTool(EditorTool activeTool) {
+        this.activeTool = activeTool;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this
@@ -86,60 +98,72 @@ public class RoomMapPanel extends JPanel
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
-        addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
-                formMouseClicked(evt);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                formMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                formMouseReleased(evt);
             }
         });
-        addKeyListener(new java.awt.event.KeyAdapter()
-        {
-            public void keyReleased(java.awt.event.KeyEvent evt)
-            {
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                formMouseMoved(evt);
+            }
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                formMouseDragged(evt);
+            }
+        });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
                 formKeyReleased(evt);
             }
         });
         setLayout(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseClicked
-    {//GEN-HEADEREND:event_formMouseClicked
-        requestFocus();
-        switch (evt.getButton()) {
-            case MouseEvent.BUTTON1: // left click
-                if(!evt.isControlDown())
-                    map.unselectAll();
-
-                map.select(evt.getX(), evt.getY());
-                break;
-            case MouseEvent.BUTTON3: // Right click
-                int x = evt.getX();
-                int y = evt.getY();
-                if (map.select(x, y)) {
-                    ArrayList<String> selected = new ArrayList(map.getSelected());
-                    ConstraintEditorFrame cef = swing.getNew(ConstraintEditorFrame.class);
-                    cef.setSelectedId(selected.get(selected.size() - 1));
-                    cef.setVisible(true);
-                }
-                map.unselect(x, y);
-                break;
-                
-        }
-                
-        repaint();
-    }//GEN-LAST:event_formMouseClicked
-
     private void formKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_formKeyReleased
     {//GEN-HEADEREND:event_formKeyReleased
+        boolean shouldRepaint = false;
         if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
             for(String id : map.getSelected())
                 ftController.unselect(id);
+            
+            shouldRepaint = true;
         }
+        
+        if(shouldRepaint || activeTool.keyReleased(evt, map))
+            repaint();
     }//GEN-LAST:event_formKeyReleased
+
+    private void formMouseDragged(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseDragged
+    {//GEN-HEADEREND:event_formMouseDragged
+        requestFocus();
+        
+        if(activeTool.mouseDragged(evt, map))
+            repaint();
+    }//GEN-LAST:event_formMouseDragged
+
+    private void formMouseMoved(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMouseMoved
+    {//GEN-HEADEREND:event_formMouseMoved
+        if(activeTool.mouseMoved(evt, map))
+            repaint();
+    }//GEN-LAST:event_formMouseMoved
+
+    private void formMousePressed(java.awt.event.MouseEvent evt)//GEN-FIRST:event_formMousePressed
+    {//GEN-HEADEREND:event_formMousePressed
+        requestFocus();
+        
+        if(activeTool.mousePressed(evt, map))        
+            repaint();
+    }//GEN-LAST:event_formMousePressed
+
+private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
+    if (activeTool.mouseReleased(evt, map))
+        repaint();
+}//GEN-LAST:event_formMouseReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
@@ -149,6 +173,7 @@ public class RoomMapPanel extends JPanel
     {
         if(map != null) {
             Graphics2D g2d = (Graphics2D) g;
+            map.setSize(getSize());
             map.draw(g2d);
         }
     }
@@ -197,8 +222,8 @@ public class RoomMapPanel extends JPanel
         map.addFurniture(name, area, color);
     }
     
-    @Listen(FurnitureTypeUnselectedEvent.class)
-    public void removeFurniture(FurnitureTypeUnselectedEvent evt) {
+    @Listen(ElementUnselectedEvent.class)
+    public void removeFurniture(ElementUnselectedEvent evt) {
         map.removeFurniture(evt.getName());
         repaint();
     }

@@ -1,5 +1,6 @@
-package interiores.presentation.swing.views;
+package interiores.presentation.swing.views.editor;
 
+import interiores.presentation.swing.views.editor.RoomMapPanel;
 import interiores.business.controllers.DesignController;
 import interiores.business.events.backtracking.ActualVariableSetEvent;
 import interiores.business.events.backtracking.NextValueEvent;

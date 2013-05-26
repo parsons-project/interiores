@@ -3,11 +3,11 @@ package interiores.business.controllers;
 import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.business.events.catalogs.FTModifiedEvent;
 import interiores.business.events.catalogs.FTSetModifiedEvent;
-import interiores.business.events.furniture.FurnitureTypeSelectedEvent;
-import interiores.business.events.furniture.FurnitureTypeUnselectedEvent;
 import interiores.business.exceptions.InvalidValueException;
 import interiores.business.models.RoomType;
 import interiores.business.models.SpaceAround;
+import interiores.business.events.furniture.ElementSelectedEvent;
+import interiores.business.events.furniture.ElementUnselectedEvent;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.room.FurnitureType;
@@ -68,7 +68,7 @@ public class FurnitureTypeController
     {        
         String id = getWishList().addWantedFurniture(name);
         
-        notify(new FurnitureTypeSelectedEvent(id));
+        notify(new ElementSelectedEvent(id));
     }
     
     /**
@@ -80,7 +80,7 @@ public class FurnitureTypeController
     {
         getWishList().removeWantedFurniture(name);
         
-        notify(new FurnitureTypeUnselectedEvent(name));
+        notify(new ElementUnselectedEvent(name));
     }
     
     /**

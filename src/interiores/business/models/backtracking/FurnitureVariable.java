@@ -123,7 +123,6 @@ public class FurnitureVariable
     //
     @Override
     public void trimDomain(Variable variable, int iteration) {
-        // ITERATION IS NOT NEEDED HERE
         this.iteration = iteration;
         // 1) preliminar move of all positions
         forwardIteration();

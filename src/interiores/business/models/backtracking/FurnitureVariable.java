@@ -127,7 +127,7 @@ public class FurnitureVariable
         forwardIteration();
                
         // 2) Run trimmers
-        for (Map.Entry<Class, Constraint> constraint : furnitureConstraints.entrySet()) {
+        for (Constraint constraint : furnitureConstraints.values()) {
             if (constraint instanceof BacktrackingTimeTrimmer)
                 ((BacktrackingTimeTrimmer) constraint).trim(this);
         }
@@ -189,7 +189,7 @@ public class FurnitureVariable
     }
 
         void triggerPreliminarTrimmers() {
-        for (Map.Entry<Class, Constraint> constraint : furnitureConstraints.entrySet()) {
+        for (Constraint constraint : furnitureConstraints.values()) {
             if (constraint instanceof PreliminarTrimmer) {
                 PreliminarTrimmer preliminarTrimmer = (PreliminarTrimmer) constraint;
                 preliminarTrimmer.preliminarTrim(this);

@@ -35,11 +35,11 @@ public class Domain {
     public Domain(HashSet<FurnitureModel> models, Dimension roomSize,
             int variableCount) {
         
-        domain = new Stage[variableCount];
+        domain = new Stage[variableCount+1];
         
         domain[0] = new Stage(models, roomSize);
         
-        for (int i = 1; i < variableCount; ++i) {
+        for (int i = 1; i < variableCount+1; ++i) {
             domain[i] = new Stage();
         }
         

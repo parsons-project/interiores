@@ -27,6 +27,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -567,6 +569,10 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
         private javax.swing.JLabel passiveSpaceLabel = new javax.swing.JLabel();
         private javax.swing.JLabel passiveSpaceHint = new javax.swing.JLabel();
         private javax.swing.JTextField passiveSpaceField = new javax.swing.JTextField();
+        
+        private boolean hasWidthChanged = false;
+        private boolean hasDepthChanged = false;
+        private boolean hasPassiveSpaceChanged = false;
                 
         /**
          * Builds a visual representation of the item in the currently active catalog
@@ -607,42 +613,66 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
             ftname.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
             ftname.setText(fullname + ":");
             
-            // Width and depth fields
+            // Width setup and events
             widthLabel.setText("This furniture should have a width between");
             widthLabel2.setText("and");
             widthLabel3.setText("cm");
             minWidthField.setText(Integer.toString(ftController.getWidthRange(actualName).min));
             maxWidthField.setText(Integer.toString(ftController.getWidthRange(actualName).max));
+            minWidthField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) { hasWidthChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
+                @Override
+                public void removeUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
+             });
+            maxWidthField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) {  hasWidthChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
+                @Override
+                public void removeUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
+             });
             minWidthField.addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
-                public void focusLost(java.awt.event.FocusEvent evt) {
-                    widthRangeUpdate();
-                }
+                public void focusLost(java.awt.event.FocusEvent evt) { if (hasWidthChanged) widthRangeUpdate(); }
             });
             maxWidthField.addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
-                public void focusLost(java.awt.event.FocusEvent evt) {
-                    widthRangeUpdate();
-                }
+                public void focusLost(java.awt.event.FocusEvent evt) { if (hasWidthChanged) widthRangeUpdate(); }
             });
             
-            
+            // Depth setup and events
             depthLabel.setText("And a depth between");
             depthLabel2.setText("and");
             depthLabel3.setText("cm");
             minDepthField.setText(Integer.toString(ftController.getDepthRange(actualName).min));
             maxDepthField.setText(Integer.toString(ftController.getDepthRange(actualName).max));
+            minDepthField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) { hasDepthChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) { hasDepthChanged = true; }
+                @Override
+                public void removeUpdate(DocumentEvent e) { hasDepthChanged = true; }
+             });
+            maxDepthField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) { hasDepthChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) { hasDepthChanged = true; }
+                @Override
+                public void removeUpdate(DocumentEvent e) { hasDepthChanged = true; }
+             });
             minDepthField.addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
-                public void focusLost(java.awt.event.FocusEvent evt) {
-                    depthRangeUpdate();
-                }
+                public void focusLost(java.awt.event.FocusEvent evt) { if (hasDepthChanged) depthRangeUpdate(); }
             });
             maxDepthField.addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
-                public void focusLost(java.awt.event.FocusEvent evt) {
-                    depthRangeUpdate();
-                }
+                public void focusLost(java.awt.event.FocusEvent evt) { if (hasDepthChanged) depthRangeUpdate(); }
             });
             
             // Passive space fields
@@ -650,16 +680,19 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
             passiveSpaceHint.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
             passiveSpaceHint.setForeground(new java.awt.Color(153, 153, 153));
             passiveSpaceHint.setText("Format: N,E,S,W. e.g. 10,0,0,20");
-            int[] ps = ftController.getPassiveSpace(actualName);
-            String passive = ps[0] + ", " + ps[1] + ", " + ps[2] + ", " + ps[3];
-            passiveSpaceField.setText(passive);
+            passiveSpaceField.setText(getFormattedPassiveSpace());
+            passiveSpaceField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) { hasPassiveSpaceChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) { hasPassiveSpaceChanged = true; }
+                @Override
+                public void removeUpdate(DocumentEvent e) { hasPassiveSpaceChanged = true; }
+             });
             passiveSpaceField.addFocusListener(new java.awt.event.FocusAdapter() {
                 @Override
-                public void focusLost(java.awt.event.FocusEvent evt) {
-                    
-                }
+                public void focusLost(java.awt.event.FocusEvent evt) { if (hasPassiveSpaceChanged) passiveSpaceUpdate(); }
             });
-            
 
             // Finally, we lay out all the visual components, assemble them and finish
             org.jdesktop.layout.GroupLayout innerPanelLayout = new org.jdesktop.layout.GroupLayout(innerPanel);
@@ -769,12 +802,69 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
             jPanel1.remove(outerPanel);
         }
         
+        /**
+         * Consults all over again the information of the item and updates its state
+         */
+        public void updateChanges() {
+            minWidthField.setText(Integer.toString(ftController.getWidthRange(actualName).min));
+            maxWidthField.setText(Integer.toString(ftController.getWidthRange(actualName).max));
+            minDepthField.setText(Integer.toString(ftController.getDepthRange(actualName).min));
+            maxDepthField.setText(Integer.toString(ftController.getDepthRange(actualName).max));
+            passiveSpaceField.setText(getFormattedPassiveSpace());
+        }     
+        
         private void widthRangeUpdate() {
-            
+            hasWidthChanged = false;
+            String min = minWidthField.getText();
+            String max = maxWidthField.getText();
+            if (min.matches("[0-9]+") && max.matches("[0-9]+")) {
+                performModification();
+                ftController.setWidthRange(actualName, Integer.parseInt(min), Integer.parseInt(max));
+            }
+            else {
+                String msg = "Width should be a positive number";
+                JOptionPane.showMessageDialog(FurnitureTypeCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
+                minWidthField.setText(Integer.toString(ftController.getWidthRange(actualName).min));
+                maxWidthField.setText(Integer.toString(ftController.getWidthRange(actualName).max));
+            }
         }
         
         private void depthRangeUpdate() {
-            
+            hasDepthChanged = false;
+            String min = minDepthField.getText();
+            String max = maxDepthField.getText();
+            if (min.matches("[0-9]+") && max.matches("[0-9]+")) {
+                performModification();
+                ftController.setDepthRange(actualName, Integer.parseInt(min), Integer.parseInt(max));
+            }
+            else {
+                String msg = "Depth should be a positive number";
+                JOptionPane.showMessageDialog(FurnitureTypeCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
+                minDepthField.setText(Integer.toString(ftController.getDepthRange(actualName).min));
+                maxDepthField.setText(Integer.toString(ftController.getDepthRange(actualName).max));
+            }
+        }
+        
+        private void passiveSpaceUpdate() {
+            hasPassiveSpaceChanged = false;
+            String str = passiveSpaceField.getText();
+            str = str.replace(" ","");
+            String[] s_ps = str.split(",");
+            String passive = getFormattedPassiveSpace();
+            try {
+                performModification();
+                int[] i_ps = new int[4]; for(int i = 0; i < 4; i++) i_ps[i] = Integer.parseInt(s_ps[i]);
+                ftController.setPassiveSpace(actualName, i_ps);
+            }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(FurnitureTypeCatalogFrame.this,e.getMessage(),"Invalid value",JOptionPane.ERROR_MESSAGE);
+                passiveSpaceField.setText(passive);
+            }
+        }
+        
+        private String getFormattedPassiveSpace() {
+            int[] ps = ftController.getPassiveSpace(actualName);
+            return ps[0] + ", " + ps[1] + ", " + ps[2] + ", " + ps[3];
         }
         
     }

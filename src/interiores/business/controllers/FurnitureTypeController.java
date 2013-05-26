@@ -127,6 +127,7 @@ public class FurnitureTypeController
     public void setPassiveSpace(String ftname, int[] ps) {
         SpaceAround sa = new SpaceAround(ps[0],ps[1],ps[2],ps[3]);
         getForWrite(ftname).setPassiveSpace(sa);
+        notify(new FTModifiedEvent(get(ftname).getFullName(),ftname));
     }
 
     /**

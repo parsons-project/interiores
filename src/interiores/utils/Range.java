@@ -15,11 +15,14 @@ public class Range {
     @XmlAttribute
     public int max;
     
-    public Range() {
+    public Range() throws InstantiationException {
         this(0, 0);
     }
     
-    public Range(int min, int max) {
+    public Range(int min, int max) throws InstantiationException {
+        if (min > max)
+            throw new InstantiationException("Max should be greater or equal than min");
+        
         this.min = min;
         this.max = max;
     }

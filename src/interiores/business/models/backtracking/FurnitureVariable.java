@@ -78,6 +78,7 @@ public class FurnitureVariable
         domain = new Domain(models, roomSize, variableCount);
         
         initializeMaxMinFields();
+        undoAssignValue();
     }
     
     public Collection<Constraint> getConstraints() {

@@ -6,6 +6,7 @@ import interiores.business.models.backtracking.FurnitureValue;
 import interiores.core.Event;
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 /**
  *
@@ -29,6 +30,10 @@ public class NextValueEvent
     public OrientedRectangle getArea()
     {
         return value.getArea();
+    }
+    
+    public Rectangle getWholeArea() {
+        return value.getWholeArea();
     }
     
     public String getModelName()

@@ -1,9 +1,11 @@
 package interiores.presentation.swing.views.map;
 
+import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +19,7 @@ public class RoomMapDebugger
     extends InteractiveRoomMap
 {
     private static final Color COLOR_GRID = Color.decode("#EEEEEE");
+    private static final Color COLOR_AREA = new Color(0, 0, 0, 70);
     private static final String[] COLOR_POINTS = new String[]{
                                                                 "#C3D9FF", // Gmail blue
                                                                 "#C79810", // 43 Things Gold
@@ -36,6 +39,7 @@ public class RoomMapDebugger
     private List<String> furnitures;
     private Map<String, List<Point>> points;
     private Map<String, Color> colors;
+    private Map<String, Rectangle> areas;
     private String furnitureActive;
         
     public RoomMapDebugger(int roomWidth, int roomDepth) {
@@ -47,6 +51,7 @@ public class RoomMapDebugger
         furnitures = new ArrayList();
         points = new HashMap();
         colors = new HashMap();
+        areas = new HashMap();
     }
     
     public void enableGrid() {
@@ -94,6 +99,22 @@ public class RoomMapDebugger
         furniturePoints.add(p);
     }
     
+    public void addFurniture(String name, OrientedRectangle area, Color color, Rectangle wholeArea) {
+        addFurniture(name, area, color);
+        
+        Rectangle wholeAreaTranslated = new Rectangle(wholeArea);
+        wholeAreaTranslated.translate(getPadding(), getPadding());
+        
+        areas.put(name, wholeAreaTranslated);
+    }
+    
+    @Override
+    public void removeFurniture(String name) {
+        super.removeFurniture(name);
+        
+        areas.remove(name);
+    }
+    
     public void setActive(String name)
     {
         if(! points.containsKey(name)) {
@@ -113,6 +134,11 @@ public class RoomMapDebugger
             
             for(Point p : points.get(furnitureName))
                 g.fillRect(p.x + getPadding(), p.y + getPadding(), RESOLUTION, RESOLUTION);
+            
+            if(areas.containsKey(furnitureName)) {
+                g.setColor(COLOR_AREA);
+                g.fill(areas.get(furnitureName));
+            }
         }
         
         if(isGridEnabled)

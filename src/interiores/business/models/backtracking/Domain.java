@@ -139,7 +139,12 @@ public class Domain {
         domain[0].eliminateExceptO(validOrientations);
     }
     
-    
+     void trimExceptO(HashSet<Orientation> validOrientations, int iteration) {
+        //modify domain[iteration+1]
+        HashSet<Orientation> discardedModels = domain[iteration+1].intersectionO(validOrientations);
+        //modify domain[iteration]
+        domain[iteration].unionO(discardedModels);
+    }
     
     
     
@@ -196,6 +201,8 @@ public class Domain {
 //
 //        domain[iteration].merge(domain[iteration+1]);
 //    }
+
+   
 
 
 

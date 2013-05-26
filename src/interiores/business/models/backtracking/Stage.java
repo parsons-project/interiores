@@ -271,6 +271,17 @@ public class Stage {
         return notContainedModels;
     }
     
+    HashSet<Orientation> intersectionO(HashSet<Orientation> validOrientations) {
+        HashSet<Orientation> notContainedOrientations = new HashSet<Orientation>();
+        for (Orientation orientation : orientations) {
+            if (! validOrientations.contains(orientation)) {
+                notContainedOrientations.add(orientation);
+                orientations.remove(orientation);
+            }
+        }
+        return notContainedOrientations;
+    }
+        
     void unionP(Area area) {
         positions.union(area);
     }
@@ -358,5 +369,7 @@ public class Stage {
             if (! validOrientations.contains(it.next()))
                 it.remove();
     }
+
+
 
 }

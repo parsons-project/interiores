@@ -13,7 +13,7 @@ import interiores.business.models.constraints.furniture.PreliminarTrimmer;
  * @author alvaro
  */
 public class StraightFacingConstraint
-    extends BinaryConstraintEnd implements PreliminarTrimmer {
+    extends BinaryConstraintEnd {
     
     private int maxDist = 1000;
     
@@ -44,11 +44,6 @@ public class StraightFacingConstraint
 
     @Override
     public void trim2(FurnitureVariable variable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void preliminarTrim(FurnitureVariable variable) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }  

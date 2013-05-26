@@ -48,7 +48,9 @@ public class FurnitureVariable
      * Value of the cheapest model
      */
     @XmlTransient
-    private float minPrice = -1; // minPrice not calculated yet
+    private float minPrice = -1;
+    private int maxWidth = -1;
+    private int maxDepth = -1;
     
     /**
      * Default constructor.
@@ -184,29 +186,23 @@ public class FurnitureVariable
      * Returns the price of the cheapest model.
      * @return 
      */
-    // pre: iteration == 0
     public float getMinPrice() {
-
-        if (minPrice >= 0) {
-            //it is already calculated
-            return minPrice;
-        }
-        else {
-            Iterator<FurnitureModel> it = domain.getModels(0).iterator();
-            if (it.hasNext()) {
-                FurnitureModel model = it.next();
+        return minPrice;
+    }
+    
+    private void initializeMaxMinFields() {
+        minPrice = -1;
+        maxWidth = 0;
+        maxDepth = 0;
+        for (FurnitureModel model : domain.getModels(0)) {
+            if (minPrice == -1 || model.getPrice() < minPrice)
                 minPrice = model.getPrice();
-                while (it.hasNext()) {
-                    model = (FurnitureModel) it.next();
-                    if (model.getPrice() < minPrice) minPrice = model.getPrice();
-                }
-            }
-            else {
-                //there are no models
-                minPrice = 0;
-            }
-            return minPrice;
+            if (model.getSize().width > maxWidth)
+                maxWidth = model.getSize().width;
+            if (model.getSize().depth > maxDepth)
+                maxDepth = model.getSize().depth;
         }
+        if (minPrice == -1) minPrice = 0;
     }
     
     void trimTooExpensiveModels(float maxPrice) {
@@ -314,6 +310,10 @@ public class FurnitureVariable
         domain.trimExceptM(validModels, iteration);
     }
 
+    public void trimExceptO(HashSet<Orientation> validOrientations) {
+        domain.trimExceptO(validOrientations, iteration);
+    }
+        
     void triggerPreliminarTrimmers() {
         Iterator<Constraint> it = furnitureConstraints.iterator();
         while(it.hasNext()) {
@@ -333,6 +333,14 @@ public class FurnitureVariable
             if (! ((InexhaustiveTrimmer) constraint).isSatisfied(this))
                 return false;
         return true;
+    }
+
+    public int getMaxWidth() {
+        return maxWidth;
+    }
+
+    public int getMaxDepth() {
+        return maxDepth;
     }
     
     

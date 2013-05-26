@@ -70,9 +70,10 @@ public class DoorTool
     }
     
     private int getLength(Point normPos) {
-        int distance = (int) position.distance(normPos);
+        if(wallWhere == Orientation.E || wallWhere == Orientation.W)
+            return Math.abs(position.y - normPos.y);
         
-        return distance - distance % RoomMap.getResolution();
+        return Math.abs(position.x - normPos.x);
     }
     
     private int getDisplacement() {

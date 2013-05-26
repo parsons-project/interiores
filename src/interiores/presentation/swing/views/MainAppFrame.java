@@ -3,14 +3,15 @@ package interiores.presentation.swing.views;
 import interiores.business.controllers.RoomController;
 import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomLoadedEvent;
-import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.core.presentation.swing.SwingException;
 import interiores.presentation.swing.helpers.FileChooser;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
@@ -167,10 +168,20 @@ public class MainAppFrame extends JFrame
 
         generalHelpMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
         generalHelpMenu.setText("General");
+        generalHelpMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generalHelpMenuActionPerformed(evt);
+            }
+        });
         helpMenu.add(generalHelpMenu);
 
         terminalHelpMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0));
         terminalHelpMenu.setText("Terminal");
+        terminalHelpMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                terminalHelpMenuActionPerformed(evt);
+            }
+        });
         helpMenu.add(terminalHelpMenu);
 
         aboutHelpMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0));
@@ -227,6 +238,14 @@ public class MainAppFrame extends JFrame
         else
             unloadComponent(terminal);
     }//GEN-LAST:event_terminalMenuCheckboxActionPerformed
+
+    private void generalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generalHelpMenuActionPerformed
+        openURL("/help/general.html");  
+    }//GEN-LAST:event_generalHelpMenuActionPerformed
+
+    private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalHelpMenuActionPerformed
+        openURL("/help/terminal.html");
+    }//GEN-LAST:event_terminalHelpMenuActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutHelpMenu;
@@ -307,10 +326,15 @@ public class MainAppFrame extends JFrame
         pack();
     }
     
-    
-    private void printComponents() {
-        Debug.println("Components in the container: " + getComponentCount());
-        for (Component c : getComponents())
-            Debug.println("Component: " + c.toString());
+    private void openURL(String url) {
+        Desktop desktop = Desktop.getDesktop();
+        if(desktop.isSupported(Desktop.Action.BROWSE)) {
+            try {
+                desktop.browse(new URI(url));
+            }
+            catch (Exception exc) {
+                throw new SwingException("Desktop api not supported", exc);
+            }
+        }
     }
 }

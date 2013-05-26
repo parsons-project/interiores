@@ -155,6 +155,8 @@ public class Stage {
      */
     public void initializeIterators() {
         
+        iterableModels = new ArrayList<FurnitureModel>();
+        iterableOrientations = new ArrayList<Orientation>();
         //we put them in lists so we can sort them
         iterableModels.addAll(models);
         iterableOrientations.addAll(orientations);
@@ -282,20 +284,20 @@ public class Stage {
     int size() {
         int modelCount = models.size();
         int oriCount = orientations.size();
-        int areaSize = iterablePositions.areaSize();
+        int areaSize = positions.areaSize();
         return modelCount * oriCount * areaSize;
     }
     
     //SET OPERATION: THE DEFINITIVE ONES
     
         void swapPositions(Stage stage) {
-        Area aux = this.iterablePositions;
-        this.iterablePositions = stage.iterablePositions;
-        stage.iterablePositions = aux;
+        Area aux = this.positions;
+        this.positions = stage.positions;
+        stage.positions = aux;
         
-        Iterator it = positionIterator;
-        positionIterator = stage.positionIterator;
-        stage.positionIterator = it;
+//        Iterator it = positionIterator;
+//        positionIterator = stage.positionIterator;
+//        stage.positionIterator = it;
     }
 
     void swapModels(Stage stage) {
@@ -303,9 +305,9 @@ public class Stage {
         this.models = stage.models;
         stage.models = aux;
         
-        Iterator it = modelIterator;
-        modelIterator = stage.modelIterator;
-        stage.modelIterator = it;
+//        Iterator it = modelIterator;
+//        modelIterator = stage.modelIterator;
+//        stage.modelIterator = it;
     }
 
     void swapOrientations(Stage stage) {
@@ -313,9 +315,9 @@ public class Stage {
         this.orientations = stage.orientations;
         stage.orientations = aux;
         
-        Iterator it = orientationIterator;
-        orientationIterator = stage.orientationIterator;
-        stage.orientationIterator = it;
+//        Iterator it = orientationIterator;
+//        orientationIterator = stage.orientationIterator;
+//        stage.orientationIterator = it;
     }
     
     
@@ -326,9 +328,9 @@ public class Stage {
      * @return 
      */
     Area intersectionP(Area area) {
-        Area startingPositions = new Area(iterablePositions);
-        iterablePositions.intersection(area);
-        startingPositions.difference(iterablePositions);
+        Area startingPositions = new Area(positions);
+        positions.intersection(area);
+        startingPositions.difference(positions);
         return startingPositions;
     }
 
@@ -367,7 +369,7 @@ public class Stage {
     }
         
     void unionP(Area area) {
-        iterablePositions.union(area);
+        positions.union(area);
     }
     
     void unionM(HashSet<FurnitureModel> newModels) {
@@ -389,9 +391,9 @@ public class Stage {
     }
 
     Area difference(Area area) {
-        Area startingPositions = new Area(iterablePositions);
-        iterablePositions.difference(area);
-        startingPositions.difference(iterablePositions);
+        Area startingPositions = new Area(positions);
+        positions.difference(area);
+        startingPositions.difference(positions);
         return startingPositions;
     }
     
@@ -411,7 +413,7 @@ public class Stage {
     }
 
     void eliminateExceptP(Area validPositions) {
-        iterablePositions.intersection(validPositions);
+        positions.intersection(validPositions);
     }
 
 }

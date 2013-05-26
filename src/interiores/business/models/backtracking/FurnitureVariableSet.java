@@ -234,6 +234,8 @@ public class FurnitureVariableSet
                 smallestModelSize[i] = variable.smallestModelSize();
                 if (smallestModelSize[i] > maxSmallestModelArea)
                     maxSmallestModelArea = smallestModelSize[i];
+                
+                ++i;
             }
 
             //calculate the weight of each factor for each variable and the final
@@ -244,9 +246,16 @@ public class FurnitureVariableSet
 
             for (i = 0; i < unassignedVariables.size(); ++i) {
 
-                int domainSizeWeight = (domainSize[i] * DOMAIN_SIZE_FACTOR) / maxDomainSize;
-                int binaryConstraintsWeight = maxBinaryConstraints -
+                int domainSizeWeight;
+                if (maxDomainSize > 0) domainSizeWeight =
+                        (domainSize[i] * DOMAIN_SIZE_FACTOR) / maxDomainSize;
+                else domainSizeWeight = 0;
+                
+                int binaryConstraintsWeight;
+                if (maxBinaryConstraints > 0) binaryConstraintsWeight = maxBinaryConstraints -
                         (binaryConstraintsLoad[i] * BINARY_CONSTRAINTS_FACTOR) / maxBinaryConstraints;
+                else binaryConstraintsWeight = 0;
+                
                 int smallestModelSizeWeight =
                         (smallestModelSize[i] * SMALLEST_MODEL_FACTOR) / maxSmallestModelArea;
 
@@ -402,6 +411,8 @@ public class FurnitureVariableSet
     //      //restricted proportionally to the weight of bc.
     private void buildMatrixOfDependence() {
 
+        matrixOfDependence = new HashMap<Entry<String, String>, Integer>();
+                
         for (FurnitureVariable v : unassignedVariables) {
             for (Map.Entry<Class, Constraint> constraint : v.furnitureConstraints.entrySet()) {
                 if (constraint instanceof BinaryConstraintEnd) {

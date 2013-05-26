@@ -14,4 +14,11 @@ class GridPoint {
         this.y = y;
     }
     
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("(" + x + "," + y + ")");
+        return result.toString();
+    }
+    
 }

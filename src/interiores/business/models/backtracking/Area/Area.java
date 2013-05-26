@@ -232,6 +232,7 @@
 package interiores.business.models.backtracking.Area;
 
 import interiores.business.models.Orientation;
+import interiores.core.Debug;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -496,7 +497,7 @@ public class Area
             }
             if (VerticalCount % 2 == 1)
                 verticalEdges.add(new VerticalEdge(vertex.x, closestBelow.y, vertex.y));
-            else verticalEdges.add(new VerticalEdge(vertex.x, vertex.y, closestAbove.y));
+            //else verticalEdges.add(new VerticalEdge(vertex.x, vertex.y, closestAbove.y));
 
             //horizontal edge
             int HorizontalCount = 0;
@@ -518,7 +519,7 @@ public class Area
             }
             if (HorizontalCount % 2 == 1)
                 horizontalEdges.add(new HorizontalEdge(vertex.y, closestRight.x, vertex.x));
-            else horizontalEdges.add(new HorizontalEdge(vertex.y, vertex.x, closestLeft.x));              
+            //else horizontalEdges.add(new HorizontalEdge(vertex.y, vertex.x, closestLeft.x));              
         }
     }
     
@@ -577,16 +578,19 @@ public class Area
         boolean rightE, downE, leftE;
         rightE = downE = leftE = false;
         
-        //find which line segments are vertexs
-        for (VerticalEdge v : verticalEdgesStoredByX.get(p.x)) {
-            if (v.contain(new VerticalEdge(p.x, p.y+1, p.y)))
-                downE = true;
+        //find which line segments are edges
+        if (verticalEdgesStoredByX.containsKey(p.x)) {
+            for (VerticalEdge v : verticalEdgesStoredByX.get(p.x))
+                if (v.contain(new VerticalEdge(p.x, p.y+1, p.y)))
+                    downE = true;
         }
-        for (HorizontalEdge v : horizontalEdgesStoredByY.get(p.y)) {
-            if (v.contain(new HorizontalEdge(p.y, p.x+1, p.x)))
-                rightE = true;
-            if (v.contain(new HorizontalEdge(p.y, p.x, p.x-1)))
-                leftE = true;
+        if (horizontalEdgesStoredByY.containsKey(p.y)) {
+            for (HorizontalEdge v : horizontalEdgesStoredByY.get(p.y)) {
+                if (v.contain(new HorizontalEdge(p.y, p.x+1, p.x)))
+                    rightE = true;
+                if (v.contain(new HorizontalEdge(p.y, p.x, p.x-1)))
+                    leftE = true;
+            }
         }
         
         //check if bottomRight is contained with usual method
@@ -708,17 +712,20 @@ public class Area
      */
     public Rectangle getBoundingRectangle() {
         int maxX, minX, maxY, minY;
+        maxX = minX = maxY = minY = 0;
         
         Iterator<GridPoint> it = vertexs.iterator();
-        GridPoint v = it.next();
-        maxX = minX = v.x;
-        maxY = minY = v.y;
-        while (it.hasNext()) {
-            v = it.next();
-            if (v.x > maxX) maxX = v.x;
-            else if (v.x < minX) minX = v.x;
-            if (v.y > maxY) maxY = v.y;
-            else if (v.y < minY) minY = v.y;
+        if (it.hasNext()) {
+            GridPoint v = it.next();
+            maxX = minX = v.x;
+            maxY = minY = v.y;
+            while (it.hasNext()) {
+                v = it.next();
+                if (v.x > maxX) maxX = v.x;
+                else if (v.x < minX) minX = v.x;
+                if (v.y > maxY) maxY = v.y;
+                else if (v.y < minY) minY = v.y;
+            }
         }
         return new Rectangle(minX, minY, maxX-minX, maxY-minY);
     }
@@ -761,6 +768,9 @@ public class Area
      * @return an estimation of the size.
      */
     public int areaSize() {
+        if (vertexs.isEmpty()) return 0;
+        
+        Debug.println(this.toString());
         Rectangle boundingRectangle = getBoundingRectangle();
         int xMin = boundingRectangle.x;
         int xMax = boundingRectangle.x + boundingRectangle.width;
@@ -772,10 +782,14 @@ public class Area
         for (int i = 0; i < SAMPLE_SIZE; ++i) {
             int Xrand = xMin + randomGenerator.nextInt(boundingRectangle.width);
             int Yrand = yMin + randomGenerator.nextInt(boundingRectangle.height);
+            Debug.println("Random point: " + Xrand + ","+Yrand);
             if (contains(new Square(Xrand, Yrand))) ++squareDensity;
         }
         
         int boundingRectangleSize = (xMax - xMin) * (yMax - yMin);
+        Debug.println("boundingRectangleSize: " + boundingRectangleSize);
+        Debug.println("squareDensity: " + squareDensity + "/" + SAMPLE_SIZE);
+        
         return (boundingRectangleSize * squareDensity) / SAMPLE_SIZE;
     }
 
@@ -930,6 +944,21 @@ public class Area
         
     }
     
-    
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String nl = System.getProperty("line.separator");
+
+        result.append("Area:" + nl);
+        result.append("List of vertexs:" + nl);
+        for (GridPoint vertex : vertexs)
+            result.append(vertex.toString() + "\t");
+        
+        result.append(nl + "List of vertical segments:" + nl);
+        for (VerticalEdge edge : verticalEdges)
+            result.append(edge.toString() + "\t");
+        result.append(nl);
+        return result.toString();
+    }
 
 }

@@ -54,5 +54,11 @@ class VerticalEdge {
     boolean contain(VerticalEdge e) {
         return yh >= e.yh && yl <= e.yl;
     }
-    
+        
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("(" + x + "," + yh + ".." + yl + ")");
+        return result.toString();
+    }
 }

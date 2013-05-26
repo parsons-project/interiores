@@ -6,6 +6,7 @@ import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
 import interiores.business.models.room.elements.WantedFurniture;
+import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import java.util.Collection;
 import java.util.Map;
@@ -21,7 +22,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlSeeAlso({MaxDistanceConstraint.class, MinDistanceConstraint.class})
 public abstract class BinaryConstraintEnd
     extends Constraint
-    implements InexhaustiveTrimmer, BacktrackingTimeTrimmer
+    implements InexhaustiveTrimmer, BacktrackingTimeTrimmer, Cloneable
 {
     
     private static Map<String, Class<? extends Constraint>> availableConstraints = new TreeMap();
@@ -105,6 +106,8 @@ public abstract class BinaryConstraintEnd
         if(end.isBounding())
             return;
         
+        Debug.println("Bounding constraint...");
+        
         BinaryConstraintEnd otherEnd = (BinaryConstraintEnd) clone();
         otherEnd.otherVariable = start;
         
@@ -114,6 +117,8 @@ public abstract class BinaryConstraintEnd
     public void unbound() {
         if(otherVariable.isConstant())
             return;
+        
+        Debug.println("Unbounding constraint...");
         
         WantedFurniture end = (WantedFurniture) otherVariable;
         end.removeBinaryConstraint(getClass());

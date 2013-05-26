@@ -1,6 +1,7 @@
 package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
+import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.room.elements.WantedFixed;
 import interiores.presentation.swing.views.map.doors.RightDoor;
 import java.awt.Color;
@@ -113,20 +114,22 @@ public class Walls implements Drawable {
     }
     
     public void addDoor(WantedFixed door) {        
-        Point key = door.getPosition();
+        FurnitureValue value = door.getAssignedValue();
+        Point key = value.getPosition();
         
         // Only right doors for now :/
-        RightDoor mapDoor = new RightDoor(door.getName(), door.getModel(), door.getPosition(),
-                door.getOrientation());
+        RightDoor mapDoor = new RightDoor(door.getName(), value.getModel(), key,
+                value.getOrientation());
         
         elements.put(key, mapDoor);
     }
     
     public void addWindow(WantedFixed window) {
-        Point key = window.getPosition();
+        FurnitureValue value = window.getAssignedValue();
+        Point key = value.getPosition();
         
-        MapWindow mapWindow = new MapWindow(window.getName(), window.getModel(), window.getPosition(),
-                window.getOrientation());
+        MapWindow mapWindow = new MapWindow(window.getName(), value.getModel(), value.getPosition(),
+                value.getOrientation());
         
         elements.put(key, mapWindow);
     }

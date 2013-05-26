@@ -286,9 +286,6 @@ public class Stage {
         return modelCount * oriCount * areaSize;
     }
     
-
-    
-    
     //SET OPERATION: THE DEFINITIVE ONES
     
         void swapPositions(Stage stage) {

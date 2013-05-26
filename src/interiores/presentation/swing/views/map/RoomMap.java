@@ -70,7 +70,7 @@ public class RoomMap
     }
     
     public void addPillar(WantedFixed pillar) {
-        OrientedRectangle area = pillar.getActiveArea();
+        OrientedRectangle area = pillar.getAssignedValue().getArea();
         
         pillars.put(pillar.getName(), new RoomElement(pillar.getName(), area));
     }

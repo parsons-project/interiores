@@ -6,17 +6,13 @@ import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.BacktrackingTimeTrimmer;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
-import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.business.models.room.FurnitureModel;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
-import java.awt.Rectangle;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -64,7 +60,6 @@ public class FurnitureVariable
     {
         super(typeName);
         
-        initializeMaxMinFields();
         furnitureConstraints = new HashMap();
     }
     
@@ -81,6 +76,8 @@ public class FurnitureVariable
     
     public void createDomain(HashSet<FurnitureModel> models, Dimension roomSize, int variableCount) {
         domain = new Domain(models, roomSize, variableCount);
+        
+        initializeMaxMinFields();
     }
     
     public Collection<Constraint> getConstraints() {

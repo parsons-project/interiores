@@ -10,6 +10,7 @@ import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.business.models.room.elements.WantedElementSet;
 import interiores.business.models.room.elements.WantedFixed;
 import interiores.business.models.room.elements.WantedFurniture;
+import interiores.core.business.BusinessException;
 import java.util.Collection;
 import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlElement;
@@ -115,7 +116,12 @@ public class WishList
         InterioresVariable element = getElement(elementId);
         bc.setOtherVariable(element);
         
-        getWantedFurniture(furnitureId).addBinaryConstraint(bc);
+        try {
+            getWantedFurniture(furnitureId).bound(bc);
+        }
+        catch(CloneNotSupportedException e) {
+            throw new BusinessException("Impossible to bound binary constraint to both ends.");
+        }
     }
     
     /**
@@ -127,7 +133,7 @@ public class WishList
      */
     public void removeBinaryConstraint(Class<? extends BinaryConstraintEnd> binaryConstraintClass, String f1)
     {
-        getWantedFurniture(f1).removeBinaryConstraint(binaryConstraintClass);
+        getWantedFurniture(f1).unbound(binaryConstraintClass);
     }
     
     /**

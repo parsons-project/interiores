@@ -7,10 +7,10 @@ import interiores.business.controllers.RoomController;
 import interiores.business.controllers.UnaryConstraintController;
 import interiores.business.events.constraints.BinaryConstraintAddedEvent;
 import interiores.business.events.constraints.BinaryConstraintRemovedEvent;
-import interiores.business.models.Orientation;
-import interiores.business.models.constraints.UnaryConstraint;
 import interiores.business.events.constraints.UnaryConstraintAddedEvent;
 import interiores.business.events.constraints.UnaryConstraintRemovedEvent;
+import interiores.business.models.Orientation;
+import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.utils.BinaryConstraintAssociation;
@@ -534,11 +534,13 @@ private void activeUnariesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
 private void activeBinariesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_activeBinariesKeyPressed
     int index = activeBinaries.getSelectedIndex();
     if (index >= 0) {
-        BinaryConstraintAssociation constraint = (BinaryConstraintAssociation) activeBinaries.getModel().getElementAt(index);
+        BinaryConstraintAssociation constraint = (BinaryConstraintAssociation) activeBinaries.getModel().
+                getElementAt(index);
+        
         switch (evt.getKeyCode()) {
             case KeyEvent.VK_DELETE:  // press delete
-                binaryConstraintController.removeConstraint(constraint.furniture1, constraint.furniture2,
-                                                            constraint.getConstraint().getClass());
+                binaryConstraintController.removeConstraint(constraint.furniture1,
+                        constraint.getConstraint().getClass());
                 break;            
         }
         updateActiveConstraintsList();
@@ -628,9 +630,11 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
         else if (type.equals("distance-min"))
             binaryConstraintController.addMinDistanceConstraint(selectedId, otherId, dist);
         else if (type.equals("facing-straight"))
-            binaryConstraintController.addStraightFacingConstraint(selectedId, otherId);
+            binaryConstraintController.addStraightFacingConstraint(selectedId, otherId, 50);
         else if (type.equals("facing-partial"))
-            binaryConstraintController.addPartialFacingConstraint(selectedId, otherId);
+            binaryConstraintController.addPartialFacingConstraint(selectedId, otherId, 50);
+        
+        // @TODO Add variable distance to facing constraints
     }
 
     private void addUnaryConstraint(String type, String value, float floatValue,
@@ -651,7 +655,8 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
             unaryConstraintController.addDepthConstraint(selectedId, range.min, range.max);
         else if (type.equals("position")) {
             if (value.equals("area"))
-                unaryConstraintController.addPositionRangeConstraint(selectedId, posX.min, posY.min, posX.max, posY.max);
+                unaryConstraintController.addPositionRangeConstraint(selectedId, posX.min, posY.min, posX.max,
+                        posY.max);
             else if (value.equals("at"))
                 unaryConstraintController.addPositionAtConstraint(selectedId, range.min, range.max);        
         }
@@ -716,7 +721,8 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
 
     private void updateBinaryView(String consName) {
         if (consName.startsWith("dist"))
-            propertyConstraintView("Distance:", new ArrayList(Arrays.asList(relatableCombo, constPropEditor,integerSpinner)));
+            propertyConstraintView("Distance:", new ArrayList(Arrays.asList(relatableCombo, constPropEditor,
+                    integerSpinner)));
         else
             showOnly((Collection) Arrays.asList(relatableCombo));
     }

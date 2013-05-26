@@ -9,7 +9,6 @@ import interiores.business.models.constraints.furniture.binary.MinDistanceConstr
 import interiores.business.models.constraints.furniture.binary.PartialFacingConstraint;
 import interiores.business.models.constraints.furniture.binary.StraightFacingConstraint;
 import interiores.core.data.JAXBDataController;
-import interiores.utils.BinaryConstraintAssociation;
 import java.util.Collection;
 
 /**

@@ -7,7 +7,6 @@ import interiores.business.events.backtracking.ValueUnassignedEvent;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.room.FurnitureType;
-import interiores.core.Debug;
 import interiores.core.Event;
 import interiores.core.Observable;
 import interiores.core.Observer;
@@ -37,8 +36,6 @@ public class FurnitureVariableSetDebugger
     @Override
     protected void setActualVariable() {
         super.setActualVariable();
-        
-        Debug.println(actual.getName());
         
         if(! allAssigned())
             notify(new ActualVariableSetEvent(actual));

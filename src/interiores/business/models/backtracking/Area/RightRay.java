@@ -15,7 +15,7 @@ class RightRay {
     
     @Override
     public boolean equals(Object p) {
-        return this.origin == ((RightRay)p).origin;
+        return this.origin.equals(((RightRay)p).origin);
     }
 
     @Override

@@ -8,8 +8,8 @@ import interiores.core.Debug;
  * @author nil.mamano
  */
 class GridPoint {
-    int x;
-    int y;
+    public int x;
+    public int y;
 
     public GridPoint(int x, int y) {
         this.x = x;

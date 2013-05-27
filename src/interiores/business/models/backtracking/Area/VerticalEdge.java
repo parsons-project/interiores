@@ -67,4 +67,15 @@ class VerticalEdge {
         return this.x == ((VerticalEdge)p).x && this.yl == ((VerticalEdge)p).yl
                 && this.yh == ((VerticalEdge)p).yh;
     }
+
+    @Override
+    public int hashCode()
+    {
+        int hash = 7;
+        hash = 53 * hash + this.x;
+        hash = 53 * hash + this.yh;
+        hash = 53 * hash + this.yl;
+        return hash;
+    }
+    
 }

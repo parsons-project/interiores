@@ -831,7 +831,7 @@ public class Area
         return euclideanDistance(new Square(sq1.x, sq1.y), new Square(sq2.x, sq2.y));
     }
 
-    private float euclideanDistance(Square sq1, Square sq2) {
+    private static float euclideanDistance(Square sq1, Square sq2) {
         float xOffset = Math.abs(sq1.x - sq2.x) - 1;
         //-1 because squares are 1 unit wide
         float yOffset = Math.abs(sq1.y - sq2.y) - 1;
@@ -841,7 +841,22 @@ public class Area
     public static float distance(Rectangle r1, Rectangle r2) {
         //find the cloosest point of r1 to r2
         //TODO: Im getting tired and dont want to introduce bugs xd.
-        throw new UnsupportedOperationException("Not supported yet.");
+        int xOffset, yOffset;
+        boolean xCoordinateIntersect = false;
+        xCoordinateIntersect |= r1.x >= r2.x && r1.x <= (r2.x+r2.width);
+        xCoordinateIntersect |= (r1.x+r1.width) >= r2.x && (r1.x+r1.width) <= (r2.x+r2.width);
+        xCoordinateIntersect |= r2.x >= r1.x && r2.x <= (r1.x+r1.width);
+        if (xCoordinateIntersect) xOffset = 0;
+        else xOffset = Math.min(Math.abs((r1.x+r1.width)-r2.x), Math.abs((r2.x+r2.width)-r1.x));
+        
+        boolean yCoordinateIntersect = false;
+        yCoordinateIntersect |= r1.y >= r2.y && r1.y <= (r2.y+r2.height);
+        yCoordinateIntersect |= (r1.y+r1.height) >= r2.y && (r1.y+r1.height) <= (r2.y+r2.height);
+        yCoordinateIntersect |= r2.y >= r1.y && r2.y <= (r1.y+r1.height);
+        if (yCoordinateIntersect) yOffset = 0;
+        else yOffset = Math.min(Math.abs((r1.y+r1.height)-r2.y), Math.abs((r2.y+r2.height)-r1.y));
+        
+        return euclideanDistance(new Square(0,0), new Square(xOffset, yOffset));
     }
 
     @Override

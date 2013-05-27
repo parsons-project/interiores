@@ -10,24 +10,16 @@ import interiores.core.Event;
  *
  * @author larribas
  */
-public abstract class ElementChangedEvent
-implements Event
-{
+public class FTCatalogCheckoutEvent implements Event {
     
     private String name;
-    private boolean added;
     
-    public ElementChangedEvent(String name, boolean added) {
+    public FTCatalogCheckoutEvent(String name) {
         this.name = name;
-        this.added = added;
     }
     
     public String getName() {
         return name;
-    }
-    
-    public boolean isAdded() {
-        return added;
     }
     
 }

@@ -8,9 +8,9 @@ package interiores.business.events.catalogs;
  *
  * @author larribas
  */
-public class RTCatalogChangedEvent extends ElementChangedEvent {
+public class RTModifiedEvent extends ElementModifiedEvent {
     
-    public RTCatalogChangedEvent(String name, boolean added) {
-        super(name,added);
+    public RTModifiedEvent(String fname, String name) {
+        super(fname,name);
     }
 }

@@ -1,6 +1,6 @@
 package interiores.business.controllers.abstracted;
 
-import interiores.business.events.catalogs.ElementChangedEvent;
+import interiores.business.events.catalogs.ElementSetModifiedEvent;
 import interiores.business.exceptions.ActiveCatalogRemovalException;
 import interiores.business.exceptions.CatalogAlreadyExistsException;
 import interiores.business.exceptions.CatalogNotFoundException;
@@ -30,8 +30,8 @@ abstract public class CatalogController<I extends PersistentIdObject>
         
         loadedCatalogs = new TreeMap();
         
+        // Default catalog (cannot be overwritten)
         NamedCatalog<I> defaultCatalog = new NamedCatalog();
-        
         loadedCatalogs.put(defaultCatalog.getName(), defaultCatalog);
         
         setActiveCatalog(defaultCatalog);
@@ -49,11 +49,11 @@ abstract public class CatalogController<I extends PersistentIdObject>
     public void checkout(String catalogName) {
         if(! loadedCatalogs.containsKey(catalogName))
             throw new CatalogNotFoundException(catalogName);
-        
+               
         setActiveCatalog(loadedCatalogs.get(catalogName));
     }
     
-    public void merge(String catalogName) {
+    public void merge(String catalogName, boolean replace) {
         NamedCatalog<I> currentCatalog = getActiveCatalog();
         
         if(currentCatalog.isDefault())
@@ -64,11 +64,9 @@ abstract public class CatalogController<I extends PersistentIdObject>
         
         Collection<I> toMerge = loadedCatalogs.get(catalogName).getCopyObjects();
         
-        for (I fType : toMerge) {
-            if (! currentCatalog.hasObject(fType)) {
-                    currentCatalog.add(fType);
-            }
-        }
+        for (I fType : toMerge)
+            if (!currentCatalog.hasObject(fType) || replace)
+                currentCatalog.add(fType);
     }
     
     public void load(String path) throws JAXBException {
@@ -82,12 +80,15 @@ abstract public class CatalogController<I extends PersistentIdObject>
         Debug.println("Loading from " + path);
         
         NamedCatalog loadedCatalog = (NamedCatalog<I>) data.load(classes, path);
+        String catalogName = loadedCatalog.getName();
         
         if(loadedCatalog.isDefault())
             throw new DefaultCatalogOverwriteException();
+        else if (loadedCatalogs.containsKey(catalogName))
+            throw new CatalogAlreadyExistsException(catalogName);
         
-        lastLoaded = loadedCatalog.getName();
-        loadedCatalogs.put(loadedCatalog.getName(), loadedCatalog);
+        lastLoaded = catalogName;
+        loadedCatalogs.put(catalogName, loadedCatalog);
         
     }
     
@@ -116,15 +117,29 @@ abstract public class CatalogController<I extends PersistentIdObject>
         loadedCatalogs.remove(catalogName);
     }
     
+    public void replace(String catalogName) {
+        NamedCatalog<I> currentCatalog = getActiveCatalog();
+        
+        if(currentCatalog.isDefault())
+            throw new DefaultCatalogOverwriteException();
+        else if (! loadedCatalogs.containsKey(catalogName))
+            throw new CatalogNotFoundException(catalogName);
+        
+        String currName = currentCatalog.getName();
+        NamedCatalog<I> newCat = new NamedCatalog<I>(currName, loadedCatalogs.get(catalogName));
+        loadedCatalogs.put(currName,newCat);
+    }
+    
     public Collection<String> getNamesLoadedCatalogs() {
         return loadedCatalogs.keySet();
+    }
+    
+    public boolean catalogContains(String cname) {
+        return loadedCatalogs.containsKey(cname);
     }
     
     private String getAbsolutePath(String path) {
         return System.getProperty("user.dir") + System.getProperty("file.separator") + path;
     }
-
-    public String getLastLoaded() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+   
 }

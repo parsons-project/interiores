@@ -25,6 +25,14 @@ public enum Material {
         return names;
     }
     
+    public static boolean exists(String name) {
+        for(Material material : values())
+            if(material.name().equalsIgnoreCase(name))
+                return true;
+        
+        return false;
+    }
+    
     public static Material getEnum(String name) throws BusinessException {
         for(Material material : values())
             if(material.name().equalsIgnoreCase(name))

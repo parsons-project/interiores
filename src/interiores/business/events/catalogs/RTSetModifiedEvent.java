@@ -8,11 +8,11 @@ package interiores.business.events.catalogs;
  *
  * @author larribas
  */
-public class RTChangedEvent extends ElementChangedEvent {
+public class RTSetModifiedEvent extends ElementSetModifiedEvent {
     
     private String fullName;
     
-    public RTChangedEvent(String fullName, String name, boolean isAdded) {
+    public RTSetModifiedEvent(String fullName, String name, boolean isAdded) {
         super(name,isAdded);
         this.fullName = fullName;
     }

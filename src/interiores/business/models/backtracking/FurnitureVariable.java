@@ -202,9 +202,12 @@ public class FurnitureVariable
     }
 
     public boolean constraintsSatisfied() {
-        for (Constraint constraint : furnitureConstraints.values())
-            if (! ((InexhaustiveTrimmer) constraint).isSatisfied(this))
-                return false;
+        for (Constraint constraint : furnitureConstraints.values()) {
+            if (constraint instanceof InexhaustiveTrimmer) {
+                if (! ((InexhaustiveTrimmer) constraint).isSatisfied(this))
+                    return false;
+            }
+        }
         return true;
     }
 

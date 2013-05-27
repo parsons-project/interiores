@@ -25,13 +25,13 @@ class GridPoint {
     
     @Override
     public boolean equals(Object p) {
-        Debug.println("In GridPoint.equals");
-        Debug.println("This:" + this.toString());
-        Debug.println("Param:" + p.toString());
+//        Debug.println("In GridPoint.equals");
+//        Debug.println("This:" + this.toString());
+//        Debug.println("Param:" + p.toString());
 
         Boolean result = this.x == ((GridPoint)p).x && this.y == ((GridPoint)p).y;
 
-        Debug.println("Result:" + result.toString());
+//        Debug.println("Result:" + result.toString());
         return result;
     }
 

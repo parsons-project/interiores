@@ -279,14 +279,23 @@ public class Area
     public Area() {
         vertexs = new ArrayList<GridPoint>();
         initializeAreaFromVertexs();
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
     }
     
     /**
      * Constructor from another area.
      */
     public Area(Area a) {
+        if (! a.isValidArea())
+            throw new UnsupportedOperationException("Corrupted area (parameter)");
+        
         this.vertexs = a.vertexs;
         initializeAreaFromVertexs();
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
     }
     
     /**
@@ -304,6 +313,9 @@ public class Area
         vertexs.add(new GridPoint(r.x, r.y+r.height));
         
         initializeAreaFromVertexs();
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
     }
     
     
@@ -314,10 +326,19 @@ public class Area
         this.vertexs = vertexs;
 
         initializeAreaFromVertexs();
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
     }
     
     public boolean contains(Point p) {
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
+        
         return contains(new Square(p.x, p.y));
+        
+        
     }
     
     /**
@@ -327,6 +348,9 @@ public class Area
      * @return true if sq is contained in the polygon
      */
     boolean contains(Square sq) {
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
         
         //apply ray-casting algorithm; direction: positive side of the x axis
         int intersectionCount = 0;
@@ -346,6 +370,9 @@ public class Area
      * @param area the area which might be contained.
      */
     public boolean contains(Area a) {
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
         
         //1) check whether at least one vertex is contained
         if (! contains(a.vertexs.get(0)))
@@ -369,6 +396,12 @@ public class Area
      * @param area 
      */
     public void union(Area a) {
+        
+        if (! a.isValidArea())
+            throw new UnsupportedOperationException("Corrupted area (parameter)");
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area(this)");
+        
         Set<GridPoint> newAreaVertexs = new HashSet<GridPoint>();    
         
         //1) add intersections between this area and area, except double
@@ -407,6 +440,9 @@ public class Area
         newAreaVertexsList.addAll(newAreaVertexs);
         vertexs = newAreaVertexsList;
         initializeAreaFromVertexs();
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area(union)");
     }
     
     
@@ -415,8 +451,17 @@ public class Area
      * @param area 
      */
     public void difference(Area a) {
+        
+        if (! a.isValidArea())
+            throw new UnsupportedOperationException("Corrupted area (parameter)");
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area(this)");
+        
         union(a);
         symmetricDifference(a);
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area(difference)");
     }
     
     
@@ -425,17 +470,29 @@ public class Area
      * @param area 
      */
     public void intersection(Area a) {
+        
+        if (! a.isValidArea())
+            throw new UnsupportedOperationException("Corrupted area (parameter)");
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area(this)");
+        
         //A^B = (A XOR B) XOR A+B
         Area union = new Area(vertexs);
         union.union(a);
         
         symmetricDifference(a);
         symmetricDifference(union);
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area(intersection)");
     }
     
     
     private void initializeAreaFromVertexs() {
         
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
+                
         //initialize maps of vertexs
         vertexsStoredByX = new HashMap<Integer,List<GridPoint>>();
         vertexsStoredByY = new HashMap<Integer,List<GridPoint>>();
@@ -533,6 +590,10 @@ public class Area
      * @return true if point is contained in the polygon
      */
     private boolean contains(GridPoint point) {
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
+                
         List<Square> adjacentSquares = adjacentSquares(point);
         for (Square sq : adjacentSquares)
             if (! contains(sq)) return false;
@@ -554,6 +615,9 @@ public class Area
      */
     private List<Boolean> areAdjacentSquaresContained(GridPoint p) {
         
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
+                
         // +-------------+-------------+
         // |             |             |
         // |             |             |
@@ -629,6 +693,11 @@ public class Area
      */
     private boolean doEdgesIntersect(Area a) {
 
+        if (! a.isValidArea())
+            throw new UnsupportedOperationException("Corrupted area (parameter)");
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area(this)");
+        
         for (VerticalEdge myEdge : verticalEdges)
             for (HorizontalEdge aEdge : a.horizontalEdges)
                 if (myEdge.intersects(aEdge)) return true;
@@ -650,6 +719,11 @@ public class Area
      */
     private List<GridPoint> getEdgesIntersect(Area a) {
 
+        if (! a.isValidArea())
+            throw new UnsupportedOperationException("Corrupted area (parameter)");
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area(this)");
+        
         List<GridPoint> intersectionPoints = new ArrayList<GridPoint>();
         
         for (VerticalEdge myEdge : verticalEdges)
@@ -671,6 +745,10 @@ public class Area
      * @return 
      */
     private List<Square> adjacentSquares(GridPoint v) {
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
+                
         List<Square> adjacentSquares = new ArrayList<Square>();
         adjacentSquares.add(new Square(v.x, v.y));
         adjacentSquares.add(new Square(v.x-1, v.y));
@@ -681,6 +759,12 @@ public class Area
     }
 
     private void symmetricDifference(Area a) {
+        
+        if (! a.isValidArea())
+            throw new UnsupportedOperationException("Corrupted area (parameter)");
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area(this)");
+        
         Set<GridPoint> vertexSet = new HashSet<GridPoint>();
         vertexSet.addAll(vertexs);
         
@@ -692,6 +776,10 @@ public class Area
         vertexs.clear();
         vertexs.addAll(vertexSet);
         initializeAreaFromVertexs();
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area (symmetricDifference)");        
+        
     }
 
     
@@ -706,6 +794,10 @@ public class Area
      * @return 
      */
     public boolean isEmpty() {
+        
+       if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
+                
         return vertexs.isEmpty();
     }
     
@@ -714,6 +806,10 @@ public class Area
      * @return 
      */
     public Rectangle getBoundingRectangle() {
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
+        
         int maxX, minX, maxY, minY;
         maxX = minX = maxY = minY = 0;
         
@@ -742,6 +838,9 @@ public class Area
      */
     public void shift(int distance, Orientation orientation) {
        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area (begin)");
+        
         List<GridPoint> newVertexs = new ArrayList<GridPoint>();
         if (orientation == Orientation.N)
             for (GridPoint v : vertexs)
@@ -758,6 +857,9 @@ public class Area
         
         vertexs = newVertexs;
         initializeAreaFromVertexs();
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area(shift)");
     }
 
     /**
@@ -771,6 +873,10 @@ public class Area
      * @return an estimation of the size.
      */
     public int areaSize() {
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area");
+        
         if (vertexs.isEmpty()) return 0;
         
         Debug.println(this.toString());
@@ -803,6 +909,10 @@ public class Area
      * @return 
      */
     public void expand(int distance) {
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area(begin)");
+        
         Area result = new Area(vertexs);
 
         Area aux;
@@ -825,6 +935,9 @@ public class Area
 
         vertexs = result.vertexs;
         initializeAreaFromVertexs();
+        
+        if (! isValidArea())
+            throw new UnsupportedOperationException("Corrupted area(expand)");
     }
     
     public float distance(Point sq1, Point sq2) {
@@ -979,4 +1092,29 @@ public class Area
         return result.toString();
     }
 
+    /**
+     * Returns whether the set of vertexs of this area identify a valid area,
+     * that it, there is an even pair of vertexs in every schuss of the plane.
+     * @param area
+     * @return 
+     */
+    public final boolean isValidArea() {
+        HashSet<Integer> verticalLines = new HashSet<Integer>();
+        HashSet<Integer> horizontalLines = new HashSet<Integer>();
+        
+        for (GridPoint vertex : vertexs) {
+            if (verticalLines.contains(vertex.x))
+                verticalLines.remove(vertex.x);
+            else verticalLines.add(vertex.x);
+            if (horizontalLines.contains(vertex.y))
+                horizontalLines.remove(vertex.y);
+            else horizontalLines.add(vertex.y);
+        }
+        
+        boolean result = verticalLines.isEmpty() && horizontalLines.isEmpty();
+        if (! result) {
+            Debug.println(this.toString());
+        }
+        return result;
+    }
 }

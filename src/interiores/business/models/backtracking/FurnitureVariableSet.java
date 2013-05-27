@@ -200,15 +200,15 @@ public class FurnitureVariableSet
     @Override
     protected void setActualVariable() {
         
-        Debug.println("==========================");        
-        Debug.println("Start of setActualVariable: " + SetActualVariableDebugCount);
-        Debug.println("Depth: " + depth);
-        Debug.println("Current actual: ");
-        if (actual == null) Debug.println("null\n");
-        else Debug.println(actual.getName());
-        Debug.println("unassignedVariables.size() = " + unassignedVariables.size());
-        Debug.println("assignedVariables.size() = " + assignedVariables.size());
-        ++SetActualVariableDebugCount;
+//        Debug.println("==========================");        
+//        Debug.println("Start of setActualVariable: " + SetActualVariableDebugCount);
+//        Debug.println("Depth: " + depth);
+//        Debug.println("Current actual: ");
+//        if (actual == null) Debug.println("null\n");
+//        else Debug.println(actual.getName());
+//        Debug.println("unassignedVariables.size() = " + unassignedVariables.size());
+//        Debug.println("assignedVariables.size() = " + assignedVariables.size());
+//        ++SetActualVariableDebugCount;
         
         if (unassignedVariables.isEmpty())
             allAssigned = true;
@@ -290,15 +290,15 @@ public class FurnitureVariableSet
             actual.resetIterators(depth);
         }
         
-        Debug.println("...running SetActualVariable...");
-        Debug.println("End of setActualVariable:\n" +
-                "Depth: " + depth + "\n" +
-                "Current actual: ");
-        if (actual == null) Debug.println("null\n");
-        else Debug.println(actual.getName());
-        Debug.println("unassignedVariables.size() = " + unassignedVariables.size());
-        Debug.println("assignedVariables.size() = " + assignedVariables.size());
-        Debug.println("==========================");
+//        Debug.println("...running SetActualVariable...");
+//        Debug.println("End of setActualVariable:\n" +
+//                "Depth: " + depth + "\n" +
+//                "Current actual: ");
+//        if (actual == null) Debug.println("null\n");
+//        else Debug.println(actual.getName());
+//        Debug.println("unassignedVariables.size() = " + unassignedVariables.size());
+//        Debug.println("assignedVariables.size() = " + assignedVariables.size());
+//        Debug.println("==========================");
     }
  
     @Override

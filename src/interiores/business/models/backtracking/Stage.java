@@ -55,6 +55,8 @@ public class Stage {
     private Iterator<FurnitureModel> modelIterator; // Iterator through the valid models
     private FurnitureModel currentModel; // The current model under consideration
     
+    private FurnitureValue nextValue; // The computed nextValue
+    
     /**
      * Builds a Stage with all positions, a list of models and the 4 default orientations.
      * This constructor is used for the stage correspondent to the first iteration.
@@ -86,7 +88,10 @@ public class Stage {
      * @return Furniture Value with the next value of the domain of this variable
      */
     public Value getNextDomainValue() {
-        
+        return nextValue;
+    }
+    
+    private boolean computeNextDomainValue() {
         // If there is a next position, we simply advance to it and return
         if (positionIterator.hasNext()) currentPosition = positionIterator.next();            
         else {
@@ -121,17 +126,24 @@ public class Stage {
                    
                     orientationIterator = orientations.iterator();
                 }
-                else throw new UnsupportedOperationException("There are no more domain values");
+                else
+                    return false; // NO MORE DOMAIN VALUES
             }
             int prev_o = currentOrientation.ordinal();
             currentOrientation = orientationIterator.next();
             
-            if (hasSameSize && prev_o + currentOrientation.ordinal() % 2 == 0) buildIterablePositions(); // build new Extended Area
+            if (hasSameSize && prev_o + currentOrientation.ordinal() % 2 == 0) {
+                buildIterablePositions(); // build new Extended Area
+            }
+            
             positionIterator = iterablePositions.iterator();
-            return getNextDomainValue();
+            
+            return computeNextDomainValue();
         }
         
-        return new FurnitureValue(currentPosition, currentModel, currentOrientation);
+        nextValue = new FurnitureValue(currentPosition, currentModel, currentOrientation);
+        
+        return true;
     }
     
     /**
@@ -139,8 +151,13 @@ public class Stage {
      * @return 'true' if there are more positions. 'false' otherwise
      */
     public boolean hasMoreValues() {
-        if( iterableModels.isEmpty() || iterableOrientations.isEmpty() ) return false;
-        return modelIterator.hasNext() || orientationIterator.hasNext() || positionIterator.hasNext();
+        if(iterableModels.isEmpty() || iterableOrientations.isEmpty())
+            return false;
+        
+        if(! (modelIterator.hasNext() || orientationIterator.hasNext() || positionIterator.hasNext()))
+            return false;
+        
+        return computeNextDomainValue();
     }
     
     

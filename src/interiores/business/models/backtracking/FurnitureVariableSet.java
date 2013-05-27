@@ -7,6 +7,7 @@ import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.room.GlobalConstraint;
+import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
 import interiores.business.models.constraints.room.global.SpaceRespectingConstraint;
@@ -200,15 +201,17 @@ public class FurnitureVariableSet
     @Override
     protected void setActualVariable() {
         
-//        Debug.println("==========================");        
-//        Debug.println("Start of setActualVariable: " + SetActualVariableDebugCount);
-//        Debug.println("Depth: " + depth);
-//        Debug.println("Current actual: ");
-//        if (actual == null) Debug.println("null\n");
-//        else Debug.println(actual.getName());
-//        Debug.println("unassignedVariables.size() = " + unassignedVariables.size());
-//        Debug.println("assignedVariables.size() = " + assignedVariables.size());
-//        ++SetActualVariableDebugCount;
+        Debug.println("==========================");        
+        Debug.println("Start of setActualVariable: " + SetActualVariableDebugCount);
+        Debug.println("Depth: " + depth);
+        Debug.println("Current actual: ");
+        if (actual == null) Debug.println("null\n");
+        else Debug.println(actual.getName());
+        Debug.println("unassignedVariables.size() = " + unassignedVariables.size());
+        Debug.println("assignedVariables.size() = " + assignedVariables.size());
+        ++SetActualVariableDebugCount;
+        for (FurnitureVariable variable : unassignedVariables)
+            Debug.println(variable.getDomain().getPositions(depth).toString());
         
         if (unassignedVariables.isEmpty())
             allAssigned = true;
@@ -304,7 +307,15 @@ public class FurnitureVariableSet
     @Override
     protected void trimDomains() {
         for (FurnitureVariable variable : unassignedVariables) {
-            variable.trimDomain(actual, depth);
+            variable.trimDomain(actual, depth);   
+        }
+        
+        //global constraints that implement the bactracking time trimmer interface
+        //are triggered
+        for (GlobalConstraint constraint : globalConstraints) {
+            if (constraint instanceof RoomBacktrackingTimeTrimmer)
+                ((RoomBacktrackingTimeTrimmer) constraint).trim(
+                    assignedVariables, unassignedVariables, constants, actual);
         }
     }
 

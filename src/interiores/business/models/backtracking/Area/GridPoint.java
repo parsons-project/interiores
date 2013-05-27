@@ -1,6 +1,8 @@
 
 package interiores.business.models.backtracking.Area;
 
+import interiores.core.Debug;
+
 /**
  *
  * @author nil.mamano
@@ -21,4 +23,23 @@ class GridPoint {
         return result.toString();
     }
     
+    @Override
+    public boolean equals(Object p) {
+        Debug.println("In GridPoint.equals");
+        Debug.println("This:" + this.toString());
+        Debug.println("Param:" + p.toString());
+
+        Boolean result = this.x == ((GridPoint)p).x && this.y == ((GridPoint)p).y;
+
+        Debug.println("Result:" + result.toString());
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 67 * hash + this.x;
+        hash = 67 * hash + this.y;
+        return hash;
+    }
 }

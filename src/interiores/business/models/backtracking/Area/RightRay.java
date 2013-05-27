@@ -12,4 +12,16 @@ class RightRay {
     public RightRay(Square origin) {
         this.origin = origin;
     }
+    
+    @Override
+    public boolean equals(Object p) {
+        return this.origin == ((RightRay)p).origin;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + (this.origin != null ? this.origin.hashCode() : 0);
+        return hash;
+    }
 }

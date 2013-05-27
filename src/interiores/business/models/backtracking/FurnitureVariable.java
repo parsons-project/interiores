@@ -241,7 +241,15 @@ public class FurnitureVariable
      * @param invalidArea 
      */
     public void trimP(Area invalidArea) {
+//            Debug.println("In trimP:");
+//            Debug.println("We have this area:");
+//            Debug.println(this.getDomain().getPositions(iteration+1).toString());
+//            Debug.println("And we remove this area from it:");
+//            Debug.println(invalidArea.toString());
         domain.trimP(invalidArea, iteration);
+//            Debug.println("And the result is this area: ");
+//            Debug.println(this.getDomain().getPositions(iteration+1).toString());
+
     }
     
     

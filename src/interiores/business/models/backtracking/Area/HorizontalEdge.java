@@ -29,4 +29,20 @@ class HorizontalEdge {
     boolean contain(HorizontalEdge e) {
         return xh >= e.xh && xl <= e.xl;
     }
+    
+    
+    @Override
+    public boolean equals(Object p) {
+        return this.y == ((HorizontalEdge)p).y && this.xl == ((HorizontalEdge)p).xl
+                && this.xh == ((HorizontalEdge)p).xh;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + this.y;
+        hash = 23 * hash + this.xh;
+        hash = 23 * hash + this.xl;
+        return hash;
+    }
 }

@@ -61,4 +61,10 @@ class VerticalEdge {
         result.append("(" + x + "," + yh + ".." + yl + ")");
         return result.toString();
     }
+    
+    @Override
+    public boolean equals(Object p) {
+        return this.x == ((VerticalEdge)p).x && this.yl == ((VerticalEdge)p).yl
+                && this.yh == ((VerticalEdge)p).yh;
+    }
 }

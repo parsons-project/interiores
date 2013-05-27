@@ -3,6 +3,7 @@ package interiores.business.models.backtracking;
 import interiores.business.models.Orientation;
 import interiores.business.models.backtracking.Area.Area;
 import interiores.business.models.room.FurnitureModel;
+import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
 import java.awt.Point;
@@ -403,7 +404,13 @@ public class Stage {
 
     Area difference(Area area) {
         Area startingPositions = new Area(positions);
+        Debug.println("Differnce of:");
+        Debug.println(positions.toString());
+        Debug.println(("-"));
+        Debug.println(area.toString());
         positions.difference(area);
+        Debug.println("Result:");
+        Debug.println(positions.toString());
         startingPositions.difference(positions);
         return startingPositions;
     }

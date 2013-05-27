@@ -8,6 +8,7 @@ import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
+import interiores.core.Debug;
 import java.util.List;
 
 /**
@@ -59,7 +60,8 @@ public class SpaceRespectingConstraint
             FurnitureVariable actual) {
         
         for (FurnitureVariable variable : unassignedVariables) {
-            variable.trimP(new Area(actual.getAssignedValue().getWholeArea()));
+            Area invalidArea = new Area(actual.getAssignedValue().getWholeArea());
+            variable.trimP(invalidArea);
         }
     }
 

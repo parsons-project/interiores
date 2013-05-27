@@ -397,6 +397,7 @@ public class Area
      */
     public void union(Area a) {
         
+        Area debugArea = new Area(this);
         if (! a.isValidArea())
             throw new UnsupportedOperationException("Corrupted area (parameter)");
         if (! isValidArea())
@@ -407,12 +408,23 @@ public class Area
         //1) add intersections between this area and area, except double
         // intersections
         List<GridPoint> intersectPoints = getEdgesIntersect(a);
-        for (GridPoint p : intersectPoints) {
-            if (newAreaVertexs.contains(p))
-                newAreaVertexs.remove(p);
-            else newAreaVertexs.add(p);
-        }
+        for (GridPoint v : intersectPoints) {
+            //OPTIMIZED WAY THAT DOESN'T WORK:
+//          if (newAreaVertexs.contains(v))
+//              newAreaVertexs.remove(v);
+//          else newAreaVertexs.add(v);
+//      }
         
+            //STUPID WAY THAT DOESN'T WORK EITHER:
+            List<Boolean> thisAdjSqs = areAdjacentSquaresContained(v);
+            List<Boolean> aAdjSqs = a.areAdjacentSquaresContained(v);
+            int count = 0;
+            if (thisAdjSqs.get(0) || aAdjSqs.get(0)) ++count;
+            if (thisAdjSqs.get(1) || aAdjSqs.get(1)) ++count;
+            if (thisAdjSqs.get(2) || aAdjSqs.get(2)) ++count;
+            if (thisAdjSqs.get(3) || aAdjSqs.get(3)) ++count;
+            if (count%2 == 1) newAreaVertexs.add(v);
+        }        
         //2) find vextexs that have an odd number of adjacent contained squares
         // in either area
         for (GridPoint v : vertexs) {
@@ -441,8 +453,13 @@ public class Area
         vertexs = newAreaVertexsList;
         initializeAreaFromVertexs();
         
-        if (! isValidArea())
+        if (! isValidArea()) {
+            Debug.println("Failure in union function.");
+            Debug.println("This area:" + debugArea.toString());
+            Debug.println("Parameter area:" + a.toString());
+            Debug.println("Result area:" + this.toString());
             throw new UnsupportedOperationException("Corrupted area(union)");
+        }
     }
     
     
@@ -490,8 +507,8 @@ public class Area
     
     private void initializeAreaFromVertexs() {
         
-        if (! isValidArea())
-            throw new UnsupportedOperationException("Corrupted area");
+//        if (! isValidArea())
+//            throw new UnsupportedOperationException("Corrupted area");
                 
         //initialize maps of vertexs
         vertexsStoredByX = new HashMap<Integer,List<GridPoint>>();
@@ -636,51 +653,56 @@ public class Area
         // |             |             |
         // +-------------+-------------+
              
-        //one boolean for each adjacent square: true if they are contained,
-        //false otherwise
-        boolean topLeftSq, topRightSq, bottomRightSq, bottomLeftSq;
-        //one boolean for each adjacent line segment: true if they are part
-        //of an edge, false otherwise
-        //upE is not needed: we will reach topLeftSq through bottomLeftSq
-        boolean rightE, downE, leftE;
-        rightE = downE = leftE = false;
-        
-        //find which line segments are edges
-        if (verticalEdgesStoredByX.containsKey(p.x)) {
-            for (VerticalEdge v : verticalEdgesStoredByX.get(p.x))
-                if (v.contain(new VerticalEdge(p.x, p.y+1, p.y)))
-                    downE = true;
-        }
-        if (horizontalEdgesStoredByY.containsKey(p.y)) {
-            for (HorizontalEdge v : horizontalEdgesStoredByY.get(p.y)) {
-                if (v.contain(new HorizontalEdge(p.y, p.x+1, p.x)))
-                    rightE = true;
-                if (v.contain(new HorizontalEdge(p.y, p.x, p.x-1)))
-                    leftE = true;
-            }
-        }
-        
-        //check if bottomRight is contained with usual method
-        bottomRightSq = contains(new Square(p.x, p.y));
-        
-        //bottomLeftSq will be the same as bottomRightSq unless downE is true
-        if (downE) bottomLeftSq = ! bottomRightSq;
-        else bottomLeftSq = bottomRightSq;
-        
-        //topRightSq will be the same as bottomRightSq unless rightE is true
-        if (rightE) topRightSq = ! bottomRightSq;
-        else topRightSq = bottomRightSq;
-        
-        //topLeftSq will be the same as bottomLeftSq unless leftE is true
-        if (leftE) topLeftSq = ! bottomLeftSq;
-        else topLeftSq = bottomLeftSq;
+//        //one boolean for each adjacent square: true if they are contained,
+//        //false otherwise
+//        boolean topLeftSq, topRightSq, bottomRightSq, bottomLeftSq;
+//        //one boolean for each adjacent line segment: true if they are part
+//        //of an edge, false otherwise
+//        //upE is not needed: we will reach topLeftSq through bottomLeftSq
+//        boolean rightE, downE, leftE;
+//        rightE = downE = leftE = false;
+//        
+//        //find which line segments are edges
+//        if (verticalEdgesStoredByX.containsKey(p.x)) {
+//            for (VerticalEdge v : verticalEdgesStoredByX.get(p.x))
+//                if (v.contain(new VerticalEdge(p.x, p.y+1, p.y)))
+//                    downE = true;
+//        }
+//        if (horizontalEdgesStoredByY.containsKey(p.y)) {
+//            for (HorizontalEdge v : horizontalEdgesStoredByY.get(p.y)) {
+//                if (v.contain(new HorizontalEdge(p.y, p.x+1, p.x)))
+//                    rightE = true;
+//                if (v.contain(new HorizontalEdge(p.y, p.x, p.x-1)))
+//                    leftE = true;
+//            }
+//        }
+//        
+//        //check if bottomRight is contained with usual method
+//        bottomRightSq = contains(new Square(p.x, p.y));
+//        
+//        //bottomLeftSq will be the same as bottomRightSq unless downE is true
+//        if (downE) bottomLeftSq = ! bottomRightSq;
+//        else bottomLeftSq = bottomRightSq;
+//        
+//        //topRightSq will be the same as bottomRightSq unless rightE is true
+//        if (rightE) topRightSq = ! bottomRightSq;
+//        else topRightSq = bottomRightSq;
+//        
+//        //topLeftSq will be the same as bottomLeftSq unless leftE is true
+//        if (leftE) topLeftSq = ! bottomLeftSq;
+//        else topLeftSq = bottomLeftSq;
+//        
+//        List<Boolean> result = new ArrayList<Boolean>();
+//        result.add(topLeftSq);
+//        result.add(topRightSq);
+//        result.add(bottomLeftSq);
+//        result.add(bottomRightSq);
         
         List<Boolean> result = new ArrayList<Boolean>();
-        result.add(topLeftSq);
-        result.add(topRightSq);
-        result.add(bottomLeftSq);
-        result.add(bottomRightSq);
-        
+        result.add(contains(new Square(p.x-1,p.y-1)));
+        result.add(contains(new Square(p.x,p.y-1)));
+        result.add(contains(new Square(p.x-1,p.y)));
+        result.add(contains(new Square(p.x,p.y)));
         return result;
         
     }
@@ -891,13 +913,13 @@ public class Area
         for (int i = 0; i < SAMPLE_SIZE; ++i) {
             int Xrand = xMin + randomGenerator.nextInt(boundingRectangle.width);
             int Yrand = yMin + randomGenerator.nextInt(boundingRectangle.height);
-            Debug.println("Random point: " + Xrand + ","+Yrand);
+//            Debug.println("Random point: " + Xrand + ","+Yrand);
             if (contains(new Square(Xrand, Yrand))) ++squareDensity;
         }
         
         int boundingRectangleSize = (xMax - xMin) * (yMax - yMin);
-        Debug.println("boundingRectangleSize: " + boundingRectangleSize);
-        Debug.println("squareDensity: " + squareDensity + "/" + SAMPLE_SIZE);
+//        Debug.println("boundingRectangleSize: " + boundingRectangleSize);
+//        Debug.println("squareDensity: " + squareDensity + "/" + SAMPLE_SIZE);
         
         return (boundingRectangleSize * squareDensity) / SAMPLE_SIZE;
     }
@@ -1112,9 +1134,9 @@ public class Area
         }
         
         boolean result = verticalLines.isEmpty() && horizontalLines.isEmpty();
-        if (! result) {
-            Debug.println(this.toString());
-        }
+//        if (! result) {
+//            Debug.println(this.toString());
+//        }
         return result;
     }
 }

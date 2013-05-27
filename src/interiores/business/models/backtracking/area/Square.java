@@ -1,7 +1,7 @@
 /**
  * Represents a square (that is, a elemental surface unit) of the Grid Plane.
  */
-package interiores.business.models.backtracking.Area;
+package interiores.business.models.backtracking.area;
 
 /**
  *

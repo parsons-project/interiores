@@ -15,7 +15,6 @@ import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedFixed;
 import interiores.business.models.room.elements.WantedFurniture;
-import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
@@ -429,7 +428,7 @@ public class FurnitureVariableSet
         matrixOfDependence = new HashMap<Entry<String, String>, Integer>();
                 
         for (FurnitureVariable v : unassignedVariables) {
-            for (Map.Entry<Class, Constraint> constraint : v.furnitureConstraints.entrySet()) {
+            for (Constraint constraint : v.getBacktrackingConstraints()) {
                 if (constraint instanceof BinaryConstraintEnd) {
                     BinaryConstraintEnd bc = (BinaryConstraintEnd) constraint;
                     
@@ -448,9 +447,11 @@ public class FurnitureVariableSet
     
     private int getDependence(FurnitureVariable variable1, FurnitureVariable variable2) {
         Entry e = new SimpleEntry(variable1.getName(), variable2.getName());
+        
         if (! matrixOfDependence.containsKey(e))
             return 0;
-        else return matrixOfDependence.get(e);
+        
+        return matrixOfDependence.get(e);
     }
     
     @Override
@@ -468,38 +469,4 @@ public class FurnitureVariableSet
             assignedVariables.remove(assignedVariables.size()-1);
         }
     }
-
-    // @TODO DELETE COMMENT
-//    @Override
-//    public String toString() {
-//        StringBuilder result = new StringBuilder();
-//        String NEW_LINE = System.getProperty("line.separator");
-//
-//        result.append(this.getClass().getName() + ":" + NEW_LINE);
-//        result.append("Iteration: " + depth + NEW_LINE);
-//        result.append("Number of variables: " + variableCount + NEW_LINE);
-//        
-//        result.append("Variables: " + NEW_LINE);
-//        for (FurnitureVariable variable : assignedVariables) {
-//            result.append(variable.getName() + ": ");
-//            result.append(variable.getAssignedValue().toString() + NEW_LINE);
-//        }
-//        result.append("Actual variable:" + NEW_LINE);
-//        if (actual == null) result.append("none" + NEW_LINE);
-//        else result.append(actual.toString());
-//        result.append("Are all variables assigned? " + NEW_LINE);
-//        if (allAssigned) result.append("All assigned: Yes" + NEW_LINE);
-//        else result.append("No" + NEW_LINE);
-//        result.append("Binary restrictions:" + NEW_LINE);
-//        result.append(binaryConstraints.toString());
-//
-//        return result.toString();
-//    }
-
-
-
-
-
-
-
 }

@@ -229,7 +229,7 @@
  * This way, each edge is added exactly once. Similarly for horizontal edges.
  * 
  */
-package interiores.business.models.backtracking.Area;
+package interiores.business.models.backtracking.area;
 
 import interiores.business.models.Orientation;
 import java.awt.Point;
@@ -391,27 +391,16 @@ public class Area
             return;
         }
             
-        
         //1) add intersections between this area and area, except double
         // intersections
         List<GridPoint> intersectPoints = getEdgesIntersect(a);
         for (GridPoint v : intersectPoints) {
-            //OPTIMIZED WAY THAT DOESN'T WORK:
-          if (newAreaVertexs.contains(v))
-              newAreaVertexs.remove(v);
-          else newAreaVertexs.add(v);
-      }
+            if (newAreaVertexs.contains(v))
+                newAreaVertexs.remove(v);
+            else
+                newAreaVertexs.add(v);
+        }     
         
-//            //STUPID WAY THAT DOESN'T WORK EITHER:
-//            List<Boolean> thisAdjSqs = areAdjacentSquaresContained(v);
-//            List<Boolean> aAdjSqs = a.areAdjacentSquaresContained(v);
-//            int count = 0;
-//            if (thisAdjSqs.get(0) || aAdjSqs.get(0)) ++count;
-//            if (thisAdjSqs.get(1) || aAdjSqs.get(1)) ++count;
-//            if (thisAdjSqs.get(2) || aAdjSqs.get(2)) ++count;
-//            if (thisAdjSqs.get(3) || aAdjSqs.get(3)) ++count;
-//            if (count%2 == 1) newAreaVertexs.add(v);
-//        }        
         //2) find vextexs that have an odd number of adjacent contained squares
         // in either area
         for (GridPoint v : vertexs) {
@@ -424,6 +413,7 @@ public class Area
             if (thisAdjSqs.get(3) || aAdjSqs.get(3)) ++count;
             if (count%2 == 1) newAreaVertexs.add(v);
         }
+        
         for (GridPoint v : a.vertexs) {
             List<Boolean> thisAdjSqs = areAdjacentSquaresContained(v);
             List<Boolean> aAdjSqs = a.areAdjacentSquaresContained(v);
@@ -439,7 +429,6 @@ public class Area
         vertexs.addAll(new ArrayList(newAreaVertexs));
         initializeAreaFromVertexs();
     }
-    
     
     /**
      * (operation 4 of the opening explanation)
@@ -652,13 +641,7 @@ public class Area
         result.add(bottomLeftSq);
         result.add(bottomRightSq);
         
-//        List<Boolean> result = new ArrayList<Boolean>();
-//        result.add(contains(new Square(p.x-1,p.y-1)));
-//        result.add(contains(new Square(p.x,p.y-1)));
-//        result.add(contains(new Square(p.x-1,p.y)));
-//        result.add(contains(new Square(p.x,p.y)));
         return result;
-        
     }
 
     /**

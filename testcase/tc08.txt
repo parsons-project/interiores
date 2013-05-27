@@ -10,5 +10,4 @@ add bc distance-min 200 chair4 chair3
 add bc distance-min 100 chair9 chair8
 add bc distance-min 300 table1 chair12
 add bc distance-min 200 table1 table2
-solve design --debug
-
+solve design

@@ -1,7 +1,7 @@
 package interiores.business.models.backtracking;
 
 import interiores.business.models.Orientation;
-import interiores.business.models.backtracking.Area.Area;
+import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.BacktrackingTimeTrimmer;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
@@ -10,23 +10,22 @@ import interiores.business.models.room.FurnitureModel;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.Iterator;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class FurnitureVariable
+abstract public class FurnitureVariable
 	extends InterioresVariable
 {
-    @XmlElementWrapper
-    protected Map<Class, Constraint> furnitureConstraints;
+    @XmlTransient
+    private Collection<Constraint> backtrackingConstraints;
     
     @XmlTransient
     protected Domain domain;
@@ -59,8 +58,6 @@ public class FurnitureVariable
     public FurnitureVariable(String typeName)
     {
         super(typeName);
-        
-        furnitureConstraints = new HashMap();
     }
     
     public FurnitureVariable(String id, String typeName, FurnitureValue value) {
@@ -77,12 +74,20 @@ public class FurnitureVariable
     public void createDomain(HashSet<FurnitureModel> models, Dimension roomSize, int variableCount) {
         domain = new Domain(models, roomSize, variableCount);
         iteration = 0;
+        backtrackingConstraints = new ArrayList(getConstraints());
+        
         initializeMaxMinFields();
         undoAssignValue();
     }
     
-    public Collection<Constraint> getConstraints() {
-        return furnitureConstraints.values();
+    /**
+     * Gets the constraints defined on this variable
+     * @return The constraints defined on this variable
+     */
+    public abstract Collection<Constraint> getConstraints();
+    
+    Collection<Constraint> getBacktrackingConstraints() {
+        return backtrackingConstraints;
     }
     
     /**
@@ -128,11 +133,10 @@ public class FurnitureVariable
         forwardIteration();
                
         // 2) Run trimmers
-        for (Constraint constraint : furnitureConstraints.values())
+        for (Constraint constraint : backtrackingConstraints)
             if (constraint instanceof BacktrackingTimeTrimmer)
                 ((BacktrackingTimeTrimmer) constraint).trim(this);
     }
-
     
     /**
      * Merges back values from step "iteration"+1 to "iteration" level.
@@ -189,22 +193,27 @@ public class FurnitureVariable
     }
 
     public void triggerPreliminarTrimmers() {
-        for (Constraint constraint : furnitureConstraints.values()) {
+        Iterator<Constraint> it = backtrackingConstraints.iterator();
+        
+        while(it.hasNext()) {
+            Constraint constraint = it.next();
+            
             if (constraint instanceof PreliminarTrimmer) {
                 PreliminarTrimmer preliminarTrimmer = (PreliminarTrimmer) constraint;
                 preliminarTrimmer.preliminarTrim(this);
             }
+            
             //ditch it if it doesn't implement any other interface
             if (! (constraint instanceof InexhaustiveTrimmer));
-                //removing constraints unhabilitated
-                //furnitureConstraints.remove(constraint.getClass());
+                it.remove();
         }
     }
 
     public boolean constraintsSatisfied() {
-        for (Constraint constraint : furnitureConstraints.values())
+        for (Constraint constraint : backtrackingConstraints)
             if (! ((InexhaustiveTrimmer) constraint).isSatisfied(this))
                 return false;
+        
         return true;
     }
 
@@ -226,31 +235,18 @@ public class FurnitureVariable
         domain.forwardIteration(iteration);
     }
     
-   
-    //CONSTRAINT - VARIABLE INTERFACE
-    
     public void eliminateExceptP(Area validPositions) {
         domain.eliminateExceptP(validPositions);
     }
 
-    
-       /**
+    /**
      * Any value of the domain of the next iteration included in the
      * parameter is trimmed (moved to the previous iteration)
      * @param invalidArea 
      */
     public void trimP(Area invalidArea) {
-//            Debug.println("In trimP:");
-//            Debug.println("We have this area:");
-//            Debug.println(this.getDomain().getPositions(iteration+1).toString());
-//            Debug.println("And we remove this area from it:");
-//            Debug.println(invalidArea.toString());
         domain.trimP(invalidArea, iteration);
-//            Debug.println("And the result is this area: ");
-//            Debug.println(this.getDomain().getPositions(iteration+1).toString());
-
     }
-    
     
     /**
      * Any value of the domain of the next iteration not included in the

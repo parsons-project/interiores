@@ -1,6 +1,6 @@
 package interiores.business.models.constraints.furniture.unary;
 
-import interiores.business.models.backtracking.Area.Area;
+import interiores.business.models.backtracking.area.Area;
 import java.awt.Point;
 import java.awt.Rectangle;
 

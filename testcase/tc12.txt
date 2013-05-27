@@ -4,4 +4,3 @@ add bc facing-straight sofa1 tv1
 select ft chair chair
 add bc distance-max 30 table1 chair1
 add bc distance-max 30 table1 chair2
-solve design

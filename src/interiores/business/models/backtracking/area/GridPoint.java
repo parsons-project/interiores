@@ -1,5 +1,5 @@
 
-package interiores.business.models.backtracking.Area;
+package interiores.business.models.backtracking.area;
 
 import interiores.core.Debug;
 

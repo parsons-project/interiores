@@ -1,7 +1,7 @@
 package interiores.business.models.backtracking;
 
 import interiores.business.models.Orientation;
-import interiores.business.models.backtracking.Area.Area;
+import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.room.FurnitureModel;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;

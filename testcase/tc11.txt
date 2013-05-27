@@ -7,4 +7,3 @@ add bc facing-straight chair1 chair2
 
 select ft sofa
 add bc facing-partial chair1 sofa1
-solve design

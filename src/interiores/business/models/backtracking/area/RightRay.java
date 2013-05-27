@@ -1,7 +1,7 @@
 /**
  * Represents a wide ray that propagates to the right.
  */
-package interiores.business.models.backtracking.Area;
+package interiores.business.models.backtracking.area;
 
 /**
  * @author nil.mamano

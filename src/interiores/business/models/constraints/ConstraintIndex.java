@@ -2,8 +2,9 @@ package interiores.business.models.constraints;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -11,10 +12,10 @@ import java.util.Map;
  */
 public class ConstraintIndex<T extends Constraint>
 {
-    private List<Class> unaryConstraints;
+    private Set<Class> unaryConstraints;
     
     public ConstraintIndex() {
-        unaryConstraints = new ArrayList();
+        unaryConstraints = new HashSet();
     }
     
     public void add(Constraint unaryConstraint, Map constraints) {
@@ -24,6 +25,7 @@ public class ConstraintIndex<T extends Constraint>
     
     public void remove(Class<? extends T> unaryConstraintClass, Map constraints) {
         constraints.remove(unaryConstraintClass);
+        unaryConstraints.remove(unaryConstraintClass);
     }
     
     public T get(Class<? extends T> unaryConstraintClass, Map constraints) {

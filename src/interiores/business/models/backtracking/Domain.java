@@ -2,13 +2,11 @@
 package interiores.business.models.backtracking;
 
 import interiores.business.models.Orientation;
-import interiores.business.models.backtracking.Area.Area;
+import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.room.FurnitureModel;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * Domain represents the set of values which a given variable can take.

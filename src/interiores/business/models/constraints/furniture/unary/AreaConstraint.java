@@ -1,6 +1,6 @@
 package interiores.business.models.constraints.furniture.unary;
 
-import interiores.business.models.backtracking.Area.Area;
+import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;

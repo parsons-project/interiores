@@ -15,4 +15,3 @@ add uc model ILLSA  chair4
 add bc distance-min 300 chair2 chair4
 add bc distance-min 300 chair3 chair2
 add bc distance-min 300 chair2 chair1
-solve design

@@ -25,4 +25,5 @@ add bc distance-max 50 chair2 chair4
 add bc distance-max 50 chair1 chair4
 add bc distance-min 200 chair4 chair3
 add bc distance-min 400 chair9 chair8
-solve design --debug
+solve design
+

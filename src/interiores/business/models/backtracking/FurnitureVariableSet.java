@@ -197,22 +197,8 @@ public class FurnitureVariableSet
      * 
      * The iterators of the actual variable are reset.
      */ 
-    int SetActualVariableDebugCount = 0;
     @Override
     protected void setActualVariable() {
-        
-        Debug.println("==========================");        
-        Debug.println("Start of setActualVariable: " + SetActualVariableDebugCount);
-        Debug.println("Depth: " + depth);
-        Debug.println("Current actual: ");
-        if (actual == null) Debug.println("null\n");
-        else Debug.println(actual.getName());
-        Debug.println("unassignedVariables.size() = " + unassignedVariables.size());
-        Debug.println("assignedVariables.size() = " + assignedVariables.size());
-        ++SetActualVariableDebugCount;
-        for (FurnitureVariable variable : unassignedVariables)
-            Debug.println(variable.getDomain().getPositions(depth).toString());
-        
         if (unassignedVariables.isEmpty())
             allAssigned = true;
         else {

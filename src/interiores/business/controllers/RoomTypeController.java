@@ -3,7 +3,7 @@ package interiores.business.controllers;
 import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.business.events.catalogs.RTModifiedEvent;
 import interiores.business.events.catalogs.RTSetModifiedEvent;
-import interiores.business.models.RoomType;
+import interiores.business.models.room.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.room.FurnitureType;

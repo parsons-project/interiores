@@ -1,12 +1,14 @@
-package interiores.business.models;
+package interiores.business.models.room;
 
 import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.MandatoryFurnitureException;
 import interiores.business.models.catalogs.PersistentIdObject;
-import interiores.business.models.room.FurnitureType;
 import interiores.core.Utils;
 import interiores.utils.Dimension;
+import interiores.utils.Functionality;
 import interiores.utils.Range;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -42,6 +44,9 @@ public class RoomType
     @XmlElementWrapper
     private TreeSet<String> cantHave;
     
+    @XmlElementWrapper
+    private ArrayList<Functionality> neededFunctions;
+    
     public RoomType() {
         this(null,0,0);
     }
@@ -51,10 +56,14 @@ public class RoomType
      * @param name The name of the room type
      */
     public RoomType(String name, int width, int depth) {
-        this(name, new Dimension(width,depth), new String[0], new String[0]);
+        this(name, new Dimension(width,depth), new String[0], new String[0], new Functionality[0]);
     }
     
-
+    public RoomType(String name, Dimension minDimension, String[] mustHave, String[] cantHave)
+    {
+        this(name, minDimension, mustHave, cantHave, new Functionality[0]);
+    }
+    
     /**
      * Full creator of the room type
      * @param name The name of the room type
@@ -63,18 +72,15 @@ public class RoomType
      * @param cantHave A Vector of strings of the furniture types that a room of this type
      *                 cannot contain
      */    
-    public RoomType(String name, Dimension minDimension, String[] mustHave, String[] cantHave) {
+    public RoomType(String name, Dimension minDimension, String[] mustHave, String[] cantHave,
+            Functionality[] neededFunctions)
+    {
         super(name);
         
         this.minDimension = minDimension;
-        this.mustHave = new TreeSet();
-        this.cantHave = new TreeSet();
-        
-        for(int i = 0; i < mustHave.length; ++i)
-            this.mustHave.add(mustHave[i]);
-        
-        for(int i = 0; i < cantHave.length; ++i)
-            this.cantHave.add(cantHave[i]);
+        this.mustHave = new TreeSet(Arrays.asList(mustHave));
+        this.cantHave = new TreeSet(Arrays.asList(cantHave));
+        this.neededFunctions = new ArrayList(Arrays.asList(neededFunctions));
     }
     
     /**

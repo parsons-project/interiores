@@ -4,7 +4,7 @@ import interiores.business.controllers.abstracted.CatalogElementController;
 import interiores.business.events.catalogs.FTModifiedEvent;
 import interiores.business.events.catalogs.FTSetModifiedEvent;
 import interiores.business.exceptions.InvalidValueException;
-import interiores.business.models.RoomType;
+import interiores.business.models.room.RoomType;
 import interiores.business.models.SpaceAround;
 import interiores.business.events.furniture.ElementSelectedEvent;
 import interiores.business.events.furniture.ElementUnselectedEvent;

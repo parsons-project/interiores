@@ -7,8 +7,10 @@ import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.core.Utils;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
+import interiores.utils.Functionality;
 import interiores.utils.Range;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,9 @@ public class FurnitureType
     @XmlElement
     private SpaceAround defaultPassiveSpace;
     
+    @XmlElementWrapper
+    private ArrayList<Functionality> functionalities;
+    
     public FurnitureType() {
         super();
     }
@@ -58,24 +63,34 @@ public class FurnitureType
         this(name, widthRange, depthRange, new SpaceAround(0, 0, 0, 0));
     }
     
+    public FurnitureType(String name, Range widthRange, Range depthRange, SpaceAround defaultPassiveSpace) {
+        this(name, widthRange, depthRange, defaultPassiveSpace, new Functionality[0]);
+    }
+    
+    public FurnitureType(String name, Range widthRange, Range depthRange, Functionality[] functionalities) {
+        this(name, widthRange, depthRange, new SpaceAround(0, 0, 0, 0), functionalities);
+    }
+    
     /**
      * Creates a new furniture type
      * @param name The name of the type of furniture
      * @param widthRange A range of valid widths
      * @param depthRange A range of valid depths
      */
-    public FurnitureType(String name, Range widthRange, Range depthRange, SpaceAround defaultPassiveSpace) {
+    public FurnitureType(String name, Range widthRange, Range depthRange, SpaceAround defaultPassiveSpace,
+            Functionality[] functionalities)
+    {
         super(name);
         
         this.widthRange = widthRange;
         this.depthRange = depthRange;
         this.defaultPassiveSpace = defaultPassiveSpace;
+        this.functionalities = new ArrayList(Arrays.asList(functionalities));
         
         unaryConstraints = new ArrayList();
         binaryConstraints = new HashMap();
         
         models = new TreeMap();
-        
     }
     
     /**

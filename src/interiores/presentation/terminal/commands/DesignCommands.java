@@ -28,13 +28,10 @@ public class DesignCommands extends AdvancedCommandGroup {
    @Command("Generate a valid design for the room")
    @CommandOptions({"debug", "time"})
    public void solve(Options options) {
-       if(options.isEnabled("debug")) {
+       if(options.isEnabled("debug"))
            println("Solving in debug mode");
-           designController.debug(options.isEnabled("time"));
-       }
-       else {
-           designController.solve(options.isEnabled("time"));
-       }
+       
+       designController.solve(options.isEnabled("debug"), options.isEnabled("time"));
    }
    
    @Command("Show the last design")
@@ -42,7 +39,7 @@ public class DesignCommands extends AdvancedCommandGroup {
        if(designController.isSolving())
            throw new BusinessException("The solver is still trying to find a solution...");
        
-       if(designController.hasSolution()) {
+       if(designController.isSolutionFound()) {
            for(WantedFurniture wf : designController.getDesignFurniture())
                println(wf.toString());
        }

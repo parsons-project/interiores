@@ -1,5 +1,6 @@
 package interiores.business.models;
 
+import interiores.business.models.room.RoomType;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import java.util.Collection;

@@ -2,6 +2,7 @@
 package interiores.business.models.constraints.room.global;
 
 import interiores.business.models.backtracking.FurnitureConstant;
+import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
@@ -145,7 +146,10 @@ public class SameMaterialConstraint
     }    
 
     @Override
-    public void notifyStepBack(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
+    public void notifyStepBack(List<FurnitureVariable> assignedVariables,
+        List<FurnitureVariable> unassignedVariables,
+        List<FurnitureConstant> fixedFurniture,
+        FurnitureVariable actual, FurnitureValue actualValue) {
 
     }
 }

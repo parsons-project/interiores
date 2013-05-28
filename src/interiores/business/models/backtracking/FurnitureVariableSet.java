@@ -10,6 +10,10 @@ import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
+import interiores.business.models.constraints.room.global.BudgetConstraint;
+import interiores.business.models.constraints.room.global.EnoughSpaceConstraint;
+import interiores.business.models.constraints.room.global.SameColorConstraint;
+import interiores.business.models.constraints.room.global.SameMaterialConstraint;
 import interiores.business.models.constraints.room.global.SpaceRespectingConstraint;
 import interiores.business.models.constraints.room.global.UnfitModelsPseudoConstraint;
 import interiores.business.models.room.FurnitureModel;
@@ -177,6 +181,21 @@ public class FurnitureVariableSet
      */
     private void addGlobalConstraints(OrientedRectangle roomArea) {
         globalConstraints.add(new SpaceRespectingConstraint(roomArea));
+        globalConstraints.add(new EnoughSpaceConstraint(roomArea));
+        boolean sameColorConstraintActive = false;
+        boolean sameMaterialConstraintActive = false;
+        boolean budgetConstraintActive = false;
+        for (GlobalConstraint constraint : globalConstraints) {
+            if (constraint instanceof SameColorConstraint)
+                sameColorConstraintActive = true;
+            else if (constraint instanceof SameMaterialConstraint)
+                sameMaterialConstraintActive = true;
+            else if (constraint instanceof BudgetConstraint)
+                budgetConstraintActive = true;
+        }
+        globalConstraints.add(new UnfitModelsPseudoConstraint(sameColorConstraintActive,
+                sameMaterialConstraintActive, budgetConstraintActive));
+        
     }
     
 
@@ -314,7 +333,7 @@ public class FurnitureVariableSet
         
         for (GlobalConstraint constraint : globalConstraints) {
             ((RoomInexhaustiveTrimmer) constraint).notifyStepBack(
-                    assignedVariables, unassignedVariables, constants, actual);
+                    assignedVariables, unassignedVariables, constants, actual, (FurnitureValue) value);
         }
     }
 

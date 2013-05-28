@@ -16,6 +16,8 @@ import java.util.Collection;
 public class FurnitureTypeCommands
     extends CatalogElementCommands
 {
+    private static final String PATTERN_PLACE_RESTRICTIONS = "^(next-to|away-from|in-front-of)$";
+    
     private FurnitureTypeController fTypeController;
     
     public FurnitureTypeCommands(FurnitureTypeController fTypeController) {
@@ -80,5 +82,17 @@ public class FurnitureTypeCommands
             println("These are the furniture types you can select for your room: ");
             print(types);
         }
+    }
+    
+    @Command("Position a furniture with respect to the types around it")
+    public void place() throws NoSuchMethodException {
+        String type1 = readString("Over which furniture do you want to define this restriction?");
+        
+        String bctype = readString("Which kind of constraint do you want to add? Possibilities are: \n" +
+                "next-to , away-from , in-front-of");
+        String type2 = readString("With respect to which furniture type?");
+        
+        if (bctype.matches(PATTERN_PLACE_RESTRICTIONS)) fTypeController.addBinaryConstraint(bctype,type1,type2);
+        else throw new NoSuchMethodException(bctype + " is not a valid place restriction");
     }
 }

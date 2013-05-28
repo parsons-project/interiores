@@ -13,7 +13,7 @@ public class FurnitureVariableSetDriver extends AbstractDriver {
 
     private static IOStream iostream = new IOStream(System.in, System.out);
     
-    private static FurnitureVariableSet variableSet;
+    private static Solver variableSet;
     
     public static void main(String[] args) {  
         introduction();

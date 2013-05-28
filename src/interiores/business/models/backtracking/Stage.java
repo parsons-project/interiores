@@ -8,6 +8,7 @@ import interiores.utils.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -61,10 +62,10 @@ public class Stage {
      * Builds a Stage with all positions, a list of models and the 4 default orientations.
      * This constructor is used for the stage correspondent to the first iteration.
      */
-    public Stage(HashSet<FurnitureModel> models, Dimension roomSize) {
+    public Stage(Collection<FurnitureModel> models, Dimension roomSize) {
            
         // initialize models
-        this.models = models;
+        this.models = new HashSet(models);
         
         // initialize positions
         positions = new Area(new Rectangle(0, 0, roomSize.width, roomSize.depth));

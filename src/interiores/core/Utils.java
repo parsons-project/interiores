@@ -1,5 +1,7 @@
 package interiores.core;
 
+import java.util.Collection;
+
 /**
  * Simple static class of utilities.
  * @author hector
@@ -56,5 +58,17 @@ public class Utils
         }
         
         return timeString;
+    }
+    
+    public static String commaSeparated(Collection<?> collection) {
+        String result = "";
+        String sep = "";
+        
+        for(Object element : collection) {
+            result += sep + element.toString();
+            sep = ", ";
+        }
+        
+        return result;
     }
 }

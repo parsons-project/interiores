@@ -4,6 +4,8 @@
  */
 package interiores.utils;
 
+import interiores.core.business.BusinessException;
+
 /**
  *
  * @author hector0193
@@ -11,4 +13,17 @@ package interiores.utils;
 public enum Functionality
 {
     SLEEP, BATH;
+    
+    public static Functionality getEnum(String name) throws BusinessException {
+        for(Functionality functionality : values())
+            if(functionality.name().equalsIgnoreCase(name))
+                return functionality;
+        
+        throw new BusinessException("There is no functionality named as " + name);
+    }
+    
+    @Override
+    public String toString() {
+        return this.name().toLowerCase();
+    }
 }

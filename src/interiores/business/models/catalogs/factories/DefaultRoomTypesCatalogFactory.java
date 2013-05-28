@@ -1,7 +1,7 @@
 package interiores.business.models.catalogs.factories;
 
-import interiores.business.models.room.RoomType;
 import interiores.business.models.catalogs.NamedCatalog;
+import interiores.business.models.room.RoomType;
 import interiores.utils.Dimension;
 import interiores.utils.Functionality;
 

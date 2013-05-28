@@ -71,13 +71,17 @@ abstract public class FurnitureVariable
         return false;
     }
     
-    public void createDomain(HashSet<FurnitureModel> models, Dimension roomSize, int variableCount) {
+    public void createDomain(Collection<FurnitureModel> models, Dimension roomSize, int variableCount) {
         domain = new Domain(models, roomSize, variableCount);
         iteration = 0;
         backtrackingConstraints = new ArrayList(getConstraints());
         
         initializeMaxMinFields();
         undoAssignValue();
+    }
+    
+    public boolean hasDomain() {
+        return domain != null;
     }
     
     /**

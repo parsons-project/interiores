@@ -1,23 +1,16 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogAccessController;
-import interiores.business.events.backtracking.DebugSolveDesignStartedEvent;
 import interiores.business.exceptions.SolverNotFinishedException;
-import interiores.business.models.backtracking.FurnitureVariableSet;
-import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
-import interiores.business.models.backtracking.Solver;
+import interiores.business.models.backtracking.ThreadSolver;
+import interiores.business.models.backtracking.ThreadSolverDebugger;
+import interiores.business.models.backtracking.VariableConfig;
 import interiores.business.models.catalogs.AvailableCatalog;
-import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.room.FurnitureType;
-import interiores.business.models.room.elements.WantedFixed;
 import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
-import interiores.utils.Dimension;
-import interiores.utils.Functionality;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -28,7 +21,7 @@ public class DesignController
     extends CatalogAccessController<FurnitureType>
     implements Observer
 {
-    private Solver solver;
+    private ThreadSolver solver;
     
     /**
      * Creates a particular instance of the design controller
@@ -36,6 +29,8 @@ public class DesignController
      */
     public DesignController(JAXBDataController data) {
         super(data, AvailableCatalog.FURNITURE_TYPES);
+        
+        solver = new ThreadSolver(); // Set an empty solver
     }
     
     /**
@@ -44,46 +39,21 @@ public class DesignController
      * case, returns the solution.
      */
     public void solve(boolean debugMode, boolean timeIt) {
-        Set<Functionality> functionsNotSatisfied = getWishList().getNotSatisfiedFunctionalities();
+        if(solver.isSolving())
+            throw new SolverNotFinishedException();
         
-        if(! functionsNotSatisfied.isEmpty())
-            throw new RoomFunctionalitiesNotSatisfied(functionsNotSatisfied);
+        VariableConfig variableConfig = getWishList().getVariableConfig(getActiveCatalog());
         
-        if(solver == null) {
-            solver = new Solver();
-            solver.addListener(this);
-        }
-        
-        FurnitureVariableSet furVarSet = createFurnitureVariableSet(debugMode);
-        solver.setTimer(timeIt);
-        
-        solver.solve(furVarSet);
-    }
-    
-    private FurnitureVariableSet createFurnitureVariableSet(boolean debugMode) {
-        FurnitureVariableSet furVarSet;
-        Dimension roomSize = getRoom().getDimension();
-        
-        if(debugMode) {
-            furVarSet = new FurnitureVariableSetDebugger(roomSize);
-            ((FurnitureVariableSetDebugger) furVarSet).addListener(this);
-            notify(new DebugSolveDesignStartedEvent());
-        }
+        if(debugMode)
+            solver = new ThreadSolverDebugger(variableConfig);
         else
-            furVarSet = new FurnitureVariableSet(roomSize);
+            solver = new ThreadSolver(variableConfig);
         
-        addWishedFurniture(furVarSet);
+        if(timeIt)
+            solver.enableTimer();
         
-        return furVarSet;
-    }
-    
-    private void addWishedFurniture(FurnitureVariableSet furVarSet) {
-        for(WantedFixed fixed : getWishList().getWantedFixed())
-            furVarSet.addConstant(fixed);
-        
-        NamedCatalog<FurnitureType> typesCatalog = getActiveCatalog();
-        
-        
+        solver.addListener(this);
+        solver.solve();
     }
     
     /**
@@ -103,7 +73,7 @@ public class DesignController
         solver.continueSolving();
     }
     
-    public void stop()
+    public void stopSolver()
     {
         solver.stopSolving();
     }

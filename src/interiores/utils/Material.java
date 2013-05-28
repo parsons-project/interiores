@@ -12,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public enum Material {
     
-    
     AGGLOMERATE, PINE, PLASTIC,
     STEEL, BEECH, BIRCH,
     MARBLE, PORCELAIN, GLASS, BRICK, WOOD;

@@ -343,7 +343,7 @@ public class RoomMapDebuggerFrame extends JFrame
         while(! designController.isSolverPaused())
             ;
         
-        designController.stop();
+        designController.stopSolver();
         map.clearFurniture();
     }//GEN-LAST:event_stopButtonActionPerformed
 

@@ -49,6 +49,7 @@ public class WantedFurniture
         constraints = new HashMap();
         unaryConstraints = new ConstraintIndex<UnaryConstraint>();
         
+        
         binaryConstraints = new ConstraintIndex<BinaryConstraintEnd>();
     }
     

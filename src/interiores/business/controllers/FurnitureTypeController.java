@@ -71,16 +71,6 @@ public class FurnitureTypeController
     {        
         String id = getWishList().addWantedFurniture(name);
         
-        // When we select a new piece of furniture, we check its default constraints and add them
-        if (get(name).shouldBeClungToWalls())
-        {
-            getWishList().addUnaryConstraint(id, new WallConstraint(getRoom().getWidth(),
-                    getRoom().getDepth(),Orientation.values()));
-        }
-            
-        
-        
-        
         notify(new ElementSelectedEvent(id));
     }
     

@@ -296,8 +296,8 @@ public class Area
      * Constructor from area rectangle.
      */
     public Area(Rectangle r) {
-        if (r.width == 0 || r.height == 0)
-            throw new UnsupportedOperationException("The rectangle is empty.");
+//        if (r.width == 0 || r.height == 0)
+//            throw new UnsupportedOperationException("The rectangle is empty.");
         
         this.vertexs = new ArrayList<GridPoint>();
 

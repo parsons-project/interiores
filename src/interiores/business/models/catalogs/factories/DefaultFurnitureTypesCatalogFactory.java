@@ -57,7 +57,7 @@ public class DefaultFurnitureTypesCatalogFactory
     
     private static FurnitureType bedDouble() throws BusinessException {
         FurnitureType ft = new FurnitureType("bedDouble", new Range(120, 240), new Range(180, 210),
-                new SpaceAround(50, 50, 0, 50), new Functionality[]{ Functionality.SLEEP });
+                new SpaceAround(50, 50, 0, 50), new Functionality[]{ Functionality.SLEEP },true);
         
         ft.addFurnitureModel(new FurnitureModel("SFORANVIK", new Dimension(140, 205), 269f, "glazed",
                 "pine"));
@@ -85,7 +85,7 @@ public class DefaultFurnitureTypesCatalogFactory
 
     private static FurnitureType bedSingle() throws BusinessException {
         FurnitureType ft = new FurnitureType("bedSingle", new Range(70, 150), new Range(180, 210),
-                new SpaceAround(50, 0, 0, 0), new Functionality[]{ Functionality.SLEEP });
+                new SpaceAround(50, 0, 0, 0), new Functionality[]{ Functionality.SLEEP },true);
         
         ft.addFurnitureModel(new FurnitureModel("TERESJI", new Dimension(90, 190), 129.99f, "glazed",
                 "beech"));
@@ -165,6 +165,7 @@ public class DefaultFurnitureTypesCatalogFactory
 
     private static FurnitureType cabinet() throws BusinessException {
         FurnitureType ft = new FurnitureType("cabinet", new Range(40, 250), new Range(25, 90));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("JASMINN", new Dimension(190, 50), 189.99f, "brown",
                 "agglomerate"));
@@ -233,6 +234,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType mirror() throws BusinessException {
         FurnitureType ft = new FurnitureType("mirror", new Range(30, 200), new Range(5, 5),
                 new SpaceAround(50, 0, 0, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("NONN", new Dimension(80, 5), 49.99f, "gray",
                 "plastic"));
@@ -259,6 +261,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType sink() throws BusinessException {
         FurnitureType ft = new FurnitureType("sink", new Range(55, 150), new Range(48, 64),
                 new SpaceAround(50, 0, 0, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("TAYKA", new Dimension(110, 50), 179.99f, "gray",
                 "steel"));
@@ -277,6 +280,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType oven() throws BusinessException {
         FurnitureType ft = new FurnitureType("oven", new Range(50, 70), new Range(40, 60),
                 new SpaceAround(30, 0, 0, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("NOHN", new Dimension(60, 55), 259f, "gray",
                 "steel"));
@@ -293,6 +297,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType microwave() throws BusinessException {
         FurnitureType ft = new FurnitureType("microwave", new Range(50, 70), new Range(35, 60),
                 new SpaceAround(30, 0, 0, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("SEIJA", new Dimension(60, 35), 229f, "gray",
                 "steel"));
@@ -309,6 +314,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType hob() throws BusinessException {
         FurnitureType ft = new FurnitureType("hob", new Range(50, 70), new Range(40, 60),
                 new SpaceAround(60, 0, 0, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("HOA", new Dimension(60, 50), 279f, "black",
                 "glass"));
@@ -327,6 +333,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType stove() throws BusinessException {
         FurnitureType ft = new FurnitureType("stove", new Range(50, 75), new Range(40, 60),
                 new SpaceAround(60, 0, 0, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("KRSTO", new Dimension(60, 50), 199.99f, "gray",
                 "steel"));
@@ -344,6 +351,7 @@ public class DefaultFurnitureTypesCatalogFactory
 
     private static FurnitureType extractor() throws BusinessException {
         FurnitureType ft = new FurnitureType("extractor", new Range(50, 90), new Range(40, 60));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("MYRKE", new Dimension(60, 50), 249f, "gray",
                 "steel"));
@@ -363,6 +371,7 @@ public class DefaultFurnitureTypesCatalogFactory
 
     private static FurnitureType fridge() throws BusinessException {
         FurnitureType ft = new FurnitureType("fridge", new Range(50, 70), new Range(40, 60));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("ARZU", new Dimension(60, 60), 389f, "gray",
                 "steel"));
@@ -388,6 +397,7 @@ public class DefaultFurnitureTypesCatalogFactory
 
     private static FurnitureType dishwasher() throws BusinessException {
         FurnitureType ft = new FurnitureType("dishwasher", new Range(50, 70), new Range(40, 60));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("PASJKAL", new Dimension(60, 55), 249f, "gray",
                 "steel"));
@@ -406,6 +416,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType washer() throws BusinessException {
         FurnitureType ft = new FurnitureType("washer", new Range(50, 70), new Range(40, 60),
                 new SpaceAround(50, 0, 0, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("SLIUBJAMIR", new Dimension(60, 55), 219f, "gray",
                 "steel"));
@@ -424,6 +435,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType shelf() throws BusinessException {
         FurnitureType ft = new FurnitureType("shelf", new Range(30, 180), new Range(5, 50),
                 new SpaceAround(50, 0, 0, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("KTYRAD", new Dimension(70, 10), 37.99f, "glazed",
                 "beech"));
@@ -480,6 +492,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType bidet() throws BusinessException {
         FurnitureType ft = new FurnitureType("bidet", new Range(30, 50), new Range(40, 60),
                 new SpaceAround(50, 25, 0, 25));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("ALLEKKSVEI", new Dimension(40, 60), 89.99f, "gray",
                 "porcelain"));
@@ -498,6 +511,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType washbasin() throws BusinessException {
         FurnitureType ft = new FurnitureType("washbasin", new Range(40, 60), new Range(30, 60),
                 new SpaceAround(50, 20, 0, 20));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("SKLLADDIYSJZ", new Dimension(55, 45), 37.99f, "white",
                 "porcelain"));
@@ -522,6 +536,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType toilet() throws BusinessException {
         FurnitureType ft = new FurnitureType("toilet", new Range(40, 60), new Range(50, 80),
                 new SpaceAround(50, 25, 0, 25));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("SVOJTEKH", new Dimension(55, 70), 219f, "black",
                 "porcelain"));
@@ -548,6 +563,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType bathtub() throws BusinessException {
         FurnitureType ft = new FurnitureType("bathtub", new Range(60, 90), new Range(100, 210),
                 new Functionality[]{ Functionality.BATH });
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("SLARS", new Dimension(70, 160), 129f, "white",
                 "porcelain"));
@@ -571,7 +587,7 @@ public class DefaultFurnitureTypesCatalogFactory
 
     private static FurnitureType shower() throws BusinessException {
         FurnitureType ft = new FurnitureType("shower", new Range(60, 120), new Range(60, 120),
-                new SpaceAround(50, 0, 0, 0), new Functionality[]{ Functionality.BATH });
+                new SpaceAround(50, 0, 0, 0), new Functionality[]{ Functionality.BATH },true);
         
         ft.addFurnitureModel(new FurnitureModel("EMMILIIA", new Dimension(90, 120), 139.99f, "white",
                 "porcelain"));
@@ -596,6 +612,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType dryer() throws BusinessException {
         FurnitureType ft = new FurnitureType("dryer", new Range(50, 70), new Range(40, 60),
                 new SpaceAround(50, 0, 0, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("KELLAGH", new Dimension(60, 55), 239f, "gray",
                 "steel"));
@@ -810,6 +827,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType shelves() throws BusinessException {
         FurnitureType ft = new FurnitureType("shelves", new Range(30, 400), new Range(20, 70),
                 new SpaceAround(50, 0, 0, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("GARAYL", new Dimension(250, 40), 349f, "white",
                 "agglomerate"));
@@ -844,6 +862,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType rack() throws BusinessException {
         FurnitureType ft = new FurnitureType("rack", new Range(20, 80), new Range(20, 80),
                 new SpaceAround(30, 0, 30, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("SKARD", new Dimension(45, 45), 79.99f, "glazed",
                 "pine"));
@@ -862,6 +881,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType tv() throws BusinessException {
         FurnitureType ft = new FurnitureType("tv", new Range(40, 100), new Range(5, 70),
                 new SpaceAround(100, 0, 0, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("HELG", new Dimension(80, 30), 149.99f, "black",
                 "plastic"));
@@ -886,6 +906,7 @@ public class DefaultFurnitureTypesCatalogFactory
     private static FurnitureType buffet() throws BusinessException {
         FurnitureType ft = new FurnitureType("buffet", new Range(20, 100), new Range(20, 100),
                 new SpaceAround(50, 0, 0, 0));
+        ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("GARANVIK", new Dimension(35, 45), 59.99f, "blue",
                 "agglomerate"));

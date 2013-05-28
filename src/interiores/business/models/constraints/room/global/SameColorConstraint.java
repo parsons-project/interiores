@@ -148,5 +148,10 @@ public class SameColorConstraint
                 set2.remove(color);
         return set2;
     }
+
+    @Override
+    public void notifyStepBack(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
+        
+    }
     
 }

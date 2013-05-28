@@ -23,7 +23,7 @@ public class PositionConstraint
      * @param point The point where the furniture must be placed 
      */
     public PositionConstraint(Point point) {
-        super(new Area(new Rectangle(point.x, point.y, 1, 1)));
+        super(new Area(new Rectangle(point.x, point.y, 5, 5)));
     }
     
 }

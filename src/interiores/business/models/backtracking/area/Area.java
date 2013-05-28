@@ -970,7 +970,7 @@ public class Area
                                 //relevant if found = true
             for (VerticalEdge edge : verticalEdges) {
                 if (edge.intersects(new RightRay(square))) {
-                    if (! found || mostLeftX < edge.x) {
+                    if (! found || mostLeftX > edge.x) {
                         found = true;
                         mostLeftX = edge.x;
                     }

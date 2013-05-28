@@ -97,4 +97,9 @@ public class SpaceRespectingConstraint
         }
         return true;
     }
+
+    @Override
+    public void notifyStepBack(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
+
+    }
 }

@@ -309,6 +309,11 @@ public class FurnitureVariableSet
         for (FurnitureVariable variable : unassignedVariables) {
             variable.undoTrimDomain(actual, value, depth);
         }
+        
+        for (GlobalConstraint constraint : globalConstraints) {
+            ((RoomInexhaustiveTrimmer) constraint).notifyStepBack(
+                    assignedVariables, unassignedVariables, constants, actual);
+        }
     }
 
     @Override
@@ -330,7 +335,8 @@ public class FurnitureVariableSet
     }
     
     @Override
-    protected boolean canAssignToActual(Value value) {
+    protected boolean canAssignToActual(Value value) 
+        throws NoSolutionException {
         
         //temporal assignment
         actual.assignValue(value);
@@ -366,7 +372,8 @@ public class FurnitureVariableSet
     
     //note: trivial implementation. To be optimized.
     @Override
-    protected void preliminarTrimDomains() {
+    protected void preliminarTrimDomains() 
+        throws NoSolutionException {
         
         //1) each variable triggers its own preliminar trimmers
         for (FurnitureVariable variable : unassignedVariables)

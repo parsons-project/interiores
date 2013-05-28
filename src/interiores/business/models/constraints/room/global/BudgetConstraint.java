@@ -58,7 +58,7 @@ public class BudgetConstraint
 
     /**
      * For each variable, we eliminate all values such that their price plus
-     * the price os the cheapest model of each other variable is higher than
+     * the price of the cheapest model of each other variable is higher than
      * maxBudget.
      * @param variables
      * @param fixedFurniture 
@@ -112,6 +112,11 @@ public class BudgetConstraint
         }
         
         variable.eliminateExceptM(validModels);
+    }
+
+    @Override
+    public void notifyStepBack(List<FurnitureVariable> assignedVariables, List<FurnitureVariable> unassignedVariables, List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
+        currentBudget -= actual.getAssignedValue().getModel().getPrice();
     }
 
 }

@@ -6,6 +6,7 @@ package interiores.business.models.constraints.room;
 
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.shared.backtracking.NoSolutionException;
 import java.util.List;
 
 /**
@@ -26,7 +27,13 @@ public interface RoomInexhaustiveTrimmer {
      * @param actual
      * @return 
      */
-    public abstract boolean isSatisfied(List<FurnitureVariable> assignedVariables,
+    public boolean isSatisfied(List<FurnitureVariable> assignedVariables,
+            List<FurnitureVariable> unassignedVariables,
+            List<FurnitureConstant> fixedFurniture,
+            FurnitureVariable actual)
+            throws NoSolutionException;
+
+    public void notifyStepBack(List<FurnitureVariable> assignedVariables,
             List<FurnitureVariable> unassignedVariables,
             List<FurnitureConstant> fixedFurniture,
             FurnitureVariable actual);

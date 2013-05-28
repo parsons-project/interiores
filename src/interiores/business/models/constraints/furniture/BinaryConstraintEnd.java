@@ -103,7 +103,7 @@ public abstract class BinaryConstraintEnd
         
         WantedFurniture end = (WantedFurniture) otherVariable;
         
-        if (end == otherVariable)
+        if (end == start)
             throw new BusinessException("Can't have a restriction with itself");
         
         if(end.isBounding())

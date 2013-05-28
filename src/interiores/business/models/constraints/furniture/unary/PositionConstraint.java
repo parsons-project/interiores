@@ -32,6 +32,7 @@ public class PositionConstraint
 
     @Override
     public void preliminarTrim(FurnitureVariable variable) {
+        // Implementar la mateixa idea que en les de parets
         variable.eliminateExceptP(new Area(new Rectangle()));
     }
     

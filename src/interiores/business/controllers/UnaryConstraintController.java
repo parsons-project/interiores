@@ -5,6 +5,7 @@ import interiores.business.events.constraints.UnaryConstraintAddedEvent;
 import interiores.business.events.constraints.UnaryConstraintRemovedEvent;
 import interiores.business.models.Orientation;
 import interiores.business.models.Room;
+import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.business.models.constraints.furniture.unary.AreaConstraint;
 import interiores.business.models.constraints.furniture.unary.ColorConstraint;
@@ -18,6 +19,7 @@ import interiores.business.models.constraints.furniture.unary.WallConstraint;
 import interiores.business.models.constraints.furniture.unary.WidthConstraint;
 import interiores.core.data.JAXBDataController;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -99,17 +101,12 @@ public class UnaryConstraintController
     }
     
     public void addPositionAtConstraint(String furnitureId, int x, int y) {
-        addConstraint(furnitureId, new PositionConstraint(new Point(x, y)));
+        addConstraint(furnitureId, new PositionConstraint(x,y));
     }
     
     public void addPositionRangeConstraint(String furnitureId, int x1, int y1, int x2, int y2) {
-        List<Point> validPositions = new ArrayList();
-        
-        for(int i = x1; i <= x2; ++i)
-            for(int j = y1; j <= y2; ++j)
-                validPositions.add(new Point(i, j));
-        
-        addPositionConstraint(furnitureId, validPositions);
+        Area area = new Area(new Rectangle(x1, y1, x2, y2));
+        addConstraint(furnitureId, new AreaConstraint(area));
     }
     
     public void addWallConstraint(String furnitureId, Orientation[] whichWalls) {

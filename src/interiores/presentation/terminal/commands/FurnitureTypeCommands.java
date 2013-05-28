@@ -1,7 +1,9 @@
 package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.FurnitureTypeController;
+import interiores.core.Options;
 import interiores.core.presentation.terminal.annotation.Command;
+import interiores.core.presentation.terminal.annotation.CommandOptions;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
 import interiores.presentation.terminal.commands.abstracted.CatalogElementCommands;
 import java.util.Collection;
@@ -23,7 +25,8 @@ public class FurnitureTypeCommands
     }
     
     @Command("Add a furniture type to the type catalog")
-    public void add() {
+    @CommandOptions({"walls"})
+    public void add(Options options) {
         String name = readString("Enter the name of the furniture type you want to add");
         
         int minWidth = readInt("Enter the minimum width of the type");
@@ -32,7 +35,9 @@ public class FurnitureTypeCommands
         int minDepth = readInt("Enter the minimum depth of the type");
         int maxDepth = readInt("Enter the maximum depth of the type");
         
-        fTypeController.add(name, minWidth, maxWidth, minDepth, maxDepth);
+        String clingToWalls = readString("Should this type be clung to a wall? (yes/no)");
+        
+        fTypeController.add(name, minWidth, maxWidth, minDepth, maxDepth, options.isEnabled("walls") );
     }
     
     @Command("Select a furniture type you want for your room")

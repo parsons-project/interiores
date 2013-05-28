@@ -59,8 +59,13 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="maxDepthField" min="-2" pref="78" max="-2" attributes="0"/>
                           </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="wallsLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="wallsCheckbox" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="16" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -90,7 +95,12 @@
                   <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="maxDepthField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="wallsCheckbox" max="32767" attributes="0"/>
+                  <Component id="wallsLabel" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="cancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="createButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -174,6 +184,16 @@
     <Component class="javax.swing.JTextField" name="maxDepthField">
       <Events>
         <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="maxDepthFieldKeyTyped"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="wallsLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Should this furniture be clung to a wall?"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="wallsCheckbox">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="wallsCheckboxActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

@@ -44,6 +44,8 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
         minDepthField = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         maxDepthField = new javax.swing.JTextField();
+        wallsLabel = new javax.swing.JLabel();
+        wallsCheckbox = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("New room type");
@@ -107,6 +109,14 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
             }
         });
 
+        wallsLabel.setText("Should this furniture be clung to a wall?");
+
+        wallsCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                wallsCheckboxActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -140,8 +150,12 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                                 .add(jLabel7)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 78, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                        .add(0, 0, Short.MAX_VALUE))))
+                                .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 78, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(layout.createSequentialGroup()
+                                .add(wallsLabel)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(wallsCheckbox)))
+                        .add(0, 16, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -164,7 +178,11 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
                     .add(minDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel7)
                     .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .add(20, 20, 20)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(wallsCheckbox, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(wallsLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(10, 10, 10)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(cancelButton)
                     .add(createButton))
@@ -184,8 +202,9 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
         int maxW = Integer.parseInt(maxWidthField.getText());
         int minD = Integer.parseInt(minDepthField.getText());
         int maxD = Integer.parseInt(maxDepthField.getText());
+        boolean clingToWalls = wallsCheckbox.isSelected();
         
-        ftController.add(name, minW, maxW, minD, maxD);
+        ftController.add(name, minW, maxW, minD, maxD,clingToWalls);
         dispose();
     }//GEN-LAST:event_createButtonActionPerformed
 
@@ -209,6 +228,10 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
         verifyFields();
     }//GEN-LAST:event_maxDepthFieldKeyTyped
 
+    private void wallsCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wallsCheckboxActionPerformed
+        verifyFields();
+    }//GEN-LAST:event_wallsCheckboxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton createButton;
@@ -223,13 +246,15 @@ public class NewFurnitureTypeDialog extends javax.swing.JDialog {
     private javax.swing.JTextField minDepthField;
     private javax.swing.JTextField minWidthField;
     private javax.swing.JTextField nameField;
+    private javax.swing.JCheckBox wallsCheckbox;
+    private javax.swing.JLabel wallsLabel;
     // End of variables declaration//GEN-END:variables
 
     /**
      * Checks whether all the fields contain valid information, and if so, enables the create button
      */
     private void verifyFields() {
-        boolean nf, wf, df;
+        boolean nf, wf, df,wcb;
         nf = !"".equals(nameField.getText());
         wf = minWidthField.getText().matches("[0-9]+") && maxWidthField.getText().matches("[0-9]+");
         df = minDepthField.getText().matches("[0-9]+") && maxDepthField.getText().matches("[0-9]+");

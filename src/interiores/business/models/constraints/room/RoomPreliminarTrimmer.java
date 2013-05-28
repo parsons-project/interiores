@@ -6,6 +6,7 @@ package interiores.business.models.constraints.room;
 
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.shared.backtracking.NoSolutionException;
 import java.util.List;
 
 /**
@@ -17,7 +18,8 @@ import java.util.List;
 public interface RoomPreliminarTrimmer
 {
     public void preliminarTrim(List<FurnitureVariable> variables,
-            List<FurnitureConstant> fixedFurniture);
+            List<FurnitureConstant> fixedFurniture)
+            throws NoSolutionException;
     
     
 }

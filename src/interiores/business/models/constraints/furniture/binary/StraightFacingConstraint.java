@@ -82,10 +82,9 @@ public class StraightFacingConstraint
    
         //it must be expanded to W and N to include all positions such that there
         //is a model that placed there, is at least parcially in validRectangle
-        int maxWidth = variable.getMaxWidth();
-        int maxDepth = variable.getMaxDepth();
-        validRectangle= validRectangle.enlarge(maxWidth, Orientation.W);
-        validRectangle= validRectangle.enlarge(maxDepth, Orientation.N);
+        int maxSize = variable.getMaxSize();
+        validRectangle= validRectangle.enlarge(maxSize, Orientation.W);
+        validRectangle= validRectangle.enlarge(maxSize, Orientation.N);
  
         
         variable.trimExceptP(new Area(validRectangle.enlarge(maxDist, validRectangle.getOrientation())));

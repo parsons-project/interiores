@@ -7,6 +7,7 @@ import interiores.business.models.constraints.furniture.BacktrackingTimeTrimmer;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.room.FurnitureModel;
+import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
@@ -208,25 +209,22 @@ abstract public class FurnitureVariable
             }
             
             //ditch it if it doesn't implement any other interface
-            if (! (constraint instanceof InexhaustiveTrimmer));
+            if (! (constraint instanceof InexhaustiveTrimmer))
                 it.remove();
         }
     }
 
     public boolean constraintsSatisfied() {
-        for (Constraint constraint : backtrackingConstraints)
-            if (! ((InexhaustiveTrimmer) constraint).isSatisfied(this))
+        for (Constraint constraint : backtrackingConstraints) {
+            if (! ((InexhaustiveTrimmer) constraint).isSatisfied(this)) {   
                 return false;
-        
+            }
+        }
         return true;
     }
 
-    public int getMaxWidth() {
-        return maxWidth;
-    }
-
-    public int getMaxDepth() {
-        return maxDepth;
+    public int getMaxSize() {
+        return Math.max(maxWidth, maxWidth);
     }
     
     //FUNCTIONS TO MODIFY THE DOMAIN

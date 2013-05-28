@@ -1,5 +1,6 @@
 package interiores.presentation.swing.views;
 
+import help.HelpView;
 import interiores.business.controllers.RoomController;
 import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomLoadedEvent;
@@ -262,11 +263,13 @@ public class MainAppFrame extends JFrame
     }//GEN-LAST:event_terminalMenuCheckboxActionPerformed
 
 private void generalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generalHelpMenuActionPerformed
-    openHelp("general.html");  
+    HelpView helpFrame = presentation.getNew(HelpView.class);
+    helpFrame.load("", "");
 }//GEN-LAST:event_generalHelpMenuActionPerformed
 
 private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalHelpMenuActionPerformed
-    openHelp("terminal/manual.html");
+    HelpView helpFrame = presentation.getNew(HelpView.class);
+    helpFrame.load("terminal/manual.html", "Terminal Manual");
 }//GEN-LAST:event_terminalHelpMenuActionPerformed
 
 
@@ -372,11 +375,6 @@ private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//
         invalidate();
         validate();
         pack();
-    }
-    
-    private void openHelp(String relPath) {
-        String helpPath = help.Help.class.getResource(".").getPath();
-        OpenDefaultBrowser.openURL(helpPath + relPath);
     }
     
 }

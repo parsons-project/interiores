@@ -1,7 +1,9 @@
 package interiores.presentation.terminal.commands;
 
 import interiores.business.controllers.FurnitureTypeController;
+import interiores.core.Options;
 import interiores.core.presentation.terminal.annotation.Command;
+import interiores.core.presentation.terminal.annotation.CommandOptions;
 import interiores.core.presentation.terminal.annotation.CommandSubject;
 import interiores.presentation.terminal.commands.abstracted.CatalogElementCommands;
 import java.util.Collection;
@@ -14,6 +16,8 @@ import java.util.Collection;
 public class FurnitureTypeCommands
     extends CatalogElementCommands
 {
+    private static final String PATTERN_PLACE_RESTRICTIONS = "^(next-to|away-from|in-front-of)$";
+    
     private FurnitureTypeController fTypeController;
     
     public FurnitureTypeCommands(FurnitureTypeController fTypeController) {
@@ -23,7 +27,8 @@ public class FurnitureTypeCommands
     }
     
     @Command("Add a furniture type to the type catalog")
-    public void add() {
+    @CommandOptions({"walls"})
+    public void add(Options options) {
         String name = readString("Enter the name of the furniture type you want to add");
         
         int minWidth = readInt("Enter the minimum width of the type");
@@ -32,7 +37,9 @@ public class FurnitureTypeCommands
         int minDepth = readInt("Enter the minimum depth of the type");
         int maxDepth = readInt("Enter the maximum depth of the type");
         
-        fTypeController.add(name, minWidth, maxWidth, minDepth, maxDepth);
+        String clingToWalls = readString("Should this type be clung to a wall? (yes/no)");
+        
+        fTypeController.add(name, minWidth, maxWidth, minDepth, maxDepth, options.isEnabled("walls") );
     }
     
     @Command("Select a furniture type you want for your room")
@@ -75,5 +82,17 @@ public class FurnitureTypeCommands
             println("These are the furniture types you can select for your room: ");
             print(types);
         }
+    }
+    
+    @Command("Position a furniture with respect to the types around it")
+    public void place() throws NoSuchMethodException {
+        String type1 = readString("Over which furniture do you want to define this restriction?");
+        
+        String bctype = readString("Which kind of constraint do you want to add? Possibilities are: \n" +
+                "next-to , away-from , in-front-of");
+        String type2 = readString("With respect to which furniture type?");
+        
+        if (bctype.matches(PATTERN_PLACE_RESTRICTIONS)) fTypeController.addBinaryConstraint(bctype,type1,type2);
+        else throw new NoSuchMethodException(bctype + " is not a valid place restriction");
     }
 }

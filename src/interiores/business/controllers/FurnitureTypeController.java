@@ -8,8 +8,15 @@ import interiores.business.models.room.RoomType;
 import interiores.business.models.SpaceAround;
 import interiores.business.events.furniture.ElementSelectedEvent;
 import interiores.business.events.furniture.ElementUnselectedEvent;
+import interiores.business.models.Orientation;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
+import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
+import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
+import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
+import interiores.business.models.constraints.furniture.binary.PartialFacingConstraint;
+import interiores.business.models.constraints.furniture.binary.StraightFacingConstraint;
+import interiores.business.models.constraints.furniture.unary.WallConstraint;
 import interiores.business.models.room.FurnitureType;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
@@ -26,6 +33,9 @@ import java.util.TreeMap;
 public class FurnitureTypeController
     extends CatalogElementController<FurnitureType>
 {
+    // The default distance a furniture is put with respect to other if they should be separated
+    private static int AWAY_DISTANCE = 200;
+    
     /**
      * Creates a particular instance of the furniture type controller
      * @param data The data controller that will give access to the objects this controller will use
@@ -41,13 +51,14 @@ public class FurnitureTypeController
      * @param maxWidth The maximum width of the type
      * @param minDepth The minimum depth of the type
      * @param maxDepth The maximum depth of the type
-     */
-    public void add(String name, int minWidth, int maxWidth, int minDepth, int maxDepth)
+     */    
+    public void add(String name, int minWidth, int maxWidth, int minDepth, int maxDepth, boolean clingToWalls)
     {
         Range widthRange = new Range(minWidth, maxWidth);
         Range depthRange = new Range(minDepth, maxDepth);
         
         FurnitureType toAdd = new FurnitureType(name, widthRange, depthRange);
+        toAdd.setToWalls(clingToWalls);
         
         super.add(toAdd);
         notify(new FTSetModifiedEvent(toAdd.getFullName(),name, true));
@@ -164,5 +175,20 @@ public class FurnitureTypeController
     private RoomType getRoomType(String name) {
         NamedCatalog<RoomType> rtCatalog = (NamedCatalog) getCatalog(AvailableCatalog.ROOM_TYPES);
         return rtCatalog.get(name);
+    }
+
+
+    public void addBinaryConstraint(String bctype, String type1, String type2) {
+        
+        BinaryConstraintEnd bce = null;
+        
+        if (bctype.equals("next-to")) bce = new MaxDistanceConstraint(0);
+        else if (bctype.equals("away-from")) bce = new MinDistanceConstraint(AWAY_DISTANCE);
+        else if (bctype.equals("in-front-of")) bce = new PartialFacingConstraint(1000); // When facing constraints lose their distance, this attribute should be simply removed
+        
+        if (bce != null) {
+            get(type1).addBinaryConstraint(get(type2), bce);
+            notify(new FTModifiedEvent(get(type1).getFullName(),type1));
+        }
     }
 }

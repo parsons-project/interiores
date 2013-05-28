@@ -85,7 +85,7 @@ public class MinDistanceConstraint
         OrientedRectangle rectangle2 =
                 ((FurnitureValue) otherVariable.getAssignedValue()).getArea();
        
-        return Area.distance(rectangle1, rectangle2) > distance;
+        return Area.distance(rectangle1, rectangle2) >= distance;
     }
 
 }

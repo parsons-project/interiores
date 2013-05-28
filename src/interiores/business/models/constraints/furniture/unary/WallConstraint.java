@@ -6,8 +6,9 @@ import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
-import interiores.business.models.room.FurnitureModel;
+import interiores.core.Debug;
 import java.awt.Rectangle;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,12 +19,12 @@ import java.util.List;
 public class WallConstraint
     extends UnaryConstraint implements InexhaustiveTrimmer {
     
-    Orientation[] orientations;
+    private List<Orientation> orientations;
     int roomWidth;
     int roomDepth;
     
     public WallConstraint(int roomWidth, int roomDepth, Orientation[] orientations) {
-        this.orientations = orientations;
+        this.orientations = Arrays.asList(orientations);
         this.roomWidth = roomWidth;
         this.roomDepth = roomDepth;
     }
@@ -49,65 +50,31 @@ public class WallConstraint
         Area validPositions = new Area();
         for(Orientation orientation : orientations) {
             
-            int maxDistance, minDistance;
+            Debug.println("Trimming " + orientation);
+            
+            int maxSize = variable.getMaxSize();
             
             switch(orientation) {
                 case N:
                     validPositions.union(
-                        new Area(new Rectangle(0,0,roomWidth,1)));
+                        new Area(new Rectangle(0,0,roomWidth, maxSize)));
                     break;
 
                 case W:
                     validPositions.union(
-                        new Area(new Rectangle(0,0,1,roomDepth)));
+                        new Area(new Rectangle(0,0,maxSize,roomDepth)));
                     break;
                                      
-                //in this case, we have to leave positions such that any
-                //model of the variable can be next to the wall
                 case S:
-                    minDistance = 0; //least depth of a model of this variable
-                    maxDistance = 0; //largest depth of a model of this variable
-                    
-                    //initialize max and min distance
-                    for (FurnitureModel model : variable.getDomain().getModels(0)) {
-                        int depth = model.getSize().depth;
-                        if (minDistance == 0 || depth < minDistance)
-                            minDistance = depth;
-                        if (maxDistance == 0 || depth > maxDistance)
-                            maxDistance = depth;
-                    }
-                    
                     validPositions.union(new Area(new Rectangle(
-                        0, roomDepth - maxDistance,
-                        roomWidth, maxDistance - minDistance)));
-                        //x goes from 0 to roomWidth to reach the whole south
-                        //wall.
-                        //y goes from roomDepth - maxDistance to roomDepth -
-                        //minDistance so that any model with depth between
-                        //minDistance and maxDistance can fit
+                        0, roomDepth - maxSize,
+                        roomWidth, maxSize)));
                     break;
                                      
                 case E:
-                    minDistance = 0; //least width of a model of this variable
-                    maxDistance = 0; //largest width of a model of this variable
-                    
-                    //initialize max and min distance
-                    for (FurnitureModel model : variable.getDomain().getModels(0)) {
-                        int width = model.getSize().width;
-                        if (minDistance == 0 || width < minDistance)
-                            minDistance = width;
-                        if (maxDistance == 0 || width > maxDistance)
-                            maxDistance = width;
-                    }
-                    
                     validPositions.union(new Area(new Rectangle(
-                        roomWidth - maxDistance, 0,
-                        maxDistance - minDistance, roomDepth)));
-                        //y goes from 0 to roomDepth to reach the whole east
-                        //wall.
-                        //x goes from roomWidth - maxDistance to roomWidth -
-                        //minDistance so that any model with width between
-                        //minDistance and maxDistance can fit
+                        roomWidth - maxSize, 0,
+                        roomWidth - maxSize, roomDepth)));
                     break;
             }    
         }
@@ -118,27 +85,54 @@ public class WallConstraint
     
     @Override
     public boolean isSatisfied(FurnitureVariable variable) {
+        boolean correct = false;
+        FurnitureValue assignedValue = variable.getAssignedValue();
         for(Orientation orientation : orientations) {
-            FurnitureValue assignedValue = variable.getAssignedValue();
             switch(orientation) {
+                case N:
+                    if (assignedValue.getPosition().y == 0) {
+                        correct = true;
+                    }
+                    break;
+                case W:
+                    if (assignedValue.getPosition().x == 0) {
+                        correct = true;
+                    }
+                    break;
                 case E:
                     if (assignedValue.getPosition().x +
-                        assignedValue.getModel().getSize().width
-                            != roomWidth)
-                        return false;
+                        assignedValue.getModel().getSize(assignedValue.getOrientation()).width
+                            == roomWidth) {
+                        correct = true;
+                    }
                     break;
 
                 case S:
                     if (assignedValue.getPosition().y +
-                        assignedValue.getModel().getSize().depth
-                            != roomDepth)
-                        return false;                    
-                    break;
-                    
-                default: //the trims on N or W walls are exhaustive
+                        assignedValue.getModel().getSize(assignedValue.getOrientation()).depth
+                            == roomDepth) {
+                        correct = true;
+                    }
                     break;
             }
         }
-        return true;
+        return correct;
+    }
+    
+    @Override
+    public String toString() {
+        String string = "";
+        boolean first = true;
+        for (Orientation orientation : orientations) {
+            if (first) {
+                string += orientation.toString();
+                first = false;
+            }
+            else
+                string += ", " + orientation;
+        }
+            
+        return "Walls: " + string;
+        
     }
 }

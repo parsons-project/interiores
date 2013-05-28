@@ -43,7 +43,7 @@ public class FurnitureType
     private Range depthRange;
     
     @XmlElementWrapper
-    private ArrayList<UnaryConstraint> unaryConstraints;
+    private boolean clingToWalls;
     
     @XmlElementWrapper
     private HashMap<String, ArrayList<BinaryConstraintEnd>> binaryConstraints;
@@ -66,21 +66,24 @@ public class FurnitureType
     }
     
     public FurnitureType(String name, Range widthRange, Range depthRange, SpaceAround defaultPassiveSpace) {
-        this(name, widthRange, depthRange, defaultPassiveSpace, new Functionality[0]);
+        this(name, widthRange, depthRange, defaultPassiveSpace, new Functionality[0],false);
     }
     
     public FurnitureType(String name, Range widthRange, Range depthRange, Functionality[] functionalities) {
-        this(name, widthRange, depthRange, new SpaceAround(0, 0, 0, 0), functionalities);
+        this(name, widthRange, depthRange, new SpaceAround(0, 0, 0, 0), functionalities,false);
     }
     
     /**
-     * Creates a new furniture type
-     * @param name The name of the type of furniture
-     * @param widthRange A range of valid widths
-     * @param depthRange A range of valid depths
+     * 
+     * @param name
+     * @param widthRange
+     * @param depthRange
+     * @param defaultPassiveSpace
+     * @param functionalities
+     * @param walls 
      */
     public FurnitureType(String name, Range widthRange, Range depthRange, SpaceAround defaultPassiveSpace,
-            Functionality[] functionalities)
+            Functionality[] functionalities, boolean walls)
     {
         super(name);
         
@@ -89,19 +92,12 @@ public class FurnitureType
         this.defaultPassiveSpace = defaultPassiveSpace;
         this.functionalities = new HashSet(Arrays.asList(functionalities));
         
-        unaryConstraints = new ArrayList();
+        clingToWalls = walls;
         binaryConstraints = new HashMap();
         
         models = new TreeMap();
     }
     
-    /**
-     * Returns the unary constraints defined for this type
-     * @return A list of unary constraints set by default
-     */
-    public List<UnaryConstraint> getUnaryConstraints() {
-        return unaryConstraints;
-    }
     
     /**
      * Returns the binary constraints defined for this type
@@ -119,12 +115,12 @@ public class FurnitureType
         return new ArrayList(models.values());
     }
     
-    /**
-     * Adds a default unary constraint to the type
-     * @param unaryConstraint The unary constraint to add
-     */
-    public void addUnaryConstraint(UnaryConstraint unaryConstraint) {
-        unaryConstraints.add(unaryConstraint);
+    public boolean shouldBeClungToWalls() {
+        return clingToWalls;
+    }
+    
+    public void setToWalls(boolean clingToWalls) {
+        this.clingToWalls = clingToWalls;
     }
     
     /**
@@ -240,4 +236,5 @@ public class FurnitureType
         return Utils.padRight(getName(), 20) + "Width[" + widthRange.toString() + "], Depth["
                 + depthRange.toString() + "]";
     }
+
 }

@@ -1,0 +1,132 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[utf8]{inputenc}
+
+\newcommand{\comando}[3]{%
+\subsection{ {#1} }
+  \begin{description}
+    \item[Sintaxis] \texttt{\textbf{#1} {#2} }
+    \item[Descripci\'{o}n] {#3}
+  \end{description}}
+
+%% \usepackage{hyperref}
+%% \hypersetup{
+%%     colorlinks=true,       % false: links enquadrats; true: links en color
+%%     linkcolor=blue,        % color de links interns (peus de pàgina, seccions)
+%%     citecolor=blue,        % color de links a bibliografia (n\'{u}meros en [])
+%%     filecolor=magenta,     % color dels links a arxius (externs al pdf)
+%%     urlcolor=blue          % color dels links a urls
+%% }
+
+\title{\textsc{Comandos de la Terminal}}
+\date{}
+
+\begin{document}
+A parte de la interf\'{i}cie gr\'{a}fica, el programa tiene definido un
+conjunto de comandos que pueden ser ejecutados desde la terminal del
+sistema directamente o bien mediante la consola virtual que puede
+activarse con la combinaci\'{o}n de teclas <CTRL-T> o bien, usando la opci\'{o}n
+{\bf Terminal} del men\'{u} {\bf View}.
+
+Las l\'{i}neas que empiecen por el car\'{a}cter {\bf #} (que puede ir
+precedido de un n\'{u}mero arbitrario de espacios en blanco) ser\'{a}n
+ignoradas.
+
+En este documento se describen todos y cada uno de los comandos
+existentes.
+
+\section{Comandos de ayuda}
+El programa intenta ser autodocumentado y ofrece un m\'{e}todo para
+obtener ayuda sobre los comandos de los que dispone. La mayoria de los
+comandos cuando no reciben todos los parametros necesarios piden con
+un mensaje por pantalla qu\'{e} necesitan.
+
+\comando{help}{[<sujeto>]}{Muestra ayuda sobre el sujeto. Si no se proporciona un sujeto, muestra una ayuda general}
+\section{Comandos sobre el conjunto de cat\'{a}logos}
+Los cat\'{a}logos contienen elementos de un tipo determinado. Los tipos
+soportados son tipo de habitaci\'{o}n (RoomTypeCatalog o {\tt rtc}) y tipo
+de mueble (FurnitureTypeCatalog o {\tt ftc}). De todos los cat\'{a}logos
+del conjunto, hay uno especial, el \emph{actual} que define los tipos
+de muebles y/o tipos de habitaciones que se pueden seleccionar. Hay un
+cat\'{a}logo por defecto ({\tt default}) que siempre est\'{a} en el conjunto y
+no se puede modificar. Ahora bien, el cat\'{a}logo {\tt session}, que
+inicialmente es una r\'{e}plica exacta del {\tt default} si permite
+modificaciones que pueden ser luego guardadas.
+
+\comando{new}{<tipo> <nombre> [<nombre2> ...]}{Crea tantos cat\'{a}logos nuevos del tipo {\tt tipo} como nombres se especifiquen y los a\~{n}ade al conjunto. No modifica el apuntador al cat\'{a}logo \emph{actual}.}
+\comando{list}{<tipo>}{Muestra los cat\'{a}logos de tipo \emph{tipo} marcando el \emph{actual} con un asterisco '*' delante.}
+\comando{checkout}{<tipo> <nombre>}{Mueve el apuntador del cat\'{a}logo \emph{actual} de tipo {\tt tipo} al cat\'{a}logo con nombre {\tt nombre}. El cat\'{a}logo debe pertenecer al conjunto.}
+\comando{merge}{<tipo> <nombre> [<nombre2> ...]}{Fusiona tantos cat\'{a}logos como nombres se especifiquen con el cat\'{a}logo actual. Si un elemento del tipo {\tt tipo} ya estaba dentro del cat\'{a}logo actual, se mantiene la versi\'{o}n de \'{e}ste; si no, se a\~{n}ade.}
+\comando{load}{<tipo> <ruta>}{Carga el cat\'{a}logo guardado en la ruta {\tt tipo}. La ruta debe ser absoluta o relativa al directorio actual.}
+\comando{save}{<tipo> <ruta>}{Guarda el cat\'{a}logo del tipo {\tt tipo} actual en la ruta {\tt ruta}. La ruta debe ser absoluta o relativa al directorio actual.}
+
+\section{Comandos sobre los cat\'{a}logos}
+Los cat\'{a}logos pueden contener elementos. Los elementos pueden ser habitaciones (Room) en el caso del cat\'{a}logo de tipos de habitaciones y modelos de muebles (FurnitureModel) en el de tipos de muebles. Aqu\'{i} los {\tt tipos} son o bien {\tt ft} (FurnitureType) o bien {\tt rt} (RoomType). Estos comandos son gen\'{e}ricos para ambos  conjuntos.
+
+
+\comando{list}{<tipo>}{Lista los elementos del cat\'{a}logo actual de tipo {\tt tipo}.}
+\comando{rm}{<tipo> <nombre> [<nombre2> ...]}{Elimina del cat\'{a}logo de tipo {\tt tipo} los elementos con los nombres dados.}
+
+\section{Comandos sobre tipos de mueble}
+Los tipos de mueble aparte de tener comandos que se ejecutan sobre los
+cat\'{a}logos que los contienen, tiene otros comandos m\'{a}s espec\'{i}ficos.
+
+\comando{add}{ft [--walls] <params>}{A\~{n}ade al cat\'{a}logo actual de tipos de muebles un nuevo mueble con propiedades definidas por {\tt params}. Si no se da ning\'{u}n par\'{a}metro, el programa pedir\'{a} uno a uno los par\'{a}metros que necesite. Si se usa la opci\'{o}n {\tt walls}, se indica que el tipo de mueble nuevo debe ir pegado a la pared.}
+\comando{select}{ft <nombre> [<nombre2> ...]}{Selecciona el tipo de mueble con nombre {\tt nombre} que ser\'{a} tenido en cuenta a la hora de crear el dise\~{n}o. Se puede seleccionar m\'{a}s de un elemento de un mismo tipo.}
+\comando{unselect}{ft <nombre>}{Quita de la lista de los que se van a tener en cuenta pare el dise\~{n}o. {\tt nombre} es el nombre identificativo que recibio el mueble al ser elegido.}
+\comando{selected}{ft}{Lista los tipos actualmente seleccionados que se tendr\'{a}n en cuenta para la generaci\'{o}n del dise\~{n}o.}
+\comando{place}{ft <tipo1> <restricci\'{o}n> <tipo2>}{Indica que un mueble de tipo {\tt tipo1} debe cumplir la restricci\'{o}n simple {\tt restricci\'{o}n} respecto un mueble de {\tt tipo2}. {\tt restricci\'{o}n} puede ser: {\tt next-to} (\emph{al lado de}, \emph{cerca}), {\tt away-from} (\emph{lejos de}), {\tt in-front-of} (\emph{en frente de}).
+
+\section{Comandos sobre modelos de muebles}
+
+Un mismo tipo de mueble puede tener varios modelos. Este conjunto de operaciones trabaja sobre los modelos dado un tipo de mueble.
+
+\comando{add}{fm <tipo> <params>}{A\~{n}ade un nuevo modelo de un tipo {\tt tipo} determinado. Si no se proporcionan par\'{a}metros, el programa ira pidiendo los que necesite uno a uno.}
+\comando{rm}{fm <tipo> <nombre>}{Elimina un modelo de mueble con tipo con nombre {\tt nombre}.}
+\comando{list}{fm <tipo>}{Lista los modelos de mueble del tipo dado.}
+
+\section{Comandos sobre los tipos de habitaci\'{o}n}
+
+Las habitaciones pueden categorizarse por tipos. Cada tipo tiene unos
+muebles obligatorios y/o prohibidos, unas dimensiones m\'{i}nimas y
+m\'{a}ximas, una funcionalidad... Estos comandos permiten gestionar estas
+cualidades de una habitaci\'{o}n.
+
+\comando{add}{rt <nombre>}{Crea una nuevo tipo de habitaci\'{o}n con nombre {\tt nombre}.}
+\comando{put}{rt <tipo> mandatory|forbidden <tipos>}{A\~{n}ade al tipo de habitaci\'{o}n {\tt tipo} los tipos de mueble {\tt tipos} que debe tener (\emph{mandatory}) o no puede tener (\emph{forbidden}).}
+\comando{release}{rt <tipo> mandatory|forbidden <tipos>}{Quita al tipo de habitaci\'{o}n {\tt tipo} los tipos de mueble {\tt tipos} que debe tener (\emph{mandatory}) o no puede tener (\emph{forbidden}).}
+\comando{types}{rt <tipo>}{Lista los tipos de muebles obligatorios y prohibidos para el tipo de habitaci\'{o}n dado.}
+
+\section{Comandos sobre las habitaciones}
+
+La habitaci\'{o}n es el elemento principal de un dise\~{n}o. Estos comandos
+gestionan el guardado y cargado de las habitaciones como dise\~{n}o.
+
+\comando{new}{room <tipo> <ancho> <profundo>}{Crea una nueva habitaci\'{o}n de tipo {\tt tipo} y con dimensiones de {\tt ancho}x{\tt profundo}. La mayor\'{i}a de comandos requieren que haya una habitaci\'{o}n instanciada que usan como par\'{a}metro impl\'{i}cito.}
+\comando{save}{room <ruta>}{Guarda el dise\~{n}o actual en la ruta especificada.}
+\comando{load}{room <ruta>}{Carga el dise\~{n}o almacenado en la ruta especificada.}
+
+\section{Comandos para gestionar restricciones}
+
+Estos comandos sirven para a\~{n}adir y quitar restricciones al
+dise\~{n}o. Tienen efectos sobre elementos seleccionados para el dise\~{n}o.
+Existen restricciones tanto unarias (afectan \'{u}nicamente al elemento
+que la tiene) como binarias (afectan a un par de elementos de la
+habitaci\'{o}n). Tambi\'{e}n hay restricciones globales, que afectan a todos
+los elementos de la habitaci\'{o}n.
+
+\comando{add}{uc <tipo> <params> <selected1>}{A\~{n}ade una restricci\'{o}n unaria de tipo {\tt tipo} con los par\'{a}metros {\tt params}. En el caso en que {\tt params} sea vac\'{i}o el programa pedir\'{a} los necesarios uno a uno. {\tt tipo} incluye: \texttt{color}, \texttt{model},  \texttt{price}, \texttt{material}, \texttt{orientation}, \texttt{width}, \texttt{depth} y \texttt{position}.{\tt selected} es el nombre del modelo seleccionado (tienen la forma \emph{tipoNUMERO}.}
+
+\comando{add}{bc <tipo> <params> <selected1> <selected2>}{A\~{n}ade una restricci\'{o}n binaria de tipo {\tt tipo} con los par\'{a}metros {\tt params}. En el caso en que {\tt params} sea vac\'{i}o el programa pedir\'{a} los necesarios uno a uno. {\tt tipo} incluye: {\tt distance-max}, {\tt distance-min}, {\tt partial-facing} y {\tt straight-facing}. Las restricciones se aplican sobre elementos seleccionados (tienen la forma \emph{tiposNUMERO}.}
+
+\comando{list}{constraint}{Lista las restricciones a\~{n}adidas hasta el momento a los elementos de la habitaci\'{o}n.}
+
+\section{Comando para generar el dise\~{n}o}
+
+Una vez creada la habitaci\'{o}n, a\~{n}adidos los muebles y definidas
+restricciones entre ellos, ya estamos dispuestos a solucionar el
+problema.
+
+\comando{solve}{design}{Dados la habitaci\'{o}n creada, los tipos muebles elegidos y sus restricciones, ejecuta el algoritmo para intentar dar una soluci\'{o}n. Si hay una soluci\'{o}n posible dibujar\'{a} la distribuci\'{o}n de los muebles por pantalla.}
+\comando{show}{design}{Muestra la \'{u}ltima soluci\'{o}n encontrada.}
+
+\end{document}

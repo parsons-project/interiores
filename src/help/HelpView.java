@@ -59,7 +59,8 @@ public class HelpView extends JScrollPane implements HyperlinkListener {
         setLocation((screen.width - getWidth()) / 2, (screen.height - getHeight()) / 2);
 
         frame.add(this);
-
+        frame.setAlwaysOnTop(true);
+        frame.setResizable(false);
         frame.setSize(400, 300);
         frame.setTitle(title);
         frame.setVisible(true);

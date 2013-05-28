@@ -339,8 +339,10 @@ public class FurnitureVariableSet
 
     @Override
     protected boolean allAssigned() {
-        if (unassignedVariables.isEmpty() && actual.isAssigned()) {
-            allAssigned = true;
+        if (unassignedVariables.isEmpty()) {
+            if (actual != null && actual.isAssigned()) {
+                allAssigned = true;
+            }
         }
         return allAssigned;
     }

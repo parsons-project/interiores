@@ -69,6 +69,6 @@ public class MaxDistanceConstraint
         OrientedRectangle rectangle1 = ((FurnitureValue) otherVariable.getAssignedValue()).getArea();
         OrientedRectangle rectangle2 = ((FurnitureValue) variable.getAssignedValue()).getArea();
         
-        return Area.distance(rectangle1, rectangle2) < distance;
+        return Area.distance(rectangle1, rectangle2) <= distance;
     }
 }

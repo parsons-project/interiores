@@ -163,6 +163,17 @@ public class FurnitureType
         return identifier;
     }
     
+    public String getFullName() {
+        String[] words = getName().split("(?=[A-Z])");
+        
+        String fullName = Utils.capitalize(words[0]);
+        
+        for(int i = 1; i < words.length; ++i)
+            fullName += " " + Utils.decapitalize(words[i]);
+        
+        return fullName;
+    }
+    
     /**
      * Gets the width range a furniture model of this type should have
      * @return The minimum dimensions a furniture model of this type should have
@@ -177,6 +188,30 @@ public class FurnitureType
      */
     public Range getDepthRange() {
         return depthRange;
+    }
+    
+    /**
+     * Sets the width range a furniture model of this type should have
+     * @return The minimum dimensions a furniture model of this type should have
+     */
+    public void setWidthRange(Range w) {
+        widthRange = w;
+    }
+    
+    /**
+     * Sets the depth range a furniture model of this type should have
+     * @return The minimum dimensions a furniture model of this type should have
+     */
+    public void setDepthRange(Range d) {
+        depthRange = d;
+    }
+    
+    public SpaceAround getPassiveSpace() {
+        return defaultPassiveSpace;
+    }
+    
+    public void setPassiveSpace(SpaceAround sa) {
+        defaultPassiveSpace = sa;
     }
     
     @Override

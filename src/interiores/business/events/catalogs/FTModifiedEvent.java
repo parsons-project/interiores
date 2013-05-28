@@ -8,9 +8,9 @@ package interiores.business.events.catalogs;
  *
  * @author larribas
  */
-public class FTCatalogChangedEvent extends ElementChangedEvent {
+public class FTModifiedEvent extends ElementModifiedEvent {
     
-    public FTCatalogChangedEvent(String name, boolean added) {
-        super(name,added);
+    public FTModifiedEvent(String fname, String name) {
+        super(fname,name);
     }
 }

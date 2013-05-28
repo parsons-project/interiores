@@ -1,5 +1,7 @@
 package interiores.core;
 
+import java.awt.Rectangle;
+
 /**
  * Simple class for enable/disable debugging mesages.
  * @author hector
@@ -24,6 +26,11 @@ public class Debug {
     public static void println(String s) {
         if(enabled)
             System.err.println("[DEBUG] " + s);
+    }
+    
+    public static void print(Rectangle r) {
+        println("Location: (" + r.x + ", " + r.y + ")");
+        println("Size: (" + r.width + ", " + r.height + ")");
     }
     
     /**

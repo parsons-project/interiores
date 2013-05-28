@@ -21,6 +21,10 @@ public class SpaceAround
         passiveOffsets = new int[]{ north, east, south, west };
     }
     
+    public int[] getOffsets() {
+        return passiveOffsets;
+    }
+    
     public Rectangle getWholeArea(OrientedRectangle area) {
         int o = area.getOrientation().ordinal();
         

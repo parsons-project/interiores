@@ -422,7 +422,7 @@ public class Stage {
             if (! validOrientations.contains(it.next()))
                 it.remove();
     }
-
+    
     void eliminateExceptP(Area validPositions) {
         positions.intersection(validPositions);
     }

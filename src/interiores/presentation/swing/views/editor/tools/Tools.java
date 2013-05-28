@@ -33,6 +33,7 @@ public class Tools {
         
         toolsMenu = new JMenu();
         toolsMenu.setText("Tools");
+        toolsMenu.setName("Tools");
         
         toolBar = new JToolBar();
         toolBar.setFloatable(false);

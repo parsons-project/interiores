@@ -1,11 +1,8 @@
 package interiores.presentation.swing.views.editor.tools;
 
 import interiores.business.controllers.FixedElementController;
-import interiores.business.models.Orientation;
 import interiores.core.presentation.SwingController;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
-import interiores.presentation.swing.views.map.RoomMap;
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
@@ -14,17 +11,12 @@ import java.awt.event.MouseEvent;
  * @author alvaro
  */
 public class DoorTool
-    extends EditorTool 
+    extends OnWallElementTool 
 {
-    private SwingController swing;
-    private FixedElementController fixedController;
-    private Point position;
-    private Orientation wallWhere;
+    
     
     public DoorTool(SwingController swing) {
-        super("Door", "door.png", KeyEvent.VK_D);
-        
-        this.swing = swing;
+        super("Door", "door.png", KeyEvent.VK_D);   
         fixedController = swing.getBusinessController(FixedElementController.class);
     }
     
@@ -38,9 +30,9 @@ public class DoorTool
         if(length == 0)
             return true;
         
-        int displacement = getDisplacement();
+        int displacement = getDisplacement(length);
         
-        fixedController.addDoor(wallWhere.toString(false), displacement, length);
+        fixedController.addDoor(wallWhere.toString(false), pad(displacement), pad(Math.abs(length)));
         
         return true;
     }
@@ -55,31 +47,10 @@ public class DoorTool
         if(length == 0)
             return true;
         
-        int displacement = getDisplacement();
+        int displacement = getDisplacement(length);
         
-        map.previewDoor(wallWhere, displacement, length);
+        map.previewDoor(wallWhere, pad(displacement), pad(Math.abs(length)));
         return true;
     }
     
-    @Override
-    public boolean mousePressed(MouseEvent evt, InteractiveRoomMap map) {
-        position  = map.normDiscretize(evt.getPoint());
-        wallWhere = map.getNearestWall(evt.getX(), evt.getY());
-   
-        return false;
-    }
-    
-    private int getLength(Point normPos) {
-        if(wallWhere == Orientation.E || wallWhere == Orientation.W)
-            return Math.abs(position.y - normPos.y);
-        
-        return Math.abs(position.x - normPos.x);
-    }
-    
-    private int getDisplacement() {
-        if(wallWhere == Orientation.E || wallWhere == Orientation.W)
-            return position.y - RoomMap.getPadding();
-            
-        return position.x - RoomMap.getPadding();
-    }
 }

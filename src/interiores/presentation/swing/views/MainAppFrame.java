@@ -11,9 +11,7 @@ import interiores.presentation.swing.helpers.FileChooser;
 import interiores.utils.OpenDefaultBrowser;
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Desktop;
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFileChooser;
@@ -26,15 +24,18 @@ import javax.xml.bind.JAXBException;
  */
 public class MainAppFrame extends JFrame
 {
+    private static int TOOLS_INDEX = 2;
+    
     private SwingController presentation;
     private RoomController roomController;
     private WelcomePanel welcome;
     private TerminalPanel terminal;
-    private RoomTypeCatalogPanel rtCatalogPanel;
     private MapEditorPanel editorPanel;
     
     private List<Component> previousViews, currentViews;
     private JFileChooser fileChooser;
+    
+    private boolean toolsEnabled = false;
     
     /**
      * Creates new form MainView
@@ -48,13 +49,13 @@ public class MainAppFrame extends JFrame
         roomController = presentation.getBusinessController(RoomController.class);
         welcome = presentation.get(WelcomePanel.class);
         terminal = presentation.get(TerminalPanel.class);
-        rtCatalogPanel = presentation.get(RoomTypeCatalogPanel.class);
         
         previousViews = new ArrayList();
         currentViews = new ArrayList();
         
         fileChooser = new FileChooser();
 
+               
         loadComponent(welcome, BorderLayout.CENTER);
     }
 
@@ -65,8 +66,7 @@ public class MainAppFrame extends JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         menuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -75,7 +75,10 @@ public class MainAppFrame extends JFrame
         saveMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        rtCatalog = new javax.swing.JMenuItem();
+        rtcMenuItem = new javax.swing.JMenuItem();
+        ftcMenuItem = new javax.swing.JMenuItem();
+        fmcMenuItem = new javax.swing.JMenuItem();
+        
         jMenu3 = new javax.swing.JMenu();
         terminalMenuCheckbox = new javax.swing.JCheckBoxMenuItem();
         helpMenu = new javax.swing.JMenu();
@@ -92,10 +95,8 @@ public class MainAppFrame extends JFrame
 
         newRoom.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         newRoom.setText("New room design...");
-        newRoom.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        newRoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 newRoomActionPerformed(evt);
             }
         });
@@ -103,10 +104,8 @@ public class MainAppFrame extends JFrame
 
         openMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         openMenuItem.setText("Open room design...");
-        openMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        openMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openMenuItemActionPerformed(evt);
             }
         });
@@ -115,10 +114,8 @@ public class MainAppFrame extends JFrame
         saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         saveMenuItem.setText("Save room design...");
         saveMenuItem.setEnabled(false);
-        saveMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveMenuItemActionPerformed(evt);
             }
         });
@@ -126,10 +123,8 @@ public class MainAppFrame extends JFrame
 
         exitMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
         exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitMenuItemActionPerformed(evt);
             }
         });
@@ -139,26 +134,42 @@ public class MainAppFrame extends JFrame
 
         jMenu2.setText("Edit");
 
-        rtCatalog.setText("Room type catalog");
-        rtCatalog.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                rtCatalogActionPerformed(evt);
+        rtcMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
+        rtcMenuItem.setText("Room types catalog");
+        rtcMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rtcMenuItemActionPerformed(evt);
             }
         });
-        jMenu2.add(rtCatalog);
+        jMenu2.add(rtcMenuItem);
+
+        ftcMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        ftcMenuItem.setText("Furniture types catalog");
+        ftcMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ftcMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu2.add(ftcMenuItem);
+
+        fmcMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        fmcMenuItem.setText("Furniture models catalog");
+        fmcMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fmcMenuItemActionPerformed(evt);
+            }
+        });
+        jMenu2.add(fmcMenuItem);
 
         menuBar.add(jMenu2);
 
         jMenu3.setText("View");
+        jMenu3.setName("View"); // NOI18N
 
         terminalMenuCheckbox.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
         terminalMenuCheckbox.setText("Terminal");
-        terminalMenuCheckbox.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        terminalMenuCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 terminalMenuCheckboxActionPerformed(evt);
             }
         });
@@ -202,10 +213,9 @@ public class MainAppFrame extends JFrame
         presentation.showNew(NewDesignDialog.class);
     }//GEN-LAST:event_newRoomActionPerformed
 
-    private void rtCatalogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rtCatalogActionPerformed
-        unloadCurrentView();
-        loadComponent(rtCatalogPanel, BorderLayout.CENTER);      
-    }//GEN-LAST:event_rtCatalogActionPerformed
+    private void rtcMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rtcMenuItemActionPerformed
+        presentation.showNew(RoomTypeCatalogFrame.class);
+    }//GEN-LAST:event_rtcMenuItemActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_exitMenuItemActionPerformed
     {//GEN-HEADEREND:event_exitMenuItemActionPerformed
@@ -234,6 +244,16 @@ public class MainAppFrame extends JFrame
         }
     }//GEN-LAST:event_saveMenuItemActionPerformed
 
+
+    private void ftcMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftcMenuItemActionPerformed
+        presentation.showNew(FurnitureTypeCatalogFrame.class);
+    }//GEN-LAST:event_ftcMenuItemActionPerformed
+
+    private void fmcMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fmcMenuItemActionPerformed
+        presentation.showNew(FurnitureModelCatalogFrame.class);
+    }//GEN-LAST:event_fmcMenuItemActionPerformed
+
+   
     private void terminalMenuCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalMenuCheckboxActionPerformed
         if(terminalMenuCheckbox.isSelected())
             loadComponent(terminal, BorderLayout.PAGE_END);
@@ -248,9 +268,13 @@ private void generalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//G
 private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalHelpMenuActionPerformed
     openHelp("terminal/manual.html");
 }//GEN-LAST:event_terminalHelpMenuActionPerformed
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutHelpMenu;
     private javax.swing.JMenuItem exitMenuItem;
+    private javax.swing.JMenuItem fmcMenuItem;
+    private javax.swing.JMenuItem ftcMenuItem;
     private javax.swing.JMenuItem generalHelpMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenu jMenu1;
@@ -259,7 +283,7 @@ private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem newRoom;
     private javax.swing.JMenuItem openMenuItem;
-    private javax.swing.JMenuItem rtCatalog;
+    private javax.swing.JMenuItem rtcMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JMenuItem terminalHelpMenu;
     private javax.swing.JCheckBoxMenuItem terminalMenuCheckbox;
@@ -293,20 +317,43 @@ private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//
     public void showFurnitureAndMap() {
         unloadComponent(welcome);
         
-        editorPanel = presentation.getNew(MapEditorPanel.class);
+        MapEditorPanel editorPanel = presentation.getNew(MapEditorPanel.class);
         loadComponent(editorPanel, BorderLayout.CENTER);
         
         saveMenuItem.setEnabled(true);
-        menuBar.add(editorPanel.getToolsMenu(), 2);        
+        
+        if(toolsEnabled)
+            menuBar.remove(TOOLS_INDEX);
+        else
+            toolsEnabled = true;
+        
+        menuBar.add(editorPanel.getToolsMenu(), TOOLS_INDEX);
+
     }
     
     private void unloadCurrentView() {
+        previousViews.clear();
         for (Component c : currentViews) {
-            remove(c);
             c.setVisible(false);
             previousViews.add(c);
         }
         currentViews.clear();
+    }
+    
+    
+    protected void loadPreviousView() {
+        for (Component c : currentViews) remove(c);
+        currentViews.clear();
+        
+        for (Component c : previousViews) {
+            currentViews.add(c);
+            c.setVisible(true);
+        }
+        previousViews.clear();
+        
+        invalidate();
+        validate();
+        pack();
     }
     
     private void loadComponent(Component comp, Object constraints) {
@@ -330,12 +377,6 @@ private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//
     private void openHelp(String relPath) {
         String helpPath = help.Help.class.getResource(".").getPath();
         OpenDefaultBrowser.openURL(helpPath + relPath);
-    }
-    
-    private void printComponents() {
-        Debug.println("Components in the container: " + getComponentCount());
-        for (Component c : getComponents())
-            Debug.println("Component: " + c.toString());
     }
     
 }

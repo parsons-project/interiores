@@ -88,12 +88,13 @@ abstract public class CatalogCommands
     }
     
     @Command("Merges two or more catalogs with the current being used")
-    public void merge() throws BusinessException {
+    @CommandOptions({"replace"})
+    public void merge(Options options) throws BusinessException {
         String question = String.format(MERGE_MSG, catalogTypeName);
         Collection<String> catalogNames = readStrings(question);
         
         for(String catalogName : catalogNames)
-            catalogController.merge(catalogName);
+            catalogController.merge(catalogName,options.isEnabled("replace"));
     }
     
     @Command("Removes the specified catalog")

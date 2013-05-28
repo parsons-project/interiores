@@ -40,8 +40,11 @@ public class SpaceRespectingConstraint
     @Override
     public void preliminarTrim(List<FurnitureVariable> variables, List<FurnitureConstant> fixedFurniture) {
         for (FurnitureConstant fixed : fixedFurniture)
-            for (FurnitureVariable variable : variables)
-                variable.trimP(new Area(fixed.getAssignedValue().getWholeArea()));
+            for (FurnitureVariable variable : variables) {
+                Debug.println("Trimming " + fixed.getAssignedValue().toString());
+                Debug.print(fixed.getAssignedValue().getWholeArea());
+                variable.eliminateP(new Area(fixed.getAssignedValue().getWholeArea()));
+            }
     }
 
     /**
@@ -95,6 +98,15 @@ public class SpaceRespectingConstraint
                 actualValue.getWholeArea().intersects(otherValue.getArea()))
                 return false;
         }
+        
+        for (FurnitureConstant fixed : fixedFurniture) {
+            FurnitureValue otherValue = fixed.getAssignedValue();
+            
+            if (actualValue.getArea().intersects(otherValue.getWholeArea()) ||
+                actualValue.getWholeArea().intersects(otherValue.getArea()))
+                return false;
+        }
+        
         return true;
     }
 }

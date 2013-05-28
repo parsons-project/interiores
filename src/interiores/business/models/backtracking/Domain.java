@@ -132,6 +132,10 @@ public class Domain {
         domain[0].eliminateExceptO(validOrientations);
     }
     
+    void eliminateP(Area invalidPositions) {
+        domain[0].difference(invalidPositions);
+    }
+    
     void eliminateExceptP(Area validPositions) {
         domain[0].eliminateExceptP(validPositions);
     }

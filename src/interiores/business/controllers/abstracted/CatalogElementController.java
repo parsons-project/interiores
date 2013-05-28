@@ -39,4 +39,5 @@ abstract public class CatalogElementController<I extends PersistentIdObject>
     public Collection<I> getCatalogObjects() {
         return getActiveCatalog().getObjects();
     }
+    
 }

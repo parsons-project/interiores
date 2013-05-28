@@ -150,6 +150,15 @@ public class Walls implements Drawable {
         elements.put(key, mapWindow);
     }
     
+    public void previewWindow(Orientation wall, int displacement, int length) {
+        Point position = getPosition(wall, displacement);
+        
+        MapWindow previewWindow = new MapWindow("previewWin", length, CoolColor.WHITE.getColor(), position, wall);
+        
+        elements.put(position, previewWindow);
+        previewKey = position;
+    }
+    
     public void clear() {
         elements.clear();
     }

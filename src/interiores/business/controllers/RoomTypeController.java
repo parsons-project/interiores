@@ -1,7 +1,8 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogElementController;
-import interiores.business.events.catalogs.RTChangedEvent;
+import interiores.business.events.catalogs.RTModifiedEvent;
+import interiores.business.events.catalogs.RTSetModifiedEvent;
 import interiores.business.models.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
@@ -9,6 +10,7 @@ import interiores.business.models.room.FurnitureType;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Range;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -31,18 +33,19 @@ public class RoomTypeController
      * Adds a new type of room to the current catalog
      * @param typeName The name of the new type
      */
-    public void add(String typeName)
+    public void add(String typeName, int width, int depth)
     {
-        RoomType type = new RoomType(typeName);
+        RoomType type = new RoomType(typeName,width,depth);
         super.add(type);
         
-        notify(new RTChangedEvent(type.getFullName(), typeName,true));
+        notify(new RTSetModifiedEvent(type.getFullName(),typeName,true));
     }
     
     @Override
     public void rm(String typeName) {
+        String fullName = get(typeName).getFullName();
         super.rm(typeName);
-        notify(new RTChangedEvent(null,typeName,false));
+        notify(new RTSetModifiedEvent(fullName,typeName,false));
     }
     
     /**
@@ -56,6 +59,8 @@ public class RoomTypeController
         FurnitureType furnitureType = getFurnitureType(furnitureTypeName);
         
         roomType.addToMandatory(furnitureType);
+        
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     /**
@@ -68,6 +73,30 @@ public class RoomTypeController
         RoomType roomType = getForWrite(roomTypeName);
         
         roomType.removeFromMandatory(furnitureTypeName);
+        
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
+    }
+    
+    public void setMandatory(String roomTypeName, String[] mandatory) {
+        RoomType roomType = getForWrite(roomTypeName);
+        Collection<FurnitureType> cft = new LinkedList();
+        for (String s : mandatory) if(!s.equals("")) cft.add(getFurnitureType(s));
+        // Now, if everything went alright
+        roomType.clearMandatory();
+        for (FurnitureType ft : cft) roomType.addToMandatory(ft);
+        
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
+    }
+    
+    public void setForbidden(String roomTypeName, String[] forbidden) {
+        RoomType roomType = getForWrite(roomTypeName);
+        Collection<FurnitureType> cft = new LinkedList();
+        for (String s : forbidden) if(!s.equals("")) cft.add(getFurnitureType(s));
+        // Now, if everything went alright
+        roomType.clearForbidden();
+        for (FurnitureType ft : cft) roomType.addToForbidden(ft);
+        
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     /**
@@ -81,6 +110,8 @@ public class RoomTypeController
         FurnitureType furnitureType = getFurnitureType(furnitureTypeName);
         
         roomType.addToForbidden(furnitureType);
+        
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     /**
@@ -93,6 +124,8 @@ public class RoomTypeController
         RoomType roomType = getForWrite(roomTypeName);
         
         roomType.removeFromForbidden(furnitureTypeName);
+        
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     /**
@@ -134,6 +167,18 @@ public class RoomTypeController
     
     public Range getDepthRange(String roomTypeName) {
         return get(roomTypeName).getDepthRange();
+    }
+    
+    public void setMinWidth(String roomTypeName, int w) {
+        RoomType roomType = getForWrite(roomTypeName);
+        roomType.setMinWidth(w);
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
+    }
+    
+    public void setMinDepth(String roomTypeName, int d) {
+        RoomType roomType = getForWrite(roomTypeName);
+        roomType.setMinDepth(d);
+        notify(new RTModifiedEvent(roomType.getFullName(),roomTypeName));
     }
     
     /**

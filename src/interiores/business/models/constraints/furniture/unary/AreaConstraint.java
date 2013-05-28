@@ -6,7 +6,6 @@ import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  * 
@@ -14,7 +13,6 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  * a piece of furniture.
  */
 @XmlRootElement
-@XmlSeeAlso({PositionConstraint.class, WallConstraint.class})
 public class AreaConstraint
     extends UnaryConstraint implements InexhaustiveTrimmer {
     

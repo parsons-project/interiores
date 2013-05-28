@@ -1,6 +1,9 @@
 package interiores.business.models.constraints.furniture.unary;
 
+import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.area.Area;
+import interiores.business.models.constraints.furniture.PreliminarTrimmer;
+import interiores.business.models.constraints.furniture.UnaryConstraint;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -10,7 +13,7 @@ import java.awt.Rectangle;
  * @author alvaro
  */
 public class PositionConstraint
-    extends AreaConstraint
+   extends UnaryConstraint implements PreliminarTrimmer
 {
     
     private Point position;
@@ -18,12 +21,18 @@ public class PositionConstraint
     public PositionConstraint()
     { }
     
+    public PositionConstraint(int x, int y) {
+        position = new Point(x, y);
+    }
+    
     /**
      * Creator of the constraint
      * @param point The point where the furniture must be placed 
      */
-    public PositionConstraint(Point point) {
-        super(new Area(new Rectangle(point.x, point.y, 5, 5)));
+
+    @Override
+    public void preliminarTrim(FurnitureVariable variable) {
+        variable.eliminateExceptP(new Area(new Rectangle()));
     }
     
 }

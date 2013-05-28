@@ -216,9 +216,9 @@ public class Stage {
         
         //Area intersections optimization
         Area shiftedLeft = new Area(positions);
-        shiftedLeft.shift(d.width, Orientation.W);
+        shiftedLeft.shift(d.width-1, Orientation.W);
         Area shiftedUp = new Area(positions);
-        shiftedUp.shift(d.depth, Orientation.N);
+        shiftedUp.shift(d.depth-1, Orientation.N);
         iterablePositions.intersection(shiftedLeft);
         iterablePositions.intersection(shiftedUp);
     }

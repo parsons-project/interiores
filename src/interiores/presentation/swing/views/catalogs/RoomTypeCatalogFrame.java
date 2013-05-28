@@ -511,13 +511,9 @@ public class RoomTypeCatalogFrame extends javax.swing.JFrame {
     public void performModification() {
         if (!hasBeenModified) {
             hasBeenModified = true;
-            Debug.println("D");
             String currM = (String) currentCatalogSelect.getSelectedItem() + "(mod)";
-            Debug.println("E");
             rtcController.create(currM);
-            Debug.println("F");
             rtcController.checkout(currM);
-            Debug.println("G");
         }        
     }
     

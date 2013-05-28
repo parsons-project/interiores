@@ -191,4 +191,12 @@ public class FurnitureTypeController
             notify(new FTModifiedEvent(get(type1).getFullName(),type1));
         }
     }
+
+    public boolean getWallClinging(String name) {
+        return get(name).shouldBeClungToWalls();
+    }
+    
+    public void setWallClinging(String name, boolean clinging) {
+        get(name).setToWalls(clinging);
+    }
 }

@@ -6,14 +6,12 @@ package interiores.presentation.swing.views.catalogs;
 
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.RoomTypeController;
-import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.utils.Range;
 import java.util.Collection;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -149,11 +147,11 @@ public final class RTCElement extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
+                .add(35, 35, 35)
                 .add(removeButton)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -162,7 +160,7 @@ public final class RTCElement extends javax.swing.JPanel {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(removeButton))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -196,20 +194,12 @@ public final class RTCElement extends javax.swing.JPanel {
         removeButton.addActionListener(new java.awt.event.ActionListener() {
         @Override
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Debug.println("A");
                 catFrame.performModification();
-                Debug.println("B");
                 rtController.rm(shortName);
-                Debug.println("C");
             }
         });
-
-        // Properties of the inner panel
-        innerPanel.setBackground(new java.awt.Color(255, 255, 255));
-        innerPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-
+        
         // Name of the element
-        rtname.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
         rtname.setText(fullName + ":");
 
         // Measure fields (1: width, 2:depth)

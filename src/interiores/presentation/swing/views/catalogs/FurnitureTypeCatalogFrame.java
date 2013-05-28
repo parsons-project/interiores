@@ -10,7 +10,6 @@ import interiores.business.events.catalogs.FTSetModifiedEvent;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.helpers.FileChooser;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.Collection;
@@ -20,8 +19,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.ToolTipManager;
-import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.xml.bind.JAXBException;
@@ -44,7 +41,7 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
     // activer catalog. This map is modified everytime the catalog changes
     // or a particular element does. Changes from any other presentation layer
     // are automatically reflected
-    private Map<String,FTC_Element> catElements;
+    private Map<String,FTCElement> catElements;
     
     // The frame also stores the changes made to the current catalog so far,
     // so that one can save them or discard them
@@ -452,13 +449,13 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
 
     /**
      * Loads a new element to the current catalog display
-     * @param key The full name of the element (e.g. Single Bed)
-     * @param ftn The short (internal) id of the element (e.g. singleBed)
+     * @param fname The full name of the element (e.g. Single Bed)
+     * @param sname The short (internal) id of the element (e.g. singleBed)
      */
-    private void addElement(String key, String ftn) {
-        FTC_Element ftcInstance = new FTC_Element(ftn,key);
-        ftcInstance.addToPanel();
-        catElements.put(key, ftcInstance);
+    private void addElement(String fname, String sname) {
+        FTCElement ftcInstance = new FTCElement(swing,sname,fname,this);
+        jPanel1.add(ftcInstance);
+        catElements.put(fname, ftcInstance);
     }
     
     /**
@@ -467,7 +464,7 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
      */
     private void removeElement(String key) {
         if (catElements.containsKey(key)) {
-            catElements.get(key).removeFromPanel();
+            jPanel1.remove(catElements.get(key) );
             catElements.remove(key);
         }
     }
@@ -507,7 +504,7 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
         jPanel1.repaint();
     }
     
-    private void performModification() {
+    public void performModification() {
         if (!hasBeenModified) {
             hasBeenModified = true;
             String currM = (String) currentCatalogSelect.getSelectedItem() + "(mod)";

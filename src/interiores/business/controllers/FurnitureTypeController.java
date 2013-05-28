@@ -8,8 +8,10 @@ import interiores.business.models.room.RoomType;
 import interiores.business.models.SpaceAround;
 import interiores.business.events.furniture.ElementSelectedEvent;
 import interiores.business.events.furniture.ElementUnselectedEvent;
+import interiores.business.models.Orientation;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
+import interiores.business.models.constraints.furniture.unary.WallConstraint;
 import interiores.business.models.room.FurnitureType;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
@@ -41,13 +43,14 @@ public class FurnitureTypeController
      * @param maxWidth The maximum width of the type
      * @param minDepth The minimum depth of the type
      * @param maxDepth The maximum depth of the type
-     */
-    public void add(String name, int minWidth, int maxWidth, int minDepth, int maxDepth)
+     */    
+    public void add(String name, int minWidth, int maxWidth, int minDepth, int maxDepth, boolean clingToWalls)
     {
         Range widthRange = new Range(minWidth, maxWidth);
         Range depthRange = new Range(minDepth, maxDepth);
         
         FurnitureType toAdd = new FurnitureType(name, widthRange, depthRange);
+        toAdd.setToWalls(clingToWalls);
         
         super.add(toAdd);
         notify(new FTSetModifiedEvent(toAdd.getFullName(),name, true));
@@ -67,6 +70,16 @@ public class FurnitureTypeController
     public void select(String name)
     {        
         String id = getWishList().addWantedFurniture(name);
+        
+        // When we select a new piece of furniture, we check its default constraints and add them
+        if (get(name).shouldBeClungToWalls())
+        {
+            getWishList().addUnaryConstraint(id, new WallConstraint(getRoom().getWidth(),
+                    getRoom().getDepth(),Orientation.values()));
+        }
+            
+        
+        
         
         notify(new ElementSelectedEvent(id));
     }

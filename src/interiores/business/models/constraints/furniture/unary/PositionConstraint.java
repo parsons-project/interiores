@@ -2,7 +2,8 @@ package interiores.business.models.constraints.furniture.unary;
 
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.backtracking.area.Area;
-import interiores.business.models.constraints.furniture.PreliminarTrimmer;
+import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
+
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -13,7 +14,7 @@ import java.awt.Rectangle;
  * @author alvaro
  */
 public class PositionConstraint
-   extends UnaryConstraint implements PreliminarTrimmer
+   extends UnaryConstraint implements InexhaustiveTrimmer
 {
     
     private Point position;
@@ -32,8 +33,13 @@ public class PositionConstraint
 
     @Override
     public void preliminarTrim(FurnitureVariable variable) {
-        // Implementar la mateixa idea que en les de parets
-        variable.eliminateExceptP(new Area(new Rectangle()));
+        int maxSize = variable.getMaxSize();
+        variable.eliminateExceptP(new Area(new Rectangle(position.x, position.y, maxSize, maxSize)));
+    }
+
+    @Override
+    public boolean isSatisfied(FurnitureVariable variable) {
+        return variable.assignedValue.getPosition().equals(position);
     }
     
 }

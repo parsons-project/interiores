@@ -101,6 +101,16 @@ public class FurnitureModel {
         return size;
     }
     
+    public Dimension getSize(Orientation orientation) {
+        switch(orientation) {          
+            case W:
+            case E:
+                return new Dimension(size.depth, size.width);
+            default:
+                return size;              
+        }
+    }
+    
     /**
      * Gets the area of the furniter model in surface units.
      * @return 

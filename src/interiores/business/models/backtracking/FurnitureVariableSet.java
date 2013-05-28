@@ -363,7 +363,10 @@ public class FurnitureVariableSet
         actual.assignValue(value);
         
         //1) check that furniture constraints are satisfied
-        if (! actual.constraintsSatisfied()) return false;
+        if (! actual.constraintsSatisfied()) {
+            actual.undoAssignValue();
+            return false;
+        }
         
         //2) check that room constraints are satisfied
         for (GlobalConstraint constraint : globalConstraints) {

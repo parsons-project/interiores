@@ -101,7 +101,7 @@ public class WallConstraint
                     break;
                 case E:
                     if (assignedValue.getPosition().x +
-                        assignedValue.getModel().getSize().width
+                        assignedValue.getModel().getSize(assignedValue.getOrientation()).width
                             == roomWidth) {
                         correct = true;
                     }
@@ -109,7 +109,7 @@ public class WallConstraint
 
                 case S:
                     if (assignedValue.getPosition().y +
-                        assignedValue.getModel().getSize().depth
+                        assignedValue.getModel().getSize(assignedValue.getOrientation()).depth
                             == roomDepth) {
                         correct = true;
                     }

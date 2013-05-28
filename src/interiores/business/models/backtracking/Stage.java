@@ -210,8 +210,7 @@ public class Stage {
      * This process eliminates many invalid positions the variable could take on.
      */
     private void buildIterablePositions() {
-        Dimension d = (currentOrientation.ordinal() % 2 == 0)?
-                currentModel.getSize() : rotateModel(currentModel);
+        Dimension d = (currentOrientation.ordinal() % 2 == 0) ? currentModel.getSize() : rotateModel(currentModel);
         iterablePositions = new Area(positions);
         
         //Area intersections optimization

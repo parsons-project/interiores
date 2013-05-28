@@ -44,12 +44,12 @@ public class FurnitureVariableSet
     /**
      * This list contains the variables which do not have an assigned value yet.
      */
-    List<FurnitureVariable> unassignedVariables;
+    private List<FurnitureVariable> unassignedVariables;
     
     /**
      * This list contains the variables which have an assigned value.
      */
-    List<FurnitureVariable> assignedVariables;
+    private List<FurnitureVariable> assignedVariables;
     
     /**
      * This is the variable that the algorithm is trying to assign in the
@@ -58,7 +58,7 @@ public class FurnitureVariableSet
      */
     protected FurnitureVariable actual;
     
-    List<FurnitureConstant> constants;
+    private List<FurnitureConstant> constants;
     
     /**
      * Indicates whether all variables have an assigned value.
@@ -68,7 +68,7 @@ public class FurnitureVariableSet
     /**
      * Indicates restrictions amongst all variables.
      */
-   List<GlobalConstraint> globalConstraints;
+    private List<GlobalConstraint> globalConstraints;
     
    /**
     * Holds information about the relationship between constraints of
@@ -79,7 +79,9 @@ public class FurnitureVariableSet
     * 
     * Detailed explanation in the header of Constraint class.
     */
-   Map<Entry<String, String>, Integer> matrixOfDependence;
+   private Map<Entry<String, String>, Integer> matrixOfDependence;
+   
+   private Dimension roomSize;
     
     /**
      * constants to calibrate the selection of the next actual variable.
@@ -118,40 +120,33 @@ public class FurnitureVariableSet
      * 
      * The matrix of dependence is built
      */
-    public FurnitureVariableSet(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog)
+    public FurnitureVariableSet(Dimension roomSize)
             throws BusinessException {
 
-        Dimension roomSize = wishList.getRoom().getDimension();
+        this.roomSize = roomSize;
         OrientedRectangle roomArea = new OrientedRectangle(new Point(0, 0), roomSize, Orientation.S);
         
-        variableCount = wishList.getUnfixedSize();
+        variableCount = 0;
         
         allAssigned = false;
-   
-        assignedVariables = new ArrayList<FurnitureVariable>();
         
         actual = null;
-        
+        assignedVariables = new ArrayList<FurnitureVariable>();
         unassignedVariables = new ArrayList<FurnitureVariable>();
-        addVariables(wishList, furnitureCatalog, roomSize);
-        
         constants = new ArrayList<FurnitureConstant>();
-        addConstants(wishList);
         
         globalConstraints = new ArrayList<GlobalConstraint>();
         addGlobalConstraints(roomArea);
         
         buildMatrixOfDependence();
-
     }
     
     /**
      * Invoked in the constructor to initialize constants.
      * @param wishList 
      */
-    private void addConstants(WishList wishList) {
-        for(WantedFixed wantedFixed : wishList.getWantedFixed())
-            constants.add(wantedFixed);
+    public void addConstant(WantedFixed wantedFixed) {
+        constants.add(wantedFixed);
     }
     
     /**
@@ -160,16 +155,13 @@ public class FurnitureVariableSet
      * @param furnitureCatalog
      * @param roomSize 
      */
-    private void addVariables(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog,
-            Dimension roomSize)
-    {   
-        for(WantedFurniture wantedFurniture : wishList.getWantedFurniture()) {
-            HashSet<FurnitureModel> models = new HashSet(
-                    furnitureCatalog.get(wantedFurniture.getTypeName()).getFurnitureModels());
-            
-            wantedFurniture.createDomain(models, roomSize, variableCount);
-            unassignedVariables.add(wantedFurniture);
-        }
+    public void addVariable(WantedFurniture wantedFurniture, List<FurnitureModel> models)
+    {
+        HashSet<FurnitureModel> modelsHash = new HashSet(models);
+        
+        wantedFurniture.createDomain(modelsHash, roomSize, variableCount);
+        unassignedVariables.add(wantedFurniture);
+        variableCount++;
     }
     
     /**

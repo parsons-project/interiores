@@ -1,13 +1,23 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogAccessController;
+import interiores.business.events.backtracking.DebugSolveDesignStartedEvent;
+import interiores.business.exceptions.SolverNotFinishedException;
+import interiores.business.models.backtracking.FurnitureVariableSet;
+import interiores.business.models.backtracking.FurnitureVariableSetDebugger;
 import interiores.business.models.backtracking.Solver;
 import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.room.FurnitureType;
+import interiores.business.models.room.elements.WantedFixed;
 import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
+import interiores.utils.Dimension;
+import interiores.utils.Functionality;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -34,15 +44,46 @@ public class DesignController
      * case, returns the solution.
      */
     public void solve(boolean debugMode, boolean timeIt) {
+        Set<Functionality> functionsNotSatisfied = getWishList().getNotSatisfiedFunctionalities();
+        
+        if(! functionsNotSatisfied.isEmpty())
+            throw new RoomFunctionalitiesNotSatisfied(functionsNotSatisfied);
+        
         if(solver == null) {
             solver = new Solver();
             solver.addListener(this);
         }
         
-        solver.setDebug(debugMode);
+        FurnitureVariableSet furVarSet = createFurnitureVariableSet(debugMode);
         solver.setTimer(timeIt);
         
-        solver.solve(getWishList(), getActiveCatalog());
+        solver.solve(furVarSet);
+    }
+    
+    private FurnitureVariableSet createFurnitureVariableSet(boolean debugMode) {
+        FurnitureVariableSet furVarSet;
+        Dimension roomSize = getRoom().getDimension();
+        
+        if(debugMode) {
+            furVarSet = new FurnitureVariableSetDebugger(roomSize);
+            ((FurnitureVariableSetDebugger) furVarSet).addListener(this);
+            notify(new DebugSolveDesignStartedEvent());
+        }
+        else
+            furVarSet = new FurnitureVariableSet(roomSize);
+        
+        addWishedFurniture(furVarSet);
+        
+        return furVarSet;
+    }
+    
+    private void addWishedFurniture(FurnitureVariableSet furVarSet) {
+        for(WantedFixed fixed : getWishList().getWantedFixed())
+            furVarSet.addConstant(fixed);
+        
+        NamedCatalog<FurnitureType> typesCatalog = getActiveCatalog();
+        
+        
     }
     
     /**

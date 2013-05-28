@@ -1,13 +1,9 @@
 package interiores.business.models.backtracking;
 
-import interiores.business.events.backtracking.DebugSolveDesignStartedEvent;
 import interiores.business.events.backtracking.SolveDesignFinishedEvent;
 import interiores.business.events.backtracking.SolveDesignStartedEvent;
 import interiores.business.events.room.RoomDesignChangedEvent;
 import interiores.business.exceptions.SolverNotFinishedException;
-import interiores.business.models.WishList;
-import interiores.business.models.catalogs.NamedCatalog;
-import interiores.business.models.room.FurnitureType;
 import interiores.core.Event;
 import interiores.core.Observable;
 import interiores.core.Observer;
@@ -23,7 +19,6 @@ public class Solver
     implements Observable, Observer
 {
     private List<Observer> listeners;
-    private boolean isDebugEnabled;
     private boolean isTimerEnabled;
     private boolean isSolutionFound;
     private Thread thread;
@@ -32,24 +27,17 @@ public class Solver
     
     public Solver() {
         listeners = new ArrayList();
-        isDebugEnabled = false;
         isTimerEnabled = false;
         isSolutionFound = false;
-    }
-    
-    public void setDebug(boolean debug) {
-        isDebugEnabled = debug;
     }
     
     public void setTimer(boolean timer) {
         isTimerEnabled = timer;
     }
     
-    public void solve(WishList wishList, NamedCatalog<FurnitureType> typesCatalog) {
+    public void solve(final FurnitureVariableSet furVarSet) {
         if(isSolving())
             throw new SolverNotFinishedException();
-        
-        final FurnitureVariableSet furVarSet = createFurnitureVariableSet(wishList, typesCatalog);
         
         thread = new Thread(){
             @Override
@@ -59,21 +47,6 @@ public class Solver
         };
         
         thread.start();
-    }
-    
-    private FurnitureVariableSet createFurnitureVariableSet(WishList wishList, NamedCatalog<FurnitureType> typesCatalog)
-    {
-        FurnitureVariableSet furVarSet;
-        
-        if(isDebugEnabled) {
-            furVarSet = new FurnitureVariableSetDebugger(wishList, typesCatalog);
-            ((FurnitureVariableSetDebugger) furVarSet).addListener(this);
-            notify(new DebugSolveDesignStartedEvent());
-        }
-        else
-            furVarSet = new FurnitureVariableSet(wishList, typesCatalog);
-        
-        return furVarSet;
     }
     
     public void computeSolution(FurnitureVariableSet furVarSet) {

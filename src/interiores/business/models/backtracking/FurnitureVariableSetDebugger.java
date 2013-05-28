@@ -14,6 +14,7 @@ import interiores.core.Observer;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
+import interiores.utils.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +28,10 @@ public class FurnitureVariableSetDebugger
 {
     private List<Observer> debuggers;
     
-    public FurnitureVariableSetDebugger(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog)
+    public FurnitureVariableSetDebugger(Dimension roomSize)
             throws BusinessException
     {
-        super(wishList, furnitureCatalog);
+        super(roomSize);
         debuggers = new ArrayList();
     }
     

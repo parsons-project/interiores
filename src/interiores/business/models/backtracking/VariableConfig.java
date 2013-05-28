@@ -52,11 +52,7 @@ public class VariableConfig
             if(!assignedVariable.hasDomain())
                 return false;
         
-        for(FurnitureVariable unassignedVariable : unassignedVariables)
-            if(!unassignedVariable.hasDomain())
-                return false;
-        
-        return true;
+        return unassignedVariables.isEmpty();
     }
     
     public void resetDomains() {

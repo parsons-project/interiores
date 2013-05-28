@@ -6,7 +6,12 @@ import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
+import interiores.business.models.constraints.room.global.BudgetConstraint;
+import interiores.business.models.constraints.room.global.EnoughSpaceConstraint;
+import interiores.business.models.constraints.room.global.SameColorConstraint;
+import interiores.business.models.constraints.room.global.SameMaterialConstraint;
 import interiores.business.models.constraints.room.global.SpaceRespectingConstraint;
+import interiores.business.models.constraints.room.global.UnfitModelsPseudoConstraint;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
@@ -147,6 +152,22 @@ public class Solver
      */
     private void addGlobalConstraints() {
         globalConstraints.add(new SpaceRespectingConstraint(variableConfig.getTotalArea()));
+        globalConstraints.add(new EnoughSpaceConstraint(variableConfig.getTotalArea()));
+        
+        boolean sameColorConstraintActive = false;
+        boolean sameMaterialConstraintActive = false;
+        boolean budgetConstraintActive = false;
+        for (GlobalConstraint constraint : globalConstraints) {
+            if (constraint instanceof SameColorConstraint)
+                sameColorConstraintActive = true;
+            else if (constraint instanceof SameMaterialConstraint)
+                sameMaterialConstraintActive = true;
+            else if (constraint instanceof BudgetConstraint)
+                budgetConstraintActive = true;
+        }
+        
+        globalConstraints.add(new UnfitModelsPseudoConstraint(sameColorConstraintActive,
+                sameMaterialConstraintActive, budgetConstraintActive));
     }
     
 
@@ -271,6 +292,11 @@ public class Solver
         for (FurnitureVariable variable : unassignedVariables) {
             variable.undoTrimDomain(actual, value, depth);
         }
+        
+        for (GlobalConstraint constraint : globalConstraints) {
+            ((RoomInexhaustiveTrimmer) constraint).notifyStepBack(
+                    assignedVariables, unassignedVariables, constants, actual, (FurnitureValue) value);
+        }
     }
 
     @Override
@@ -296,13 +322,17 @@ public class Solver
     }
     
     @Override
-    protected boolean canAssignToActual(Value value) {
-        
+    protected boolean canAssignToActual(Value value)
+            throws NoSolutionException
+    {
         //temporal assignment
         actual.assignValue(value);
         
         //1) check that furniture constraints are satisfied
-        if (! actual.constraintsSatisfied()) return false;
+        if (! actual.constraintsSatisfied()) {
+            actual.undoAssignValue();
+            return false;
+        }
         
         //2) check that room constraints are satisfied
         for (GlobalConstraint constraint : globalConstraints) {
@@ -332,7 +362,9 @@ public class Solver
     
     //note: trivial implementation. To be optimized.
     @Override
-    protected void preliminarTrimDomains() {
+    protected void preliminarTrimDomains()
+            throws NoSolutionException
+    {
         
         //1) each variable triggers its own preliminar trimmers
         for (FurnitureVariable variable : unassignedVariables)

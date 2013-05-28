@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package interiores.presentation.swing.views;
+package interiores.presentation.swing.views.catalogs;
 
 import interiores.business.controllers.abstracted.CatalogController;
 

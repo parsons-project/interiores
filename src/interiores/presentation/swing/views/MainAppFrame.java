@@ -1,5 +1,8 @@
 package interiores.presentation.swing.views;
 
+import interiores.presentation.swing.views.catalogs.FurnitureTypeCatalogFrame;
+import interiores.presentation.swing.views.catalogs.RoomTypeCatalogFrame;
+import interiores.presentation.swing.views.catalogs.FurnitureModelCatalogFrame;
 import interiores.business.controllers.RoomController;
 import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomLoadedEvent;

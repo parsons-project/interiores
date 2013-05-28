@@ -1,5 +1,5 @@
 
-package interiores.presentation.swing.views;
+package interiores.presentation.swing.views.catalogs;
 
 import interiores.business.controllers.FurnitureModelController;
 import interiores.business.controllers.FurnitureTypeController;

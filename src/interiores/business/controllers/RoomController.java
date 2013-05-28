@@ -4,7 +4,7 @@ import interiores.business.controllers.abstracted.CatalogAccessController;
 import interiores.business.events.room.RoomCreatedEvent;
 import interiores.business.events.room.RoomLoadedEvent;
 import interiores.business.models.Room;
-import interiores.business.models.RoomType;
+import interiores.business.models.room.RoomType;
 import interiores.business.models.WishList;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.core.Debug;

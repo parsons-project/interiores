@@ -235,6 +235,10 @@ abstract public class FurnitureVariable
         domain.forwardIteration(iteration);
     }
     
+    public void eliminateP(Area invalidPositions) {
+        domain.eliminateP(invalidPositions);
+    }
+    
     public void eliminateExceptP(Area validPositions) {
         domain.eliminateExceptP(validPositions);
     }

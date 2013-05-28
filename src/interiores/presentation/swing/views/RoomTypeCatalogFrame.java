@@ -1,23 +1,82 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package interiores.presentation.swing.views;
+
+import interiores.business.controllers.FurnitureTypeController;
+import interiores.business.controllers.RoomTypeController;
+import interiores.business.controllers.RoomTypesCatalogController;
+import interiores.business.events.catalogs.RTCatalogSetModifiedEvent;
+import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
+import interiores.business.events.catalogs.RTModifiedEvent;
+import interiores.business.events.catalogs.RTSetModifiedEvent;
 import interiores.core.presentation.SwingController;
-import javax.swing.JFrame;
+import interiores.core.presentation.annotation.Listen;
+import interiores.presentation.swing.helpers.FileChooser;
+import interiores.utils.Range;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.io.File;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.xml.bind.JAXBException;
 
 /**
- *
+ * This class represents the room type catalog editor, where the user can edit
+ * the catalog of room types. Options range from creating a new catalog, saving,
+ * or loading one, to modifying a determined type of room.
  * @author larribas
  */
-public class RoomTypeCatalogFrame extends JFrame {
+public class RoomTypeCatalogFrame extends javax.swing.JFrame {
 
+    // The frame has access to these controllers, and its own fileChooser
+    private SwingController swing;
+    private RoomTypeController rtController;
+    private RoomTypesCatalogController rtcController;
+    private FurnitureTypeController ftController;
+    private JFileChooser fileChooser;
+
+    // The frame stores a map containing  all the elements in the currently
+    // activer catalog. This map is modified everytime the catalog changes
+    // or a particular element does. Changes from any other presentation layer
+    // are automatically reflected
+    private Map<String,RTC_Element> catElements;
+    
+    // The frame also stores the changes made to the current catalog so far,
+    // so that one can save them or discard them
+    private boolean hasBeenModified = false;
+    
     /**
-     * Creates new form RoomTypeCatalogPanel
+     * Creates the very RTC editor frame
+     * @param presentation 
      */
     public RoomTypeCatalogFrame(SwingController presentation) {
+        // We initialize all the fundamental components of the editor
         initComponents();
-        pack();
+        
+        // We reference all the approriate controllers internally
+        this.swing = presentation;
+        rtController = swing.getBusinessController(RoomTypeController.class);
+        rtcController = swing.getBusinessController(RoomTypesCatalogController.class);
+        ftController = swing.getBusinessController(FurnitureTypeController.class);
+        fileChooser = new FileChooser();
+        
+        // We initialize the data structures the frame will use
+        catElements = new HashMap();
+        
+        
+        // We load the list with all catalogs, set the required visual settings,
+        // and load all the elements in the catalog
+        initCatalogList();
+        initVisualSettings();
+        refreshCatalog();
     }
 
     /**
@@ -26,33 +85,804 @@ public class RoomTypeCatalogFrame extends JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
+        title1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel1 = new javax.swing.JPanel();
+        currentCatalogSelect = new javax.swing.JComboBox();
+        currentCatalogLabel = new javax.swing.JLabel();
+        newCatalogButton = new javax.swing.JButton();
+        loadCatalogButton = new javax.swing.JButton();
+        removeCatalogButton = new javax.swing.JButton();
+        saveCatalogButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        newButton = new javax.swing.JButton();
+        saveChangesButton = new javax.swing.JButton();
+        discardChangesButton = new javax.swing.JButton();
 
-        setTitle("Room type catalog");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Room Types Catalog Editor");
+        setAlwaysOnTop(true);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBounds(new java.awt.Rectangle(0, 0, 900, 600));
+        setMinimumSize(new java.awt.Dimension(900, 600));
+        setResizable(false);
+        setSize(new java.awt.Dimension(900, 700));
 
-        jLabel2.setText("Room type catalog");
+        title1.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        title1.setText("Room types catalog editor");
+        title1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        jScrollPane1.setBorder(null);
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(900, 0));
+        jScrollPane1.setViewportView(null);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setAutoscrolls(true);
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
+        jScrollPane1.setViewportView(jPanel1);
+
+        currentCatalogSelect.setBackground(new java.awt.Color(255, 255, 255));
+        currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        currentCatalogSelect.setMaximumSize(new java.awt.Dimension(130, 32767));
+        currentCatalogSelect.setMinimumSize(new java.awt.Dimension(90, 27));
+        currentCatalogSelect.setPreferredSize(new java.awt.Dimension(130, 27));
+        currentCatalogSelect.setSize(new java.awt.Dimension(130, 0));
+        currentCatalogSelect.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                currentCatalogSelectItemStateChanged(evt);
+            }
+        });
+
+        currentCatalogLabel.setText("Current catalog:");
+
+        newCatalogButton.setText("New Catalog");
+        newCatalogButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newCatalogButtonActionPerformed(evt);
+            }
+        });
+
+        loadCatalogButton.setText("Load Catalog");
+        loadCatalogButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadCatalogButtonActionPerformed(evt);
+            }
+        });
+
+        removeCatalogButton.setText("Remove Catalog");
+        removeCatalogButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeCatalogButtonActionPerformed(evt);
+            }
+        });
+
+        saveCatalogButton.setText("Save Catalog");
+        saveCatalogButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveCatalogButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Add a new type of room");
+
+        ImageIcon im = new javax.swing.ImageIcon("src/resources/add_element.png");
+        im.setImage( im.getImage().getScaledInstance(35,35,java.awt.Image.SCALE_SMOOTH) );
+        newButton.setIcon(im); // NOI18N
+        newButton.setBorder(BorderFactory.createEmptyBorder());
+        newButton.setContentAreaFilled(false);
+        newButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newButtonActionPerformed(evt);
+            }
+        });
+
+        saveChangesButton.setText("Save changes");
+        saveChangesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveChangesButtonActionPerformed(evt);
+            }
+        });
+
+        discardChangesButton.setText("Discard changes");
+        discardChangesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                discardChangesButtonActionPerformed(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jLabel2)
-                .addContainerGap(282, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(layout.createSequentialGroup()
+                                .add(newCatalogButton)
+                                .add(18, 18, 18)
+                                .add(loadCatalogButton))
+                            .add(title1))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(layout.createSequentialGroup()
+                                .add(saveCatalogButton)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(removeCatalogButton))
+                            .add(layout.createSequentialGroup()
+                                .add(currentCatalogLabel)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())
+                    .add(layout.createSequentialGroup()
+                        .add(discardChangesButton)
+                        .add(206, 206, 206)
+                        .add(newButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLabel1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 198, Short.MAX_VALUE)
+                        .add(saveChangesButton))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jLabel2)
-                .addContainerGap(301, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(title1)
+                    .add(currentCatalogLabel)
+                    .add(currentCatalogSelect, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(18, 18, 18)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(newCatalogButton)
+                    .add(loadCatalogButton)
+                    .add(removeCatalogButton)
+                    .add(saveCatalogButton))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 515, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(newButton)
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(saveChangesButton))
+                    .add(discardChangesButton))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    /**
+     * Triggers when the "Load catalog" button is pressed. It opens a fileChooser dialog and loads the selected catalog
+     */
+    private void loadCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadCatalogButtonActionPerformed
+        loadCatalog();
+    }//GEN-LAST:event_loadCatalogButtonActionPerformed
+
+    /**
+     * Triggers when the "Save catalog" button is pressed. It opens a fileChooser dialog and saves 
+     * the current catalog to the specified path, under the specified name
+     */
+    private void saveCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveCatalogButtonActionPerformed
+        saveCatalog();
+    }//GEN-LAST:event_saveCatalogButtonActionPerformed
+
+    /**
+     * Triggers when the "Remove catalog" button is pressed. It removes the current catalog
+     * and checks out the default one (which cannot be modified or removed)
+     */
+    private void removeCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeCatalogButtonActionPerformed
+        if (!hasBeenModified) {
+            rtcController.checkout("default");
+            rtcController.remove(currentCatalogSelect.getSelectedItem().toString());
+        }
+        else showModificationWarning();
+    }//GEN-LAST:event_removeCatalogButtonActionPerformed
+
+    /**
+     * Triggers when the "New catalog" button is pressed. It shows a dialog asking the
+     * properties of the new catalog, and creates it.
+     */
+    private void newCatalogButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCatalogButtonActionPerformed
+        if (!hasBeenModified) {
+            NewCatalogDialog newCat = new NewCatalogDialog(rtcController);
+            newCat.setVisible(true);
+        }
+        else showModificationWarning();
+    }//GEN-LAST:event_newCatalogButtonActionPerformed
+
+    /**
+     * Triggers when the "New element" (+) button is pressed. It shows a dialog asking the
+     * properties of the new element, and creates it.
+     */
+    private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
+        performModification();
+        NewRoomTypeDialog newRT = new NewRoomTypeDialog(rtController);
+        newRT.setVisible(true);
+    }//GEN-LAST:event_newButtonActionPerformed
+
+    /**
+     * Triggers when the "Discard changes" button is pressed. It forgets about all the changes,
+     * eliminates the temporarily modified catalog (if any), and closes the window
+     */
+    private void discardChangesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_discardChangesButtonActionPerformed
+        if (hasBeenModified) discardChanges((String) currentCatalogSelect.getSelectedItem());
+        dispose();
+    }//GEN-LAST:event_discardChangesButtonActionPerformed
+
+    /**
+     * Triggers when the "Save changes" button is pressed. It merges all the changes,
+     * done in the temporarily modified catalog "name(mod)" with the actual catalog,
+     * eliminates 'name(mod)', and closes the window
+     */
+    private void saveChangesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveChangesButtonActionPerformed
+        if (hasBeenModified) saveChanges((String) currentCatalogSelect.getSelectedItem());
+        dispose();
+    }//GEN-LAST:event_saveChangesButtonActionPerformed
+
+    private void currentCatalogSelectItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_currentCatalogSelectItemStateChanged
+        if (!hasBeenModified) rtcController.checkout(currentCatalogSelect.getSelectedItem().toString());
+    }//GEN-LAST:event_currentCatalogSelectItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel currentCatalogLabel;
+    private javax.swing.JComboBox currentCatalogSelect;
+    private javax.swing.JButton discardChangesButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton loadCatalogButton;
+    private javax.swing.JButton newButton;
+    private javax.swing.JButton newCatalogButton;
+    private javax.swing.JButton removeCatalogButton;
+    private javax.swing.JButton saveCatalogButton;
+    private javax.swing.JButton saveChangesButton;
+    private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Shows a fileChooser open dialog and lets the user select the file
+     * from which a new catalog is to be loaded
+     */
+    private void loadCatalog() {
+        int status = fileChooser.showOpenDialog(this);
+        
+        if(status == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            
+            try {
+                rtcController.load(file.getAbsolutePath());
+            }
+            catch(JAXBException e) {
+            }
+        }
+    }
+    
+    /**
+     * Shows a fileChooser save dialog and lets the user select the file
+     * to where the current catalog is to be saved
+     */
+    private void saveCatalog() {
+        int status = fileChooser.showSaveDialog(this);
+        
+        if(status == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            
+            try {
+                rtcController.save(file.getAbsolutePath());
+            }
+            catch(JAXBException e) {
+                
+            }
+        }
+    }
+    
+    /**
+     * This function is invoked whenever a particular element of the catalog
+     * is added or removed, so that those changes reflect upon this frame
+     * @param evt The tell-tale event
+     */
+    @Listen({RTSetModifiedEvent.class})
+    public void updateCatalogElementSet(RTSetModifiedEvent evt) {
+        if (evt.isAdded()) addElement(evt.getFullName(),evt.getName());
+        else {
+            removeElement(evt.getFullName());
+            if (catElements.isEmpty()) showEmptyCatalogMessage();
+        }
+        refresh();
+    }
+    
+    /**
+     * This function is invoked whenever a particular element of the catalog
+     * is modified, so that those changes reflect upon this frame
+     * @param evt The tell-tale event
+     */
+    @Listen({RTModifiedEvent.class})
+    public void updateCatalogElement(RTModifiedEvent evt) {
+        catElements.get(evt.getFullName()).updateChanges();
+    }
+
+    /**
+     * This function is invoked whenever the list of available catalog changes,
+     * so that those changes reflect upon this frame
+     * @param evt The tell-tale event
+     */
+    @Listen({RTCatalogSetModifiedEvent.class})
+    public void updateCatalogList(RTCatalogSetModifiedEvent evt) {
+        if (evt.isAdded()) currentCatalogSelect.addItem(evt.getName());
+        else currentCatalogSelect.removeItem(evt.getName());
+    }
+    
+    /**
+     * This function is invoked whenever the currently selected catalog changes,
+     * so that those changes reflect upon this frame
+     * @param evt The tell-tale event
+     */
+    @Listen({RTCatalogCheckoutEvent.class})
+    public void updateSelectedCatalog(RTCatalogCheckoutEvent evt) {
+        currentCatalogSelect.setSelectedItem(evt.getName());
+        refreshCatalog();
+    }
+    
+    /**
+     * This method is called when a full recognition of the current catalog's
+     * elements is needed. It clears the element list and loads the appropriate one
+     */
+    private void refreshCatalog() {
+        clearElements();
+        
+        // Retrieve all the elements in the catalog
+        Map<String,String> rtypes = rtController.getFullNamesMap();
+        
+        if (rtypes.isEmpty()) showEmptyCatalogMessage();
+        else {
+            // Each 'key' has the full name of the furniture, which in turn is accessed by its short name
+            for (String key : rtypes.keySet()) {
+                String rtn = rtypes.get(key); // 'rtn' is the short name (its actual name within the program)
+                addElement(key, rtn);
+            }
+        }
+        refresh();
+    }
+
+    /**
+     * Loads a new element to the current catalog display
+     * @param key The full name of the element (e.g. Living Room)
+     * @param rtn The short (internal) id of the element (e.g. livingroom)
+     */
+    private void addElement(String key, String rtn) {
+        RTC_Element rtInstance = new RTC_Element(rtn,key);
+        rtInstance.addToPanel();
+        catElements.put(key, rtInstance);
+    }
+    
+    /**
+     * Removes a specific element from the current catalog display
+     * @param key The key the element has in the internal data structure of the frame
+     */
+    private void removeElement(String key) {
+        if (catElements.containsKey(key)) {
+            catElements.get(key).removeFromPanel();
+            catElements.remove(key);
+        }
+    }
+    
+    /**
+     * Clears all the catalog elements currently loaded.
+     * This work is needed not only visually but also structurally
+     */
+    private void clearElements() {
+        jPanel1.removeAll();
+        catElements.clear();
+    }
+    
+    /**
+     * It loads the available catalogs into the frame
+     */
+    private void initCatalogList() {
+        Collection<String> catalogs = rtcController.getNamesLoadedCatalogs();
+        Object[] s = catalogs.toArray();
+        currentCatalogSelect.setModel(new javax.swing.DefaultComboBoxModel(s) );
+        currentCatalogSelect.setSelectedItem("session");
+    }
+    
+    /**
+     * Groups all the custom visual setting this frame has to initialize when loading
+     */
+    private void initVisualSettings() {
+        UIManager.put("ToolTip.background", Color.white);
+        ToolTipManager.sharedInstance().setInitialDelay(0);
+    }
+
+    /**
+     * Groups the appropriate swing routine we have to perform each time we need to
+     * refresh (or redraw) the contents of the main panel
+     */
+    private void refresh() {
+        jPanel1.revalidate();
+        jPanel1.repaint();
+    }
+    
+    private void performModification() {
+        if (!hasBeenModified) {
+            hasBeenModified = true;
+            String currM = (String) currentCatalogSelect.getSelectedItem() + "(mod)";
+            rtcController.create(currM);
+            rtcController.checkout(currM);
+        }        
+    }
+    
+    /**
+     * Given the name of a modified catalog, it saves all the changes and erases the modified version
+     * @param modCat The name of the modified catalog (e.g. session(mod) )
+     */
+    private void saveChanges(String modCat) {
+        hasBeenModified = false;
+        rtcController.checkout(modCat.substring(0, modCat.length()-5));
+        rtcController.replace(modCat);
+        rtcController.remove(modCat);
+    }
+    
+    /**
+     * Given the name of a modified catalog, it discards all the changes and erases the modified version
+     * @param modCat The name of the modified catalog (e.g. session(mod) )
+     */
+    private void discardChanges(String modCat) {
+        hasBeenModified = false;
+        rtcController.checkout(modCat.substring(0,modCat.length()-5));
+        rtcController.remove(modCat);
+    }
+    
+    private void showModificationWarning() {
+        int choice = JOptionPane.showConfirmDialog(this,"The current catalog has been modified. Do you want to save those changes?",
+                                                    "Save changes", JOptionPane.YES_NO_OPTION);
+        
+        String curr = (String) currentCatalogSelect.getSelectedItem();
+        if (choice == JOptionPane.NO_OPTION) discardChanges(curr);
+        else saveChanges(curr);
+    }
+    
+    private void showEmptyCatalogMessage() {
+        javax.swing.JLabel emptyLabel = new javax.swing.JLabel();
+        emptyLabel.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
+        emptyLabel.setText("There isn't any room type defined in catalog "
+                + currentCatalogSelect.getSelectedItem().toString() );
+        jPanel1.add(emptyLabel);
+    }
+
+    /**
+     * This class is a visual representation of a catalog item.
+     * It serves as an auxiliary data structure to hold a whole information pane
+     * with its own features, events, and properties.
+     */
+    class RTC_Element {
+        // The actual name of the element contains its internal name within the application
+        private String actualName;
+        // rtname, on the other hand, contains a visually clearer name
+        private javax.swing.JLabel rtname = new javax.swing.JLabel();
+        
+        // The outer panel holds the remove button and the inner panel
+        private javax.swing.JPanel outerPanel = new javax.swing.JPanel();
+            private javax.swing.JButton removeButton = new javax.swing.JButton();
+            private javax.swing.JPanel innerPanel = new javax.swing.JPanel();
+        
+        // The inner panel holds all the labels and text fields related to the properties of an element
+        private javax.swing.JLabel measureLabel1 = new javax.swing.JLabel();
+        private javax.swing.JLabel measureLabel2 = new javax.swing.JLabel();
+        private javax.swing.JLabel measureLabel3 = new javax.swing.JLabel();
+        private javax.swing.JTextField measureField1 = new javax.swing.JTextField();
+        private javax.swing.JTextField measureField2 = new javax.swing.JTextField();
+        
+        private javax.swing.JLabel mandatoryLabel = new javax.swing.JLabel();
+        private javax.swing.JTextField mandatoryField = new javax.swing.JTextField();
+        private javax.swing.JLabel forbiddenLabel = new javax.swing.JLabel();
+        private javax.swing.JTextField forbiddenField = new javax.swing.JTextField();
+        
+        private boolean hasWidthChanged = false;
+        private boolean hasDepthChanged = false;
+        private boolean hasMandatoryListChanged = false;
+        private boolean hasForbiddenListChanged = false;
+        
+        /**
+         * Builds a visual representation of the item in the currently active catalog
+         * whose name is 'actname'
+         * @param actname The actual (internal) id of the element
+         * @param fullname A visually clearer name for such an element
+         */
+        public RTC_Element(String actname, String fullname) {
+
+            actualName = actname;
+            
+            // We set the properties of the outer panel
+            outerPanel.setBackground(new java.awt.Color(255, 255, 255));
+            outerPanel.setSize(new Dimension(800, 200));
+            outerPanel.setMinimumSize(new Dimension(800, 200));
+            outerPanel.setMaximumSize(new Dimension(800, 200));
+            
+            // These lines substitute the default aspect of a button with a custom icon
+            ImageIcon im = new javax.swing.ImageIcon("src/resources/remove_element.png");
+            im.setImage( im.getImage().getScaledInstance(40,40,java.awt.Image.SCALE_SMOOTH) );
+            removeButton.setIcon(im);
+            removeButton.setBorder(BorderFactory.createEmptyBorder());
+            removeButton.setContentAreaFilled(false);
+            removeButton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    performModification();
+                    rtController.rm(actualName);
+                }
+            });
+            
+            // Properties of the inner panel
+            innerPanel.setBackground(new java.awt.Color(255, 255, 255));
+            innerPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+            
+            // Name of the element
+            rtname.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
+            rtname.setText(fullname + ":");
+
+            // Measure fields (1: width, 2:depth)
+            measureLabel1.setText("This room should measure more than");
+            measureField1.setText(Integer.toString(rtController.getWidthRange(actualName).min) );
+            measureField1.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) { hasWidthChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
+                @Override
+                public void removeUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
+             });
+            measureField1.addFocusListener(new java.awt.event.FocusAdapter() {
+                @Override
+                public void focusLost(java.awt.event.FocusEvent evt) { if(hasWidthChanged) widthUpdate(); }
+            });
+            measureLabel2.setText("cm wide and");
+            measureField2.setText(Integer.toString(rtController.getDepthRange(actualName).min) );
+            measureField1.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) { hasDepthChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) {  hasDepthChanged = true;  }
+                @Override
+                public void removeUpdate(DocumentEvent e) {  hasDepthChanged = true;  }
+             });
+            measureField2.addFocusListener(new java.awt.event.FocusAdapter() {
+                @Override
+                public void focusLost(java.awt.event.FocusEvent evt) { if(hasDepthChanged) depthUpdate(); }
+            });
+            measureLabel3.setText("cm deep");
+            
+            // Mandatory and Forbidden furniture lists and actions
+            mandatoryLabel.setText("Mandatory furniture:");
+            String mandatory = rtController.getMandatory(actualName).toString();
+            mandatoryField.setText(mandatory.substring(1, mandatory.length()-1));
+            mandatoryField.setColumns(30);
+            mandatoryField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) { hasMandatoryListChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) {  hasMandatoryListChanged = true;  }
+                @Override
+                public void removeUpdate(DocumentEvent e) {  hasMandatoryListChanged = true;  }
+             });
+            mandatoryField.addFocusListener(new java.awt.event.FocusAdapter() {
+                @Override
+                public void focusLost(java.awt.event.FocusEvent evt) { if (hasMandatoryListChanged) mandatoryUpdate(); }
+            });
+            forbiddenLabel.setText("Forbidden furniture:");
+            String forbidden = rtController.getForbidden(actualName).toString();
+            forbiddenField.setText(forbidden.substring(1, forbidden.length()-1));
+            forbiddenField.setColumns(30);
+            forbiddenField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void changedUpdate(DocumentEvent e) { hasForbiddenListChanged = true; }
+                @Override
+                public void insertUpdate(DocumentEvent e) {  hasForbiddenListChanged = true;  }
+                @Override
+                public void removeUpdate(DocumentEvent e) {  hasForbiddenListChanged = true;  }
+             });
+            forbiddenField.addFocusListener(new java.awt.event.FocusAdapter() {
+                @Override
+                public void focusLost(java.awt.event.FocusEvent evt) { if (hasForbiddenListChanged) forbiddenUpdate(); }
+            });
+            
+            
+            // We update the tooltips at construction time, in order to initialize them
+            updateTooltips();
+
+            // Finally, we lay out all the visual components, assemble them and finish
+            org.jdesktop.layout.GroupLayout innerPanelLayout = new org.jdesktop.layout.GroupLayout(innerPanel);
+            innerPanel.setLayout(innerPanelLayout);
+            innerPanelLayout.setHorizontalGroup(
+                innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(innerPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .add(rtname)
+                    .add(58, 58, 58)
+                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                        .add(innerPanelLayout.createSequentialGroup()
+                            .add(measureLabel1)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(measureField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(measureLabel2)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(measureField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 52, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(measureLabel3))
+                        .add(innerPanelLayout.createSequentialGroup()
+                            .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(mandatoryLabel)
+                                .add(forbiddenLabel))
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                            .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(forbiddenField)
+                                .add(mandatoryField))))
+                    .addContainerGap(15, Short.MAX_VALUE))
+            );
+            innerPanelLayout.setVerticalGroup(
+                innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(innerPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(rtname)
+                        .add(measureLabel1)
+                        .add(measureField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(measureLabel2)
+                        .add(measureField2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(measureLabel3))
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(mandatoryLabel)
+                        .add(mandatoryField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                        .add(forbiddenField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(forbiddenLabel))
+                    .addContainerGap(15, Short.MAX_VALUE))
+            );
+            
+            org.jdesktop.layout.GroupLayout outerPanelLayout = new org.jdesktop.layout.GroupLayout(outerPanel);
+            outerPanel.setLayout(outerPanelLayout);
+            outerPanelLayout.setHorizontalGroup(
+                outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(outerPanelLayout.createSequentialGroup()
+                    .add(removeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 31, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(768, Short.MAX_VALUE))
+                .add(outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(outerPanelLayout.createSequentialGroup()
+                        .add(0, 93, Short.MAX_VALUE)
+                        .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 93, Short.MAX_VALUE)))
+            );
+            outerPanelLayout.setVerticalGroup(
+                outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                .add(0, 0, Short.MAX_VALUE)
+                .add(outerPanelLayout.createSequentialGroup()
+                    .add(26, 26, 26)
+                    .add(removeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(20, Short.MAX_VALUE))
+                .add(outerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(outerPanelLayout.createSequentialGroup()
+                        .add(0, 24, Short.MAX_VALUE)
+                        .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 25, Short.MAX_VALUE)))
+            );
+        }
+
+        /**
+         * Everything built, this operation adds the outer panel to the frame display 
+         */
+        public void addToPanel() {
+            jPanel1.add(outerPanel);
+        }
+        
+        /**
+         * Everything built, this operation removes the outer panel from the frame display
+         */
+        public void removeFromPanel() {
+            jPanel1.remove(outerPanel);
+        }
+        
+        /**
+         * Consults all over again the information of the item and updates its state
+         */
+        public void updateChanges() {
+            measureField1.setText(Integer.toString(rtController.getWidthRange(actualName).min) );
+            measureField2.setText(Integer.toString(rtController.getDepthRange(actualName).min) );
+            String mandatory = rtController.getMandatory(actualName).toString();
+            mandatoryField.setText(mandatory.substring(1, mandatory.length()-1));
+            String forbidden = rtController.getForbidden(actualName).toString();
+            forbiddenField.setText(forbidden.substring(1, forbidden.length()-1));
+        }               
+        
+        private void widthUpdate() {
+            hasWidthChanged = false;
+            String str = measureField1.getText();
+            Range r = rtController.getWidthRange(actualName);
+            if (str.matches("[0-9]+") && Integer.parseInt(str) <= r.max) {
+                performModification();
+                rtController.setMinWidth(actualName, Integer.parseInt(str));
+            }
+            else {
+                String msg = "Width should be a positive number between 0 and " + r.max;
+                JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
+                measureField1.setText(String.valueOf(rtController.getWidthRange(actualName).min));
+            }
+        }
+        
+        private void depthUpdate() {
+            hasDepthChanged = false;
+            String str = measureField2.getText();
+            Range r = rtController.getDepthRange(actualName);
+            if (str.matches("[0-9]+") && Integer.parseInt(str) <= r.max) {
+                performModification();
+                rtController.setMinDepth(actualName, Integer.parseInt(str));
+            }
+            else {
+                String msg = "Depth should be a positive number between 0 and " + r.max;
+                JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
+                measureField2.setText(String.valueOf(rtController.getDepthRange(actualName).min));
+            }
+        }
+        
+        private void mandatoryUpdate() {
+            hasMandatoryListChanged = false;
+            String str = mandatoryField.getText();
+            str = str.replace(" ","");
+            String[] mand = str.split(",");
+            String mandatory = rtController.getMandatory(actualName).toString();
+            try {
+                performModification();
+                rtController.setMandatory(actualName, mand);
+                updateTooltips();
+            }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,e.getMessage(),"Invalid value",JOptionPane.ERROR_MESSAGE);
+                mandatory = mandatory.substring(1, mandatory.length()-1);
+                mandatoryField.setText(mandatory);
+            }
+        }
+        
+        private void forbiddenUpdate() {
+            hasForbiddenListChanged = false;
+            String str = forbiddenField.getText();
+            str = str.replace(" ","");
+            String[] forb = str.split(",");
+            String forbidden = rtController.getForbidden(actualName).toString();
+            try {
+                performModification();
+                rtController.setForbidden(actualName, forb);
+                updateTooltips();
+            }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(RoomTypeCatalogFrame.this,e.getMessage(),"Invalid value",JOptionPane.ERROR_MESSAGE);
+                forbidden = forbidden.substring(1, forbidden.length()-1);
+                forbiddenField.setText(forbidden);
+            }
+        }
+        
+        /**
+         * Updates the tooltips of the current item with all the necessary information.
+         */
+        private void updateTooltips() {
+            Collection<String> cs = ftController.getUncategorizedFurniture(actualName);
+            String s = "<html><strong>Available furniture:</strong><br>";
+            for(String f : cs) s += f + "<br>"; s += "</html>";
+            mandatoryField.setToolTipText(s);
+            forbiddenField.setToolTipText(s);
+        }
+        
+    }
+    /*
+     * End of RTC_Element Class
+     */
+
 }
+/*
+ * End of the main class
+ */

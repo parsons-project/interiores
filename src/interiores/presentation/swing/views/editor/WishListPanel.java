@@ -45,12 +45,7 @@ public class WishListPanel extends JPanel {
     }
     
     private void solveDesign() {
-        if (debugCheckBox.isSelected()) {
-            designController.debug(timeCheckBox.isSelected());
-        }
-        else {
-            designController.solve(timeCheckBox.isSelected());
-        }
+        designController.solve(debugCheckBox.isSelected(), timeCheckBox.isSelected());
     }
     
     public void updateSelectable() {

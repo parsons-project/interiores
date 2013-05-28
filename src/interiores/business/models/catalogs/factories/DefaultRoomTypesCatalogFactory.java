@@ -1,8 +1,9 @@
 package interiores.business.models.catalogs.factories;
 
-import interiores.business.models.RoomType;
+import interiores.business.models.room.RoomType;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.utils.Dimension;
+import interiores.utils.Functionality;
 
 /**
  *
@@ -16,7 +17,8 @@ public class DefaultRoomTypesCatalogFactory {
                 new Dimension(180, 240),
                 new String[]{},
                 new String[]{"sink", "oven", "microwave", "hob", "stove", "extractor", "fridge", "dishwasher", "washer",
-                             "bidet", "washbasin", "toilet", "bathtub", "shower", "dryer", "worktop", "wringer"}
+                             "bidet", "washbasin", "toilet", "bathtub", "shower", "dryer", "worktop", "wringer"},
+                new Functionality[]{ Functionality.SLEEP }
         ));
         
         catalog.add(new RoomType("kitchen",
@@ -30,7 +32,8 @@ public class DefaultRoomTypesCatalogFactory {
                 new Dimension(100, 210),
                 new String[]{"mirror", "bidet", "washbasin", "toilet"},
                 new String[]{"bedSingle", "bedDouble", "tableBedside", "sink", "oven", "microwave", "hob", "stove",
-                             "extractor", "fridge", "dishwasher", "armchair", "worktop", "wringer","armchair", "sofa"}
+                             "extractor", "fridge", "dishwasher", "armchair", "worktop", "wringer","armchair", "sofa"},
+                new Functionality[]{ Functionality.BATH }
         ));
         
         catalog.add(new RoomType("lounge",

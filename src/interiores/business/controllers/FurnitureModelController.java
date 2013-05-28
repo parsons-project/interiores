@@ -1,12 +1,18 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogAccessController;
+import interiores.business.events.catalogs.FMModifiedEvent;
+import interiores.business.events.catalogs.FMSetModifiedEvent;
+import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.room.FurnitureType;
 import interiores.core.data.JAXBDataController;
+import interiores.utils.CoolColor;
 import interiores.utils.Dimension;
+import interiores.utils.Material;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -17,6 +23,10 @@ import java.util.Collection;
 public class FurnitureModelController
     extends CatalogAccessController<FurnitureType>
 {
+    
+    // Since there is no easy way to obtain the properties of an element by its name
+    // in constant time, we will cache the last model accessed.
+    private FurnitureModel cached_fm = null;
     
     /**
      * Creates a particular instance of the furniture model controller
@@ -49,6 +59,8 @@ public class FurnitureModelController
                 passiveSpace);
         
         furnitureType.addFurnitureModel(furnitureModel);
+        
+        notify(new FMSetModifiedEvent(furnitureTypeName, name, true));
     }
     
     /**
@@ -61,6 +73,8 @@ public class FurnitureModelController
         FurnitureType furnitureType = getForWrite(furnitureTypeName);
         
         furnitureType.removeFurnitureModel(name);
+        
+        notify(new FMSetModifiedEvent(furnitureTypeName, name, false));
     }
     
     /**
@@ -84,4 +98,54 @@ public class FurnitureModelController
         }
         return furnitureNames;
     }
+    
+    // Particular getters
+    public Dimension getSize(String furnitureTypeName, String name) {
+        return getModel(furnitureTypeName, name).getSize();
+    }
+    
+    public String getMaterial(String furnitureTypeName, String name) {
+        return getModel(furnitureTypeName, name).getMaterial();
+    }
+    
+    public String getColor(String furnitureTypeName, String name) {
+        return getModel(furnitureTypeName, name).getColorName();
+    }
+    
+    public float getPrice(String furnitureTypeName, String name) {
+        return getModel(furnitureTypeName, name).getPrice();
+    }
+    
+    public int[] getPassiveSpace(String furnitureTypeName, String name) {
+        return getModel(furnitureTypeName, name).getPassiveSpace().getOffsets();
+    }
+    
+    public void replace(String furnitureTypeName, String name, int width, int depth, float price,
+            String color, String material, int[] passiveOffsets)
+    {
+        FurnitureModel fm = getModel(furnitureTypeName, name);
+        fm.setSize(new Dimension(width,depth));
+        fm.setPrice(price);
+        fm.setPassiveSpace(new SpaceAround(passiveOffsets[0], passiveOffsets[1], passiveOffsets[2],passiveOffsets[3]));
+        fm.setMaterial(Material.getEnum(material));
+        fm.setColor(CoolColor.getEnum(color));
+        
+        notify(new FMModifiedEvent(name,furnitureTypeName));
+    }
+    
+    private FurnitureModel getModel(String furnitureTypeName, String name) {
+        // If the model is chached, we return it
+        if (cached_fm != null && cached_fm.getType().equals(furnitureTypeName) && cached_fm.getName().equals(name) );
+        // Else, we find it and cache it!
+        else {
+            boolean wasFound = false;
+            for (FurnitureModel fm : getFurnitureModels(furnitureTypeName))
+                if (fm.getName().equals(name)) { cached_fm = fm; wasFound = true; break; }
+        
+            if(!wasFound) throw new ElementNotFoundBusinessException(null);
+        }
+        
+        return cached_fm;
+    }
+    
 }

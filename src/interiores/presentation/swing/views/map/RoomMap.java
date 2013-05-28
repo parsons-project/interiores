@@ -9,11 +9,10 @@ import interiores.utils.Dimension;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * 
@@ -29,11 +28,13 @@ public class RoomMap
     protected int width;
     protected int depth;
     protected Dimension size; // Total size of the map
-    private Map<String, RoomElement> furnitures;
-    private Map<String, RoomElement> pillars;
+    protected Map<String, RoomElement> pillars;
+    protected String pillarKey;
+    private Map<String, RoomElement> furnitures;   
     protected Walls walls;
     private String status;
     private String time;
+    
     
     public RoomMap(int roomWidth, int roomDepth) {
         width = roomWidth + getPadding() * 2;
@@ -110,9 +111,11 @@ public class RoomMap
     }
     
     public RoomElement getElementAt(int x, int y) {
-        for(RoomElement element : furnitures.values()) {
-            if(element.contains(new Point(x, y)))
-                return element;
+        ArrayList<RoomElement> elements = new ArrayList(furnitures.values());
+        
+        for(int i = elements.size() - 1; i >= 0; i--) {
+            if(elements.get(i).contains(new Point(x, y)))
+                return elements.get(i);
         }
         
         return null;
@@ -151,8 +154,14 @@ public class RoomMap
     }
     
     protected void drawPillars(Graphics2D g) {
+              
         for(Drawable pillar : pillars.values())
             pillar.draw(g);
+        
+        if(pillarKey != null) {
+            pillars.remove(pillarKey);
+            pillarKey = null;
+        }
     }
     
     public static int getPadding() {

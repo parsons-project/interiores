@@ -1,12 +1,17 @@
 package interiores.presentation.swing.views.map;
 
 import interiores.business.models.Orientation;
+import interiores.business.models.OrientedRectangle;
 import interiores.core.Debug;
+import interiores.utils.CoolColor;
+import interiores.utils.Dimension;
+import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
+import javax.lang.model.util.ElementScanner6;
 
 /**
  *
@@ -150,5 +155,17 @@ public class InteractiveRoomMap
     
     public void previewDoor(Orientation wall, int displacement, int length) {
         walls.previewDoor(wall, displacement, length);
+    }
+    
+    public void previewWindow(Orientation wall, int displacement, int length) {
+        walls.previewWindow(wall, displacement, length);
+    }
+    
+    public void previewPillar(Point position, Dimension size) {
+        RoomElement previewPillar = new RoomElement("previewPillar", new OrientedRectangle(position, size, Orientation.S),
+                                                    CoolColor.GRAY.getColor());
+        pillars.put("previewPillar", previewPillar);
+        pillarKey = "previewPillar";
+        
     }
 }

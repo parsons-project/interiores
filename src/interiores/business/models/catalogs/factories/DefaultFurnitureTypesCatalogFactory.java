@@ -6,6 +6,7 @@ import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
+import interiores.utils.Functionality;
 import interiores.utils.Range;
 
 /**
@@ -56,7 +57,7 @@ public class DefaultFurnitureTypesCatalogFactory
     
     private static FurnitureType bedDouble() throws BusinessException {
         FurnitureType ft = new FurnitureType("bedDouble", new Range(120, 240), new Range(180, 210),
-                new SpaceAround(50, 50, 0, 50));
+                new SpaceAround(50, 50, 0, 50), new Functionality[]{ Functionality.SLEEP });
         
         ft.addFurnitureModel(new FurnitureModel("SFORANVIK", new Dimension(140, 205), 269f, "glazed",
                 "pine"));
@@ -84,7 +85,7 @@ public class DefaultFurnitureTypesCatalogFactory
 
     private static FurnitureType bedSingle() throws BusinessException {
         FurnitureType ft = new FurnitureType("bedSingle", new Range(70, 150), new Range(180, 210),
-                new SpaceAround(50, 0, 0, 0));
+                new SpaceAround(50, 0, 0, 0), new Functionality[]{ Functionality.SLEEP });
         
         ft.addFurnitureModel(new FurnitureModel("TERESJI", new Dimension(90, 190), 129.99f, "glazed",
                 "beech"));
@@ -545,7 +546,8 @@ public class DefaultFurnitureTypesCatalogFactory
     }
 
     private static FurnitureType bathtub() throws BusinessException {
-        FurnitureType ft = new FurnitureType("bathtub", new Range(60, 90), new Range(100, 210));
+        FurnitureType ft = new FurnitureType("bathtub", new Range(60, 90), new Range(100, 210),
+                new Functionality[]{ Functionality.BATH });
         
         ft.addFurnitureModel(new FurnitureModel("SLARS", new Dimension(70, 160), 129f, "white",
                 "porcelain"));
@@ -569,7 +571,7 @@ public class DefaultFurnitureTypesCatalogFactory
 
     private static FurnitureType shower() throws BusinessException {
         FurnitureType ft = new FurnitureType("shower", new Range(60, 120), new Range(60, 120),
-                new SpaceAround(50, 0, 0, 0));
+                new SpaceAround(50, 0, 0, 0), new Functionality[]{ Functionality.BATH });
         
         ft.addFurnitureModel(new FurnitureModel("EMMILIIA", new Dimension(90, 120), 139.99f, "white",
                 "porcelain"));

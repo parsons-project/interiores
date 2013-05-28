@@ -1,15 +1,23 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogElementController;
+import interiores.business.events.catalogs.FTModifiedEvent;
+import interiores.business.events.catalogs.FTSetModifiedEvent;
+import interiores.business.exceptions.InvalidValueException;
+import interiores.business.models.room.RoomType;
+import interiores.business.models.SpaceAround;
 import interiores.business.events.furniture.ElementSelectedEvent;
 import interiores.business.events.furniture.ElementUnselectedEvent;
 import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.room.FurnitureType;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Range;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Business controller covering the operations performed over a type of furniture
@@ -42,6 +50,14 @@ public class FurnitureTypeController
         FurnitureType toAdd = new FurnitureType(name, widthRange, depthRange);
         
         super.add(toAdd);
+        notify(new FTSetModifiedEvent(toAdd.getFullName(),name, true));
+    }
+    
+    @Override
+    public void rm(String typeName) {
+        String fullName = get(typeName).getFullName();
+        super.rm(typeName);
+        notify(new FTSetModifiedEvent(fullName,typeName,false));
     }
     
     /**
@@ -75,6 +91,48 @@ public class FurnitureTypeController
     {
         return getWishList().getFurnitureNames();
     }
+    
+    public Map<String, String> getFullNamesMap() {
+        Map<String, String> fullNames = new TreeMap();
+        
+        for(FurnitureType ft : getCatalogObjects())
+            fullNames.put(ft.getFullName(), ft.getName());
+        
+        return fullNames;
+    }
+    
+    public Range getWidthRange(String ftname) {
+        return get(ftname).getWidthRange();
+    }
+    
+    public Range getDepthRange(String ftname) {
+        return get(ftname).getDepthRange();
+    }
+    
+    public void setWidthRange(String ftname, int wmin, int wmax) {
+        FurnitureType ft = getForWrite(ftname);
+        ft.setWidthRange(new Range(wmin, wmax));
+        notify(new FTModifiedEvent(ft.getFullName(),ftname));
+    }
+    
+    public void setDepthRange(String ftname, int dmin, int dmax) {
+        FurnitureType ft = getForWrite(ftname);
+        ft.setWidthRange(new Range(dmin, dmax));
+        notify(new FTModifiedEvent(ft.getFullName(),ftname));
+    }
+    
+    public int[] getPassiveSpace(String ftname) {
+        return get(ftname).getPassiveSpace().getOffsets();
+    }
+    
+    public void setPassiveSpace(String ftname, int[] ps) {
+        if (ps.length != 4)
+            throw new InvalidValueException("Passive space needs four values");
+        
+        SpaceAround sa = new SpaceAround(ps[0],ps[1],ps[2],ps[3]);
+        getForWrite(ftname).setPassiveSpace(sa);
+        notify(new FTModifiedEvent(get(ftname).getFullName(),ftname));
+    }
 
     /**
      * Gets all the furniture types that can be placed within the current room.
@@ -89,5 +147,22 @@ public class FurnitureTypeController
         Collection<String> forbidden = getRoom().getType().getForbidden();
         selectable.removeAll(forbidden);
         return selectable;
+    }
+    
+    public Collection getUncategorizedFurniture(String rtype) {
+        Collection<String> u = new ArrayList();
+        for (FurnitureType ft : getCatalogObjects()) u.add(ft.getName());
+        
+        Collection<String> forbidden = getRoomType(rtype).getForbidden();
+        u.removeAll(forbidden);
+        Collection<String> mandatory = getRoomType(rtype).getMandatory();
+        u.removeAll(mandatory);
+        
+        return u;
+    }
+    
+    private RoomType getRoomType(String name) {
+        NamedCatalog<RoomType> rtCatalog = (NamedCatalog) getCatalog(AvailableCatalog.ROOM_TYPES);
+        return rtCatalog.get(name);
     }
 }

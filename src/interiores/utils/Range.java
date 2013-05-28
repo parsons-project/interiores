@@ -1,5 +1,6 @@
 package interiores.utils;
 
+import interiores.business.exceptions.InvalidValueException;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,11 +16,14 @@ public class Range {
     @XmlAttribute
     public int max;
     
-    public Range() {
+    public Range() throws InstantiationException {
         this(0, 0);
     }
     
-    public Range(int min, int max) {
+    public Range(int min, int max) throws InvalidValueException {
+        if (min > max)
+            throw new InvalidValueException("Max should be greater or equal than min");
+        
         this.min = min;
         this.max = max;
     }

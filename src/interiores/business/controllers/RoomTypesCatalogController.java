@@ -1,10 +1,9 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogController;
-import interiores.business.events.catalogs.ElementChangedEvent;
-import interiores.business.events.catalogs.RTCatalogChangedEvent;
+import interiores.business.events.catalogs.RTCatalogSetModifiedEvent;
 import interiores.business.events.catalogs.RTCatalogCheckoutEvent;
-import interiores.business.models.RoomType;
+import interiores.business.models.room.RoomType;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.catalogs.factories.DefaultRoomTypesCatalogFactory;
@@ -27,28 +26,34 @@ public class RoomTypesCatalogController
         
         // Temporary default catalog overwrite
         NamedCatalog defaultCatalog;
-        
         defaultCatalog = DefaultRoomTypesCatalogFactory.getCatalog();
-        
         loadedCatalogs.put(defaultCatalog.getName(), defaultCatalog);
-        setActiveCatalog(defaultCatalog);
+        
+        // Now, we create a "session" catalog that can be manipulated, and set it active
+        NamedCatalog sessionCatalog = new NamedCatalog("session", defaultCatalog);
+        loadedCatalogs.put("session", sessionCatalog);
+        
+        setActiveCatalog(sessionCatalog);
     }
     
     @Override
     public void create(String catalogName) {
         super.create(catalogName);
-        notify(new RTCatalogChangedEvent(catalogName,true));
+        notify(new RTCatalogSetModifiedEvent(catalogName,true));
     }
     
     @Override
     public void remove(String catalogName) {
         super.remove(catalogName);
-        notify(new RTCatalogChangedEvent(catalogName, false));
+        notify(new RTCatalogSetModifiedEvent(catalogName, false));
     }
     
     @Override
-    public void merge(String catalogName) {
-        super.merge(catalogName);
+    public void merge(String catalogName, boolean replace) {
+        super.merge(catalogName,replace);
+        // We notify a checkout event, as this operation performs a great change
+        // upon the currently selected catalog, and thus we are somehow changing
+        // into a completely different catalog
         notify(new RTCatalogCheckoutEvent(getNameActiveCatalog()));
     }
     
@@ -61,6 +66,6 @@ public class RoomTypesCatalogController
     @Override
     public void load(String path) throws JAXBException {
         super.load(path);
-        notify(new RTCatalogChangedEvent(lastLoaded, true));
+        notify(new RTCatalogSetModifiedEvent(lastLoaded, true));
     }
 }

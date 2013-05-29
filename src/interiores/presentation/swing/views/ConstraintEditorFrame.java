@@ -658,9 +658,9 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
         else if (type.equals("distance-min"))
             binaryConstraintController.addMinDistanceConstraint(selectedId, otherId, dist);
         else if (type.equals("facing-straight"))
-            binaryConstraintController.addStraightFacingConstraint(selectedId, otherId, 50);
+            binaryConstraintController.addStraightFacingConstraint(selectedId, otherId);
         else if (type.equals("facing-partial"))
-            binaryConstraintController.addPartialFacingConstraint(selectedId, otherId, 50);
+            binaryConstraintController.addPartialFacingConstraint(selectedId, otherId);
         
         // @TODO Add variable distance to facing constraints
     }

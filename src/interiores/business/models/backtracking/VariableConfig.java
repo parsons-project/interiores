@@ -157,7 +157,7 @@ public class VariableConfig
         BinaryConstraintEnd bce = null;
         if (placement.equals("next-to")) bce = new MaxDistanceConstraint(0);
         else if (placement.equals("away-from")) bce = new MinDistanceConstraint(AWAY_DISTANCE);
-        else if (placement.equals("in-front-of")) bce = new StraightFacingConstraint(1000);
+        else if (placement.equals("in-front-of")) bce = new StraightFacingConstraint();
         
         return bce;
     }

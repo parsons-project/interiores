@@ -57,13 +57,13 @@ public class BinaryConstraintCommands
     public void addPartialFacingConstraint() {
         String[] furniture = selectFurniturePair();
         int distance = readInt("Enter the distance you want between the elements measured in cm");
-        constraintController.addPartialFacingConstraint(furniture[0], furniture[1], distance);
+        constraintController.addPartialFacingConstraint(furniture[0], furniture[1]);
     }
     
     public void addStraightFacingConstraint() {
         String[] furniture = selectFurniturePair();
         int distance = readInt("Enter the distance you want between the elements measured in cm");
-        constraintController.addStraightFacingConstraint(furniture[0], furniture[1], distance);
+        constraintController.addStraightFacingConstraint(furniture[0], furniture[1]);
     }
     
     private String[] selectFurniturePair() {

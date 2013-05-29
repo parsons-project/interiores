@@ -54,15 +54,15 @@ public class BinaryConstraintController
         notify(new BinaryConstraintAddedEvent());
     }
     
-    public void addStraightFacingConstraint(String furnitureId1, String furnitureId2, int distance)
+    public void addStraightFacingConstraint(String furnitureId1, String furnitureId2)
     {
-        getWishList().addBinaryConstraint(new StraightFacingConstraint(distance), furnitureId1, furnitureId2);
+        getWishList().addBinaryConstraint(new StraightFacingConstraint(), furnitureId1, furnitureId2);
         notify(new BinaryConstraintAddedEvent());
     }
     
-    public void addPartialFacingConstraint(String furnitureId1, String furnitureId2, int distance)
+    public void addPartialFacingConstraint(String furnitureId1, String furnitureId2)
     {
-        getWishList().addBinaryConstraint(new PartialFacingConstraint(distance), furnitureId1, furnitureId2);
+        getWishList().addBinaryConstraint(new PartialFacingConstraint(), furnitureId1, furnitureId2);
         notify(new BinaryConstraintAddedEvent());
     }
     

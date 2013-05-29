@@ -15,12 +15,11 @@ import java.util.HashSet;
 public class StraightFacingConstraint
     extends BinaryConstraintEnd {
     
-    private int maxDist = 1000;
+    private static final int MAXDIST = 1000;
     
     
-    public StraightFacingConstraint(int distance) {
+    public StraightFacingConstraint() {
         super();
-        maxDist = distance;
     }
     
     
@@ -30,8 +29,8 @@ public class StraightFacingConstraint
         OrientedRectangle rectangle1 = ((FurnitureValue) otherVariable.getAssignedValue()).getArea();
         OrientedRectangle rectangle2 = ((FurnitureValue) variable.getAssignedValue()).getArea();
         
-        return rectangle1.enlarge(maxDist, rectangle1.getOrientation()).intersects(rectangle2) &&
-               rectangle2.enlarge(maxDist, rectangle2.getOrientation()).intersects(rectangle1) &&
+        return rectangle1.enlarge(MAXDIST, rectangle1.getOrientation()).intersects(rectangle2) &&
+               rectangle2.enlarge(MAXDIST, rectangle2.getOrientation()).intersects(rectangle1) &&
                (rectangle1.getCenter().x == rectangle2.getCenter().x ||
                 rectangle1.getCenter().y == rectangle2.getCenter().y);
         
@@ -47,7 +46,7 @@ public class StraightFacingConstraint
         OrientedRectangle r = ((FurnitureValue) otherVariable.getAssignedValue()).getArea();
         
 
-        r.enlarge(maxDist, r.getOrientation());
+        r.enlarge(MAXDIST, r.getOrientation());
         //r is the area where the variable must be partially placed
         //to satisfy the constraint
         
@@ -57,26 +56,26 @@ public class StraightFacingConstraint
         OrientedRectangle validRectangle;
         if (r.getOrientation() == Orientation.N) 
             validRectangle = new OrientedRectangle(r.getCenter().x-1,
-                                                   r.y - maxDist,
+                                                   r.y - MAXDIST,
                                                    2, //2 units wide to leave room for rounding errors, not sure if necessary
-                                                   maxDist,
+                                                   MAXDIST,
                                                    Orientation.S);
         else if (r.getOrientation() == Orientation.S) 
             validRectangle = new OrientedRectangle(r.getCenter().x-1,
                                                    r.y + r.height,
                                                    2, 
-                                                   maxDist,
+                                                   MAXDIST,
                                                    Orientation.N);
         else if (r.getOrientation() == Orientation.E)
             validRectangle = new OrientedRectangle(r.x + r.width,
                                                    r.getCenter().y-1,
-                                                   maxDist,
+                                                   MAXDIST,
                                                    2,
                                                    Orientation.W);
         else 
-            validRectangle = new OrientedRectangle(r.x - maxDist,
+            validRectangle = new OrientedRectangle(r.x - MAXDIST,
                                                    r.getCenter().y-1,
-                                                   maxDist,
+                                                   MAXDIST,
                                                    2,
                                                    Orientation.E);
    
@@ -87,7 +86,7 @@ public class StraightFacingConstraint
         validRectangle= validRectangle.enlarge(maxSize, Orientation.N);
  
         
-        variable.trimExceptP(new Area(validRectangle.enlarge(maxDist, validRectangle.getOrientation())));
+        variable.trimExceptP(new Area(validRectangle.enlarge(MAXDIST, validRectangle.getOrientation())));
         HashSet<Orientation> validOrientations = new HashSet<Orientation>();
         validOrientations.add(validRectangle.getOrientation().complementary());
         variable.trimExceptO(validOrientations);

@@ -10,7 +10,7 @@ import java.util.HashSet;
 
 /**
  * The variable associated with the constraint has to be facing the
- * otherVariable, and can be at much maxDist away.
+ * otherVariable, and can be at much MAXDIST away.
  * The variables are considered facing each other if there exists a paralel
  * line to the direction either of them are facing that crosses
  * the area of both variables.
@@ -19,11 +19,10 @@ import java.util.HashSet;
 public class PartialFacingConstraint
     extends BinaryConstraintEnd
 {
-    private int maxDist;
+    private static final int MAXDIST = 10000;
     
-    public PartialFacingConstraint(int distance) {
+    public PartialFacingConstraint() {
         super();
-        maxDist = distance;
     }
     
     @Override
@@ -31,18 +30,18 @@ public class PartialFacingConstraint
         OrientedRectangle rectangle1 = ((FurnitureValue) otherVariable.getAssignedValue()).getArea();
         OrientedRectangle rectangle2 = ((FurnitureValue) variable.getAssignedValue()).getArea();
         
-        return rectangle1.enlarge(maxDist, rectangle1.getOrientation()).intersects(rectangle2) &&
-               rectangle2.enlarge(maxDist, rectangle2.getOrientation()).intersects(rectangle1);
+        return rectangle1.enlarge(MAXDIST, rectangle1.getOrientation()).intersects(rectangle2) &&
+               rectangle2.enlarge(MAXDIST, rectangle2.getOrientation()).intersects(rectangle1);
         
     }
     
     @Override
     public int getWeight() {
-        if (maxDist < 6) return 250;
-        if (maxDist < 20) return 160;
-        if (maxDist < 60) return 130;
-        if (maxDist < 100) return 120;
-        if (maxDist < 200) return 110;
+        if (MAXDIST < 6) return 250;
+        if (MAXDIST < 20) return 160;
+        if (MAXDIST < 60) return 130;
+        if (MAXDIST < 100) return 120;
+        if (MAXDIST < 200) return 110;
         return 100;
     }
 
@@ -50,7 +49,7 @@ public class PartialFacingConstraint
     public void trim2(FurnitureVariable variable) {
         OrientedRectangle validRectangle = ((FurnitureValue) otherVariable.getAssignedValue()).getArea();
         
-        validRectangle = validRectangle.enlarge(maxDist, validRectangle.getOrientation());
+        validRectangle = validRectangle.enlarge(MAXDIST, validRectangle.getOrientation());
         //validRectangle is the area where the variable must be partially placed
         //to satisfy the constraint
         
@@ -61,7 +60,7 @@ public class PartialFacingConstraint
         validRectangle = validRectangle.enlarge(maxSize, Orientation.N);
  
         
-        variable.trimExceptP(new Area(validRectangle.enlarge(maxDist, validRectangle.getOrientation())));
+        variable.trimExceptP(new Area(validRectangle.enlarge(MAXDIST, validRectangle.getOrientation())));
         HashSet<Orientation> validOrientations = new HashSet<Orientation>();
         validOrientations.add(validRectangle.getOrientation().complementary());
         variable.trimExceptO(validOrientations);

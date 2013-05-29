@@ -12,6 +12,7 @@ import interiores.business.events.constraints.BinaryConstraintRemovedEvent;
 import interiores.business.events.constraints.UnaryConstraintAddedEvent;
 import interiores.business.events.constraints.UnaryConstraintRemovedEvent;
 import interiores.business.models.Orientation;
+import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
@@ -559,13 +560,13 @@ private void activeUnariesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:e
 private void activeBinariesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_activeBinariesKeyPressed
     int index = activeBinaries.getSelectedIndex();
     if (index >= 0) {
-        BinaryConstraintAssociation constraint = (BinaryConstraintAssociation) activeBinaries.getModel().
+        BinaryConstraintEnd constraint = (BinaryConstraintEnd) activeBinaries.getModel().
                 getElementAt(index);
         
         switch (evt.getKeyCode()) {
             case KeyEvent.VK_DELETE:  // press delete
-                binaryConstraintController.removeConstraint(constraint.furniture1,
-                        constraint.getConstraint().getClass());
+                binaryConstraintController.removeConstraint(constraint.getOtherVariable().getName(),
+                        constraint.getClass());
                 break;            
         }
         updateActiveConstraintsList();

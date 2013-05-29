@@ -1,6 +1,7 @@
 package interiores.presentation.swing.views;
 
 import interiores.business.controllers.BinaryConstraintController;
+import interiores.business.controllers.FixedElementController;
 import interiores.business.controllers.FurnitureModelController;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.RoomController;
@@ -11,6 +12,7 @@ import interiores.business.events.constraints.UnaryConstraintAddedEvent;
 import interiores.business.events.constraints.UnaryConstraintRemovedEvent;
 import interiores.business.models.Orientation;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
+import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.utils.BinaryConstraintAssociation;
@@ -25,6 +27,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 /**
@@ -35,6 +38,7 @@ public class ConstraintEditorFrame extends JFrame {
 
     private String selectedId;
     private FurnitureTypeController furnitureTypeController;
+    private FixedElementController fixedElementController;
     private FurnitureModelController furnitureModelController;
     private UnaryConstraintController unaryConstraintController;
     private BinaryConstraintController binaryConstraintController;
@@ -45,6 +49,7 @@ public class ConstraintEditorFrame extends JFrame {
     public ConstraintEditorFrame(SwingController presentation) {
         initComponents();
         
+        fixedElementController = presentation.getBusinessController(FixedElementController.class);
         furnitureTypeController = presentation.getBusinessController(FurnitureTypeController.class);
         furnitureModelController = presentation.getBusinessController(FurnitureModelController.class);
         unaryConstraintController = presentation.getBusinessController(UnaryConstraintController.class);
@@ -79,7 +84,8 @@ public class ConstraintEditorFrame extends JFrame {
     private void updateConstraintEditorFrame() {
         
        // This is done to avoid aliasing
-       relatableFurniture = new ArrayList(furnitureTypeController.getRoomFurniture());       
+       relatableFurniture = new ArrayList(furnitureTypeController.getRoomFurniture());
+       relatableFurniture.addAll(fixedElementController.getFixedNames());
        relatableFurniture.remove(selectedId);
        
        unaryConstraintRadio.setSelected(true);
@@ -566,6 +572,7 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
     boolean unarySelected = unaryConstraintRadio.isSelected();
     String type = (String) relatableCombo.getSelectedItem();
     if (unarySelected && type != null) {
+        resetSpinners();
         if (type.equals("at")) {
             positionPanel.setVisible(false);
             prepareRangePanel("x:", "y:");
@@ -658,7 +665,7 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
                 unaryConstraintController.addPositionRangeConstraint(selectedId, posX.min, posY.min, posX.max,
                         posY.max);
             else if (value.equals("at"))
-                unaryConstraintController.addPositionAtConstraint(selectedId, range.min, range.max);        
+                unaryConstraintController.addPositionAtConstraint(selectedId, range.min, range.max);
         }
         else if (type.equals("wall"))
             unaryConstraintController.addWallConstraint(selectedId, orientations);
@@ -725,6 +732,14 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
                     integerSpinner)));
         else
             showOnly((Collection) Arrays.asList(relatableCombo));
+    }
+
+    private void resetSpinners() {
+       JSpinner[] spinners = {minSpinner, maxSpinner, minXSpinner, maxXSpinner, minYSpinner, maxYSpinner};
+       for (JSpinner spinner: spinners)  {
+           spinner.getModel().setValue(0);
+       }
+                       
     }
 
 }

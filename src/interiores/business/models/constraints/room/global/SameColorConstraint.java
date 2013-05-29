@@ -11,6 +11,7 @@ import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
 import interiores.business.models.room.FurnitureModel;
+import interiores.core.Debug;
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -144,9 +145,12 @@ public class SameColorConstraint
      * @return 
      */
     private HashSet<Color> intersection(HashSet<Color> set1, HashSet<Color> set2) {
-        for (Color color : set2)
+        Iterator<Color> it = set2.iterator();
+        while (it.hasNext()) {
+            Color color = it.next();
             if (! set1.contains(color))
-                set2.remove(color);
+                it.remove();
+        }
         return set2;
     }
 

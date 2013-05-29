@@ -4,12 +4,14 @@ import interiores.business.events.backtracking.SolveDesignFinishedEvent;
 import interiores.business.events.backtracking.SolveDesignStartedEvent;
 import interiores.business.events.room.RoomDesignChangedEvent;
 import interiores.business.exceptions.SolverNotFinishedException;
+import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.core.Event;
 import interiores.core.Observable;
 import interiores.core.Observer;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.utils.Dimension;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,11 +29,11 @@ public class ThreadSolver
     private long time;
     
     public ThreadSolver() {
-        this(new VariableConfig(new Dimension(0, 0))); // Default empty solver
+        this(new VariableConfig(new Dimension(0, 0)), new ArrayList<GlobalConstraint>()); // Default empty solver
     }
     
-    public ThreadSolver(VariableConfig variableConfig) {
-        super(variableConfig);
+    public ThreadSolver(VariableConfig variableConfig, Collection<GlobalConstraint> gconst) {
+        super(variableConfig, gconst);
         
         listeners = new ArrayList();
         isTimerEnabled = false;

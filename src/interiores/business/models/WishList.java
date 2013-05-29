@@ -10,14 +10,16 @@ import interiores.business.models.backtracking.VariableConfig;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
+import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedElementSet;
 import interiores.business.models.room.elements.WantedFixed;
 import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.business.BusinessException;
-import interiores.shared.backtracking.VariableSet;
 import interiores.utils.Functionality;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlElement;
@@ -40,6 +42,9 @@ public class WishList
     @XmlElement
     private WantedElementSet<WantedFixed> fixed;
     
+    @XmlElement
+    private Map<String,GlobalConstraint> globalConstraints;
+    
     public WishList()
     { }
     
@@ -49,6 +54,8 @@ public class WishList
         
         furniture = new WantedElementSet("furniture");
         fixed = new WantedElementSet("fixed element");
+        
+        globalConstraints = new HashMap<String,GlobalConstraint>();
         
         for(String mandatoryType : room.getMandatoryFurniture())
             addWithoutChecking(mandatoryType);
@@ -110,6 +117,16 @@ public class WishList
         return fixed.size();
     }
     
+    
+    public void addGlobalConstraint(GlobalConstraint gc) {
+        globalConstraints.put(gc.getClass().getName(), gc);
+    } // remove i fer el controlador i les comandes.
+    // Afegir les comandes a la documentació
+    // afegir a l'interficie gráfica
+    // tests a saco
+    //Començar la guia de l'usuari
+    
+    
     /**
      * Adds a new binary constraint.
      * @param binaryConstraintClass The type of the constraint
@@ -139,6 +156,11 @@ public class WishList
         getWantedFurniture(furnitureId).unbound(binaryConstraintClass, elementId);
     }
     
+    
+    public void removeGlobalConstraint(String name) {
+        globalConstraints.remove(GlobalConstraint.getConstraintClass(name).getName());
+    }
+    
     /**
      * Returns all the constraints (both unary and binary) of a given WantedFurniture.
      * @param furnitureID the identifier of the WantedFurniture
@@ -155,6 +177,10 @@ public class WishList
             throw new WantedFurnitureNotFoundException(elementId);
         
         return furniture.get(elementId).getBinaryConstraints();
+    }
+    
+    public Collection<GlobalConstraint> getGlobalConstraints() {
+        return globalConstraints.values();
     }
     
     /**

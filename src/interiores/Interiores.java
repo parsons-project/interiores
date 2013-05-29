@@ -6,6 +6,7 @@ import interiores.business.controllers.FixedElementController;
 import interiores.business.controllers.FurnitureModelController;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.FurnitureTypesCatalogController;
+import interiores.business.controllers.GlobalConstraintController;
 import interiores.business.controllers.RoomController;
 import interiores.business.controllers.RoomTypeController;
 import interiores.business.controllers.RoomTypesCatalogController;
@@ -57,6 +58,7 @@ public class Interiores
         app.addBusiness(FurnitureTypesCatalogController.class);
         app.addBusiness(RoomTypesCatalogController.class);
         app.addBusiness(FixedElementController.class);
+        app.addBusiness(GlobalConstraintController.class);
         
         // Presentation layer
         app.addPresentation(swingController);

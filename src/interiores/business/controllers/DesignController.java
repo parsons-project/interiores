@@ -6,6 +6,7 @@ import interiores.business.models.backtracking.ThreadSolver;
 import interiores.business.models.backtracking.ThreadSolverDebugger;
 import interiores.business.models.backtracking.VariableConfig;
 import interiores.business.models.catalogs.AvailableCatalog;
+import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.Observer;
@@ -43,13 +44,15 @@ public class DesignController
             throw new SolverNotFinishedException();
         
         VariableConfig variableConfig = getWishList().getVariableConfig(getActiveCatalog());
+        Collection<GlobalConstraint> gconst = getWishList().getGlobalConstraints();
         
         if(debugMode || solver.shouldRenew(variableConfig)) {
-            if(debugMode)
-                solver = new ThreadSolverDebugger(variableConfig);
-            else
-                solver = new ThreadSolver(variableConfig);
-        
+            if(debugMode) {
+                solver = new ThreadSolverDebugger(variableConfig, gconst);
+            }
+            else {
+                solver = new ThreadSolver(variableConfig, gconst);
+            }
             solver.addListener(this);
             
         }

@@ -139,9 +139,14 @@ abstract public class FurnitureVariable
         forwardIteration();
                
         // 2) Run trimmers
-        for (Constraint constraint : backtrackingConstraints)
-            if (constraint instanceof BacktrackingTimeTrimmer)
-                ((BacktrackingTimeTrimmer) constraint).trim(this);
+        for (Constraint constraint : backtrackingConstraints) {
+            if (constraint instanceof BacktrackingTimeTrimmer) {
+                BacktrackingTimeTrimmer trimmer = (BacktrackingTimeTrimmer) constraint;
+                
+                if(trimmer.shouldTrim((FurnitureVariable) variable))
+                    trimmer.trim(this);
+            }
+        }
     }
     
     /**

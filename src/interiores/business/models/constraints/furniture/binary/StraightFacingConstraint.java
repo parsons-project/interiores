@@ -55,7 +55,7 @@ public class StraightFacingConstraint
         //it must be expanded to W and N to include all positions such that there
         //is a model that placed there, is at least parcially in validRectangle
         int otherMaxSize = ((FurnitureVariable) otherVariable).getMaxSize();
-        Dimension modelSize = variable.getAssignedValue().getModel().getSize();
+        Dimension modelSize = otherVariable.getAssignedValue().getModel().getSize();
         int thisMaxSize;
         switch(curOrientation) {
             case E:

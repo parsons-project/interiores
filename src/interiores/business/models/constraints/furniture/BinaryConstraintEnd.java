@@ -75,6 +75,11 @@ public abstract class BinaryConstraintEnd
     }
  
     public abstract void trim2(FurnitureVariable variable);
+    
+    @Override
+    public boolean shouldTrim(FurnitureVariable actual) {
+        return actual.equals(otherVariable);
+    }
 
     @Override
     public final boolean isSatisfied(FurnitureVariable variable) {
@@ -97,11 +102,11 @@ public abstract class BinaryConstraintEnd
     }
     
     public boolean hasCounterPart() {
-        return otherVariable.isConstant();
+        return (!otherVariable.isConstant());
     }
     
     public BinaryConstraintEnd getCounterPart(FurnitureVariable start) {
-        if(hasCounterPart())
+        if(!hasCounterPart())
             throw new BusinessException("Binary constraint without counterpart.");
         
         FurnitureVariable end = (FurnitureVariable) otherVariable;

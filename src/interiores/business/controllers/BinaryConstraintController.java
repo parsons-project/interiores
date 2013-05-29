@@ -100,10 +100,8 @@ public class BinaryConstraintController
      * @param constraintAlias The constraint's alias
      */
     public void removeConstraint(String furnitureId, String elementId, String constraintAlias)
-
     {
         Class binaryConstraintClass = BinaryConstraintEnd.getConstraintClass(constraintAlias);
-        
         removeConstraint(furnitureId, elementId, binaryConstraintClass);
     }
     

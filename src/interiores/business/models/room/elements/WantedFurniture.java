@@ -1,18 +1,16 @@
 package interiores.business.models.room.elements;
 
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.Constraint;
-import interiores.business.models.constraints.ConstraintIndex;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
+import interiores.business.models.constraints.furniture.BinaryConstraintSet;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
+import interiores.business.models.constraints.furniture.UnaryConstraintSet;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -24,14 +22,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class WantedFurniture
     extends FurnitureVariable
 {
-    @XmlElementWrapper
-    private Map<Class, Constraint> constraints;
+    @XmlElement
+    private UnaryConstraintSet unaryConstraints;
     
     @XmlElement
-    private ConstraintIndex<UnaryConstraint> unaryConstraints;
-    
-    @XmlElement
-    private ConstraintIndex<BinaryConstraintEnd> binaryConstraints;
+    private BinaryConstraintSet binaryConstraints;
     
     public WantedFurniture()
     { }
@@ -43,78 +38,58 @@ public class WantedFurniture
     public WantedFurniture(String typeName) {
         super(typeName);
         
-        constraints = new HashMap();
-        unaryConstraints = new ConstraintIndex<UnaryConstraint>();
-        
-        
-        binaryConstraints = new ConstraintIndex<BinaryConstraintEnd>();
+        unaryConstraints = new UnaryConstraintSet();
+        binaryConstraints = new BinaryConstraintSet();
     }
     
     @Override
     public Collection<Constraint> getConstraints() {
-        return constraints.values();
+        Collection<Constraint> constraints = new HashSet();
+        
+        constraints.addAll(unaryConstraints.getAll());
+        constraints.addAll(binaryConstraints.getAll());
+        
+        return constraints;
     }
     
     public void addUnaryConstraint(UnaryConstraint unaryConstraint) {
-        unaryConstraints.add(unaryConstraint, constraints);
+        unaryConstraints.add(unaryConstraint);
     }
     
     public void removeUnaryConstraint(Class<? extends UnaryConstraint> unaryConstraintClass) {
-        unaryConstraints.remove(unaryConstraintClass, constraints);
+        unaryConstraints.remove(unaryConstraintClass);
     }
     
     public UnaryConstraint getUnaryConstraint(Class<? extends UnaryConstraint> unaryConstraintClass) {
-        return unaryConstraints.get(unaryConstraintClass, constraints);
+        return unaryConstraints.get(unaryConstraintClass);
     }
     
     public Collection<UnaryConstraint> getUnaryConstraints() {
-        return unaryConstraints.getAll(constraints);
+        return unaryConstraints.getAll();
     }
     
-    public void bound(BinaryConstraintEnd binaryConstraint, String otherName)
+    public void bound(BinaryConstraintEnd binaryConstraint)
     {
-        addBinaryConstraint(binaryConstraint, otherName);
-        
-        BinaryConstraintEnd counterPart = binaryConstraint.getCounterPart(this);
-        
-        if(counterPart == null)
-            return;
-        
-        WantedFurniture other = (WantedFurniture) binaryConstraint.getOtherVariable();
-        other.addBinaryConstraint(counterPart, name);
+        binaryConstraints.bound(this, binaryConstraint);
     }
     
     public void unbound(Class<? extends BinaryConstraintEnd> binaryConstraintClass, String otherName)
     {
-        BinaryConstraintEnd binaryConstraint = (BinaryConstraintEnd) constraints.get(
-                binaryConstraintClass);
-        
-        removeBinaryConstraint(binaryConstraintClass, name);
-        
-        if(! binaryConstraint.hasCounterPart())
-            return;
-        
-        WantedFurniture other = (WantedFurniture) binaryConstraint.getOtherVariable();
-        other.removeBinaryConstraint(binaryConstraintClass, name);
+        binaryConstraints.unbound(name, binaryConstraintClass, otherName);
     }
     
     public void addBinaryConstraint(BinaryConstraintEnd binaryConstraint, String otherName)
     {
-        binaryConstraints.add(binaryConstraint, constraints);
+        binaryConstraints.add(binaryConstraint, otherName);
     }
     
     public void removeBinaryConstraint(Class<? extends BinaryConstraintEnd> binaryConstraintClass,
             String otherName)
     {
-        binaryConstraints.remove(binaryConstraintClass, constraints);
-    }
-    
-    public BinaryConstraintEnd getBinaryConstraint(Class<? extends BinaryConstraintEnd> binaryConstraintClass)
-    {
-        return binaryConstraints.get(binaryConstraintClass, constraints);
+        binaryConstraints.remove(binaryConstraintClass, otherName);
     }
     
     public Collection<BinaryConstraintEnd> getBinaryConstraints() {
-        return binaryConstraints.getAll(constraints);
+        return binaryConstraints.getAll();
     }
 }

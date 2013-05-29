@@ -14,8 +14,6 @@ import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedElementSet;
 import interiores.business.models.room.elements.WantedFixed;
 import interiores.business.models.room.elements.WantedFurniture;
-import interiores.core.business.BusinessException;
-import interiores.shared.backtracking.VariableSet;
 import interiores.utils.Functionality;
 import java.util.Collection;
 import java.util.Set;
@@ -123,7 +121,7 @@ public class WishList
         InterioresVariable element = getElement(elementId);
         bc.setOtherVariable(element);
         
-        getWantedFurniture(furnitureId).bound(bc, elementId);
+        getWantedFurniture(furnitureId).bound(bc);
     }
     
     /**

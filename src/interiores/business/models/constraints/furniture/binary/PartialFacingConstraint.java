@@ -52,7 +52,7 @@ public class PartialFacingConstraint
         
         //it must be expanded to W and N to include all positions such that there
         //is a model that placed there, is at least parcially in validRectangle
-        int maxSize = variable.getMaxSize();
+        int maxSize = ((FurnitureVariable) otherVariable).getMaxSize();
         validRectangle = validRectangle.enlarge(maxSize, curOrientation.rotateLeft());
         validRectangle = validRectangle.enlarge(maxSize, curOrientation.rotateRight());
  

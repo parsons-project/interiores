@@ -52,7 +52,7 @@ public class ColorConstraint
         HashSet<FurnitureModel> validModels = variable.getDomain().getModels(0);
         Iterator<FurnitureModel> it = validModels.iterator();
         while (it.hasNext()) {
-            if (! it.next().getColor().equals(color))
+            if (! it.next().getColor().equals(color.getColor()))
                 it.remove();
         }
         

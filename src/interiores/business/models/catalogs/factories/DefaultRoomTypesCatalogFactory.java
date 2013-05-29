@@ -29,7 +29,7 @@ public class DefaultRoomTypesCatalogFactory {
         ));
         
         catalog.add(new RoomType("bathroom",
-                new Dimension(100, 210),
+                new Dimension(150, 210),
                 new String[]{"mirror", "bidet", "washbasin", "toilet"},
                 new String[]{"bedSingle", "bedDouble", "tableBedside", "sink", "oven", "microwave", "hob", "stove",
                              "extractor", "fridge", "dishwasher", "armchair", "worktop", "wringer","armchair", "sofa"},

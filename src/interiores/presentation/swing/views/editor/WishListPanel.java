@@ -1,10 +1,14 @@
 package interiores.presentation.swing.views.editor;
 
 import interiores.business.controllers.DesignController;
+import interiores.business.controllers.FixedElementController;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.events.furniture.ElementSelectedEvent;
 import interiores.business.events.furniture.ElementUnselectedEvent;
+import interiores.business.exceptions.ElementNotFoundBusinessException;
+import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.core.Debug;
+import interiores.core.business.BusinessException;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.views.ConstraintEditorFrame;
@@ -23,6 +27,7 @@ public class WishListPanel extends JPanel {
 
     private DesignController designController;
     private FurnitureTypeController furnitureTypeController;
+    private FixedElementController fixedElementController;
     private DefaultListModel listModel;
     private SwingController swing;
     
@@ -33,6 +38,7 @@ public class WishListPanel extends JPanel {
         swing = presentation;
         designController = presentation.getBusinessController(DesignController.class);
         furnitureTypeController = presentation.getBusinessController(FurnitureTypeController.class);
+        fixedElementController = presentation.getBusinessController(FixedElementController.class);
         listModel = new DefaultListModel();
         
         initLists();
@@ -173,7 +179,9 @@ private void selectedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:ev
         int index = selected.getSelectedIndex();
         if (index >= 0) {
             String type = (String) selected.getModel().getElementAt(index);
-            launchConstraintEditor(type);
+            if (! isFixed(type)) {
+                launchConstraintEditor(type);
+            }
         }
     }
 }//GEN-LAST:event_selectedMouseClicked
@@ -187,7 +195,6 @@ private void selectableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:
         if (node != null) {
             String nodeInfo = (String) node.getUserObject();
             if (node.isLeaf()) {
-                Debug.println("Adding a: " + nodeInfo);
                 furnitureTypeController.select(nodeInfo);
             }
         }
@@ -201,13 +208,18 @@ private void selectedKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         String type = (String) selected.getModel().getElementAt(index);
         switch (evt.getKeyCode()) {
             case KeyEvent.VK_DELETE:  // press delete
-                
-                Debug.println("Removing: " + type);
-                furnitureTypeController.unselect(type);
+                try {
+                    furnitureTypeController.unselect(type);
+                }
+                catch (WantedElementNotFoundException nfe) {
+                    // It wasn't a furniture element it is a fixed
+                    fixedElementController.remove(type);
+                }
                 break;
                 
             case KeyEvent.VK_ENTER:
-                launchConstraintEditor(type);
+                if (! isFixed(type))
+                    launchConstraintEditor(type);
                 break;
         }
    }
@@ -222,5 +234,9 @@ private void selectedKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private javax.swing.JButton solveButton;
     private javax.swing.JCheckBox timeCheckBox;
     // End of variables declaration//GEN-END:variables
+
+    private boolean isFixed(String name) {
+        return fixedElementController.getFixedNames().contains(name);
+    }
 
 }

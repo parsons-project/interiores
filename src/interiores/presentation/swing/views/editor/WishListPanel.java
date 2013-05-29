@@ -107,7 +107,7 @@ public class WishListPanel extends JPanel {
                                  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (choice == JOptionPane.YES_OPTION) designController.stopSolver();
                 }
-            }, 3000);
+            }, 30000);
         }
     }
     

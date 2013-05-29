@@ -5,7 +5,6 @@ import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
-import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import java.util.Collection;
@@ -97,33 +96,29 @@ public abstract class BinaryConstraintEnd
         return otherVariable;
     }
     
-    public void bound(WantedFurniture start) throws CloneNotSupportedException {
-        if(otherVariable.isConstant())
-            return;
+    public boolean hasCounterPart() {
+        return otherVariable.isConstant();
+    }
+    
+    public BinaryConstraintEnd getCounterPart(FurnitureVariable start) {
+        if(hasCounterPart())
+            throw new BusinessException("Binary constraint without counterpart.");
         
-        WantedFurniture end = (WantedFurniture) otherVariable;
+        FurnitureVariable end = (FurnitureVariable) otherVariable;
         
         if (end == start)
             throw new BusinessException("Can't have a restriction with itself");
         
-        if(end.isBounding())
-            return;
+        Debug.println("Creating constraint counterpart...");
         
-        Debug.println("Bounding constraint...");
-        
-        BinaryConstraintEnd otherEnd = (BinaryConstraintEnd) clone();
-        otherEnd.otherVariable = start;
-        
-        end.addBinaryConstraint(otherEnd);
-    }
-    
-    public void unbound() {
-        if(otherVariable.isConstant())
-            return;
-        
-        Debug.println("Unbounding constraint...");
-        
-        WantedFurniture end = (WantedFurniture) otherVariable;
-        end.removeBinaryConstraint(getClass());
+        try {
+            BinaryConstraintEnd otherEnd = (BinaryConstraintEnd) clone();
+            otherEnd.otherVariable = start;
+            
+            return otherEnd;
+        }
+        catch(CloneNotSupportedException e) {
+            throw new BusinessException("Impossible to create other binary constraint end.");
+        }
     }
 }

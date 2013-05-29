@@ -56,13 +56,13 @@ public class BinaryConstraintCommands
     
     public void addPartialFacingConstraint() {
         String[] furniture = selectFurniturePair();
-        int distance = readInt("Enter the distance you want between the elements measured in cm");
+        
         constraintController.addPartialFacingConstraint(furniture[0], furniture[1]);
     }
     
     public void addStraightFacingConstraint() {
         String[] furniture = selectFurniturePair();
-        int distance = readInt("Enter the distance you want between the elements measured in cm");
+        
         constraintController.addStraightFacingConstraint(furniture[0], furniture[1]);
     }
     
@@ -80,9 +80,9 @@ public class BinaryConstraintCommands
         String alias = readChoice("Specify the alias of the constraint you want to remove:",
                 constraintController.getAvailableConstraints());
         
-        String furniture = readString("Select the furniture from which you want to remove the constraint:");
+        String[] furniture = selectFurniturePair();
         
-        constraintController.removeConstraint(furniture, alias);
+        constraintController.removeConstraint(furniture[0], furniture[1], alias);
     }
     
     @Command("List binary constraints applied to a piece of furniture")

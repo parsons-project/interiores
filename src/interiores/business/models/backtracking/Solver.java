@@ -12,7 +12,7 @@ import interiores.business.models.constraints.room.global.SameColorConstraint;
 import interiores.business.models.constraints.room.global.SameMaterialConstraint;
 import interiores.business.models.constraints.room.global.SpaceRespectingConstraint;
 import interiores.business.models.constraints.room.global.UnfitModelsPseudoConstraint;
-import interiores.core.Observable;
+import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
@@ -60,13 +60,16 @@ public class Solver
     /**
      * Indicates whether all variables have an assigned value.
      */
+    private int jumpToDepth;
     protected boolean allAssigned;
     private boolean stepReset;
-
+    protected boolean shouldStop;
+    
     /**
      * Indicates restrictions amongst all variables.
      */
     private List<GlobalConstraint> globalConstraints;
+    
     
    /**
     * Holds information about the relationship between constraints of
@@ -123,35 +126,50 @@ public class Solver
 
         allAssigned = false;
         stepReset = false;
+        shouldStop = false;
         actual = null;
         
         globalConstraints = new ArrayList<GlobalConstraint>();
         addGlobalConstraints();
     }
     
+    public boolean hasConfiguration(VariableConfig otherConfig) {
+        return variableConfig.equals(otherConfig);
+    }
+    
     @Override
     public void solve() throws NoSolutionException {
-        initVariables();
-        preliminarTrimDomains();
-        backtracking();
+        if(allAssigned)
+            next();
+        
+        else {
+            initVariables();
+            super.solve();
+        }
     }
     
     protected void initVariables() {
-        if(variableConfig.isConsistent()) {
-            variableConfig.sort();
-            variableConfig.unassignLast();
-            stepReset = true;
-        }
-        else
-            variableConfig.resetDomains();
+        variableConfig.resetDomains();
         
-        assignedVariables = variableConfig.getAssignedVariables();
-        unassignedVariables = variableConfig.getUnassignedVariables();
+        assignedVariables = new ArrayList();
+        unassignedVariables = variableConfig.getVariables();
         constants = variableConfig.getConstants();
-        variableCount = assignedVariables.size() + unassignedVariables.size();
-        depth = assignedVariables.size();
+        variableCount = unassignedVariables.size();
+        jumpToDepth = -1;
         
         buildMatrixOfDependence();
+    }
+    
+    private void next() throws NoSolutionException {
+        actual.undoAssignValue();
+        unassignedVariables.add(actual);
+        
+        actual = null;
+        allAssigned = false;
+        depth = 0;
+        jumpToDepth = assignedVariables.size();
+        
+        backtracking();
     }
     
     /**
@@ -200,8 +218,16 @@ public class Solver
     protected void setActualVariable() {
         if (unassignedVariables.isEmpty())
             allAssigned = true;
-        else {
+        
+        else if(depth < jumpToDepth) {
+            Debug.println(depth + " " + jumpToDepth);
+            actual = assignedVariables.get(depth);
             
+            if(depth + 1 == jumpToDepth)
+                assignedVariables.remove(depth);
+        }
+        
+        else {
             //move previousactual to assigned, unless it is the first iteration
             if (actual != null)
                 assignedVariables.add(actual);
@@ -275,15 +301,18 @@ public class Solver
             unassignedVariables.remove(minimumWeightVariableIndex);
             
             //reset iterators
-            if(stepReset)
-                stepReset = false;
-            else
+            if(depth > jumpToDepth)
                 actual.resetIterators(depth);
+            
+            jumpToDepth = -1;
         }
     }
  
     @Override
     protected void trimDomains() {
+        if(depth < jumpToDepth)
+            return;
+        
         for (FurnitureVariable variable : unassignedVariables) {
             variable.trimDomain(actual, depth);   
         }
@@ -323,11 +352,17 @@ public class Solver
 
     @Override
     protected boolean actualHasMoreValues() {
+        if(depth < jumpToDepth)
+            return true;
+        
         return actual.hasMoreValues();
     }
     
     @Override
     protected Value getNextActualDomainValue() {
+        if(depth < jumpToDepth)
+            return actual.getAssignedValue();
+        
         return actual.getNextDomainValue();
     }
     
@@ -335,6 +370,12 @@ public class Solver
     protected boolean canAssignToActual(Value value)
             throws NoSolutionException
     {
+        if(depth < jumpToDepth)
+            return true;
+        
+        if(shouldStop)
+            throw new NoSolutionException("Solver stopped manually");
+        
         //temporal assignment
         actual.assignValue(value);
         
@@ -360,7 +401,10 @@ public class Solver
 
     
     @Override
-    protected void assignToActual(Value value) {        
+    protected void assignToActual(Value value) { 
+        if(depth < jumpToDepth)
+            return;
+        
         actual.assignValue(value);
     }
 
@@ -375,7 +419,6 @@ public class Solver
     protected void preliminarTrimDomains()
             throws NoSolutionException
     {
-        
         //1) each variable triggers its own preliminar trimmers
         for (FurnitureVariable variable : unassignedVariables)
             variable.triggerPreliminarTrimmers();

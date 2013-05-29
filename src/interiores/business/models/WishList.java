@@ -123,12 +123,7 @@ public class WishList
         InterioresVariable element = getElement(elementId);
         bc.setOtherVariable(element);
         
-        try {
-            getWantedFurniture(furnitureId).bound(bc);
-        }
-        catch(CloneNotSupportedException e) {
-            throw new BusinessException("Impossible to bound binary constraint to both ends.");
-        }
+        getWantedFurniture(furnitureId).bound(bc, elementId);
     }
     
     /**
@@ -138,9 +133,10 @@ public class WishList
      * @param f1 First WantedFurniture affected by this constraint
      * @param f2 Second WantedFurniture affected by this constraint
      */
-    public void removeBinaryConstraint(Class<? extends BinaryConstraintEnd> binaryConstraintClass, String f1)
+    public void removeBinaryConstraint(Class<? extends BinaryConstraintEnd> binaryConstraintClass,
+            String furnitureId, String elementId)
     {
-        getWantedFurniture(f1).unbound(binaryConstraintClass);
+        getWantedFurniture(furnitureId).unbound(binaryConstraintClass, elementId);
     }
     
     /**

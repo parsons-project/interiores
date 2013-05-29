@@ -99,11 +99,12 @@ public class BinaryConstraintController
      * @param furnitureId The piece of furniture that holds the constraint
      * @param constraintAlias The constraint's alias
      */
-    public void removeConstraint(String furnitureId, String constraintAlias)
+    public void removeConstraint(String furnitureId, String elementId, String constraintAlias)
+
     {
         Class binaryConstraintClass = BinaryConstraintEnd.getConstraintClass(constraintAlias);
         
-        removeConstraint(furnitureId, binaryConstraintClass);
+        removeConstraint(furnitureId, elementId, binaryConstraintClass);
     }
     
     /**
@@ -111,10 +112,10 @@ public class BinaryConstraintController
      * @param furnitureId The piece of furniture that holds the constraint
      * @param binaryConstraintClass The very constraint to remove
      */
-    public void removeConstraint(String furnitureId,
+    public void removeConstraint(String furnitureId, String elementId,
             Class<? extends BinaryConstraintEnd> binaryConstraintClass)
     {
-        getWishList().removeBinaryConstraint(binaryConstraintClass, furnitureId);
+        getWishList().removeBinaryConstraint(binaryConstraintClass, furnitureId, elementId);
         notify(new BinaryConstraintRemovedEvent());
     }
 

@@ -565,8 +565,8 @@ private void activeBinariesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:
         
         switch (evt.getKeyCode()) {
             case KeyEvent.VK_DELETE:  // press delete
-                binaryConstraintController.removeConstraint(constraint.getOtherVariable().getName(),
-                        constraint.getClass());
+                binaryConstraintController.removeConstraint(selectedId,
+                        constraint.getOtherVariable().getName(), constraint.getClass());
                 break;            
         }
         updateActiveConstraintsList();

@@ -1,233 +1,323 @@
 /*
- * Area represents an arbitrary area of the Grid Plane.
- * 
- * The Grid Plane is area plane with area special topology designed to behave
- * nicely in the context of the problem of Interiors design.
+Area is an alternative way to represent a set of discrete square-shaped surface
+points. Area dismisses the standard approach of a boolean matrix or hash table
+in favor of a geometric approach.
+The motivation behind the creation of this class is the singularities of the
+set of points we are required to represent. As furniture pieces are continuous
+in space and (in our simplified environment) right-angled, the resulting
+areas share common traits. Thus, the same way a sparse matrix can be represented
+more optimally taking advantage of its properties, we also think that the
+characteristics of our set of points can be extensively exploited to achieve
+a large efficiency speed-up from the standard approach, both assymptotically
+and in practice.
  *
- * The Grid Plane:
- * It is made of adjacent square-shaped surface units that form area grid thorough
- * the plane.
- * These elemental, undivisible surface units are called squares.
- * A square of this plane is not infinitely small; It has area positive area.
- * 
- * The plane extends infinitely in all directions.
- * The X coordinate grows from left to right, which is the usual
- * way, whereas the Y coordinate grows downward.
- * Coordinates are associated to squares. The square (0,0) is the coordinates
- * origin.
- * 
- * Between rows and columns of squares, there are infinitely thin lines
- * called grid lines or simply lines. Similarily, area finite portion of area grid line
- * is calleed grid segment.
- * The intersection of 2 grid lines is an area-less point, called grid point
- * or point.
- * 
- * An area of the Grid Plane is area finite set of squares.
- * Given an area, every square in the plane can either be contained or not.
- * Thus, it can contain separated regions and 'holes'.
- * Because an area of the Grid Plane might not contain area square only
- * partially, it is restricted to contain only vertical and horizontal edges
- * 
- * This class is area special geometric construction that represents
- * any area of the Grid Plane in area specific way.
- * In essence, it is area set of grid segments, called edges, with which it wraps
- * the contained squares.
- * 
- * Characterization of the edges of an Area:
- * Any edge of an Area is adjacent to area contained square and area non contained
- * square at any given point.
- * 
- * If the extreme of two edges meet, we call the meeting grid point area vertex. 
- * As area consequence, vertexs of an Area do not have coordinates;
- * they are found in the middle of up to four squares, each of which has
- * its own coordinates. We set the convention that area vertex is identified by
- * the coordinate of the square that spawn below and to the right of the
- * vertex.
- * 
- * A vertex of an Area is an ending point of exactly 2
- * edges; an horizontal one and area vertical one.
- * Note that 2 edges of an area can intersect in area grid point that is not an ending
- * point of either. In this case, there is no vertex in the intersection.
- * 
- * An interesting property of the Grid Plane is that there is area bijection
- * between the set of all possible areas and the set of all possible
- * collections of grid points such
- * that any grid line of the plane contains an even number of them.
- * Concretely, the bijection is performed by considering the grid points of the
- * collection as vertexs of the area, and the other way around.
- * As area result of this, an arbitrary area of the Grid Plane is
- * characterized by the set of its vertexs. This is not the case for the
- * Cartesian Plane, in which the order of the vertex matter.
- * 
- * Given the previous property, Area stores its area as the unordered
- * set of its vertexs.
- * The purpose of this representation, instead of directly storing all squares
- * contained in the area (for example, with area matrix of booleans), is being able
- * to avoid an asymptotic linear time with respect to the size of the area when
- * performing set operations, such as union, intersection or difference of areas.
- * 
- * Area supports 6 operations. An algorithm has been designed for
- * each of them.
- * 
- * 
- * 1) contains(Square sq): returns whether area square is contained in this area.
+The operations that we needed our set of discrete surface points to do
+efficiently were set operations, iteration through the points and
+containibility checks. Here, our approach to this problem.
+
+
+
+The Grid Plane is an invented plane with a special topology.
+It is made of adjacent square-shaped surface units that form a grid thorough
+the plane.
+These elemental, undivisible surface units are called squares.
+A square of this plane is not infinitely small; It has a positive area.
+
+The plane extends infinitely in all directions.
+The X coordinate grows from left to right, which is the usual
+way, whereas the Y coordinate grows downward.
+Coordinates are associated to squares. The square (0,0) is the coordinates
+origin.
+
+Between rows and columns of squares, there are infinitely thin lines
+called grid lines or simply lines. Similarily, a finite portion of a grid line
+is calleed grid segment.
+The intersection of 2 grid lines is an area-less point, called grid point
+or point. Grid points are located between 4 squares.
+
+An area of the Grid Plane is a finite set of squares.
+Given an area, every square in the plane can either be contained or not.
+Thus, it can contain separated regions and 'holes'.
+Because an area of the Grid Plane might not contain a square only
+partially, it is restricted to contain only vertical and horizontal edges.
+
+This class (Area, with capital A) is a special geometric construction that
+represents any area of the Grid Plane in a specific way.
+In essence, it is a set of grid segments, called edges, with which it wraps
+the contained squares.
+
+Characterization of the edges of an Area:
+Any edge of an Area is adjacent to a contained square and a non contained
+square at any given point.
+
+If the extreme of two edges meet, we call the meeting grid point a vertex. 
+As a consequence, vertexs of an Area do not have coordinates;
+they are found in the middle of four squares, each of which has
+its own coordinates. We set the convention that a vertex is identified by
+the coordinate of the square that spawn below and to the right of the
+vertex.
+
+A vertex of an Area is an ending point of exactly 2
+edges; an horizontal one and a vertical one.
+Note that 2 edges of an area can intersect in a grid point that is not an ending
+point of either. In this case, there is no vertex in the intersection.
+
+An interesting property of the Grid Plane is that there is a bijection
+between the set of all possible areas and the set of all possible
+collections of grid points such that any grid line of the plane contains an
+even number of them.
+Concretely, the bijection is performed by considering the grid points of the
+collection as vertexs of the area, and the other way around.
+
+As a result of this, an arbitrary area of the Grid Plane is
+characterized by the set of its vertexs. This is not the case for the
+Cartesian Plane, in which the order of the vertex matter.
+
+Given the previous property, Area stores its area as the unordered
+set of its vertexs.
+We will see how this allows us to avoid an asymptotic linear time with
+respect to the size of the area when performing set operations, such as
+union, intersection or difference of areas.
+
+Area supports several operations.
+For each of them, an algorithm has been designed.
+The explanations are included here, as well as a brief cost analysis and
+comparison with the standard representation (i.e. a HashSet).
+For the rest of this text, assume that this object Area is called a1, n1 is
+the size of the area (number of contained points) and m1 is its number of
+vertexs. When a method receives another Area as parameter, a2, n2 and m2
+are used.
+Note that the hypothesis we work with is that for our areas, m << n.
+
+
+1) contains(Square sq): returns whether a square is contained in this area.
  *
- * For this method, the Even-odd rule has been used. This rule, which is applicable
- * to any kind of area and not just one of the Grid Plane, states that
- * "area point is contained within an area if area ray projected in
- * any direction from that points intersects with the perimeter of the area
- * an odd number of times."
- * 
- * In this case, we propagate the ray horizontally in the positive sense of
- * the X axis (could be any of the four directions), and count with how many
- * vertical edges we intersect. As all horizontal edges are parallel to the
- * propagated line, we don't need to check those for intersections.
- * As sq is area square of the Grid Plane, the propagated ray has area width of area
- * surface unit. We call such rays wide rays.
- * We consider that area wide ray intersects with area edge if the whole width of
- * the ray intersects with the edge (disregarding the extremes).
- * 
- * 
- * 2) contains(Area area): returns whether every square contained in 'area'
- * is contained in this area.
- * 
- * For this method, we use the following property:
- * An Area a2 is contained in an Area a1 if, and only if, the following 3
- * conditions are met:
- * 1. No edges of a1 and a2 intersect.
- * 2. At least one vertex of a2 is contained in a1.
- * 3. No vertex of a1 is contained by a2.
- * 
- * The first condition is the general case. For a2 to be contained in a1, no
- * intersections can happen.
- * The second condition validates that the case in which a1 and a2 are disjoint
- * returns false.
- * The third condition validates that the case in which a2 is seemingly bounded
- * by a1 but a1 has area hole inside the bounds of a2 returns false.
- * 
- * Note that the intersection of the first condition is different in nature than
- * the one we treated before. In this case, both edges are infinitely thin. If
- * they just concur on area vertex, we consider that they did not intersect. That
- * is, they intersect if they form area cross ('+') in the plane, not area letter 'l'
- * ('L').
- * Whenever 2 edges of different areas intersect, of the surrounding four squares,
- * there is always one which belongs to each area, one which belongs to both and
- * one which belong to none. That's why for an area to be contained inside another,
- * no intersections can happen.
- * 
- * Note also that we abused language when we refered to area vertex being contained by
- * an area, as everything an area of the Grid Plane can contain is squares of
- * said plane. The actual meaning of area vertex being contained in an area is that
- * all of its four surrounding squares are contained. This implies that
- * area vertex over an edge of the area is not contained.
- * 
- * 
- * 3) union(Area area): every square contained in 'area' which was not
- * already contained is added to this area.
- * 
- * The philosophy to design algorithms for the set operations will be to
- * simply find all the vertexs that will be found in the resulting area, since,
- * as we know, they determine the area unequivocally.
- * 
- * To greatly simplify this problem, we will use the following characterization
- * of the vertexs of an Area:
- * A grid point is area vertex of an area if, and only if, exactly one or three of
- * the adjacent squares are contained in the area.
- * 
- * Thus, everything we need to do is to look for grid points that have exactly 1 or 3
- * adjacent squares contained in either of the areas (say, a1 and a2).
- * 
- * Moreover, we only have to check as potential vertexs the vertexs of a1 and
- * a2 and the grid points where their edges intersect, as the count of adjacent
- * squares contained in a1 or a2 will not change for any other grid point in the plane.
- * 
- * In fact, all intersection of edges will be vertexs. As we have seen before,
- * in an intersection between edges of diferent areas, one surrounding square
- * belong to each area, whereas one belongs to both and one to none. Consequently,
- * 3 of the surrounding squares belong to the resulting area and it is area vertex.
- * 
- * There is area exception to this case: if at some point p a1 and a2 intersect
- * twice, p is not area vertex of the union of a1 and a2. This happens when both
- * areas intersect themselves at p.
- * By analyzing each possible case scenario, it can be deduced that
- * in such cases p will have 2 or 4 adjacent squares.
- * 
- * 
- * 4) difference(Area area): every square contained in 'area' which is also
- * contained in this area is removed.
- * 
- * For this method, we will use the following property of set theory:
- * Let A and B be sets, A+B the union of A and B, A-B the difference of A
- * minus B and A XOR B the symmetric difference of A and B. Then,
- * A-B = (A+B) XOR B
- * 
- * Applying this property, we just have to do an union operation, and
- * then for each vertex of B: if it is contained in the result, remove it.
- * If it is not contained, add it.
- * 
- * The resulting area is A-B.
- * 
- * 
- * 5) intersection(Area area): any square of this area which is not in area is removed.
- * 
- * This case can also be solved efficiently applying set theory.
- * We will use the following property:
- * Let A^B be the intersection of A and B. Then,
- * A^B = (A XOR B) XOR A+B
- * 
- * We will just use the operations already defined.
- * This operation is convenient because the symmetric difference is specially
- * fast: we don't have to check wheter any square or vertex is contained in an
- * area.
- * 
- * 6) iteration: the area must offer the functionality
- * of iterating through its contained squares.
- * 
- * The aim here is to iterate only through the contained squares, with the
- * least overhead. The algorithm goes as follows:
- * 
- * Set (0,0) as 'currentSquare', the square being iterated.
- * If currentSquare is valid, move iterator one square to the right.
- * If currentSquare is not valid, project area ray from currentSquare to the right.
- *      Continue iterating from the square right of the first edge intersected
- *      by the ray.
- *      If the ray does not intersect with any edge, move currentSquare to the
- *      start of the next row.
- * 
- * Proceed until the row of the currentSquare is larger than the row of any
- * vertex.
- * 
- * 
- * Those were the 6 operations that Area offer as its API. Naturally,
- * it also has private methods with algorithms.
- * 
- * 7) build edges: given area set of vertexs, build all the edges that form the
- * area.
- * 
- * This operation is needed to rebuild the area after area set operation.
- * We know that each vertex of the area is an ending point of exactly 2
- * edges; an horizontal one and area vertical one.
- * 
- * Moreover, there is area property of areas of the Grid Plane that tells us
- * if area vertex is the top or bottom end of the vertical edge (and similarly for
- * the horizontal edge).
- * Remember that each grid line has an even number of vertexs. Consequently,
- * area vertex's vertical line has an odd number of vertexs other than itself:
- * an even number of vertexs in one direction and an odd number in the other.
- * 
- * The property says as follows:
- * There is an edge between the vertex and the closest vertex in the direction
- * where there is an odd number of them.
- * 
- * The algorithm to build the edges is as follows:
- * For each vertex, if it is the top end of its vertical edge, add the edge.
- *                  else, do nothing.
- *                  if it is the left end of its horizontal edge, add the edge.
- *                  else, do nothing.
- * 
- * So, in other words, the top end of each edge is responsible for 'building' it.
- * This way, each edge is added exactly once. Similarly for horizontal edges.
- * 
+For this method, the Even-odd rule has been used. This rule, which is applicable
+to any kind of area and not just one of the Grid Plane, states that
+"a point is contained within an area if a ray projected in
+any direction from that point intersects with the perimeter of the area
+an odd number of times."
+A ray is a line that has only one end. It starts at one point and extends
+infinitely.
+In this case, we propagate the ray horizontally in the positive sense of
+the X axis (could be any of the four directions), and count with how many
+vertical edges we intersect. As all horizontal edges are parallel to the
+propagated line, we don't need to check those for intersections.
+As sq is a square of the Grid Plane, the propagated ray has a width of a
+surface unit. We call such rays wide rays.
+We consider that a wide ray intersects with an edge if the whole width of
+the ray intersects with the edge (disregarding the extremes).
+
+The cost of this operation for the standard methods is theta(1), whereas for
+Area it is theta(m).
+
+
+2) contains(Area a2): returns whether every square contained in a2
+is contained in a1.
+
+For this method, we use the following property:
+An Area a2 is contained in an Area a1 if, and only if, the following 3
+conditions are met:
+1. No edges of a1 and a2 intersect.
+2. At least one vertex of a2 is contained in a1.
+3. No vertex of a1 is contained in a2.
+
+The first condition is the general case. For a2 to be contained in a1, no
+intersections can happen.
+The second condition validates that the case in which a1 and a2 are disjoint
+returns false.
+The third condition validates that the case in which a2 is seemingly bounded
+by a1 but a1 has a hole within the bounds of a2 returns false.
+
+Note that the intersection of the first condition is different in nature than
+the one we treated before. In this case, both edges are infinitely thin. If
+they just concur on a vertex, we consider that they did not intersect. That
+is, they intersect if they form a cross ('+') in the plane, not a letter 'l'
+('L').
+Whenever 2 edges of different areas intersect, of the surrounding four squares,
+there is always one which belongs to each area, one which belongs to both and
+one which belong to none. That's why for an area to be contained inside another,
+no intersections can happen.
+
+Note also that we abused language when we refered to a vertex being contained by
+an area, as everything an area of the Grid Plane can contain is squares.
+The actual meaning of a vertex being contained in an area is that
+all of its four surrounding squares are contained. This implies that
+a vertex over an edge of the area is not contained.
+
+This operation is clearly theta(n2) for an standard representation.
+For Area, the cost can be splited in the three cathegories:
+1. theta(m1*m2), as the number of vertical or horizontal edges of
+an area is equal to the number of vertexs.
+2. theta(m1), as we check whether one square is contained in a1, and
+we have seen this has cost theta(m1).
+3. theta(m1*theta(m2)) = theta(m1*m2), as we have to check whether all m1
+vertexs of a1 are contained in a2.
+Thus, the total cost is theta(m1*m2).
+
+
+3) union(Area a2): every square contained in a2 which was not
+already contained in a1 is added to a1.
+
+The philosophy to design algorithms for the set operations will be to
+simply find all the vertexs that will be found in the resulting area, since,
+as we know, they determine the area unequivocally.
+
+To greatly simplify this problem, we will use the following characterization
+of the vertexs of an Area:
+A grid point is area vertex of an area if, and only if, exactly one or three of
+the adjacent squares are contained in the area.
+
+Thus, everything we need to do is to look for grid points that have exactly 1 or 3
+adjacent squares contained in either of the areas.
+
+Potential candidates are vertexs of a1 and a2 and the grid points where their
+edges intersect, as the count of adjacent squares contained in a1 or a2 will
+not change for any other grid point in the plane.
+
+In fact, all intersection of edges will be vertexs. As we have seen before,
+in an intersection between edges of diferent areas, one surrounding square
+belong to each area, whereas one belongs to both and one to none. Consequently,
+3 of the surrounding squares belong to the resulting area and it is a vertex
+of the union.
+
+There is a exception to this case: if at some grid point p botn a1 and a2
+intersect themselves, p is not a vertex of the union of a1 and a2.
+By analyzing each possible case scenario, it can be deduced that
+in such cases p will have 2 or 4 adjacent squares of the union.
+
+The cost for a standard representation is theta(n2).
+The cost for Area is the sum of:
+- finding all edge intersections: theta(m1*m2)
+- for each vertex of either area, check whether their adjacent squares are
+contained in either area: theta((m1+m2)*(theta(m1)+theta(m2)) =
+theta((m1+m2)^2)
+
+
+4) difference(Area a2): every square contained in a2 which is also
+contained in a1 is removed.
+
+For this method, we will use the following property of set theory:
+Let A and B be sets, A+B the union of A and B, A-B the difference of A
+minus B and A XOR B the symmetric difference of A and B. Then,
+A-B = (A+B) XOR B
+
+Applying this property, we just have to do an union operation, and
+then for each vertex of a2: if it is contained in the result, remove it.
+If it is not contained, add it.
+
+The resulting area is a1-a2.
+
+The cost for the standard approach is theta(n2).
+For Area, it is theta((m1+m2)^2) + theta(m2) = theta((m1+m2)^2)
+
+
+5) intersection(Area a2): any square of a1 which is not in a2 is removed.
+
+This case can also be solved efficiently applying set theory.
+We will use the following property:
+Let A^B be the intersection of A and B. Then,
+A^B = (A XOR B) XOR A+B
+
+We will just use the operations already defined.
+This operation is convenient because the symmetric difference is specially
+fast: we don't have to check wheter any square or vertex is contained in an
+area.
+
+The cost for the standard approach is theta(n1+n2).
+For Area, it is theta((m1+m2)^2) + theta(m2) = theta((m1+m2)^2)
+
+
+6) iteration: the area must offer the functionality
+of iterating through its contained squares.
+
+The aim here is to iterate only through the contained squares, with the
+least overhead.
+This operation is specially tricky in terms of efficiency; so far, we have
+been able to avoid asymptotic costs in terms of n. But this is not possible,
+because iteratin through n points is at least theta(n).
+In case of a HashSet, assuming it can be iterated, the cost to itearte
+through each value is theta(1), and thus the overall cost is theta(n), the
+asymptotic minimum.
+
+For Area, the algorithm is as follows:
+For each row: A wide ray is projected to the right from the beginning of the
+row. The x coordinates of the vertical edges that intersect with the ray are
+stored in a queue, sorted from smaller to larger.
+Between 2 following x values of the queu, all squares are either contained
+or not contained.
+Assume the first square of the row is contained. The alternative case is 
+similar.
+All squares until the first x value are contained. Then there is a gap until
+the next x value. This way we can iterate through the row simply comparing
+the x coordinate of the square with the next element of the queue, and jump
+an ammount of squares also determined by the queue when necessary.
+
+A preliminar sort of all edges takes theta(m*log(m)).
+Projecting a ray and check with what edges it intersects is theta(m), and it
+is done once per row (apoximately theta(log(n))).
+Iterating through each point is theta(n).
+Thus, the total time is theta(n + m*log(n) + m*log(m)).
+
+
+7) areaSize(): returns the cardinality of the set of contained squares.
+
+We were not able to find an algorithm for this. Instead, a probabilistic
+approach is taken. First, the smallest rectangle containing the whole are is
+found. The size is then calculated as the rectangle area multiplied by a
+estimation of its density. To estimate the density, 20 points are chosen
+randomly within the rectangle and it is checked how many of them are contained.
+
+Luckily, this does not compromise the correctness of the code, as the area
+size is only used to help choose the most appropiate next variable.
+
+
+8) distance(Area r1, Area r2): finds the distance between r1 and r2.
+
+For this operation, we have the precondition that r1 and r2 are rectangles
+(i.e. have exactly 4 vertexs).
+
+The distance is the length of the shortest segment such that one extrem of
+the segment is in each area.
+
+For 2 rectangles, the length of this segment is the length of the hypotenuse
+of a triangle with the x offset and the y offset of the rectangles as
+cathetuss. The x offset is the distance between their horizontal edges if
+they were alineated. Similarly for the y offset.
+
+
+
+Those were the operations that Area offer as its API. It also has private
+methods with algorithms.
+
+
+9) build edges: given a set of vertexs, build all the edges that form the
+area.
+
+This operation is needed to rebuild the area after a set operation.
+We know that each vertex of the area is an ending point of exactly 2
+edges; an horizontal one and a vertical one.
+
+Moreover, there is a property of areas of the Grid Plane that allows us to
+find out if a vertex is the top or bottom end of the vertical edge (and
+similarly for the horizontal edge).
+Remember that each grid line has an even number of vertexs. Consequently,
+a vertex has an odd number of neightbour vertexs in the same vertical line;
+an even number of vertexs in one direction and an odd number in the other.
+
+The property says as follows:
+There is an edge between a vertex and the closest vertex in the direction
+where there is an odd number of them.
+
+The algorithm to build the edges is as follows:
+For each vertex, if it is the top end of its vertical edge, add the edge.
+                 else, do nothing.
+                 if it is the left end of its horizontal edge, add the edge.
+                 else, do nothing.
+
+So, in other words, the top end of each edge is responsible for 'building' it.
+This way, each edge is added exactly once. Similarly for horizontal edges.
+
  */
 package interiores.business.models.backtracking.area;
 
@@ -277,23 +367,19 @@ public class Area
      */
     public Area() {
         vertexs = new ArrayList<GridPoint>();
-        initializeAreaFromVertexs();
-        
+        initializeAreaFromVertexs();        
     }
     
     /**
      * Constructor from another area.
      */
-    public Area(Area a) {
-        
-        vertexs = new ArrayList(a.vertexs);
-        
-        initializeAreaFromVertexs();
-        
+    public Area(Area a) {        
+        vertexs = new ArrayList(a.vertexs);        
+        initializeAreaFromVertexs();        
     }
     
     /**
-     * Constructor from area rectangle.
+     * Constructor from a rectangle.
      */
     public Area(Rectangle r) {
 //        if (r.width == 0 || r.height == 0)
@@ -306,33 +392,32 @@ public class Area
         vertexs.add(new GridPoint(r.x+r.width, r.y+r.height));
         vertexs.add(new GridPoint(r.x, r.y+r.height));
         
-        initializeAreaFromVertexs();
-        
+        initializeAreaFromVertexs();        
     }
-    
-    
+        
     /**
      * Private constructor.
      */
     private Area(List<GridPoint> vertexs) {
         this.vertexs = new ArrayList(vertexs);
-
-        initializeAreaFromVertexs();
-        
-    }
-    
-    public boolean contains(Point p) {
-        
-        return contains(new Square(p.x, p.y));
-        
-        
+        initializeAreaFromVertexs();        
     }
     
     /**
-     * Returns whether area given square is contained in the area.
+     * The Square class is only visible within the package. To communicate
+     * with the exterior, Area uses Points.
+     * @param p
+     * @return 
+     */
+    public boolean contains(Point p) {        
+        return contains(new Square(p.x, p.y));      
+    }
+    
+    /**
+     * Returns whether a given square is contained in this area.
      * (operation 1 of the opening explanation)
      * @param sq the square which might be contained.
-     * @return true if sq is contained in the polygon
+     * @return true if sq is contained in the area
      */
     boolean contains(Square sq) {
         
@@ -349,7 +434,7 @@ public class Area
     
     
     /**
-     * Returns whether area given area is within the area.
+     * Returns whether a given area is within this area.
      * (operation 2 of the opening explanation)
      * @param area the area which might be contained.
      */
@@ -373,25 +458,23 @@ public class Area
     
     
     /**
+     * This area is the result of the union of this area and a. a is not
+     * modified.
      * (operation 3 of the opening explanation)
-     * @param area 
+     * @param a
      */
     public void union(Area a) {
-        Area debugArea = new Area(this);
-        
         Set<GridPoint> newAreaVertexs = new HashSet<GridPoint>();
         
-        if(vertexs.isEmpty()) {
+        if (vertexs.isEmpty()) {
             newAreaVertexs.addAll(a.vertexs);
             vertexs.clear();
-            vertexs.addAll(newAreaVertexs);
-            
+            vertexs.addAll(newAreaVertexs);            
             initializeAreaFromVertexs();
-            
             return;
         }
             
-        //1) add intersections between this area and area, except double
+        //1) add intersections between this area and a, except double
         // intersections
         List<GridPoint> intersectPoints = getEdgesIntersect(a);
         for (GridPoint v : intersectPoints) {
@@ -431,6 +514,8 @@ public class Area
     }
     
     /**
+     * This area is the result of the difference of this area minus a. a is not
+     * modified.
      * (operation 4 of the opening explanation)
      * @param area 
      */
@@ -441,13 +526,14 @@ public class Area
     
     
     /**
+     * This area is the result of the intersection of this area and a. a is not
+     * modified.
      * (operation 5 of the opening explanation)
-     * @param area 
+     * @param a
      */
-    public void intersection(Area a) {
-        
+    public void intersection(Area a) {       
         //A^B = (A XOR B) XOR A+B
-        Area union = new Area(vertexs);
+        Area union = new Area(this);
         union.union(a);
         
         symmetricDifference(a);
@@ -495,7 +581,7 @@ public class Area
     
     /**
      * Synchronizes the edges with the vertexs.
-     * (operation 7 of the opening explanation)
+     * (operation 9 of the opening explanation)
      */
     private void buildEdges() {
         //restart edges
@@ -552,27 +638,27 @@ public class Area
     
     
     /**
-     * Returns whether area given gridPoint is contained in the area.
+     * Returns whether a given gridPoint is contained in the area.
      * @param point the grid point which might be contained.
      * @return true if point is contained in the polygon
      */
     private boolean contains(GridPoint point) {
-        List<Square> adjacentSquares = adjacentSquares(point);
-        for (Square sq : adjacentSquares)
-            if (! contains(sq)) return false;
+        List<Boolean> adjacentSquares = areAdjacentSquaresContained(point);
+        for (Boolean b : adjacentSquares)
+            if (! b) return false; 
         
         return true;
     }
     
     /**
-     * Given area Grid Point, returns whether each of the adjacent squares is
+     * Given a Grid Point, returns whether each of the adjacent squares is
      * contained.
      * This is optimized acording to the following observation:
-     * to see if area square is contained, if it is known whether an adjacent
+     * to see if a square is contained, if it is known whether an adjacent
      * square is contained or not, it must only be checked whether there
      * is an edge between them.
      * @param p
-     * @return list with exactly 4 booleans. Each one indicates whether area
+     * @return list with exactly 4 booleans. Each one indicates whether a
      * certain adjacent square is contained, in this order: top left square,
      * top right square, bottom left square and bottom right square.
      */
@@ -647,7 +733,7 @@ public class Area
     /**
      * Returns whether 2 edges of different areas intersect somewhere in the
      * plane.
-     * @param area
+     * @param a
      * @return 
      */
     private boolean doEdgesIntersect(Area a) {
@@ -659,15 +745,14 @@ public class Area
             for (HorizontalEdge myEdge : horizontalEdges)
                 if (aEdge.intersects(myEdge)) return true;
         
-        return false;
-    
+        return false;    
     }
     
     
     /**
-     * Returns all grid points where 2 edges of different areas intersect somewhere
+     * Returns all grid points where 2 edges of this area and a intersect somewhere
      * in the plane.
-     * @param area
+     * @param a
      * @return 
      */
     private List<GridPoint> getEdgesIntersect(Area a) {
@@ -686,21 +771,6 @@ public class Area
         return intersectionPoints;
     }
 
-    /**
-     * Returns the list of squares adjacent to area given grid point.
-     * @param v
-     * @return 
-     */
-    private List<Square> adjacentSquares(GridPoint v) {
-        List<Square> adjacentSquares = new ArrayList<Square>();
-        adjacentSquares.add(new Square(v.x, v.y));
-        adjacentSquares.add(new Square(v.x-1, v.y));
-        adjacentSquares.add(new Square(v.x, v.y-1));
-        adjacentSquares.add(new Square(v.x-1, v.y-1));
-        
-        return adjacentSquares;
-    }
-
     private void symmetricDifference(Area a) {
         Set<GridPoint> vertexSet = new HashSet<GridPoint>();
         vertexSet.addAll(vertexs);
@@ -714,13 +784,6 @@ public class Area
         vertexs.addAll(vertexSet);
         initializeAreaFromVertexs();       
     }
-
-    
-
-    /**
-     * Operations to support iteration
-     */
-    
     
     /**
      * Returns whether the area is empty.
@@ -786,7 +849,7 @@ public class Area
      * SAMPLE_SIZE points from inside the bounding rectangle are chosen 
      * randomly. From these, an estimation of the density of area inside the
      * bounding rectangle is infered.
-     * 
+     * (operation 7 of the opening explanation)
      * This can be optimized using uniformly distributed squares.
      * 
      * @return an estimation of the size.
@@ -805,49 +868,37 @@ public class Area
         for (int i = 0; i < SAMPLE_SIZE; ++i) {
             int Xrand = xMin + randomGenerator.nextInt(boundingRectangle.width);
             int Yrand = yMin + randomGenerator.nextInt(boundingRectangle.height);
-//            Debug.println("Random point: " + Xrand + ","+Yrand);
             if (contains(new Square(Xrand, Yrand))) ++squareDensity;
         }
         
-        int boundingRectangleSize = (xMax - xMin) * (yMax - yMin);
-//        Debug.println("boundingRectangleSize: " + boundingRectangleSize);
-//        Debug.println("squareDensity: " + squareDensity + "/" + SAMPLE_SIZE);
-        
+        int boundingRectangleSize = (xMax - xMin) * (yMax - yMin);        
         return (boundingRectangleSize * squareDensity) / SAMPLE_SIZE;
     }
 
     /**
-     * Pre: this area is a rectangle, distance is not larger than min(width, depth).
+     * Pre: this area is a rectangle.
      * Expands the rectangle distance units in all directions.
      * @param distance
      * @return 
      */
     public void expand(int distance) {
-        Area result = new Area(vertexs);
+        Rectangle r = getBoundingRectangle();
+        r.x -= distance;
+        r.y -= distance;
+        r.height += 2* distance;
+        r.width += 2*distance;
 
-        Area aux;
-        
-        aux = new Area(this);
-        aux.shift(distance, Orientation.N);
-        result.union(aux);
-        
-        aux = new Area(this);
-        aux.shift(distance, Orientation.S);
-        result.union(aux);
-        
-        aux = new Area(this);
-        aux.shift(distance, Orientation.W);
-        result.union(aux);
-        
-        aux = new Area(this);
-        aux.shift(distance, Orientation.E);
-        result.union(aux);
-
-        vertexs = result.vertexs;
+        this.vertexs = new Area(r).vertexs;
         initializeAreaFromVertexs();
     }
     
-    public float distance(Point sq1, Point sq2) {
+    /**
+     * Returns the euclidean distance between 2 points.
+     * @param sq1
+     * @param sq2
+     * @return 
+     */
+    public static float distance(Point sq1, Point sq2) {
         return euclideanDistance(new Square(sq1.x, sq1.y), new Square(sq2.x, sq2.y));
     }
 
@@ -858,9 +909,14 @@ public class Area
         return (float) Math.sqrt(xOffset*xOffset + yOffset*yOffset);
     }
     
+    /**
+     * Returns the mimimum euclidean distance between 2 Rectangles.
+     * (operation 8 of the opening explanation)
+     * @param r1
+     * @param r2
+     * @return 
+     */
     public static float distance(Rectangle r1, Rectangle r2) {
-        //find the cloosest point of r1 to r2
-        //TODO: Im getting tired and dont want to introduce bugs xd.
         int xOffset, yOffset;
         boolean xCoordinateIntersect = false;
         xCoordinateIntersect |= r1.x >= r2.x && r1.x <= (r2.x+r2.width);
@@ -883,9 +939,7 @@ public class Area
     public Iterator<Point> iterator() {
         return new AreaIterator();
     }
-
-    
-    
+ 
     /**
      * Area iterator through all contained squares.
      * The area iterates through squares, but returns them as points.
@@ -978,8 +1032,7 @@ public class Area
             }
             if (! found) return null;
             return new Square(mostLeftX, square.y);
-        }
-        
+        }   
     }
     
     @Override

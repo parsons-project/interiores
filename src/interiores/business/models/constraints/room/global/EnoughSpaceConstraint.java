@@ -39,12 +39,11 @@ public class EnoughSpaceConstraint
     @Override
     public boolean isSatisfied(List<FurnitureVariable> assignedVariables,
         List<FurnitureVariable> unassignedVariables,
-        List<FurnitureConstant> fixedFurniture, FurnitureVariable actual)
-        throws NoSolutionException {
+        List<FurnitureConstant> fixedFurniture, FurnitureVariable actual) {
         OrientedRectangle area = actual.getAssignedValue().getArea();
         leastSpaceNeeded += area.height * area.width;
         leastSpaceNeeded -= minSpace.get(actual.getName());
-        if (leastSpaceNeeded > totalArea) throw new NoSolutionException("Not enough space");
+        if (leastSpaceNeeded > totalArea) return false;
         
         return true;
     }

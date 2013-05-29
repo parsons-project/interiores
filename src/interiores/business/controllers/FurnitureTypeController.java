@@ -175,18 +175,22 @@ public class FurnitureTypeController
     }
 
 
-    public void addBinaryConstraint(String bctype, String type1, String type2) {
+    public void addPlacementConstraint(String pctype, String type1, String type2) {
         
         BinaryConstraintEnd bce = null;
         
-        if (bctype.equals("next-to")) bce = new MaxDistanceConstraint(0);
-        else if (bctype.equals("away-from")) bce = new MinDistanceConstraint(AWAY_DISTANCE);
-        else if (bctype.equals("in-front-of")) bce = new PartialFacingConstraint(1000); // When facing constraints lose their distance, this attribute should be simply removed
+        if (pctype.equals("next-to")) bce = new MaxDistanceConstraint(0);
+        else if (pctype.equals("away-from")) bce = new MinDistanceConstraint(AWAY_DISTANCE);
+        else if (pctype.equals("in-front-of")) bce = new PartialFacingConstraint(1000); // When facing constraints lose their distance, this attribute should be simply removed
         
         if (bce != null) {
             get(type1).addBinaryConstraint(get(type2), bce);
             notify(new FTModifiedEvent(get(type1).getFullName(),type1));
         }
+    }
+    
+    public String[] getPlacementConstraints(String name) {
+        
     }
 
     public boolean getWallClinging(String name) {

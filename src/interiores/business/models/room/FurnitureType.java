@@ -2,8 +2,6 @@ package interiores.business.models.room;
 
 import interiores.business.models.SpaceAround;
 import interiores.business.models.catalogs.PersistentIdObject;
-import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
-import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.core.Utils;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
@@ -13,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -44,7 +41,7 @@ public class FurnitureType
     private boolean clingToWalls;
     
     @XmlElementWrapper
-    private HashMap<String, ArrayList<BinaryConstraintEnd>> binaryConstraints;
+    private HashMap<String, String> placementConstraints;
     
     @XmlElementWrapper
     private TreeMap<String, FurnitureModel> models;
@@ -91,7 +88,7 @@ public class FurnitureType
         this.functionalities = new ArrayList(Arrays.asList(functionalities));
         
         clingToWalls = walls;
-        binaryConstraints = new HashMap();
+        placementConstraints = new HashMap();
         
         models = new TreeMap();
     }
@@ -101,8 +98,8 @@ public class FurnitureType
      * Returns the binary constraints defined for this type
      * @return A map of binary constraints defined between this type and another
      */
-    public Map<String, ArrayList<BinaryConstraintEnd>> getBinaryConstraints() {
-        return binaryConstraints;
+    public HashMap<String, String> getBinaryConstraints() {
+        return placementConstraints;
     }
     
     /**
@@ -121,16 +118,9 @@ public class FurnitureType
         this.clingToWalls = clingToWalls;
     }
     
-    /**
-     * Adds a default binary constraint to the type
-     * @param other The other type of furniture
-     * @param binaryConstraint The binary constraint to add 
-     */
-    public void addBinaryConstraint(FurnitureType other, BinaryConstraintEnd binaryConstraint) {
-        if(! binaryConstraints.containsKey(other.getId()))
-            binaryConstraints.put(other.getId(), new ArrayList());
-            
-        binaryConstraints.get(other.getId()).add(binaryConstraint);
+    
+    public void addPlacementConstraint(String otherFT, String placement) {
+        placementConstraints.put(otherFT, placement);
     }
     
     /**

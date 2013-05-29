@@ -18,4 +18,9 @@ public class WidthConstraint
     public WidthConstraint(int minWidth, int maxWidth) {
         super(Dimension.Component.WIDTH, new Range(minWidth, maxWidth));
     }
+    
+    @Override
+    public String toString() {
+        return toString("Width: ");
+    } 
 }

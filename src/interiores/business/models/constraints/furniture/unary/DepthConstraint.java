@@ -18,4 +18,9 @@ public class DepthConstraint
     public DepthConstraint(int minDepth, int maxDepth) {
         super(Dimension.Component.DEPTH, new Range(minDepth, maxDepth));
     }
+    
+    @Override
+    public String toString() {
+        return toString("Depth: ");
+    }
 }

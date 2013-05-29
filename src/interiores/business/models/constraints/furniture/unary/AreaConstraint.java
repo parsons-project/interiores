@@ -4,6 +4,7 @@ import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
+import java.awt.Rectangle;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -66,7 +67,8 @@ public class AreaConstraint
     
     @Override
     public String toString() {
-        // @TODO Implement toString method in AreaConstraint
-        return super.toString();
+        Rectangle rectangle = validPositions.getBoundingRectangle();
+        return "Restringed to an area (x:" + rectangle.x + ", y:" + rectangle.y + ", w:" +
+                                      rectangle.width + ", h:" + rectangle.height + ")";
     }
 }

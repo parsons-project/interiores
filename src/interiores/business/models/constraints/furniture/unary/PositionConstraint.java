@@ -42,4 +42,9 @@ public class PositionConstraint
         return variable.assignedValue.getPosition().equals(position);
     }
     
+    @Override
+    public String toString() {
+        return "Position (upper left corner): (" + position.x + ", " + position.y + ")"; 
+    }
+    
 }

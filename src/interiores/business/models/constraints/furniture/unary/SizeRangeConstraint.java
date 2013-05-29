@@ -53,9 +53,13 @@ abstract public class SizeRangeConstraint
         variable.eliminateExceptM(validModels);
     }       
     
+    protected String toString(String name) {
+        return name + range;
+    }
+    
     @Override
     public String toString() {
-        return "Range: " + range;
+        return toString("Range: ");
         //return getClass().getName() + " Range[" + range + "]";
     }
 }

@@ -69,7 +69,7 @@ public class MinDistanceConstraint
      */
     @Override
     public void preliminarTrim(FurnitureVariable variable) {
-         //Not implemented for now. This shouldn't have an important impact.    
+         //Not implemented for now. This shouldn't have an important impact.
     }
 
     /**

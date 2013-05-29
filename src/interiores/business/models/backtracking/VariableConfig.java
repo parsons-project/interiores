@@ -2,7 +2,13 @@ package interiores.business.models.backtracking;
 
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
+import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
+import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
+import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
+import interiores.business.models.constraints.furniture.binary.StraightFacingConstraint;
+import interiores.business.models.constraints.furniture.unary.WallConstraint;
 import interiores.business.models.room.FurnitureType;
+import interiores.business.models.room.elements.WantedFurniture;
 import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -22,6 +28,8 @@ public class VariableConfig
     private List<FurnitureVariable> assignedVariables;
     private List<FurnitureVariable> unassignedVariables;
     private Map<FurnitureVariable, FurnitureType> furnitureTypes;
+    
+    private static final int AWAY_DISTANCE = 200;
     
     public VariableConfig(Dimension areaSize) {
         this.areaSize = areaSize;
@@ -67,6 +75,7 @@ public class VariableConfig
         for(FurnitureVariable unassignedVariable : unassignedVariables) {
             FurnitureType ftype = furnitureTypes.get(unassignedVariable);
             unassignedVariable.createDomain(ftype.getFurnitureModels(), areaSize, unassignedVariables.size());
+            addDefaultConstraints(ftype,unassignedVariable);
         }
     }
     
@@ -97,5 +106,54 @@ public class VariableConfig
     
     public OrientedRectangle getTotalArea() {
         return new OrientedRectangle(new Point(0, 0), areaSize, Orientation.S);
+    }
+
+    private void addDefaultConstraints(FurnitureType ftype, FurnitureVariable unassignedVariable) {
+        
+        // First, we treat wall-clinging
+        if (ftype.shouldBeClungToWalls())
+        {
+            WallConstraint wc = new WallConstraint(areaSize.width, areaSize.depth, Orientation.values());
+            unassignedVariable.addBacktrackingConstraint(wc);
+        }
+            
+        // Afterwards, we assign all the binary constraints that could take place
+        HashMap<String,String> pcs = ftype.getPlacementConstraints();
+        for (String otype : pcs.keySet()) {
+            // For each placement constraint defined, we get other end affected by (if any)
+            FurnitureVariable end = getPossibleEnd(otype);
+            if (end != null)
+            {
+                // We translate the placement constraint into a binary one
+                BinaryConstraintEnd bce = translateIntoBinaryConstraint(pcs.get(otype));
+                // And try setting it to both variables affected
+                try {
+                    bce.setOtherVariable(end);
+                    bce.bound((WantedFurniture) unassignedVariable);
+                    unassignedVariable.addBacktrackingConstraint(bce);
+                }
+                catch(Exception e) {}
+            }
+        }
+        
+    }
+    
+    
+
+    private FurnitureVariable getPossibleEnd(String otype) {
+        
+        for (FurnitureVariable fv : unassignedVariables) {
+            if (fv.getName().contains(otype)) return fv;
+        }
+        return null;
+    }
+
+    private BinaryConstraintEnd translateIntoBinaryConstraint(String placement) {
+        BinaryConstraintEnd bce = null;
+        if (placement.equals("next-to")) bce = new MaxDistanceConstraint(0);
+        else if (placement.equals("away-from")) bce = new MinDistanceConstraint(AWAY_DISTANCE);
+        else if (placement.equals("in-front-of")) bce = new StraightFacingConstraint(1000);
+        
+        return bce;
     }
 }

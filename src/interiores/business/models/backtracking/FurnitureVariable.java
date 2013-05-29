@@ -6,7 +6,9 @@ import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.BacktrackingTimeTrimmer;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
+import interiores.business.models.constraints.furniture.unary.WallConstraint;
 import interiores.business.models.room.FurnitureModel;
+import interiores.business.models.room.FurnitureType;
 import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
@@ -77,6 +79,7 @@ abstract public class FurnitureVariable
         domain = new Domain(models, roomSize, variableCount);
         iteration = 0;
         backtrackingConstraints = new ArrayList(getConstraints());
+        
         
         initializeMaxMinFields();
         undoAssignValue();
@@ -283,5 +286,9 @@ abstract public class FurnitureVariable
     @Override
     public int compareTo(FurnitureVariable variable) {
         return this.iteration - variable.iteration;
+    }
+
+    void addBacktrackingConstraint(Constraint c) {
+        backtrackingConstraints.add(c);
     }
 }

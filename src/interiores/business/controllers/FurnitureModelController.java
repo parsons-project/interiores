@@ -45,6 +45,7 @@ public class FurnitureModelController
      * @param price The price the model costs
      * @param color The color of the specific model
      * @param material The material the specific model is made from
+     * @param passiveOffsets The cardinal offsets (N,E,S,W) of the passive space the furniture should hold by default
      */
     public void add(String furnitureTypeName, String name, int width, int depth, float price,
             String color, String material, int[] passiveOffsets)
@@ -89,6 +90,11 @@ public class FurnitureModelController
         return furnitureType.getFurnitureModels();
     }
     
+    /**
+     * Obtains the name of all the furniture models available for a certain type of furniture, within the active catalog
+     * @param furnitureTypeName The type of furniture whose models we want
+     * @return A collection of strings containing all the names of the particular models of 'furnitureTypeName'
+     */
     public Collection<String> getFurnitureModelNames(String furnitureTypeName) {
         Collection<FurnitureModel> fmodels = getFurnitureModels(furnitureTypeName);
         
@@ -99,7 +105,8 @@ public class FurnitureModelController
         return furnitureNames;
     }
     
-    // Particular getters
+    // INDIVIDUAL-ATTRIBUTE GETTERS
+    
     public Dimension getSize(String furnitureTypeName, String name) {
         return getModel(furnitureTypeName, name).getSize();
     }
@@ -116,10 +123,25 @@ public class FurnitureModelController
         return getModel(furnitureTypeName, name).getPrice();
     }
     
+    /**
+     * Gets the passive space there should be around a model
+     * @return An array of four positions with offsets >= 0 representing N,E,S,W coordinates, in that order
+     */
     public int[] getPassiveSpace(String furnitureTypeName, String name) {
         return getModel(furnitureTypeName, name).getPassiveSpace().getOffsets();
     }
     
+    /**
+     * Replaces all the properties of a given furniture by new ones
+     * @param furnitureTypeName The type of furniture the model pertains to
+     * @param name The name of the furniture model we want to modify
+     * @param width A particular width
+     * @param depth A particular depth
+     * @param price The price the model costs
+     * @param color The color the model is painted in
+     * @param material The material the model is made from
+     * @param passiveOffsets An array of size 4 representing N,E,S,W offsets to the passive space around the model
+     */
     public void replace(String furnitureTypeName, String name, int width, int depth, float price,
             String color, String material, int[] passiveOffsets)
     {
@@ -133,6 +155,9 @@ public class FurnitureModelController
         notify(new FMModifiedEvent(name,furnitureTypeName));
     }
     
+    /**
+     * Obtains a particular model as such. Used internally
+     */
     private FurnitureModel getModel(String furnitureTypeName, String name) {
         // If the model is chached, we return it
         if (cached_fm != null && cached_fm.getType().equals(furnitureTypeName) && cached_fm.getName().equals(name) );

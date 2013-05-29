@@ -6,6 +6,8 @@ package interiores.presentation.swing.views.catalogs;
 
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.core.presentation.SwingController;
+import interiores.utils.Functionality;
+import java.util.Collection;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -25,6 +27,7 @@ public final class FTCElement extends javax.swing.JPanel {
     private boolean hasWidthChanged = false;
     private boolean hasDepthChanged = false;
     private boolean hasPassiveSpaceChanged = false;
+    private boolean hasFunctionChanged = false;
     
     private FurnitureTypeCatalogFrame catFrame;
     private FurnitureTypeController ftController;
@@ -42,6 +45,7 @@ public final class FTCElement extends javax.swing.JPanel {
         initComponents();
         initDocumentListeners();
         refreshFields();
+        updateTooltips();
     }
 
     /**
@@ -72,8 +76,8 @@ public final class FTCElement extends javax.swing.JPanel {
         placeButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        functionField = new javax.swing.JTextField();
+        functionLabel = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -165,7 +169,13 @@ public final class FTCElement extends javax.swing.JPanel {
 
         jLabel3.setText("respect to other furniture");
 
-        jLabel1.setText("Used for:");
+        functionField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                functionFieldFocusLost(evt);
+            }
+        });
+
+        functionLabel.setText("Used for:");
 
         org.jdesktop.layout.GroupLayout innerPanelLayout = new org.jdesktop.layout.GroupLayout(innerPanel);
         innerPanel.setLayout(innerPanelLayout);
@@ -175,55 +185,53 @@ public final class FTCElement extends javax.swing.JPanel {
                 .addContainerGap()
                 .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(innerPanelLayout.createSequentialGroup()
-                        .add(6, 6, 6)
-                        .add(jLabel1)
-                        .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(ftname)
+                        .add(64, 64, 64))
                     .add(innerPanelLayout.createSequentialGroup()
                         .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(innerPanelLayout.createSequentialGroup()
-                                .add(0, 0, Short.MAX_VALUE)
-                                .add(ftname))
-                            .add(jTextField1))
-                        .add(64, 64, 64)
-                        .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(functionLabel)
+                            .add(functionField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 115, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                        .add(innerPanelLayout.createSequentialGroup()
+                            .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                                .add(depthLabel)
+                                .add(widthLabel))
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                 .add(innerPanelLayout.createSequentialGroup()
-                                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                        .add(depthLabel)
-                                        .add(widthLabel))
+                                    .add(minWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                        .add(innerPanelLayout.createSequentialGroup()
-                                            .add(minWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                            .add(widthLabel2)
-                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                            .add(maxWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                        .add(innerPanelLayout.createSequentialGroup()
-                                            .add(minDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                            .add(depthLabel2)
-                                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                            .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                                    .add(widthLabel2)
                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                        .add(widthLabel3)
-                                        .add(depthLabel3)))
+                                    .add(maxWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                                 .add(innerPanelLayout.createSequentialGroup()
-                                    .add(placeButton)
+                                    .add(minDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                        .add(jLabel2)
-                                        .add(jLabel3))
-                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .add(wallCheckbox))
-                                .add(org.jdesktop.layout.GroupLayout.TRAILING, innerPanelLayout.createSequentialGroup()
-                                    .add(6, 6, 6)
-                                    .add(passiveSpaceField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 128, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                .add(passiveSpaceHint, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 207, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .add(passiveSpaceLabel)))
-                        .add(26, 26, 26))))
+                                    .add(depthLabel2)
+                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                    .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(widthLabel3)
+                                .add(depthLabel3)))
+                        .add(innerPanelLayout.createSequentialGroup()
+                            .add(placeButton)
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                            .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(jLabel2)
+                                .add(jLabel3))
+                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(wallCheckbox))
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, innerPanelLayout.createSequentialGroup()
+                            .add(6, 6, 6)
+                            .add(passiveSpaceField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 128, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(passiveSpaceHint, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 207, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(passiveSpaceLabel)))
+                .add(26, 26, 26))
         );
         innerPanelLayout.setVerticalGroup(
             innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -263,9 +271,9 @@ public final class FTCElement extends javax.swing.JPanel {
                             .add(placeButton))
                         .addContainerGap(12, Short.MAX_VALUE))
                     .add(innerPanelLayout.createSequentialGroup()
-                        .add(jLabel1)
+                        .add(functionLabel)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jTextField1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(functionField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
@@ -326,16 +334,20 @@ public final class FTCElement extends javax.swing.JPanel {
         ftController.setWallClinging(shortName, wallCheckbox.isEnabled());
     }//GEN-LAST:event_wallCheckboxActionPerformed
 
+    private void functionFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_functionFieldFocusLost
+       if (hasFunctionChanged) functionUpdate();
+    }//GEN-LAST:event_functionFieldFocusLost
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel depthLabel;
     private javax.swing.JLabel depthLabel2;
     private javax.swing.JLabel depthLabel3;
     private javax.swing.JLabel ftname;
+    private javax.swing.JTextField functionField;
+    private javax.swing.JLabel functionLabel;
     private javax.swing.JPanel innerPanel;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField maxDepthField;
     private javax.swing.JTextField maxWidthField;
     private javax.swing.JTextField minDepthField;
@@ -404,13 +416,13 @@ public final class FTCElement extends javax.swing.JPanel {
          });
         
         // Functionality field
-        passiveSpaceField.getDocument().addDocumentListener(new DocumentListener() {
+        functionField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void changedUpdate(DocumentEvent e) { hasPassiveSpaceChanged = true; }
+            public void changedUpdate(DocumentEvent e) { hasFunctionChanged = true; }
             @Override
-            public void insertUpdate(DocumentEvent e) { hasPassiveSpaceChanged = true; }
+            public void insertUpdate(DocumentEvent e) { hasFunctionChanged = true; }
             @Override
-            public void removeUpdate(DocumentEvent e) { hasPassiveSpaceChanged = true; }
+            public void removeUpdate(DocumentEvent e) { hasFunctionChanged = true; }
          });
     }
 
@@ -420,6 +432,7 @@ public final class FTCElement extends javax.swing.JPanel {
         minDepthField.setText(Integer.toString(ftController.getDepthRange(shortName).min));
         maxDepthField.setText(Integer.toString(ftController.getDepthRange(shortName).max));
         passiveSpaceField.setText(getFormattedPassiveSpace());
+        functionField.setText(getFormattedFunctionalities());
     }     
 
     private void widthRangeUpdate() {
@@ -453,6 +466,22 @@ public final class FTCElement extends javax.swing.JPanel {
             maxDepthField.setText(Integer.toString(ftController.getDepthRange(shortName).max));
         }
     }
+    
+    private void functionUpdate() {
+        hasFunctionChanged = false;
+        String str = functionField.getText().replace(" ", "");
+        String[] fs = str.split(",");
+        for (int i = 0; i < fs.length; i++) if (fs[i].contains("ing")) fs[i] = fs[i].substring(0, fs[i].length()-3);
+        try {
+            catFrame.performModification();
+            ftController.setFunctionalities(shortName, fs);
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this,e.getMessage(),"Invalid value",JOptionPane.ERROR_MESSAGE);
+            functionField.setText(getFormattedFunctionalities());
+        }
+        
+    }
 
     private void passiveSpaceUpdate() {
         hasPassiveSpaceChanged = false;
@@ -475,6 +504,24 @@ public final class FTCElement extends javax.swing.JPanel {
     private String getFormattedPassiveSpace() {
         int[] ps = ftController.getPassiveSpace(shortName);
         return ps[0] + ", " + ps[1] + ", " + ps[2] + ", " + ps[3];
+    }
+    
+    private String getFormattedFunctionalities() {       
+        String s = "";
+        for (String c : ftController.getFunctionalities(shortName)) s += c + "ing, ";
+        if (s.length() > 3) s = s.substring(0, s.length()-2);
+        return s;
+    }
+    
+    /**
+     * Updates the tooltips of the current item with all the necessary information.
+     */
+    private void updateTooltips() {
+        Collection<String> cs = Functionality.getFunctionalitiesName();
+        String s = "<html><strong>Available functions:</strong><br>";
+        for(String f : cs) s += f + "ing<br>";
+        s += "</html>";
+        functionField.setToolTipText(s);
     }
 
 

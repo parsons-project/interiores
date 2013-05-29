@@ -5,6 +5,8 @@
 package interiores.utils;
 
 import interiores.core.business.BusinessException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *
@@ -20,6 +22,12 @@ public enum Functionality
                 return functionality;
         
         throw new BusinessException("There is no functionality named as " + name);
+    }
+    
+    public static Collection<String> getFunctionalitiesName() {
+        Collection<String> names = new ArrayList();
+        for(Functionality f : values()) names.add(f.toString());
+        return names;
     }
     
     @Override

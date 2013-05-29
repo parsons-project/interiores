@@ -214,7 +214,7 @@ public class FurnitureTypeController
 
         HashSet<Functionality> hs = new HashSet();
         for (String f : functs) {
-            hs.add(Functionality.valueOf(name.toUpperCase()));
+            hs.add(Functionality.getEnum(f));
         }
         get(name).setFunctionalities(hs);
     }

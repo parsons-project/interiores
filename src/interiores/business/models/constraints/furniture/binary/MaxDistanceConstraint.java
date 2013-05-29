@@ -5,6 +5,7 @@ import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
+import interiores.core.Debug;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -39,7 +40,7 @@ public class MaxDistanceConstraint
     @Override
     public void trim2(FurnitureVariable variable) {
         Area validArea = new Area(otherVariable.assignedValue.getArea());
-        validArea.expand(distance);
+        validArea.expand(distance + variable.getMaxSize());
         variable.trimExceptP(validArea);
     }
 
@@ -65,7 +66,7 @@ public class MaxDistanceConstraint
      */
     @Override
     public boolean isSatisfied2(FurnitureVariable variable) {
-        
+        Debug.println("OHAY");
         OrientedRectangle rectangle1 = ((FurnitureValue) otherVariable.getAssignedValue()).getArea();
         OrientedRectangle rectangle2 = ((FurnitureValue) variable.getAssignedValue()).getArea();
         

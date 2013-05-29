@@ -612,7 +612,7 @@ public class Area
         if (yCoordinateIntersect) yOffset = 0;
         else yOffset = Math.min(Math.abs((r1.y+r1.height)-r2.y), Math.abs((r2.y+r2.height)-r1.y));
         
-        return euclideanDistance(new Square(0,0), new Square(xOffset, yOffset));
+        return (float) Math.sqrt(xOffset*xOffset + yOffset*yOffset);
     }
 
     @Override

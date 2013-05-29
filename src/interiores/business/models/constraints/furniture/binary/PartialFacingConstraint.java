@@ -37,30 +37,27 @@ public class PartialFacingConstraint
     
     @Override
     public int getWeight() {
-        if (MAXDIST < 6) return 250;
-        if (MAXDIST < 20) return 160;
-        if (MAXDIST < 60) return 130;
-        if (MAXDIST < 100) return 120;
-        if (MAXDIST < 200) return 110;
-        return 100;
+        return 110;
     }
 
     @Override
     public void trim2(FurnitureVariable variable) {
         OrientedRectangle validRectangle = ((FurnitureValue) otherVariable.getAssignedValue()).getArea();
         
-        validRectangle = validRectangle.enlarge(MAXDIST, validRectangle.getOrientation());
+        Orientation curOrientation = validRectangle.getOrientation();
+        
+        validRectangle = validRectangle.enlarge(MAXDIST, curOrientation);
         //validRectangle is the area where the variable must be partially placed
         //to satisfy the constraint
         
         //it must be expanded to W and N to include all positions such that there
         //is a model that placed there, is at least parcially in validRectangle
         int maxSize = variable.getMaxSize();
-        validRectangle = validRectangle.enlarge(maxSize, Orientation.W);
-        validRectangle = validRectangle.enlarge(maxSize, Orientation.N);
+        validRectangle = validRectangle.enlarge(maxSize, curOrientation.rotateLeft());
+        validRectangle = validRectangle.enlarge(maxSize, curOrientation.rotateRight());
  
         
-        variable.trimExceptP(new Area(validRectangle.enlarge(MAXDIST, validRectangle.getOrientation())));
+        variable.trimExceptP(new Area(validRectangle));
         HashSet<Orientation> validOrientations = new HashSet<Orientation>();
         validOrientations.add(validRectangle.getOrientation().complementary());
         variable.trimExceptO(validOrientations);

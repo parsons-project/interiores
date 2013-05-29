@@ -370,10 +370,12 @@ public class Stage {
      */
     HashSet<Orientation> intersectionO(HashSet<Orientation> validOrientations) {
         HashSet<Orientation> notContainedOrientations = new HashSet<Orientation>();
-        for (Orientation orientation : orientations) {
+        Iterator<Orientation> it = orientations.iterator();
+        while(it.hasNext()) {
+            Orientation orientation = it.next();
             if (! validOrientations.contains(orientation)) {
                 notContainedOrientations.add(orientation);
-                orientations.remove(orientation);
+                it.remove();
             }
         }
         return notContainedOrientations;

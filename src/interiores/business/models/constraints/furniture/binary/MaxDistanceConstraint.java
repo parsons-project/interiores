@@ -66,7 +66,6 @@ public class MaxDistanceConstraint
      */
     @Override
     public boolean isSatisfied2(FurnitureVariable variable) {
-        Debug.println("OHAY");
         OrientedRectangle rectangle1 = ((FurnitureValue) otherVariable.getAssignedValue()).getArea();
         OrientedRectangle rectangle2 = ((FurnitureValue) variable.getAssignedValue()).getArea();
         

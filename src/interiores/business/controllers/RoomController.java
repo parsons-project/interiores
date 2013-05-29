@@ -75,6 +75,13 @@ public class RoomController
         Debug.println("Loaded successfully.");
     }
     
+    /**
+     * Gets the current resolution the room works with.
+     * The resolution means a tradeoff between quality and speed.
+     * A higher resolution means only a subset of positions will be
+     * considered as valid for holding the initial position of a furniture
+     * @return 
+     */
     public int getResolution() {
         return Room.getResolution();
     }

@@ -50,8 +50,6 @@ public class WallConstraint
         Area validPositions = new Area();
         for(Orientation orientation : orientations) {
             
-            Debug.println("Trimming " + orientation);
-            
             int maxSize = variable.getMaxSize();
             
             switch(orientation) {

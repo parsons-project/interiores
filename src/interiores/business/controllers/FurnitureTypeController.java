@@ -192,4 +192,13 @@ public class FurnitureTypeController
         get(name).setToWalls(clinging);
         notify(new FTModifiedEvent(get(name).getFullName(),name));
     }
+
+    public Collection<String> getPlacementDescriptions(String typeName) {
+        ArrayList<String> description = new ArrayList<String>();
+        HashMap<String,String> map = getPlacementConstraints(typeName);
+        for (String type : map.keySet()) {
+            description.add(type + " with " + map.get(type));
+        }
+        return description;
+    }
 }

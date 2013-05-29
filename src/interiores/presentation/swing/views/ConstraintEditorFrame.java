@@ -6,6 +6,7 @@ import interiores.business.controllers.FurnitureModelController;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.controllers.RoomController;
 import interiores.business.controllers.UnaryConstraintController;
+import interiores.business.events.catalogs.FTModifiedEvent;
 import interiores.business.events.constraints.BinaryConstraintAddedEvent;
 import interiores.business.events.constraints.BinaryConstraintRemovedEvent;
 import interiores.business.events.constraints.UnaryConstraintAddedEvent;
@@ -23,6 +24,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -76,7 +78,12 @@ public class ConstraintEditorFrame extends JFrame {
     
     public void setSelectedId(String selectedId) {
         this.selectedId = selectedId;
-        selectedElementLabel.setText(selectedId + " constraints");
+        String title = "";
+        title += selectedId + " constraints";
+        if (furnitureTypeController.getWallClinging(getTypeName(selectedId))) {
+            title += " (Clinged to wall)";
+        }
+        selectedElementLabel.setText(title);
         updateConstraintEditorFrame();
     }
 
@@ -129,8 +136,10 @@ public class ConstraintEditorFrame extends JFrame {
     }
     
     @Listen({UnaryConstraintAddedEvent.class, UnaryConstraintRemovedEvent.class,
-             BinaryConstraintAddedEvent.class, BinaryConstraintRemovedEvent.class})
-    public void updateActiveConstraintsList() {
+             BinaryConstraintAddedEvent.class, BinaryConstraintRemovedEvent.class,
+             FTModifiedEvent.class})
+    public void updateActiveConstraintsList() {      
+        setListValues(activePlacement, furnitureTypeController.getPlacementDescriptions(getTypeName(selectedId)));
         setListValues(activeUnaries, unaryConstraintController.getConstraints(selectedId));
         setListValues(activeBinaries, binaryConstraintController.getConstraints(selectedId));
         repaint();
@@ -182,6 +191,8 @@ public class ConstraintEditorFrame extends JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        activePlacement = new javax.swing.JList();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -420,6 +431,8 @@ public class ConstraintEditorFrame extends JFrame {
         positionPanel.setBounds(0, 0, 299, 104);
         constPropEditor.add(positionPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        jScrollPane3.setViewportView(activePlacement);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -440,7 +453,8 @@ public class ConstraintEditorFrame extends JFrame {
                         .addGap(55, 55, 55)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-                            .addComponent(jScrollPanel2, javax.swing.GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE))))
+                            .addComponent(jScrollPanel2, javax.swing.GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE))))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(50, 50, 50)
@@ -458,32 +472,37 @@ public class ConstraintEditorFrame extends JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(selectedElementLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(unaryConstraintRadio)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(binaryConstraintRadio)
-                        .addGap(18, 18, 18)
-                        .addComponent(constraintTypeList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(selectedElementLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(unaryConstraintRadio)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(binaryConstraintRadio)
+                                .addGap(18, 18, 18)
+                                .addComponent(constraintTypeList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPanel2, 0, 0, Short.MAX_VALUE)))
                         .addGap(10, 10, 10)
-                        .addComponent(relatableCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelButton)
-                    .addComponent(addConstraintButton))
-                .addGap(21, 21, 21))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(relatableCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cancelButton)
+                            .addComponent(addConstraintButton))
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(57, 57, 57))))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(184, 184, 184)
                     .addComponent(constPropEditor, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(81, Short.MAX_VALUE)))
+                    .addContainerGap(105, Short.MAX_VALUE)))
         );
 
         pack();
@@ -590,6 +609,7 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private javax.swing.JCheckBox SCheckBox;
     private javax.swing.JCheckBox WCheckBox;
     private javax.swing.JList activeBinaries;
+    private javax.swing.JList activePlacement;
     private javax.swing.JList activeUnaries;
     private javax.swing.JButton addConstraintButton;
     private javax.swing.JRadioButton binaryConstraintRadio;
@@ -605,6 +625,7 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPanel2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JSpinner maxSpinner;

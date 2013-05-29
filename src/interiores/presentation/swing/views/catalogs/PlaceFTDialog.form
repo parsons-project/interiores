@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+<Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
+    <Property name="title" type="java.lang.String" value="Select placement options"/>
+    <Property name="alwaysOnTop" type="boolean" value="true"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -27,8 +29,7 @@
               <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="okButton" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jScrollPane1" min="-2" pref="507" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="placingSelector" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -37,9 +38,10 @@
                           <Component id="newButton" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="dialogTitle" min="-2" max="-2" attributes="0"/>
+                      <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="65" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -58,7 +60,7 @@
               <Component id="jScrollPane1" min="-2" pref="102" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="okButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="9" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -69,7 +71,9 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Grande" size="18" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Place armchair"/>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="&quot;Place &quot; + furnitureName" type="code"/>
+        </Property>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -81,16 +85,16 @@
       <SubComponents>
         <Component class="javax.swing.JList" name="placingList">
           <Properties>
-            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="Item 1"/>
-                <StringItem index="1" value="Item 2"/>
-                <StringItem index="2" value="Item 3"/>
-                <StringItem index="3" value="Item 4"/>
-                <StringItem index="4" value="Item 5"/>
-              </StringArray>
+            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="model" type="code"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="placingListKeyPressed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="HashMap&lt;String,String&gt; pcs = ftController.getPlacementConstraints(furnitureName);&#xa;for (String f : pcs.keySet()) model.addElement(fromSlang(pcs.get(f)) + &quot; &quot; + f);"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
@@ -100,24 +104,20 @@
           <StringArray count="3">
             <StringItem index="0" value="Next to"/>
             <StringItem index="1" value="Away from"/>
-            <StringItem index="2" value="In fron of"/>
+            <StringItem index="2" value="In front of"/>
           </StringArray>
         </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="furnitureSelector">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
-      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Collection&lt;String&gt; furn = ftController.getFullNamesMap().values();&#xa;furn.remove(furnitureName);&#xa;String[] f = furn.toArray(new String[0]);&#xa;furnitureSelector.setModel(new javax.swing.DefaultComboBoxModel(f));"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="newButton">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newButtonActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="ImageIcon im = new javax.swing.ImageIcon(&quot;src/resources/add_element.png&quot;);&#xa;im.setImage( im.getImage().getScaledInstance(25,25,java.awt.Image.SCALE_SMOOTH) );&#xa;newButton.setIcon(im); // NOI18N&#xa;newButton.setBorder(BorderFactory.createEmptyBorder());&#xa;newButton.setContentAreaFilled(false);"/>
       </AuxValues>

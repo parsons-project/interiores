@@ -10,16 +10,13 @@ import interiores.business.events.furniture.ElementSelectedEvent;
 import interiores.business.events.furniture.ElementUnselectedEvent;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
-import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
-import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
-import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
-import interiores.business.models.constraints.furniture.binary.PartialFacingConstraint;
 import interiores.business.models.room.FurnitureType;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
 import interiores.utils.Range;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -30,8 +27,6 @@ import java.util.TreeMap;
 public class FurnitureTypeController
     extends CatalogElementController<FurnitureType>
 {
-    // The default distance a furniture is put with respect to other if they should be separated
-    private static int AWAY_DISTANCE = 200;
     
     /**
      * Creates a particular instance of the furniture type controller
@@ -176,21 +171,17 @@ public class FurnitureTypeController
 
 
     public void addPlacementConstraint(String pctype, String type1, String type2) {
-        
-        BinaryConstraintEnd bce = null;
-        
-        if (pctype.equals("next-to")) bce = new MaxDistanceConstraint(0);
-        else if (pctype.equals("away-from")) bce = new MinDistanceConstraint(AWAY_DISTANCE);
-        else if (pctype.equals("in-front-of")) bce = new PartialFacingConstraint(1000); // When facing constraints lose their distance, this attribute should be simply removed
-        
-        if (bce != null) {
-            get(type1).addBinaryConstraint(get(type2), bce);
-            notify(new FTModifiedEvent(get(type1).getFullName(),type1));
-        }
+        get(type1).addPlacementConstraint(type2, pctype);
+        notify(new FTModifiedEvent(get(type1).getFullName(),type1));
     }
     
-    public String[] getPlacementConstraints(String name) {
-        
+    public void removePlacementConstraint(String type1, String type2) {
+        get(type1).removePlacementConstraint(type2);
+        notify(new FTModifiedEvent(get(type1).getFullName(),type1));
+    }
+    
+    public HashMap<String,String> getPlacementConstraints(String name) {
+        return get(name).getPlacementConstraints();
     }
 
     public boolean getWallClinging(String name) {

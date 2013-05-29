@@ -92,7 +92,7 @@ public class FurnitureTypeCommands
                 "next-to , away-from , in-front-of");
         String type2 = readString("With respect to which furniture type?");
         
-        if (bctype.matches(PATTERN_PLACE_RESTRICTIONS)) fTypeController.addBinaryConstraint(bctype,type1,type2);
+        if (bctype.matches(PATTERN_PLACE_RESTRICTIONS)) fTypeController.addPlacementConstraint(bctype,type1,type2);
         else throw new NoSuchMethodException(bctype + " is not a valid place restriction");
     }
 }

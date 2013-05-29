@@ -94,13 +94,7 @@ public class FurnitureType
     }
     
     
-    /**
-     * Returns the binary constraints defined for this type
-     * @return A map of binary constraints defined between this type and another
-     */
-    public HashMap<String, String> getBinaryConstraints() {
-        return placementConstraints;
-    }
+    
     
     /**
      * Gets all the particular models of this type of furniture
@@ -121,6 +115,19 @@ public class FurnitureType
     
     public void addPlacementConstraint(String otherFT, String placement) {
         placementConstraints.put(otherFT, placement);
+    }
+    
+    public void removePlacementConstraint(String otherFT) {
+        if (placementConstraints.containsKey(otherFT))
+            placementConstraints.remove(otherFT);
+    }
+    
+    /**
+     * Returns the binary constraints defined for this type
+     * @return A map of placement constraints defined between this type and another
+     */
+    public HashMap<String, String> getPlacementConstraints() {
+        return placementConstraints;
     }
     
     /**
@@ -220,5 +227,7 @@ public class FurnitureType
         return Utils.padRight(getName(), 20) + "Width[" + widthRange.toString() + "], Depth["
                 + depthRange.toString() + "]";
     }
+
+    
 
 }

@@ -5,6 +5,13 @@
 package interiores.presentation.swing.views.catalogs;
 
 import interiores.business.controllers.FurnitureTypeController;
+import interiores.core.Debug;
+import java.awt.event.KeyEvent;
+import java.util.Collection;
+import java.util.HashMap;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -12,17 +19,21 @@ import interiores.business.controllers.FurnitureTypeController;
  */
 public class PlaceFTDialog extends javax.swing.JDialog {
 
+    private String furnitureName;
     
     private FurnitureTypeController ftController;
+    
+    final DefaultListModel model = new DefaultListModel();
     
     /**
      * Creates new form PlaceFTDialog
      */
-    public PlaceFTDialog(FurnitureTypeController ftc) {
-        initComponents();
-        
+    public PlaceFTDialog(FurnitureTypeController ftc, String fname) {
+
+        furnitureName = fname;
         ftController = ftc;
         
+        initComponents();
     }
 
     /**
@@ -42,26 +53,34 @@ public class PlaceFTDialog extends javax.swing.JDialog {
         okButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Select placement options");
+        setAlwaysOnTop(true);
 
         dialogTitle.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
-        dialogTitle.setText("Place armchair");
+        dialogTitle.setText("Place " + furnitureName);
 
-        placingList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        placingList.setModel(model);
+        placingList.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                placingListKeyPressed(evt);
+            }
         });
         jScrollPane1.setViewportView(placingList);
+        HashMap<String,String> pcs = ftController.getPlacementConstraints(furnitureName);
+        for (String f : pcs.keySet()) model.addElement(fromSlang(pcs.get(f)) + " " + f);
 
-        placingSelector.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Next to", "Away from", "In fron of" }));
-
-        furnitureSelector.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        placingSelector.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Next to", "Away from", "In front of" }));
 
         ImageIcon im = new javax.swing.ImageIcon("src/resources/add_element.png");
         im.setImage( im.getImage().getScaledInstance(25,25,java.awt.Image.SCALE_SMOOTH) );
         newButton.setIcon(im); // NOI18N
         newButton.setBorder(BorderFactory.createEmptyBorder());
         newButton.setContentAreaFilled(false);
+        newButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newButtonActionPerformed(evt);
+            }
+        });
 
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -78,16 +97,16 @@ public class PlaceFTDialog extends javax.swing.JDialog {
                 .add(22, 22, 22)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(okButton)
-                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 507, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                         .add(layout.createSequentialGroup()
                             .add(placingSelector, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(18, 18, 18)
                             .add(furnitureSelector, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(18, 18, 18)
                             .add(newButton))
-                        .add(dialogTitle)))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .add(dialogTitle)
+                        .add(jScrollPane1)))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -103,8 +122,13 @@ public class PlaceFTDialog extends javax.swing.JDialog {
                 .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 102, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(okButton)
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        Collection<String> furn = ftController.getFullNamesMap().values();
+        furn.remove(furnitureName);
+        String[] f = furn.toArray(new String[0]);
+        furnitureSelector.setModel(new javax.swing.DefaultComboBoxModel(f));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -112,6 +136,27 @@ public class PlaceFTDialog extends javax.swing.JDialog {
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         dispose();
     }//GEN-LAST:event_okButtonActionPerformed
+
+    private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
+        String pc = (String) placingSelector.getSelectedItem();
+        String internal_pc = toSlang(pc);
+        String otherFurniture = (String) furnitureSelector.getSelectedItem();
+        ftController.addPlacementConstraint(internal_pc, furnitureName, otherFurniture);
+        addToModel(pc,otherFurniture);
+        Debug.println("Adding placement constraint: " + furnitureName + " should be " + pc + " " + otherFurniture);
+    }//GEN-LAST:event_newButtonActionPerformed
+
+    private void placingListKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_placingListKeyPressed
+        if ( evt.getKeyCode() == KeyEvent.VK_DELETE ) {
+            String f = (String) placingList.getSelectedValue();
+            int lf = f.length();
+            f = f.substring(f.lastIndexOf(" "),lf);
+            ftController.removePlacementConstraint(furnitureName,f);
+            model.remove(placingList.getSelectedIndex());
+            Debug.println("Removing placement constraint: " + furnitureName + " isn't affected by " + f);
+        }
+            
+    }//GEN-LAST:event_placingListKeyPressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel dialogTitle;
@@ -123,18 +168,28 @@ public class PlaceFTDialog extends javax.swing.JDialog {
     private javax.swing.JComboBox placingSelector;
     // End of variables declaration//GEN-END:variables
 
-
-    private void initValues() {
-        
-        // We initialize the list of furniture
-        String[] furn = (String[]) ftController.getFullNamesMap().values().toArray();
-        furnitureSelector.setModel(new javax.swing.DefaultComboBoxModel(furn));
-        
-        // And subsequently the list of already-defined placing options
-        ftController.getBinaryConstraints();
-        
+    /**
+     * Translates "Next to" into "next-to", and likewise for any other placement constraint
+     */
+    private String toSlang(String pc) {
+        String translation = pc.toLowerCase();
+        translation = translation.replace(" ", "-");
+        return translation;
     }
-
+    
+    private String fromSlang(String pc) {
+        String translation = pc.replace("-"," ");
+        char firstLetter = Character.toUpperCase(translation.charAt(0) );
+        return firstLetter + translation.substring(1);
+    }
+    
+    private void addToModel(String pc, String otherFurniture) {
+        for (int i = 0; i < model.size(); i++)
+            if (( (String) model.getElementAt(i) ).contains(otherFurniture)) {
+                model.setElementAt(pc + " " + otherFurniture, i); return;
+            }
+        model.addElement(pc + " " + otherFurniture);
+    }
 
 
 

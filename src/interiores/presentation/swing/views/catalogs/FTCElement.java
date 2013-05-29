@@ -277,7 +277,8 @@ public final class FTCElement extends javax.swing.JPanel {
     }//GEN-LAST:event_removeButtonActionPerformed
 
     private void placeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_placeButtonActionPerformed
-        JOptionPane.showMessageDialog(FTCElement.this, "Dialog still unimplemented");
+        PlaceFTDialog pftd = new PlaceFTDialog(ftController, shortName);
+        pftd.setVisible(true);
     }//GEN-LAST:event_placeButtonActionPerformed
 
     private void minWidthFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_minWidthFieldFocusLost

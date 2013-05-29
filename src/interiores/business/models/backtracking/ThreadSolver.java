@@ -23,7 +23,7 @@ public class ThreadSolver
     private List<Observer> listeners;
     private boolean isSolutionFound;
     private boolean isTimerEnabled;
-    final private Thread thread;
+    private Thread thread;
     private long time;
     
     public ThreadSolver() {
@@ -33,26 +33,27 @@ public class ThreadSolver
     public ThreadSolver(VariableConfig variableConfig) {
         super(variableConfig);
         
-        thread = new Thread(){
-            @Override
-            public void run() {
-                computeSolution();
-            }
-        };
-        
         listeners = new ArrayList();
-        isSolutionFound = false;
         isTimerEnabled = false;
     }
     
-    public void enableTimer() {
-        isTimerEnabled = true;
+    public void setTimerEnabled(boolean timer) {
+        isTimerEnabled = timer;
     }
     
     @Override
     public void solve() {
         if(isSolving())
             throw new SolverNotFinishedException();
+        
+        isSolutionFound = false;
+        
+        thread = new Thread(){
+            @Override
+            public void run() {
+                computeSolution();
+            }
+        };
         
         thread.start(); // Start solving!
     }
@@ -90,23 +91,24 @@ public class ThreadSolver
     }
     
     public boolean isSolving() {
-        return thread.isAlive();
+        return (thread != null && thread.isAlive());
     }
     
     public boolean isPaused() {
         return (thread.getState() == Thread.State.WAITING);
     }
     
-    public void continueSolving() {
+    public void resumeSolving() {
         synchronized (thread) {
             thread.notify();
         }
     }
     
     public void stopSolving() {
-        continueSolving();
+        shouldStop = true;
         
-        thread.interrupt();
+        if(isPaused())
+            resumeSolving();
     }
     
     @Override
@@ -118,5 +120,22 @@ public class ThreadSolver
     public void notify(Event e) {
         for(Observer listener : listeners)
             listener.notify(e);
+    }
+    
+    public boolean canDebug() {
+        return false;
+    }
+    
+    public boolean shouldRenew(VariableConfig configuration) {
+        if(!configuration.isConsistent())
+            return true;
+        
+        if(!hasConfiguration(configuration))
+            return true;
+        
+        if(canDebug())
+            return true;
+        
+        return false;
     }
 }

@@ -1,6 +1,7 @@
 package interiores.business.models.room.elements;
 
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.ConstraintIndex;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
@@ -13,7 +14,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * This class is the abstraction of a wanted element for the room
@@ -32,9 +32,6 @@ public class WantedFurniture
     
     @XmlElement
     private ConstraintIndex<BinaryConstraintEnd> binaryConstraints;
-    
-    @XmlTransient
-    private boolean isBounding = false;
     
     public WantedFurniture()
     { }
@@ -74,34 +71,41 @@ public class WantedFurniture
         return unaryConstraints.getAll(constraints);
     }
     
-    public boolean isBounding() {
-        return isBounding;
-    }
-    
-    public void bound(BinaryConstraintEnd binaryConstraint)
-        throws CloneNotSupportedException
+    public void bound(BinaryConstraintEnd binaryConstraint, String otherName)
     {
-        isBounding = true; // This avoids infinite bounding :/
-        binaryConstraint.bound(this);
-        isBounding = false;
+        addBinaryConstraint(binaryConstraint, otherName);
         
-        addBinaryConstraint(binaryConstraint);
+        BinaryConstraintEnd counterPart = binaryConstraint.getCounterPart(this);
+        
+        if(counterPart == null)
+            return;
+        
+        WantedFurniture other = (WantedFurniture) binaryConstraint.getOtherVariable();
+        other.addBinaryConstraint(counterPart, name);
     }
     
-    public void unbound(Class<? extends BinaryConstraintEnd> binaryConstraintClass) {
+    public void unbound(Class<? extends BinaryConstraintEnd> binaryConstraintClass, String otherName)
+    {
         BinaryConstraintEnd binaryConstraint = (BinaryConstraintEnd) constraints.get(
                 binaryConstraintClass);
         
-        binaryConstraint.unbound();
+        removeBinaryConstraint(binaryConstraintClass, name);
         
-        removeBinaryConstraint(binaryConstraintClass);
+        if(! binaryConstraint.hasCounterPart())
+            return;
+        
+        WantedFurniture other = (WantedFurniture) binaryConstraint.getOtherVariable();
+        other.removeBinaryConstraint(binaryConstraintClass, name);
     }
     
-    public void addBinaryConstraint(BinaryConstraintEnd binaryConstraint) {
+    public void addBinaryConstraint(BinaryConstraintEnd binaryConstraint, String otherName)
+    {
         binaryConstraints.add(binaryConstraint, constraints);
     }
     
-    public void removeBinaryConstraint(Class<? extends BinaryConstraintEnd> binaryConstraintClass) {
+    public void removeBinaryConstraint(Class<? extends BinaryConstraintEnd> binaryConstraintClass,
+            String otherName)
+    {
         binaryConstraints.remove(binaryConstraintClass, constraints);
     }
     

@@ -9,10 +9,10 @@ import interiores.business.models.constraints.furniture.binary.StraightFacingCon
 import interiores.business.models.constraints.furniture.unary.WallConstraint;
 import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedFurniture;
+import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +25,7 @@ public class VariableConfig
 {
     private Dimension areaSize;
     private List<FurnitureConstant> constants;
-    private List<FurnitureVariable> assignedVariables;
-    private List<FurnitureVariable> unassignedVariables;
+    private List<FurnitureVariable> variables;
     private Map<FurnitureVariable, FurnitureType> furnitureTypes;
     
     private static final int AWAY_DISTANCE = 200;
@@ -35,20 +34,12 @@ public class VariableConfig
         this.areaSize = areaSize;
         
         constants = new ArrayList();
-        assignedVariables = new ArrayList();
-        unassignedVariables = new ArrayList();
+        variables = new ArrayList();
         furnitureTypes = new HashMap();
     }
     
     public void addVariable(FurnitureVariable variable, FurnitureType ftype) {
-        if(variable.isAssigned())
-            assignedVariables.add(variable);
-        
-        else {
-            variable.undoAssignValue();
-            unassignedVariables.add(variable);
-        }
-        
+        variables.add(variable);
         furnitureTypes.put(variable, ftype);
     }
     
@@ -57,64 +48,42 @@ public class VariableConfig
     }
     
     public boolean isConsistent() {
-        for(FurnitureVariable assignedVariable : assignedVariables)
-            if(!assignedVariable.hasDomain())
+        for(FurnitureVariable assignedVariable : variables)
+            if(!assignedVariable.hasDomain() || !assignedVariable.isAssigned())
                 return false;
         
-        return unassignedVariables.isEmpty();
-    }
-    
-    public void sort() {
-        Collections.sort(assignedVariables);
+        return true;
     }
     
     public void resetDomains() {
-        unassignedVariables.addAll(assignedVariables);
-        assignedVariables.clear();
-        
-        for(FurnitureVariable unassignedVariable : unassignedVariables) {
-            FurnitureType ftype = furnitureTypes.get(unassignedVariable);
-            unassignedVariable.createDomain(ftype.getFurnitureModels(), areaSize, unassignedVariables.size());
-            addDefaultConstraints(ftype,unassignedVariable);
+        for(FurnitureVariable variable : variables) {
+            FurnitureType ftype = furnitureTypes.get(variable);
+            variable.undoAssignValue();
+            variable.createDomain(ftype.getFurnitureModels(), areaSize, variables.size());
+            
+            addDefaultConstraints(ftype, variable);
         }
     }
     
-    public void unassignLast() {
-        int lastIndex = assignedVariables.size() - 1;
-        
-        if(lastIndex < 0)
-            return;
-        
-        FurnitureVariable variable = assignedVariables.get(lastIndex);
-        variable.undoAssignValue();
-        
-        unassignedVariables.add(variable);
-        assignedVariables.remove(lastIndex);
-    }
-    
-    public List<FurnitureVariable> getAssignedVariables() {
-        return assignedVariables;
-    }
-    
-    public List<FurnitureVariable> getUnassignedVariables() {
-        return unassignedVariables;
+    public List<FurnitureVariable> getVariables() {
+        return new ArrayList(variables);
     }
     
     public List<FurnitureConstant> getConstants() {
-        return constants;
+        return new ArrayList(constants);
     }
     
     public OrientedRectangle getTotalArea() {
         return new OrientedRectangle(new Point(0, 0), areaSize, Orientation.S);
     }
-
-    private void addDefaultConstraints(FurnitureType ftype, FurnitureVariable unassignedVariable) {
+    
+    private void addDefaultConstraints(FurnitureType ftype, FurnitureVariable variable) {
         
         // First, we treat wall-clinging
         if (ftype.shouldBeClungToWalls())
         {
             WallConstraint wc = new WallConstraint(areaSize.width, areaSize.depth, Orientation.values());
-            unassignedVariable.addBacktrackingConstraint(wc);
+            variable.addBacktrackingConstraint(wc);
         }
             
         // Afterwards, we assign all the binary constraints that could take place
@@ -127,15 +96,13 @@ public class VariableConfig
                 // We translate the placement constraint into a binary one
                 BinaryConstraintEnd bce = translateIntoBinaryConstraint(pcs.get(otype));
                 // And try setting it to both variables affected
-                try {
-                    bce.setOtherVariable(end);
-                    bce.bound((WantedFurniture) unassignedVariable);
-                    unassignedVariable.addBacktrackingConstraint(bce);
-                }
-                catch(Exception e) {}
+                bce.setOtherVariable(end);
+                variable.addBacktrackingConstraint(bce);
+                
+                BinaryConstraintEnd bceCounterPart = bce.getCounterPart(variable);
+                end.addBacktrackingConstraint(bceCounterPart);
             }
         }
-        
     }
 
     private FurnitureVariable getPossibleEnd(String otype) {
@@ -144,21 +111,47 @@ public class VariableConfig
         
         // From all the suitable ends (if there's any), we select the one with less
         // binary constraints defined over it, so as to balance constraint load
-        for (FurnitureVariable fv : unassignedVariables) {
-            if (fv.getName().contains(otype) && nb_assignations < ((WantedFurniture) fv).getBinaryConstraints().size()) {
+        for (FurnitureVariable fv : variables) {
+            if (fv.getTypeName().equals(otype) &&
+                    nb_assignations < ((WantedFurniture) fv).getBinaryConstraints().size())
+            {
                 nb_assignations = fv.getConstraints().size();
                 end = fv;
             }
         }
+        
         return end;
     }
 
     private BinaryConstraintEnd translateIntoBinaryConstraint(String placement) {
-        BinaryConstraintEnd bce = null;
-        if (placement.equals("next-to")) bce = new MaxDistanceConstraint(0);
-        else if (placement.equals("away-from")) bce = new MinDistanceConstraint(AWAY_DISTANCE);
-        else if (placement.equals("in-front-of")) bce = new StraightFacingConstraint();
+        BinaryConstraintEnd bce;
+        
+        if (placement.equals("next-to"))
+            bce = new MaxDistanceConstraint(0);
+        
+        else if (placement.equals("away-from"))
+            
+            bce = new MinDistanceConstraint(AWAY_DISTANCE);
+        
+        else if (placement.equals("in-front-of"))
+            bce = new StraightFacingConstraint();
+        
+        else
+            throw new BusinessException("Unknown constraint: " + placement);
         
         return bce;
+    }
+    
+    public boolean equals(VariableConfig other) {
+        if(! areaSize.equals(other.areaSize))
+            return false;
+        
+        if(! constants.equals(other.constants))
+            return false;
+        
+        if(! variables.equals(other.variables))
+            return false;
+        
+        return true;
     }
 }

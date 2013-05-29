@@ -44,15 +44,17 @@ public class DesignController
         
         VariableConfig variableConfig = getWishList().getVariableConfig(getActiveCatalog());
         
-        if(debugMode)
-            solver = new ThreadSolverDebugger(variableConfig);
-        else
-            solver = new ThreadSolver(variableConfig);
+        if(debugMode || solver.shouldRenew(variableConfig)) {
+            if(debugMode)
+                solver = new ThreadSolverDebugger(variableConfig);
+            else
+                solver = new ThreadSolver(variableConfig);
         
-        if(timeIt)
-            solver.enableTimer();
+            solver.addListener(this);
+            
+        }
         
-        solver.addListener(this);
+        solver.setTimerEnabled(timeIt);
         solver.solve();
     }
     
@@ -70,9 +72,9 @@ public class DesignController
     
     public void resumeSolver()
     {
-        solver.continueSolving();
+        solver.resumeSolving();
     }
-    
+
     public void stopSolver()
     {
         solver.stopSolving();

@@ -66,17 +66,17 @@ public class BinaryConstraintController
         notify(new BinaryConstraintAddedEvent());
     }
     
-    public void removeConstraint(String furnitureId, String constraintAlias)
+    public void removeConstraint(String furnitureId, String elementId, String constraintAlias)
     {
         Class binaryConstraintClass = BinaryConstraintEnd.getConstraintClass(constraintAlias);
         
-        removeConstraint(furnitureId, binaryConstraintClass);
+        removeConstraint(furnitureId, elementId, binaryConstraintClass);
     }
     
-    public void removeConstraint(String furnitureId,
+    public void removeConstraint(String furnitureId, String elementId,
             Class<? extends BinaryConstraintEnd> binaryConstraintClass)
     {
-        getWishList().removeBinaryConstraint(binaryConstraintClass, furnitureId);
+        getWishList().removeBinaryConstraint(binaryConstraintClass, furnitureId, elementId);
         notify(new BinaryConstraintRemovedEvent());
     }
 

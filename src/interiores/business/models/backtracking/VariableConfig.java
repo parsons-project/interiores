@@ -137,15 +137,20 @@ public class VariableConfig
         }
         
     }
-    
-    
 
     private FurnitureVariable getPossibleEnd(String otype) {
+        int nb_assignations = -1;
+        FurnitureVariable end = null;
         
+        // From all the suitable ends (if there's any), we select the one with less
+        // binary constraints defined over it, so as to balance constraint load
         for (FurnitureVariable fv : unassignedVariables) {
-            if (fv.getName().contains(otype)) return fv;
+            if (fv.getName().contains(otype) && nb_assignations < ((WantedFurniture) fv).getBinaryConstraints().size()) {
+                nb_assignations = fv.getConstraints().size();
+                end = fv;
+            }
         }
-        return null;
+        return end;
     }
 
     private BinaryConstraintEnd translateIntoBinaryConstraint(String placement) {

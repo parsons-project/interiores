@@ -91,4 +91,9 @@ public class StraightFacingConstraint
         validOrientations.add(validRectangle.getOrientation().complementary());
         variable.trimExceptO(validOrientations);
     }
+    
+    @Override
+    public String toString() {
+        return "Straight facing with " + otherVariable.getName();
+    }
 }  

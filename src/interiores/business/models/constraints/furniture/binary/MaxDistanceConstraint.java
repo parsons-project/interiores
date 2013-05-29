@@ -29,7 +29,7 @@ public class MaxDistanceConstraint
     
     @Override
     public String toString() {
-        return "Maximum distance = " + distance + "cm constraint";
+        return "Maximum distance (" + distance + " cm) with " + otherVariable.getName();
     }
 
     /**

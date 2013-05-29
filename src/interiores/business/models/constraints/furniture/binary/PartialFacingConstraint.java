@@ -62,5 +62,10 @@ public class PartialFacingConstraint
         validOrientations.add(validRectangle.getOrientation().complementary());
         variable.trimExceptO(validOrientations);
     }
+    
+    @Override
+    public String toString() {
+        return "Partial facing with " + otherVariable.getName();
+    }
 
 }

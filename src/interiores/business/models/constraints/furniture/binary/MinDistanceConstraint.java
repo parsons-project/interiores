@@ -28,7 +28,7 @@ public class MinDistanceConstraint
     
     @Override
     public String toString() {
-        return "Minimum distance = " + distance + "cm constraint";
+        return "Minimum distance (" + distance + " cm) with " + otherVariable.getName();
     }
 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::   

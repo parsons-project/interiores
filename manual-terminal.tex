@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 
 \newcommand{\comando}[3]{%
-\subsection{ {#1} }
+\subsubsection{ {#1} }
   \begin{description}
     \item[Sintaxis] \texttt{\textbf{#1} {#2} }
     \item[Descripci\'{o}n] {#3}
@@ -17,10 +17,12 @@
 %%     urlcolor=blue          % color dels links a urls
 %% }
 
-\title{\textsc{Comandos de la Terminal}}
+\title{Comandos de la Terminal}
 \date{}
 
 \begin{document}
+
+\section{Comandos interiores}
 A parte de la interf\'{i}cie gr\'{a}fica, el programa tiene definido un
 conjunto de comandos que pueden ser ejecutados desde la terminal del
 sistema directamente o bien mediante la consola virtual que puede
@@ -34,14 +36,14 @@ ignoradas.
 En este documento se describen todos y cada uno de los comandos
 existentes.
 
-\section{Comandos de ayuda}
+\subsection{Comandos de ayuda}
 El programa intenta ser autodocumentado y ofrece un m\'{e}todo para
 obtener ayuda sobre los comandos de los que dispone. La mayoria de los
 comandos cuando no reciben todos los parametros necesarios piden con
 un mensaje por pantalla qu\'{e} necesitan.
 
 \comando{help}{[<sujeto>]}{Muestra ayuda sobre el sujeto. Si no se proporciona un sujeto, muestra una ayuda general}
-\section{Comandos sobre el conjunto de cat\'{a}logos}
+\subsection{Comandos sobre el conjunto de cat\'{a}logos}
 Los cat\'{a}logos contienen elementos de un tipo determinado. Los tipos
 soportados son tipo de habitaci\'{o}n (RoomTypeCatalog o {\tt rtc}) y tipo
 de mueble (FurnitureTypeCatalog o {\tt ftc}). De todos los cat\'{a}logos
@@ -59,14 +61,14 @@ modificaciones que pueden ser luego guardadas.
 \comando{load}{<tipo> <ruta>}{Carga el cat\'{a}logo guardado en la ruta {\tt tipo}. La ruta debe ser absoluta o relativa al directorio actual.}
 \comando{save}{<tipo> <ruta>}{Guarda el cat\'{a}logo del tipo {\tt tipo} actual en la ruta {\tt ruta}. La ruta debe ser absoluta o relativa al directorio actual.}
 
-\section{Comandos sobre los cat\'{a}logos}
+\subsection{Comandos sobre los cat\'{a}logos}
 Los cat\'{a}logos pueden contener elementos. Los elementos pueden ser habitaciones (Room) en el caso del cat\'{a}logo de tipos de habitaciones y modelos de muebles (FurnitureModel) en el de tipos de muebles. Aqu\'{i} los {\tt tipos} son o bien {\tt ft} (FurnitureType) o bien {\tt rt} (RoomType). Estos comandos son gen\'{e}ricos para ambos  conjuntos.
 
 
 \comando{list}{<tipo>}{Lista los elementos del cat\'{a}logo actual de tipo {\tt tipo}.}
 \comando{rm}{<tipo> <nombre> [<nombre2> ...]}{Elimina del cat\'{a}logo de tipo {\tt tipo} los elementos con los nombres dados.}
 
-\section{Comandos sobre tipos de mueble}
+\subsection{Comandos sobre tipos de mueble}
 Los tipos de mueble aparte de tener comandos que se ejecutan sobre los
 cat\'{a}logos que los contienen, tiene otros comandos m\'{a}s espec\'{i}ficos.
 
@@ -76,7 +78,7 @@ cat\'{a}logos que los contienen, tiene otros comandos m\'{a}s espec\'{i}ficos.
 \comando{selected}{ft}{Lista los tipos actualmente seleccionados que se tendr\'{a}n en cuenta para la generaci\'{o}n del dise\~{n}o.}
 \comando{place}{ft <tipo1> <restricci\'{o}n> <tipo2>}{Indica que un mueble de tipo {\tt tipo1} debe cumplir la restricci\'{o}n simple {\tt restricci\'{o}n} respecto un mueble de {\tt tipo2}. {\tt restricci\'{o}n} puede ser: {\tt next-to} (\emph{al lado de}, \emph{cerca}), {\tt away-from} (\emph{lejos de}), {\tt in-front-of} (\emph{en frente de}).
 
-\section{Comandos sobre modelos de muebles}
+\subsection{Comandos sobre modelos de muebles}
 
 Un mismo tipo de mueble puede tener varios modelos. Este conjunto de operaciones trabaja sobre los modelos dado un tipo de mueble.
 
@@ -84,7 +86,7 @@ Un mismo tipo de mueble puede tener varios modelos. Este conjunto de operaciones
 \comando{rm}{fm <tipo> <nombre>}{Elimina un modelo de mueble con tipo con nombre {\tt nombre}.}
 \comando{list}{fm <tipo>}{Lista los modelos de mueble del tipo dado.}
 
-\section{Comandos sobre los tipos de habitaci\'{o}n}
+\subsection{Comandos sobre los tipos de habitaci\'{o}n}
 
 Las habitaciones pueden categorizarse por tipos. Cada tipo tiene unos
 muebles obligatorios y/o prohibidos, unas dimensiones m\'{i}nimas y
@@ -96,7 +98,21 @@ cualidades de una habitaci\'{o}n.
 \comando{release}{rt <tipo> mandatory|forbidden <tipos>}{Quita al tipo de habitaci\'{o}n {\tt tipo} los tipos de mueble {\tt tipos} que debe tener (\emph{mandatory}) o no puede tener (\emph{forbidden}).}
 \comando{types}{rt <tipo>}{Lista los tipos de muebles obligatorios y prohibidos para el tipo de habitaci\'{o}n dado.}
 
-\section{Comandos sobre las habitaciones}
+\subsection{Comandos sobre los elementos fijos}
+
+Los elementos fijos definen la topolog\'{i}a de la habitaci\'{o}n y son
+colocados por el usuario. El programa soporta ventanas ({\tt Window}),
+puertas ({\tt Door}) y pilares ({\tt Pilar}). El algoritmo los
+contempla en cuanto a espacio y restricciones binarias.
+Aqui tipo se refiere a  {\tt door}, {\tt window} o {\tt pillar}.
+
+\comando{add}{fe <tipo> <params>}{A\~{n}ade un elemento fijo a la habitaci\'{o}n de tipo {\tt tipo} con las caracter\'{i}sticas determinadas por {\tt params}. Si no se proporcionan par\'{a}metros el programa los pedir\'{a} uno a uno.}
+
+\comando{remove}{fe <nombre>}{Elimina de la habitaci\'{o}n el elemento fijo con nombre {\tt nombre}.}
+
+\comando{selected}{fe}{Lista los elementos fijos actualmente contenidos en la habitaci\'{o}n.}
+
+\subsection{Comandos sobre las habitaciones}
 
 La habitaci\'{o}n es el elemento principal de un dise\~{n}o. Estos comandos
 gestionan el guardado y cargado de las habitaciones como dise\~{n}o.
@@ -105,7 +121,7 @@ gestionan el guardado y cargado de las habitaciones como dise\~{n}o.
 \comando{save}{room <ruta>}{Guarda el dise\~{n}o actual en la ruta especificada.}
 \comando{load}{room <ruta>}{Carga el dise\~{n}o almacenado en la ruta especificada.}
 
-\section{Comandos para gestionar restricciones}
+\subsection{Comandos para gestionar restricciones}
 
 Estos comandos sirven para a\~{n}adir y quitar restricciones al
 dise\~{n}o. Tienen efectos sobre elementos seleccionados para el dise\~{n}o.
@@ -120,7 +136,7 @@ los elementos de la habitaci\'{o}n.
 
 \comando{list}{constraint}{Lista las restricciones a\~{n}adidas hasta el momento a los elementos de la habitaci\'{o}n.}
 
-\section{Comando para generar el dise\~{n}o}
+\subsection{Comando para generar el dise\~{n}o}
 
 Una vez creada la habitaci\'{o}n, a\~{n}adidos los muebles y definidas
 restricciones entre ellos, ya estamos dispuestos a solucionar el

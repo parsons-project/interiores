@@ -270,7 +270,7 @@ private void generalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//G
 
 private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalHelpMenuActionPerformed
     HelpView helpFrame = presentation.getNew(HelpView.class);
-    helpFrame.load("terminal/manual.html", "Terminal Manual");
+    helpFrame.load("terminal/node1.html", "Terminal Manual");
 }//GEN-LAST:event_terminalHelpMenuActionPerformed
 
 

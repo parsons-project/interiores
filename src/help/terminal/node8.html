@@ -7,9 +7,9 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
   Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
 <HTML>
 <HEAD>
-<TITLE>load </TITLE>
-<META NAME="description" CONTENT="load ">
-<META NAME="keywords" CONTENT="manual">
+<TITLE>merge </TITLE>
+<META NAME="description" CONTENT="merge ">
+<META NAME="keywords" CONTENT="manual-terminal">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
 
@@ -17,49 +17,38 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <META NAME="Generator" CONTENT="LaTeX2HTML v2008">
 <META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
 
-<LINK REL="STYLESHEET" HREF="manual.css">
+<LINK REL="STYLESHEET" HREF="manual-terminal.css">
 
 <LINK REL="next" HREF="node9.html">
 <LINK REL="previous" HREF="node7.html">
-<LINK REL="up" HREF="node3.html">
+<LINK REL="up" HREF="node4.html">
 <LINK REL="next" HREF="node9.html">
 </HEAD>
 
 <BODY >
+<DIV CLASS="navigation">
 
-<DIV CLASS="navigation"><!--Navigation Panel-->
-<A NAME="tex2html122"
-  HREF="node9.html">
-<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next"
- SRC="/usr/share/latex2html/icons/next.png"></A> 
-<A NAME="tex2html120"
-  HREF="node3.html">
-<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up"
- SRC="/usr/share/latex2html/icons/up.png"></A> 
-<A NAME="tex2html114"
-  HREF="node7.html">
-<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous"
- SRC="/usr/share/latex2html/icons/prev.png"></A>   
-<BR>
-<B> Next:</B> <A NAME="tex2html123"
-  HREF="node9.html">save</A>
-<B> Up:</B> <A NAME="tex2html121"
-  HREF="node3.html">Comandos sobre el conjunto</A>
-<B> Previous:</B> <A NAME="tex2html115"
-  HREF="node7.html">merge</A>
+
+<B> Next:</B> <A NAME="tex2html174"
+  HREF="node9.html">load</A>
+<B> Up:</B> <A NAME="tex2html172"
+  HREF="node4.html">Comandos sobre el conjunto</A>
+<B> Previous:</B> <A NAME="tex2html166"
+  HREF="node7.html">checkout</A>
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A NAME="SECTION00002500000000000000">
- load </A>
-</H3><DL>
+<H3><A NAME="SECTION00012400000000000000">
+ merge </A>
+</H3>
+  <DL>
 <DT><STRONG>Sintaxis</STRONG></DT>
-<DD><TT><SPAN  CLASS="textbf">load</SPAN> &lt;tipo&gt; &lt;ruta&gt; </TT>
+<DD><TT><SPAN  CLASS="textbf">merge</SPAN> &lt;tipo&gt; &lt;nombre&gt; [&lt;nombre2&gt; ...] </TT>
     
 </DD>
 <DT><STRONG>Descripci&#243;n</STRONG></DT>
-<DD>Carga el cat&#225;logo guardado en la ruta <SPAN  CLASS="textit">tipo</SPAN>. La ruta debe ser absoluta o relativa al directorio actual.
+<DD>Fusiona tantos cat&#225;logos como nombres se especifiquen con el cat&#225;logo actual. Si un elemento del tipo <TT>tipo</TT> ya estaba dentro del cat&#225;logo actual, se mantiene la versi&#243;n de &#233;ste; si no, se a&#241;ade.
   
 </DD>
 </DL>

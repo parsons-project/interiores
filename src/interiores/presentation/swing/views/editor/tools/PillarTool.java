@@ -1,6 +1,7 @@
 package interiores.presentation.swing.views.editor.tools;
 
 import interiores.business.controllers.FixedElementController;
+import interiores.core.business.BusinessException;
 import interiores.core.presentation.SwingController;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
 import interiores.utils.Dimension;
@@ -29,9 +30,13 @@ public class PillarTool
     public boolean mouseReleased(MouseEvent evt, InteractiveRoomMap map) {
 
         updatePositions(map.unpad(map.normDiscretize(evt.getPoint())));
+        Dimension pillarArea =  new Dimension(0,0);
         if (minPosition != null && maxPosition != null) {
-            fixedController.addPillar(minPosition, new Dimension((maxPosition.x - minPosition.x),
-                                                                 (maxPosition.y - minPosition.y)));
+            pillarArea = new Dimension((maxPosition.x - minPosition.x),
+                                       (maxPosition.y - minPosition.y));
+        }
+        if (pillarArea.depth != 0 && pillarArea.width != 0) {
+            fixedController.addPillar(minPosition, pillarArea);
             return true;
         }
         return false;

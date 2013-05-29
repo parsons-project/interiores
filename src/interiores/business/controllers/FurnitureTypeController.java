@@ -8,15 +8,12 @@ import interiores.business.models.room.RoomType;
 import interiores.business.models.SpaceAround;
 import interiores.business.events.furniture.ElementSelectedEvent;
 import interiores.business.events.furniture.ElementUnselectedEvent;
-import interiores.business.models.Orientation;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.PartialFacingConstraint;
-import interiores.business.models.constraints.furniture.binary.StraightFacingConstraint;
-import interiores.business.models.constraints.furniture.unary.WallConstraint;
 import interiores.business.models.room.FurnitureType;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
@@ -198,5 +195,6 @@ public class FurnitureTypeController
     
     public void setWallClinging(String name, boolean clinging) {
         get(name).setToWalls(clinging);
+        notify(new FTModifiedEvent(get(name).getFullName(),name));
     }
 }

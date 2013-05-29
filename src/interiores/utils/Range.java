@@ -21,8 +21,7 @@ public class Range {
     }
     
     public Range(int min, int max) throws InvalidValueException {
-        if (min > max)
-            throw new InvalidValueException("Max should be greater or equal than min");
+        if (min > max) throw new InvalidValueException("Max should be greater or equal than min");
         
         this.min = min;
         this.max = max;

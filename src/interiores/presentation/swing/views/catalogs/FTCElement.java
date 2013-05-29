@@ -33,15 +33,15 @@ public final class FTCElement extends javax.swing.JPanel {
      * Creates new form FTCElement
      */
     public FTCElement(SwingController sw, String shortName, String fullName, FurnitureTypeCatalogFrame frame) {
-        initComponents();
-        
         this.shortName = shortName;
         this.fullName = fullName;
         
         catFrame = frame;
         ftController = sw.getBusinessController(FurnitureTypeController.class);
         
-        initValues();
+        initComponents();
+        initDocumentListeners();
+        refreshFields();
     }
 
     /**
@@ -80,38 +80,84 @@ public final class FTCElement extends javax.swing.JPanel {
         removeButton.setIcon(im);
         removeButton.setBorder(BorderFactory.createEmptyBorder());
         removeButton.setContentAreaFilled(false);
+        removeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeButtonActionPerformed(evt);
+            }
+        });
 
         innerPanel.setBackground(new java.awt.Color(255, 255, 255));
         innerPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
 
         ftname.setFont(new java.awt.Font("Lucida Grande", 0, 16)); // NOI18N
-        ftname.setText("Name:");
+        ftname.setText(fullName + ":");
 
         widthLabel.setText("This furniture should have a width between");
 
+        minWidthField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                minWidthFieldFocusLost(evt);
+            }
+        });
+
         widthLabel2.setText("and");
+
+        maxWidthField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                maxWidthFieldFocusLost(evt);
+            }
+        });
 
         depthLabel3.setText("cm");
 
         depthLabel.setText("And a depth between");
 
+        minDepthField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                minDepthFieldFocusLost(evt);
+            }
+        });
+
         depthLabel2.setText("and");
+
+        maxDepthField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                maxDepthFieldFocusLost(evt);
+            }
+        });
 
         widthLabel3.setText("cm");
 
         passiveSpaceLabel.setText("It should always have the following free space to its sides:");
+
+        passiveSpaceField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                passiveSpaceFieldFocusLost(evt);
+            }
+        });
 
         passiveSpaceHint.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
         passiveSpaceHint.setForeground(new java.awt.Color(153, 153, 153));
         passiveSpaceHint.setText("Format: N,E,S,W. e.g. 10,0,0,20");
 
         wallCheckbox.setText("Cling to a wall");
+        wallCheckbox.setSelected(ftController.getWallClinging(shortName));
+        wallCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                wallCheckboxActionPerformed(evt);
+            }
+        });
 
         im = new javax.swing.ImageIcon("src/resources/place.png");
         im.setImage( im.getImage().getScaledInstance(50,40,java.awt.Image.SCALE_SMOOTH) );
         placeButton.setIcon(im);
         placeButton.setBorder(BorderFactory.createEmptyBorder());
         placeButton.setContentAreaFilled(false);
+        placeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                placeButtonActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Modify position with");
 
@@ -121,51 +167,50 @@ public final class FTCElement extends javax.swing.JPanel {
         innerPanel.setLayout(innerPanelLayout);
         innerPanelLayout.setHorizontalGroup(
             innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(innerPanelLayout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, innerPanelLayout.createSequentialGroup()
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(passiveSpaceLabel)
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, innerPanelLayout.createSequentialGroup()
-                        .add(199, 199, 199)
-                        .add(passiveSpaceHint, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 207, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(18, 18, 18)
-                        .add(passiveSpaceField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 128, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, innerPanelLayout.createSequentialGroup()
-                        .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, depthLabel)
+                    .add(innerPanelLayout.createSequentialGroup()
+                        .add(ftname)
+                        .add(64, 64, 64)
+                        .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                             .add(innerPanelLayout.createSequentialGroup()
-                                .add(ftname)
-                                .add(64, 64, 64)
-                                .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(widthLabel)
-                                    .add(innerPanelLayout.createSequentialGroup()
-                                        .add(placeButton)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                            .add(jLabel2)
-                                            .add(jLabel3))))))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(innerPanelLayout.createSequentialGroup()
-                                .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(minWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                    .add(minDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                                    .add(depthLabel)
+                                    .add(widthLabel))
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                                     .add(innerPanelLayout.createSequentialGroup()
+                                        .add(minWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                         .add(widthLabel2)
                                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(maxWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(widthLabel3))
+                                        .add(maxWidthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                                     .add(innerPanelLayout.createSequentialGroup()
+                                        .add(minDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                         .add(depthLabel2)
                                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(depthLabel3))))
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, wallCheckbox))))
-                .add(15, 15, 15))
+                                        .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 50, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(widthLabel3)
+                                    .add(depthLabel3)))
+                            .add(innerPanelLayout.createSequentialGroup()
+                                .add(placeButton)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jLabel2)
+                                    .add(jLabel3))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(wallCheckbox))
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, innerPanelLayout.createSequentialGroup()
+                                .add(6, 6, 6)
+                                .add(passiveSpaceField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 128, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                    .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(passiveSpaceHint, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 207, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(passiveSpaceLabel)))
+                .add(26, 26, 26))
         );
         innerPanelLayout.setVerticalGroup(
             innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -185,7 +230,7 @@ public final class FTCElement extends javax.swing.JPanel {
                     .add(depthLabel2)
                     .add(maxDepthField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(depthLabel3))
-                .add(18, 18, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 18, Short.MAX_VALUE)
                 .add(passiveSpaceLabel)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(innerPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
@@ -213,7 +258,7 @@ public final class FTCElement extends javax.swing.JPanel {
                 .add(removeButton)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(innerPanel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -225,6 +270,40 @@ public final class FTCElement extends javax.swing.JPanel {
                 .addContainerGap(21, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
+        catFrame.performModification();
+        ftController.rm(shortName);
+    }//GEN-LAST:event_removeButtonActionPerformed
+
+    private void placeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_placeButtonActionPerformed
+        JOptionPane.showMessageDialog(FTCElement.this, "Dialog still unimplemented");
+    }//GEN-LAST:event_placeButtonActionPerformed
+
+    private void minWidthFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_minWidthFieldFocusLost
+        if (hasWidthChanged) widthRangeUpdate();
+    }//GEN-LAST:event_minWidthFieldFocusLost
+
+    private void maxWidthFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_maxWidthFieldFocusLost
+        if (hasWidthChanged) widthRangeUpdate();
+    }//GEN-LAST:event_maxWidthFieldFocusLost
+
+    private void minDepthFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_minDepthFieldFocusLost
+        if (hasDepthChanged) depthRangeUpdate();
+    }//GEN-LAST:event_minDepthFieldFocusLost
+
+    private void maxDepthFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_maxDepthFieldFocusLost
+        if (hasDepthChanged) depthRangeUpdate();
+    }//GEN-LAST:event_maxDepthFieldFocusLost
+
+    private void passiveSpaceFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passiveSpaceFieldFocusLost
+        if (hasPassiveSpaceChanged) passiveSpaceUpdate();
+    }//GEN-LAST:event_passiveSpaceFieldFocusLost
+
+    private void wallCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wallCheckboxActionPerformed
+        catFrame.performModification();
+        ftController.setWallClinging(shortName, wallCheckbox.isEnabled());
+    }//GEN-LAST:event_wallCheckboxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel depthLabel;
@@ -253,31 +332,9 @@ public final class FTCElement extends javax.swing.JPanel {
     * Builds a visual representation of the item in the currently active catalog
     * whose name is 'actname'
     */
-    public void initValues() {
-        // These lines substitute the default aspect of a button with a custom icon
+    public void initDocumentListeners() {
         
-        removeButton.addActionListener(new java.awt.event.ActionListener() {
-        @Override
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                catFrame.performModification();
-                ftController.rm(shortName);
-            }
-        });
-        
-        
-        placeButton.addActionListener(new java.awt.event.ActionListener() {
-        @Override
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JOptionPane.showMessageDialog(FTCElement.this, "Dialog still unimplemented");
-            }
-        });
-
-        // Name of the element
-        ftname.setText(fullName + ":");
-
         // Width setup and events
-        minWidthField.setText(Integer.toString(ftController.getWidthRange(shortName).min));
-        maxWidthField.setText(Integer.toString(ftController.getWidthRange(shortName).max));
         minWidthField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) { hasWidthChanged = true; }
@@ -294,18 +351,8 @@ public final class FTCElement extends javax.swing.JPanel {
             @Override
             public void removeUpdate(DocumentEvent e) {  hasWidthChanged = true;  }
          });
-        minWidthField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) { if (hasWidthChanged) widthRangeUpdate(); }
-        });
-        maxWidthField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) { if (hasWidthChanged) widthRangeUpdate(); }
-        });
-
+        
         // Depth setup and events
-        minDepthField.setText(Integer.toString(ftController.getDepthRange(shortName).min));
-        maxDepthField.setText(Integer.toString(ftController.getDepthRange(shortName).max));
         minDepthField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) { hasDepthChanged = true; }
@@ -322,17 +369,8 @@ public final class FTCElement extends javax.swing.JPanel {
             @Override
             public void removeUpdate(DocumentEvent e) { hasDepthChanged = true; }
          });
-        minDepthField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) { if (hasDepthChanged) depthRangeUpdate(); }
-        });
-        maxDepthField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) { if (hasDepthChanged) depthRangeUpdate(); }
-        });
 
         // Passive space fields
-        passiveSpaceField.setText(getFormattedPassiveSpace());
         passiveSpaceField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) { hasPassiveSpaceChanged = true; }
@@ -341,15 +379,9 @@ public final class FTCElement extends javax.swing.JPanel {
             @Override
             public void removeUpdate(DocumentEvent e) { hasPassiveSpaceChanged = true; }
          });
-        passiveSpaceField.addFocusListener(new java.awt.event.FocusAdapter() {
-            @Override
-            public void focusLost(java.awt.event.FocusEvent evt) { if (hasPassiveSpaceChanged) passiveSpaceUpdate(); }
-        });
-        
-        wallCheckbox.setSelected(ftController.getWallClinging(shortName));
     }
 
-    public void updateChanges() {
+    public void refreshFields() {
         minWidthField.setText(Integer.toString(ftController.getWidthRange(shortName).min));
         maxWidthField.setText(Integer.toString(ftController.getWidthRange(shortName).max));
         minDepthField.setText(Integer.toString(ftController.getDepthRange(shortName).min));
@@ -366,7 +398,7 @@ public final class FTCElement extends javax.swing.JPanel {
             ftController.setWidthRange(shortName, Integer.parseInt(min), Integer.parseInt(max));
         }
         else {
-            String msg = "Width should be a positive number";
+            String msg = "Width should be a range of positive numbers";
             JOptionPane.showMessageDialog(this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
             minWidthField.setText(Integer.toString(ftController.getWidthRange(shortName).min));
             maxWidthField.setText(Integer.toString(ftController.getWidthRange(shortName).max));
@@ -382,7 +414,7 @@ public final class FTCElement extends javax.swing.JPanel {
             ftController.setDepthRange(shortName, Integer.parseInt(min), Integer.parseInt(max));
         }
         else {
-            String msg = "Depth should be a positive number";
+            String msg = "Depth should be a range of positive numbers";
             JOptionPane.showMessageDialog(this,msg,"Invalid value",JOptionPane.ERROR_MESSAGE);
             minDepthField.setText(Integer.toString(ftController.getDepthRange(shortName).min));
             maxDepthField.setText(Integer.toString(ftController.getDepthRange(shortName).max));

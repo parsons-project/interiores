@@ -101,6 +101,11 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(900, 600));
         setResizable(false);
         setSize(new java.awt.Dimension(900, 700));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         title1.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
         title1.setText("Furniture types catalog editor");
@@ -326,6 +331,11 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_saveChangesButtonActionPerformed
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if (!hasBeenModified) dispose();
+        else showModificationWarning();
+    }//GEN-LAST:event_formWindowClosing
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentCatalogLabel;
     private javax.swing.JComboBox currentCatalogSelect;
@@ -401,7 +411,7 @@ public class FurnitureTypeCatalogFrame extends javax.swing.JFrame {
      */
     @Listen({FTModifiedEvent.class})
     public void updateCatalogElement(FTModifiedEvent evt) {
-        catElements.get(evt.getFullName()).updateChanges();
+        catElements.get(evt.getFullName()).refreshFields();
     }
 
     /**

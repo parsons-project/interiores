@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 abstract public class FurnitureVariable
 	extends InterioresVariable
+        implements Comparable<FurnitureVariable>
 {
     @XmlTransient
     private Collection<Constraint> backtrackingConstraints;
@@ -279,4 +280,8 @@ abstract public class FurnitureVariable
         domain.trimExceptO(validOrientations, iteration);
     }
     
+    @Override
+    public int compareTo(FurnitureVariable variable) {
+        return this.iteration - variable.iteration;
+    }
 }

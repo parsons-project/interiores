@@ -60,6 +60,7 @@ public class Solver
      * Indicates whether all variables have an assigned value.
      */
     protected boolean allAssigned;
+    private boolean stepReset;
 
     /**
      * Indicates restrictions amongst all variables.
@@ -120,29 +121,34 @@ public class Solver
         this.variableConfig = variableConfig;
 
         allAssigned = false;
+        stepReset = false;
         actual = null;
         
         globalConstraints = new ArrayList<GlobalConstraint>();
         addGlobalConstraints();
-        
-        
     }
     
     @Override
     public void solve() throws NoSolutionException {
         initVariables();
-        
-        super.solve();
+        preliminarTrimDomains();
+        backtracking();
     }
     
     protected void initVariables() {
-        if(! variableConfig.isConsistent())
+        if(variableConfig.isConsistent()) {
+            variableConfig.sort();
+            variableConfig.unassignLast();
+            stepReset = true;
+        }
+        else
             variableConfig.resetDomains();
         
         assignedVariables = variableConfig.getAssignedVariables();
         unassignedVariables = variableConfig.getUnassignedVariables();
         constants = variableConfig.getConstants();
         variableCount = assignedVariables.size() + unassignedVariables.size();
+        depth = assignedVariables.size();
         
         buildMatrixOfDependence();
     }
@@ -268,7 +274,10 @@ public class Solver
             unassignedVariables.remove(minimumWeightVariableIndex);
             
             //reset iterators
-            actual.resetIterators(depth);
+            if(stepReset)
+                stepReset = false;
+            else
+                actual.resetIterators(depth);
         }
     }
  

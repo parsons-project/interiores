@@ -31,7 +31,7 @@ public class ThreadSolverDebugger
     
     @Override
     protected void initVariables() {
-        variableConfig.resetDomains();
+        //variableConfig.resetDomains();
         
         super.initVariables();
     }

@@ -6,6 +6,7 @@ import interiores.business.models.room.FurnitureType;
 import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,10 @@ public class VariableConfig
         return unassignedVariables.isEmpty();
     }
     
+    public void sort() {
+        Collections.sort(assignedVariables);
+    }
+    
     public void resetDomains() {
         unassignedVariables.addAll(assignedVariables);
         assignedVariables.clear();
@@ -63,6 +68,19 @@ public class VariableConfig
             FurnitureType ftype = furnitureTypes.get(unassignedVariable);
             unassignedVariable.createDomain(ftype.getFurnitureModels(), areaSize, unassignedVariables.size());
         }
+    }
+    
+    public void unassignLast() {
+        int lastIndex = assignedVariables.size() - 1;
+        
+        if(lastIndex < 0)
+            return;
+        
+        FurnitureVariable variable = assignedVariables.get(lastIndex);
+        variable.undoAssignValue();
+        
+        unassignedVariables.add(variable);
+        assignedVariables.remove(lastIndex);
     }
     
     public List<FurnitureVariable> getAssignedVariables() {

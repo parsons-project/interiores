@@ -228,6 +228,10 @@ public class FurnitureType
         return functionalities;
     }
     
+    public void setFunctionalities(HashSet<Functionality> funct) {
+        functionalities = funct;
+    }
+    
     @Override
     public String toString() {
         return Utils.padRight(getName(), 20) + "Width[" + widthRange.toString() + "], Depth["

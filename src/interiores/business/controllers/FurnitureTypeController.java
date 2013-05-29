@@ -13,10 +13,12 @@ import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.room.FurnitureType;
 import interiores.core.business.BusinessException;
 import interiores.core.data.JAXBDataController;
+import interiores.utils.Functionality;
 import interiores.utils.Range;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -200,5 +202,20 @@ public class FurnitureTypeController
             description.add(type + " with " + map.get(type));
         }
         return description;
+    }
+    
+    public Collection<String> getFunctionalities(String name) {
+        Collection<String> functs = new ArrayList();
+        for (Functionality f : get(name).getFunctionalities() ) functs.add(f.toString());
+        return functs;
+    }
+    
+    public void setFunctionalities(String name, String[] functs) {
+
+        HashSet<Functionality> hs = new HashSet();
+        for (String f : functs) {
+            hs.add(Functionality.valueOf(name.toUpperCase()));
+        }
+        get(name).setFunctionalities(hs);
     }
 }

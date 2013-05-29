@@ -134,7 +134,10 @@ los elementos de la habitaci\'{o}n.
 
 \comando{add}{bc <tipo> <params> <selected1> <selected2>}{A\~{n}ade una restricci\'{o}n binaria de tipo {\tt tipo} con los par\'{a}metros {\tt params}. En el caso en que {\tt params} sea vac\'{i}o el programa pedir\'{a} los necesarios uno a uno. {\tt tipo} incluye: {\tt distance-max}, {\tt distance-min}, {\tt partial-facing} y {\tt straight-facing}. Las restricciones se aplican sobre elementos seleccionados (tienen la forma \emph{tiposNUMERO}.}
 
-\comando{list}{constraint}{Lista las restricciones a\~{n}adidas hasta el momento a los elementos de la habitaci\'{o}n.}
+\comando{add}{gc <tipo> <params>}{A\~{n}ade una restricci\'{o}n global (para toda la habitaci\'{o}n). Esta restricci\'{o}n puede ser o bien de presupuesto m\'{a}ximo ({\tt budget}), que todos tengan el mismo color o el mismo material ({\tt same-color}, {\tt same-material}) o bien que todos tengan un color o un material especificados ({\tt specific-color}, {\tt specific-material}).}
+
+\comando{remove}{constraint <params>}{Elimina un restricci\'{o}n del tipo {\tt constraint}. Puede ser tanto unaria, como binaria, como global.}
+\comando{list}{constraint [<params>]}{Lista las restricciones a\~{n}adidas hasta el momento a los elementos de la habitaci\'{o}n.}
 
 \subsection{Comando para generar el dise\~{n}o}
 

@@ -101,7 +101,7 @@ public class WishListPanel extends JPanel {
                 @Override
                 public void run() {
                     String title = "Solving is taking too long";
-                    String msg = "It seems it is taking too long to find out if there is a solution."
+                    String msg = "It seems it is taking too long to find out if there is a solution.\n"
                                + "Maybe you should try with a different design";
                     int choice = JOptionPane.showConfirmDialog(WishListPanel.this, msg, title,
                                  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);

@@ -19,6 +19,7 @@ import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.VariableSet;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -119,7 +120,7 @@ public class Solver
      * 
      * The matrix of dependence is built
      */
-    public Solver(VariableConfig variableConfig)
+    public Solver(VariableConfig variableConfig, Collection<GlobalConstraint> gconst)
             throws BusinessException
     {
         this.variableConfig = variableConfig;
@@ -129,7 +130,7 @@ public class Solver
         shouldStop = false;
         actual = null;
         
-        globalConstraints = new ArrayList<GlobalConstraint>();
+        globalConstraints = new ArrayList<GlobalConstraint>(gconst);
         addGlobalConstraints();
     }
     

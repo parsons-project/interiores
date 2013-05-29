@@ -3,6 +3,8 @@ package interiores.presentation.swing.views.editor;
 import interiores.business.controllers.DesignController;
 import interiores.business.controllers.FixedElementController;
 import interiores.business.controllers.FurnitureTypeController;
+import interiores.business.events.backtracking.SolveDesignFinishedEvent;
+import interiores.business.events.backtracking.SolveDesignStartedEvent;
 import interiores.business.events.furniture.ElementSelectedEvent;
 import interiores.business.events.furniture.ElementUnselectedEvent;
 import interiores.business.exceptions.ElementNotFoundBusinessException;
@@ -14,7 +16,9 @@ import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.views.ConstraintEditorFrame;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
+import java.util.TimerTask;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -30,6 +34,8 @@ public class WishListPanel extends JPanel {
     private FixedElementController fixedElementController;
     private DefaultListModel listModel;
     private SwingController swing;
+    
+    java.util.Timer timeout;
     
     /** Creates new form WishListPanel */
     public WishListPanel(SwingController presentation) {
@@ -85,6 +91,31 @@ public class WishListPanel extends JPanel {
         cef.setSelectedId(selectedId);
         cef.setVisible(true);
     }
+    
+    @Listen(SolveDesignStartedEvent.class)
+    public void setTimeoutTimer(SolveDesignStartedEvent evt) {
+        timeout = new java.util.Timer();
+        if( ! debugCheckBox.isSelected() ) {
+            timeout.schedule(new TimerTask() {
+
+                @Override
+                public void run() {
+                    String title = "Solving is taking too long";
+                    String msg = "It seems it is taking too long to find out if there is a solution."
+                               + "Maybe you should try with a different design";
+                    int choice = JOptionPane.showConfirmDialog(WishListPanel.this, msg, title,
+                                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (choice == JOptionPane.YES_OPTION) designController.stopSolver();
+                }
+            }, 30000);
+        }
+    }
+    
+    @Listen(SolveDesignFinishedEvent.class)
+    public void setTimeoutTimer(SolveDesignFinishedEvent evt) {
+        timeout.cancel();
+    }
+    
     
     /** This method is called from within the constructor to
      * initialize the form.

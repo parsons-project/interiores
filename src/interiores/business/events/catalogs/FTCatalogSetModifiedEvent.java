@@ -5,7 +5,7 @@
 package interiores.business.events.catalogs;
 
 /**
- *
+ * Represents the event of the set of furniture type catalogs being modified
  * @author larribas
  */
 public class FTCatalogSetModifiedEvent extends ElementSetModifiedEvent {

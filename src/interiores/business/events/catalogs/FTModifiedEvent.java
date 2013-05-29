@@ -5,7 +5,7 @@
 package interiores.business.events.catalogs;
 
 /**
- *
+ * Represents the event of a furniture type being modified
  * @author larribas
  */
 public class FTModifiedEvent extends ElementModifiedEvent {

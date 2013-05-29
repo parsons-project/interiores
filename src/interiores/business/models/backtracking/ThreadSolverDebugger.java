@@ -5,8 +5,10 @@ import interiores.business.events.backtracking.DebugSolveDesignStartedEvent;
 import interiores.business.events.backtracking.NextValueEvent;
 import interiores.business.events.backtracking.ValueAssignedEvent;
 import interiores.business.events.backtracking.ValueUnassignedEvent;
+import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.Value;
+import java.util.Collection;
 
 /**
  *
@@ -15,10 +17,10 @@ import interiores.shared.backtracking.Value;
 public class ThreadSolverDebugger
     extends ThreadSolver
 {
-    public ThreadSolverDebugger(VariableConfig variableConfig)
+    public ThreadSolverDebugger(VariableConfig variableConfig, Collection<GlobalConstraint> gconst)
             throws BusinessException
     {
-        super(variableConfig);
+        super(variableConfig, gconst);
     }
     
     @Override

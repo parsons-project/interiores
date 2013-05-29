@@ -5,7 +5,7 @@
 package interiores.business.events.catalogs;
 
 /**
- *
+ * Represents the event of the set of room type catalogs being modified
  * @author larribas
  */
 public class RTCatalogSetModifiedEvent extends ElementSetModifiedEvent {

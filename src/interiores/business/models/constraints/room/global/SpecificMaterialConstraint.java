@@ -9,6 +9,7 @@ import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
+import interiores.utils.Material;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -20,9 +21,9 @@ import java.util.List;
 public class SpecificMaterialConstraint 
     extends GlobalConstraint implements RoomPreliminarTrimmer {
 
-    private String material;
+    private Material material;
 
-    public SpecificMaterialConstraint(String material) {
+    public SpecificMaterialConstraint(Material material) {
         this.material = material;
     }
     
@@ -33,7 +34,7 @@ public class SpecificMaterialConstraint
             HashSet<FurnitureModel> validModels = new HashSet(variable.getDomain().getModels(0));
             Iterator<FurnitureModel> it = validModels.iterator();
             while (it.hasNext()) {
-                if (! it.next().getMaterial().equals(material))
+                if (! it.next().getMaterial().equals(material.name()))
                     it.remove();
             }
             variable.eliminateExceptM(validModels);

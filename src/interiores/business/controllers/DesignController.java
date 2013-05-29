@@ -53,8 +53,8 @@ public class DesignController
             else {
                 solver = new ThreadSolver(variableConfig, gconst);
             }
-            solver.addListener(this);
             
+            solver.addListener(this);
         }
         
         solver.setTimerEnabled(timeIt);

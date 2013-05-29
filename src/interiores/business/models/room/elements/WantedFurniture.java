@@ -54,10 +54,12 @@ public class WantedFurniture
     
     public void addUnaryConstraint(UnaryConstraint unaryConstraint) {
         unaryConstraints.add(unaryConstraint);
+        isDirty = true;
     }
     
     public void removeUnaryConstraint(Class<? extends UnaryConstraint> unaryConstraintClass) {
         unaryConstraints.remove(unaryConstraintClass);
+        isDirty = true;
     }
     
     public UnaryConstraint getUnaryConstraint(Class<? extends UnaryConstraint> unaryConstraintClass) {
@@ -71,22 +73,26 @@ public class WantedFurniture
     public void bound(BinaryConstraintEnd binaryConstraint)
     {
         binaryConstraints.bound(this, binaryConstraint);
+        isDirty = true;
     }
     
     public void unbound(Class<? extends BinaryConstraintEnd> binaryConstraintClass, String otherName)
     {
         binaryConstraints.unbound(name, binaryConstraintClass, otherName);
+        isDirty = true;
     }
     
     public void addBinaryConstraint(BinaryConstraintEnd binaryConstraint, String otherName)
     {
         binaryConstraints.add(binaryConstraint, otherName);
+        isDirty = true;
     }
     
     public void removeBinaryConstraint(Class<? extends BinaryConstraintEnd> binaryConstraintClass,
             String otherName)
     {
         binaryConstraints.remove(binaryConstraintClass, otherName);
+        isDirty = true;
     }
     
     public Collection<BinaryConstraintEnd> getBinaryConstraints() {

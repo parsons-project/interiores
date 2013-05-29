@@ -150,7 +150,7 @@ public class Solver
     }
     
     protected void initVariables() {
-        variableConfig.resetDomains();
+        variableConfig.reset();
         
         assignedVariables = new ArrayList();
         unassignedVariables = variableConfig.getVariables();

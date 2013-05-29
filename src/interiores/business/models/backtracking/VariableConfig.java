@@ -48,14 +48,21 @@ public class VariableConfig
     }
     
     public boolean isConsistent() {
-        for(FurnitureVariable assignedVariable : variables)
-            if(!assignedVariable.hasDomain() || !assignedVariable.isAssigned())
+        for(FurnitureVariable variable : variables)
+            if(variable.isDirty() || !variable.isAssigned())
+                return false;
+        
+        for(FurnitureConstant constant : constants)
+            if(constant.isDirty())
                 return false;
         
         return true;
     }
     
-    public void resetDomains() {
+    public void reset() {
+        for(FurnitureConstant fixed : constants)
+            fixed.clean();
+        
         for(FurnitureVariable variable : variables) {
             FurnitureType ftype = furnitureTypes.get(variable);
             variable.undoAssignValue();

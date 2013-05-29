@@ -1,9 +1,8 @@
 package interiores.business.models.constraints.furniture.unary;
 
-import interiores.business.models.room.FurnitureModel;
-import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
+import interiores.business.models.room.FurnitureModel;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.xml.bind.annotation.XmlAttribute;

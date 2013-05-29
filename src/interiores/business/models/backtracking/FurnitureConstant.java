@@ -21,6 +21,10 @@ public class FurnitureConstant
         assignValue(value);
     }
     
+    public void clean() {
+        isDirty = false;
+    }
+    
     @Override
     public boolean isConstant() {
         return true;

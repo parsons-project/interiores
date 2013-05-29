@@ -39,8 +39,14 @@ abstract public class FurnitureVariable
     
     @XmlTransient
     private float minPrice;
+    
+    @XmlTransient
     private int maxWidth;
+    
+    @XmlTransient
     private int maxDepth;
+    
+    @XmlTransient
     private int minSize;
     
     /**
@@ -77,13 +83,10 @@ abstract public class FurnitureVariable
         iteration = 0;
         backtrackingConstraints = new ArrayList(getConstraints());
         
-        
         initializeMaxMinFields();
         undoAssignValue();
-    }
-    
-    public boolean hasDomain() {
-        return domain != null;
+        
+        isDirty = false;
     }
     
     /**

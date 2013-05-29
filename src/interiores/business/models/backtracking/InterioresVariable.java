@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,6 +30,9 @@ abstract public class InterioresVariable
     
     @XmlElement
     public FurnitureValue assignedValue;
+    
+    @XmlTransient
+    protected boolean isDirty = true;
     
     public InterioresVariable() {
         
@@ -55,6 +59,10 @@ abstract public class InterioresVariable
     
     public String getTypeName() {
         return typeName;
+    }
+    
+    public boolean isDirty() {
+        return isDirty;
     }
     
     @Override

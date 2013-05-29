@@ -6,6 +6,7 @@ import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.room.FurnitureModel;
 import interiores.shared.backtracking.Value;
 import interiores.utils.Dimension;
+import java.util.Collection;
 import java.util.HashSet;
 
 /**
@@ -30,7 +31,7 @@ public class Domain {
     private Stage[] domain;
     
     
-    public Domain(HashSet<FurnitureModel> models, Dimension roomSize,
+    public Domain(Collection<FurnitureModel> models, Dimension roomSize,
             int variableCount) {
         
         domain = new Stage[variableCount+1];

@@ -10,7 +10,9 @@ import interiores.utils.Range;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -50,7 +52,7 @@ public class FurnitureType
     private SpaceAround defaultPassiveSpace;
     
     @XmlElementWrapper
-    private ArrayList<Functionality> functionalities;
+    private HashSet<Functionality> functionalities;
     
     public FurnitureType() {
         super();
@@ -85,7 +87,7 @@ public class FurnitureType
         this.widthRange = widthRange;
         this.depthRange = depthRange;
         this.defaultPassiveSpace = defaultPassiveSpace;
-        this.functionalities = new ArrayList(Arrays.asList(functionalities));
+        this.functionalities = new HashSet(Arrays.asList(functionalities));
         
         clingToWalls = walls;
         placementConstraints = new HashMap();
@@ -220,6 +222,10 @@ public class FurnitureType
     
     public void setPassiveSpace(SpaceAround sa) {
         defaultPassiveSpace = sa;
+    }
+    
+    public Set<Functionality> getFunctionalities() {
+        return functionalities;
     }
     
     @Override

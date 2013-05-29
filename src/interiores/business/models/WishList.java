@@ -2,16 +2,23 @@ package interiores.business.models;
 
 import interiores.business.exceptions.ForbiddenFurnitureException;
 import interiores.business.exceptions.MandatoryFurnitureException;
+import interiores.business.exceptions.RoomFunctionalitiesNotSatisfiedException;
 import interiores.business.exceptions.WantedElementNotFoundException;
 import interiores.business.exceptions.WantedFurnitureNotFoundException;
 import interiores.business.models.backtracking.InterioresVariable;
+import interiores.business.models.backtracking.VariableConfig;
+import interiores.business.models.catalogs.NamedCatalog;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
+import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedElementSet;
 import interiores.business.models.room.elements.WantedFixed;
 import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.business.BusinessException;
+import interiores.shared.backtracking.VariableSet;
+import interiores.utils.Functionality;
 import java.util.Collection;
+import java.util.Set;
 import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -170,8 +177,8 @@ public class WishList
         return fixed.getElementNames();
     }
     
-    public Collection<String> getElementTypes() {
-        Collection<String> elementTypes = new TreeSet();
+    public Set<String> getElementTypes() {
+        Set<String> elementTypes = new TreeSet();
         
         elementTypes.addAll(furniture.getTypeNames());
         elementTypes.addAll(fixed.getTypeNames());
@@ -223,5 +230,35 @@ public class WishList
      */
     public Collection<WantedFixed> getWantedFixed() {
         return fixed.getAll();
+    }
+    
+    public Set<Functionality> getUnsatisfiedFunctionalities(NamedCatalog<FurnitureType> typesCatalog) {
+        Set<Functionality> notSatisfied = room.getNeededFunctions();
+        
+        for(String elementType : furniture.getTypeNames()) {
+            FurnitureType type = typesCatalog.get(elementType);
+            
+            for(Functionality function : type.getFunctionalities())
+                notSatisfied.remove(function);
+        }
+        
+        return notSatisfied;
+    }
+    
+    public VariableConfig getVariableConfig(NamedCatalog<FurnitureType> typesCatalog) {
+        Set<Functionality> functionsNotSatisfied = getUnsatisfiedFunctionalities(typesCatalog);
+        
+        if(! functionsNotSatisfied.isEmpty())
+            throw new RoomFunctionalitiesNotSatisfiedException(functionsNotSatisfied);
+        
+        VariableConfig variableSet = new VariableConfig(room.getDimension());
+        
+        for(WantedFixed wfixed : fixed.getAll())
+            variableSet.addConstant(wfixed);
+        
+        for(WantedFurniture wfurniture : furniture.getAll())
+            variableSet.addVariable(wfurniture, typesCatalog.get(wfurniture.getTypeName()));
+        
+        return variableSet;
     }
 }

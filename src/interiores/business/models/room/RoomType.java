@@ -7,8 +7,9 @@ import interiores.core.Utils;
 import interiores.utils.Dimension;
 import interiores.utils.Functionality;
 import interiores.utils.Range;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.TreeSet;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -45,7 +46,7 @@ public class RoomType
     private TreeSet<String> cantHave;
     
     @XmlElementWrapper
-    private ArrayList<Functionality> neededFunctions;
+    private Set<Functionality> neededFunctions;
     
     public RoomType() {
         this(null,0,0);
@@ -80,7 +81,7 @@ public class RoomType
         this.minDimension = minDimension;
         this.mustHave = new TreeSet(Arrays.asList(mustHave));
         this.cantHave = new TreeSet(Arrays.asList(cantHave));
-        this.neededFunctions = new ArrayList(Arrays.asList(neededFunctions));
+        this.neededFunctions = new HashSet(Arrays.asList(neededFunctions));
     }
     
     /**
@@ -232,6 +233,10 @@ public class RoomType
      */
     public boolean isForbidden(FurnitureType ftype) {
         return cantHave.contains(ftype.getId());
+    }
+    
+    public Set<Functionality> getNeededFunctions() {
+        return neededFunctions;
     }
     
     @Override

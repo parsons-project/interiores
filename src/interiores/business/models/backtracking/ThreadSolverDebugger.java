@@ -1,37 +1,39 @@
 package interiores.business.models.backtracking;
 
 import interiores.business.events.backtracking.ActualVariableSetEvent;
+import interiores.business.events.backtracking.DebugSolveDesignStartedEvent;
 import interiores.business.events.backtracking.NextValueEvent;
 import interiores.business.events.backtracking.ValueAssignedEvent;
 import interiores.business.events.backtracking.ValueUnassignedEvent;
-import interiores.business.models.WishList;
-import interiores.business.models.catalogs.NamedCatalog;
-import interiores.business.models.room.FurnitureType;
-import interiores.core.Debug;
-import interiores.core.Event;
-import interiores.core.Observable;
-import interiores.core.Observer;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author hector
  */
-public class FurnitureVariableSetDebugger
-    extends FurnitureVariableSet
-    implements Observable
+public class ThreadSolverDebugger
+    extends ThreadSolver
 {
-    private List<Observer> debuggers;
-    
-    public FurnitureVariableSetDebugger(WishList wishList, NamedCatalog<FurnitureType> furnitureCatalog)
+    public ThreadSolverDebugger(VariableConfig variableConfig)
             throws BusinessException
     {
-        super(wishList, furnitureCatalog);
-        debuggers = new ArrayList();
+        super(variableConfig);
+    }
+    
+    @Override
+    public void solve() {
+        notify(new DebugSolveDesignStartedEvent());
+        
+        super.solve();
+    }
+    
+    @Override
+    protected void initVariables() {
+        //variableConfig.resetDomains();
+        
+        super.initVariables();
     }
     
     @Override
@@ -101,20 +103,6 @@ public class FurnitureVariableSetDebugger
         super.undoSetActualVariable();
         
         notify(new ActualVariableSetEvent(actual));
-    }
-    
-    @Override
-    public void addListener(Observer observer) {
-        debuggers.add(observer);
-    }
-    
-    @Override
-    public void notify(Event event) {
-        if(shouldStop())
-            return; // Stop notifying
-        
-        for(Observer debugger : debuggers)
-            debugger.notify(event);
     }
     
     public boolean shouldStop() {

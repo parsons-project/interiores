@@ -3,7 +3,9 @@ package interiores.business.models;
 import interiores.business.models.room.RoomType;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
+import interiores.utils.Functionality;
 import java.util.Collection;
+import java.util.Set;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -109,5 +111,10 @@ public class Room
     
     public int getDepth() {
         return size.depth;
+    }
+
+    public Set<Functionality> getNeededFunctions()
+    {
+        return type.getNeededFunctions();
     }
 }

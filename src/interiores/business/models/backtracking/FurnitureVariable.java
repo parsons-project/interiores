@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 abstract public class FurnitureVariable
 	extends InterioresVariable
+        implements Comparable<FurnitureVariable>
 {
     @XmlTransient
     private Collection<Constraint> backtrackingConstraints;
@@ -72,13 +73,17 @@ abstract public class FurnitureVariable
         return false;
     }
     
-    public void createDomain(HashSet<FurnitureModel> models, Dimension roomSize, int variableCount) {
+    public void createDomain(Collection<FurnitureModel> models, Dimension roomSize, int variableCount) {
         domain = new Domain(models, roomSize, variableCount);
         iteration = 0;
         backtrackingConstraints = new ArrayList(getConstraints());
         
         initializeMaxMinFields();
         undoAssignValue();
+    }
+    
+    public boolean hasDomain() {
+        return domain != null;
     }
     
     /**
@@ -275,4 +280,8 @@ abstract public class FurnitureVariable
         domain.trimExceptO(validOrientations, iteration);
     }
     
+    @Override
+    public int compareTo(FurnitureVariable variable) {
+        return this.iteration - variable.iteration;
+    }
 }

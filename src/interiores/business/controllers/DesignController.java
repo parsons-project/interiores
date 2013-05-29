@@ -1,7 +1,10 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.CatalogAccessController;
-import interiores.business.models.backtracking.Solver;
+import interiores.business.exceptions.SolverNotFinishedException;
+import interiores.business.models.backtracking.ThreadSolver;
+import interiores.business.models.backtracking.ThreadSolverDebugger;
+import interiores.business.models.backtracking.VariableConfig;
 import interiores.business.models.catalogs.AvailableCatalog;
 import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedFurniture;
@@ -18,7 +21,7 @@ public class DesignController
     extends CatalogAccessController<FurnitureType>
     implements Observer
 {
-    private Solver solver;
+    private ThreadSolver solver;
     
     /**
      * Creates a particular instance of the design controller
@@ -26,6 +29,8 @@ public class DesignController
      */
     public DesignController(JAXBDataController data) {
         super(data, AvailableCatalog.FURNITURE_TYPES);
+        
+        solver = new ThreadSolver(); // Set an empty solver
     }
     
     /**
@@ -34,15 +39,21 @@ public class DesignController
      * case, returns the solution.
      */
     public void solve(boolean debugMode, boolean timeIt) {
-        if(solver == null) {
-            solver = new Solver();
-            solver.addListener(this);
-        }
+        if(solver.isSolving())
+            throw new SolverNotFinishedException();
         
-        solver.setDebug(debugMode);
-        solver.setTimer(timeIt);
+        VariableConfig variableConfig = getWishList().getVariableConfig(getActiveCatalog());
         
-        solver.solve(getWishList(), getActiveCatalog());
+        if(debugMode)
+            solver = new ThreadSolverDebugger(variableConfig);
+        else
+            solver = new ThreadSolver(variableConfig);
+        
+        if(timeIt)
+            solver.enableTimer();
+        
+        solver.addListener(this);
+        solver.solve();
     }
     
     /**
@@ -62,7 +73,7 @@ public class DesignController
         solver.continueSolving();
     }
     
-    public void stop()
+    public void stopSolver()
     {
         solver.stopSolving();
     }

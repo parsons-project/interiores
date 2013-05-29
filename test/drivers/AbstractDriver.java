@@ -9,7 +9,7 @@ import interiores.business.models.Room;
 import interiores.business.models.room.RoomType;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.backtracking.FurnitureVariableSet;
+import interiores.business.models.backtracking.Solver;
 import interiores.business.models.backtracking.VariableConstraintSet;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.business.models.constraints.furniture.unary.AreaConstraint;
@@ -271,7 +271,7 @@ public abstract class AbstractDriver {
         return new FurnitureVariable(models, room, ucs, varCount);
     }
     
-    public static FurnitureVariableSet readFurnitureVariableSet() {
+    public static Solver readFurnitureVariableSet() {
         
         iostream.println("Enter the room of the variable set: ");
         Room room = readRoom();
@@ -293,7 +293,7 @@ public abstract class AbstractDriver {
         }
        
         
-        return new FurnitureVariableSet(room, metaModels, metaUC, new VariableConstraintSet());
+        return new Solver(room, metaModels, metaUC, new VariableConstraintSet());
         
     }
 }

@@ -12,6 +12,7 @@ import interiores.business.models.constraints.room.global.SameColorConstraint;
 import interiores.business.models.constraints.room.global.SameMaterialConstraint;
 import interiores.business.models.constraints.room.global.SpaceRespectingConstraint;
 import interiores.business.models.constraints.room.global.UnfitModelsPseudoConstraint;
+import interiores.core.Observable;
 import interiores.core.business.BusinessException;
 import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;

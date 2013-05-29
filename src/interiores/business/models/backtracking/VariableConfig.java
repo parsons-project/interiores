@@ -3,6 +3,7 @@ package interiores.business.models.backtracking;
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
 import interiores.business.models.room.FurnitureType;
+import interiores.core.Debug;
 import interiores.utils.Dimension;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -19,28 +20,19 @@ public class VariableConfig
 {
     private Dimension areaSize;
     private List<FurnitureConstant> constants;
-    private List<FurnitureVariable> assignedVariables;
-    private List<FurnitureVariable> unassignedVariables;
+    private List<FurnitureVariable> variables;
     private Map<FurnitureVariable, FurnitureType> furnitureTypes;
     
     public VariableConfig(Dimension areaSize) {
         this.areaSize = areaSize;
         
         constants = new ArrayList();
-        assignedVariables = new ArrayList();
-        unassignedVariables = new ArrayList();
+        variables = new ArrayList();
         furnitureTypes = new HashMap();
     }
     
     public void addVariable(FurnitureVariable variable, FurnitureType ftype) {
-        if(variable.isAssigned())
-            assignedVariables.add(variable);
-        
-        else {
-            variable.undoAssignValue();
-            unassignedVariables.add(variable);
-        }
-        
+        variables.add(variable);
         furnitureTypes.put(variable, ftype);
     }
     
@@ -49,53 +41,42 @@ public class VariableConfig
     }
     
     public boolean isConsistent() {
-        for(FurnitureVariable assignedVariable : assignedVariables)
-            if(!assignedVariable.hasDomain())
+        for(FurnitureVariable assignedVariable : variables)
+            if(!assignedVariable.hasDomain() || !assignedVariable.isAssigned())
                 return false;
         
-        return unassignedVariables.isEmpty();
-    }
-    
-    public void sort() {
-        Collections.sort(assignedVariables);
+        return true;
     }
     
     public void resetDomains() {
-        unassignedVariables.addAll(assignedVariables);
-        assignedVariables.clear();
-        
-        for(FurnitureVariable unassignedVariable : unassignedVariables) {
-            FurnitureType ftype = furnitureTypes.get(unassignedVariable);
-            unassignedVariable.createDomain(ftype.getFurnitureModels(), areaSize, unassignedVariables.size());
+        for(FurnitureVariable variable : variables) {
+            FurnitureType ftype = furnitureTypes.get(variable);
+            variable.createDomain(ftype.getFurnitureModels(), areaSize, variables.size());
         }
     }
     
-    public void unassignLast() {
-        int lastIndex = assignedVariables.size() - 1;
-        
-        if(lastIndex < 0)
-            return;
-        
-        FurnitureVariable variable = assignedVariables.get(lastIndex);
-        variable.undoAssignValue();
-        
-        unassignedVariables.add(variable);
-        assignedVariables.remove(lastIndex);
-    }
-    
-    public List<FurnitureVariable> getAssignedVariables() {
-        return assignedVariables;
-    }
-    
-    public List<FurnitureVariable> getUnassignedVariables() {
-        return unassignedVariables;
+    public List<FurnitureVariable> getVariables() {
+        return new ArrayList(variables);
     }
     
     public List<FurnitureConstant> getConstants() {
-        return constants;
+        return new ArrayList(constants);
     }
     
     public OrientedRectangle getTotalArea() {
         return new OrientedRectangle(new Point(0, 0), areaSize, Orientation.S);
+    }
+    
+    public boolean equals(VariableConfig other) {
+        if(! areaSize.equals(other.areaSize))
+            return false;
+        
+        if(! constants.equals(other.constants))
+            return false;
+        
+        if(! variables.equals(other.variables))
+            return false;
+        
+        return true;
     }
 }

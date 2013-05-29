@@ -2,11 +2,11 @@ package interiores.presentation.swing.views.editor;
 
 import interiores.business.controllers.DesignController;
 import interiores.business.events.backtracking.ActualVariableSetEvent;
+import interiores.business.events.backtracking.DebugSolveDesignStartedEvent;
 import interiores.business.events.backtracking.NextValueEvent;
+import interiores.business.events.backtracking.SolveDesignFinishedEvent;
 import interiores.business.events.backtracking.ValueAssignedEvent;
 import interiores.business.events.backtracking.ValueUnassignedEvent;
-import interiores.business.events.backtracking.DebugSolveDesignStartedEvent;
-import interiores.business.events.backtracking.SolveDesignFinishedEvent;
 import interiores.business.models.Orientation;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Business;

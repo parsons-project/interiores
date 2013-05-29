@@ -6,7 +6,6 @@ import interiores.business.events.backtracking.NextValueEvent;
 import interiores.business.events.backtracking.ValueAssignedEvent;
 import interiores.business.events.backtracking.ValueUnassignedEvent;
 import interiores.core.business.BusinessException;
-import interiores.shared.backtracking.NoSolutionException;
 import interiores.shared.backtracking.Value;
 
 /**
@@ -31,8 +30,6 @@ public class ThreadSolverDebugger
     
     @Override
     protected void initVariables() {
-        //variableConfig.resetDomains();
-        
         super.initVariables();
     }
     
@@ -40,18 +37,8 @@ public class ThreadSolverDebugger
     protected void setActualVariable() {
         super.setActualVariable();
         
-        //Debug.println(actual.getName());
-        
         if(! allAssigned())
             notify(new ActualVariableSetEvent(actual));
-    }
-    
-    @Override
-    protected boolean actualHasMoreValues() {
-        if(shouldStop())
-            return false; // Force to stop checking current variable
-        
-        return super.actualHasMoreValues();
     }
     
     @Override
@@ -62,7 +49,7 @@ public class ThreadSolverDebugger
         Thread current = Thread.currentThread();
         
         synchronized (current) {
-            if(!shouldStop()) { 
+            if(!shouldStop) { 
                 try {
                     current.wait();
                 }
@@ -90,22 +77,9 @@ public class ThreadSolverDebugger
     }
     
     @Override
-    public void backtracking() throws NoSolutionException
-    {
-        if(shouldStop())
-            throw new NoSolutionException("Solver stopped manually");
-        
-        super.backtracking();    
-    }
-    
-    @Override
     public void undoSetActualVariable() {
         super.undoSetActualVariable();
         
         notify(new ActualVariableSetEvent(actual));
-    }
-    
-    public boolean shouldStop() {
-        return Thread.currentThread().isInterrupted();
     }
 }

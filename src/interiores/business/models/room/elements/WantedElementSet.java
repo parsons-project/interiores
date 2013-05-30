@@ -24,6 +24,9 @@ public class WantedElementSet<T extends InterioresVariable>
     @XmlElementWrapper
     private TreeMap<String, Integer> typesCount;
     
+    public WantedElementSet()
+    { }
+    
     public WantedElementSet(String name) {
         this.name = name;
         elements = new TreeMap();

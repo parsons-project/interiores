@@ -4,13 +4,10 @@ package interiores.business.models.constraints.room;
 import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.room.global.BudgetConstraint;
 import interiores.business.models.constraints.room.global.ConnectivityConstraint;
-import interiores.business.models.constraints.room.global.EnoughSpaceConstraint;
 import interiores.business.models.constraints.room.global.SameColorConstraint;
 import interiores.business.models.constraints.room.global.SameMaterialConstraint;
-import interiores.business.models.constraints.room.global.SpaceRespectingConstraint;
 import interiores.business.models.constraints.room.global.SpecificColorConstraint;
 import interiores.business.models.constraints.room.global.SpecificMaterialConstraint;
-import interiores.business.models.constraints.room.global.UnfitModelsPseudoConstraint;
 import interiores.core.business.BusinessException;
 import java.util.Collection;
 import java.util.Map;
@@ -22,9 +19,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  * Generic class for representing constraints over a furniture piece.
  */
 @XmlRootElement
-@XmlSeeAlso({BudgetConstraint.class, ConnectivityConstraint.class, EnoughSpaceConstraint.class,
-             SameColorConstraint.class, SameMaterialConstraint.class, SpaceRespectingConstraint.class,
-             SpecificColorConstraint.class, SpecificMaterialConstraint.class, UnfitModelsPseudoConstraint.class})
+@XmlSeeAlso({BudgetConstraint.class, ConnectivityConstraint.class, SameColorConstraint.class,
+    SameMaterialConstraint.class, SpecificColorConstraint.class, SpecificMaterialConstraint.class})
 public abstract class GlobalConstraint
     extends Constraint {
     

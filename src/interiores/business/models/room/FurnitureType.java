@@ -14,6 +14,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author alvaro
  */
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FurnitureType
     extends PersistentIdObject
 {
@@ -39,7 +43,7 @@ public class FurnitureType
     @XmlElement
     private Range depthRange;
     
-    @XmlElementWrapper
+    @XmlAttribute
     private boolean clingToWalls;
     
     @XmlElementWrapper

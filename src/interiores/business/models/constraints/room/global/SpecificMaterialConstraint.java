@@ -4,25 +4,32 @@
  */
 package interiores.business.models.constraints.room.global;
 
-import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
+import interiores.business.models.room.FurnitureModel;
 import interiores.utils.Material;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * All variables must have the material material.
  * @author Nil
  */
+@XmlRootElement
 public class SpecificMaterialConstraint 
     extends GlobalConstraint implements RoomPreliminarTrimmer {
 
+    @XmlAttribute
     private Material material;
-
+    
+    public SpecificMaterialConstraint()
+    { }
+    
     public SpecificMaterialConstraint(Material material) {
         this.material = material;
     }

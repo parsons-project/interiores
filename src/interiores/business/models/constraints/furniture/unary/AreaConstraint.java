@@ -1,11 +1,11 @@
 package interiores.business.models.constraints.furniture.unary;
 
-import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import java.awt.Rectangle;
-import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -23,7 +23,7 @@ public class AreaConstraint
      * More precisely, by position of a furniture piece, we are talking about
      * his top left coordinate.
      */
-    @XmlElementWrapper
+    @XmlElement
     private Area validPositions;
     
     public AreaConstraint() {

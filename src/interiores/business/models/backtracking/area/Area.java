@@ -12,34 +12,52 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Special geometric construction that represents any area of the Grid Plane.
  * @author nil.mamano
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Area 
-    implements Iterable<Point> {
+    implements Iterable<Point>
+{    
+    private static final int SAMPLE_SIZE = 20;
     
+    @XmlElementWrapper
     private List<GridPoint> vertexs;
+    
+    @XmlTransient
     private List<VerticalEdge> verticalEdges;
+    
+    @XmlTransient
     private List<HorizontalEdge> horizontalEdges;
         
     /**
      * Given area x' value, permits fast access to all vertexs of the area
      * of the form (x,y), where x=x'.
      */
+    @XmlTransient
     private HashMap<Integer,List<GridPoint>> vertexsStoredByX;
+    
     /**
      * Given area y' value, permits fast access to all vertexs of the area
      * of the form (x,y), where y=y'.
      */
+    @XmlTransient
     private HashMap<Integer,List<GridPoint>> vertexsStoredByY;
     
-    
+    @XmlTransient
     private HashMap<Integer,List<VerticalEdge>> verticalEdgesStoredByX;
-    private HashMap<Integer,List<HorizontalEdge>> horizontalEdgesStoredByY;
     
-    private static final int SAMPLE_SIZE = 20;
+    @XmlTransient
+    private HashMap<Integer,List<HorizontalEdge>> horizontalEdgesStoredByY;
     
     
     /**
@@ -81,6 +99,15 @@ public class Area
     private Area(List<GridPoint> vertexs) {
         this.vertexs = new ArrayList(vertexs);
         initializeAreaFromVertexs();        
+    }
+    
+    /**
+     * JAXB persistance initialization needed
+     * @param u
+     * @param parent 
+     */
+    public void afterUnmarshal(Unmarshaller u, Object parent) {
+        initializeAreaFromVertexs();
     }
     
     /**

@@ -1,10 +1,10 @@
 package interiores.business.models.constraints.room.global;
 
 import interiores.business.models.OrientedRectangle;
-import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;

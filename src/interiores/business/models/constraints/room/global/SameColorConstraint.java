@@ -7,15 +7,15 @@ package interiores.business.models.constraints.room.global;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
+import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
 import interiores.business.models.room.FurnitureModel;
-import interiores.core.Debug;
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Represents a global constraint imposed over the color of all the elements in a room.
@@ -23,11 +23,13 @@ import java.util.List;
  * specific color it is
  * @author nmamano
  */
+@XmlRootElement
 public class SameColorConstraint 
     extends GlobalConstraint
     implements RoomPreliminarTrimmer, RoomBacktrackingTimeTrimmer
 {
-    public SameColorConstraint() { }
+    public SameColorConstraint()
+    { }
 
     /**
      * Finds a list of colors such that for each variable, at least one model

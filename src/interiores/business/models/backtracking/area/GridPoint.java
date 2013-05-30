@@ -1,16 +1,27 @@
 
 package interiores.business.models.backtracking.area;
 
-import interiores.core.Debug;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author nil.mamano
  */
+@XmlRootElement
 class GridPoint {
+    @XmlAttribute
     public int x;
+    
+    @XmlAttribute
     public int y;
-
+    
+    /**
+     * Empty constructor needed for persistance.
+     */
+    public GridPoint()
+    { }
+    
     public GridPoint(int x, int y) {
         this.x = x;
         this.y = y;
@@ -18,9 +29,7 @@ class GridPoint {
     
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        result.append("(" + x + "," + y + ")");
-        return result.toString();
+        return "(" + x + "," + y + ")";
     }
     
     @Override

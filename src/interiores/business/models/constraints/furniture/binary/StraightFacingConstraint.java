@@ -2,27 +2,30 @@ package interiores.business.models.constraints.furniture.binary;
 
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
-import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.utils.Dimension;
 import java.util.HashSet;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author alvaro
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class StraightFacingConstraint
     extends BinaryConstraintEnd {
     
     private static final int MAXDIST = 1000;
     
     
-    public StraightFacingConstraint() {
-        super();
-    }
-    
+    public StraightFacingConstraint()
+    { }
     
     @Override
     public boolean isSatisfied2(FurnitureVariable variable) {

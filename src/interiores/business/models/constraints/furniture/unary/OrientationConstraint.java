@@ -1,7 +1,6 @@
 package interiores.business.models.constraints.furniture.unary;
 
 import interiores.business.models.Orientation;
-import interiores.business.models.backtracking.Domain;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import java.util.ArrayList;

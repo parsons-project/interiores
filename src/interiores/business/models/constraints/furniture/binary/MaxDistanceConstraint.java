@@ -1,11 +1,12 @@
 package interiores.business.models.constraints.furniture.binary;
 
 import interiores.business.models.OrientedRectangle;
-import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
-import interiores.core.Debug;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -14,12 +15,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author alvaro
  */
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class MaxDistanceConstraint 
                 extends BinaryConstraintEnd {
     
     @XmlAttribute
     private int distance; // The maximum distance between the two variables
-
+    
+    public MaxDistanceConstraint()
+    { }
     
     public MaxDistanceConstraint(int distance) {
         super();

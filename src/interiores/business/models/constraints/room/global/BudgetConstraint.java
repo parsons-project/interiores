@@ -15,6 +15,8 @@ import interiores.business.models.room.FurnitureModel;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Represents a constraint that imposes a maximum budget for the wanted elements in a room.
@@ -22,15 +24,19 @@ import java.util.List;
  * in the backtracking process.
  * @author nmamano
  */
+@XmlRootElement
 public class BudgetConstraint
     extends GlobalConstraint
     implements RoomPreliminarTrimmer, RoomBacktrackingTimeTrimmer {
     
+    @XmlAttribute
     private double maxBudget;
+    
+    @XmlAttribute
     private double currentBudget;
     
-    public BudgetConstraint() {
-    }
+    public BudgetConstraint()
+    { }
 
     public BudgetConstraint(float maxBudget) {
         this.maxBudget = maxBudget;

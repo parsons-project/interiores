@@ -5,11 +5,17 @@ import interiores.business.models.backtracking.InterioresVariable;
 import interiores.business.models.constraints.Constraint;
 import interiores.business.models.constraints.furniture.binary.MaxDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
+import interiores.business.models.constraints.furniture.binary.PartialFacingConstraint;
+import interiores.business.models.constraints.furniture.binary.StraightFacingConstraint;
 import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
@@ -18,12 +24,13 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  * @author alvaro
  */
 @XmlRootElement
-@XmlSeeAlso({MaxDistanceConstraint.class, MinDistanceConstraint.class})
+@XmlSeeAlso({MaxDistanceConstraint.class, MinDistanceConstraint.class, PartialFacingConstraint.class,
+    StraightFacingConstraint.class})
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class BinaryConstraintEnd
     extends Constraint
     implements InexhaustiveTrimmer, BacktrackingTimeTrimmer, Cloneable
 {
-    
     private static Map<String, Class<? extends Constraint>> availableConstraints = new TreeMap();
     
     public static void addConstraintClass(String name, Class<? extends BinaryConstraintEnd> constraintClass)
@@ -41,10 +48,8 @@ public abstract class BinaryConstraintEnd
         return availableConstraints.keySet();
     }
     
-    
-    
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    
+    @XmlElement
+    @XmlIDREF
     protected InterioresVariable otherVariable;
     
     public BinaryConstraintEnd()

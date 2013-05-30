@@ -7,8 +7,10 @@ import interiores.business.models.constraints.furniture.unary.ColorConstraint;
 import interiores.business.models.constraints.furniture.unary.MaterialConstraint;
 import interiores.business.models.constraints.furniture.unary.ModelConstraint;
 import interiores.business.models.constraints.furniture.unary.OrientationConstraint;
+import interiores.business.models.constraints.furniture.unary.PositionConstraint;
 import interiores.business.models.constraints.furniture.unary.PriceConstraint;
 import interiores.business.models.constraints.furniture.unary.SizeRangeConstraint;
+import interiores.business.models.constraints.furniture.unary.WallConstraint;
 import interiores.core.business.BusinessException;
 import java.util.Collection;
 import java.util.Map;
@@ -21,7 +23,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  */
 @XmlRootElement
 @XmlSeeAlso({AreaConstraint.class, ColorConstraint.class, MaterialConstraint.class, ModelConstraint.class,
-    OrientationConstraint.class, PriceConstraint.class, SizeRangeConstraint.class})
+    OrientationConstraint.class, PositionConstraint.class, PriceConstraint.class, SizeRangeConstraint.class,
+    WallConstraint.class})
 public abstract class UnaryConstraint
     extends Constraint
     implements PreliminarTrimmer

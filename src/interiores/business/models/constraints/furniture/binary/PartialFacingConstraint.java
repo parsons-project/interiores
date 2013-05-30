@@ -2,11 +2,14 @@ package interiores.business.models.constraints.furniture.binary;
 
 import interiores.business.models.Orientation;
 import interiores.business.models.OrientedRectangle;
-import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import java.util.HashSet;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * The variable associated with the constraint has to be facing the
@@ -16,14 +19,15 @@ import java.util.HashSet;
  * the area of both variables.
  * @author alvaro
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class PartialFacingConstraint
     extends BinaryConstraintEnd
 {
     private static final int MAXDIST = 10000;
     
-    public PartialFacingConstraint() {
-        super();
-    }
+    public PartialFacingConstraint()
+    { }
     
     @Override
     public boolean isSatisfied2(FurnitureVariable variable) {

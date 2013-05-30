@@ -9,12 +9,9 @@ import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.room.GlobalConstraint;
-import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
-import interiores.core.Debug;
 import interiores.shared.backtracking.NoSolutionException;
-import interiores.utils.Dimension;
 import java.util.HashMap;
 import java.util.List;
 

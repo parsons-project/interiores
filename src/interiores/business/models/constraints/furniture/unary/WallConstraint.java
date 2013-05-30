@@ -1,27 +1,41 @@
 package interiores.business.models.constraints.furniture.unary;
 
 import interiores.business.models.Orientation;
-import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
+import interiores.business.models.backtracking.area.Area;
 import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
-import interiores.core.Debug;
 import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * The variable must be placed next to a wall identified by an orientation
  * in orientations.
  * @author nmamano
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class WallConstraint
     extends UnaryConstraint implements InexhaustiveTrimmer {
     
+    @XmlElementWrapper
     private List<Orientation> orientations;
+    
+    @XmlAttribute
     int roomWidth;
+    
+    @XmlAttribute
     int roomDepth;
+    
+    public WallConstraint()
+    { }
     
     public WallConstraint(int roomWidth, int roomDepth, Orientation[] orientations) {
         this.orientations = Arrays.asList(orientations);
@@ -29,7 +43,6 @@ public class WallConstraint
         this.roomDepth = roomDepth;
     }
 
-    
     /**
      * Trims values that lead to no valid solution.
      * 
@@ -45,8 +58,6 @@ public class WallConstraint
      */
     @Override
     public void preliminarTrim(FurnitureVariable variable) {
-
-
         Area validPositions = new Area();
         for(Orientation orientation : orientations) {
             

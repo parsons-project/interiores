@@ -8,6 +8,7 @@ import interiores.business.models.constraints.room.global.SameMaterialConstraint
 import interiores.business.models.constraints.room.global.SpecificColorConstraint;
 import interiores.business.models.constraints.room.global.SpecificMaterialConstraint;
 import interiores.core.data.JAXBDataController;
+import interiores.utils.CoolColor;
 import interiores.utils.Material;
 import java.awt.Color;
 import java.util.Collection;
@@ -47,8 +48,8 @@ public class GlobalConstraintController
         getWishList().addGlobalConstraint(constraint);
     }
     
-    public void addSpecificColorConstraint(Color color) {
-        GlobalConstraint constraint = new SpecificColorConstraint(color);
+    public void addSpecificColorConstraint(String color) {
+        GlobalConstraint constraint = new SpecificColorConstraint(CoolColor.getEnum(color));
         getWishList().addGlobalConstraint(constraint);
     }
     

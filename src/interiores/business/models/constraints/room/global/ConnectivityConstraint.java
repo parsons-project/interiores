@@ -1,16 +1,13 @@
 
 package interiores.business.models.constraints.room.global;
 
-import interiores.business.exceptions.ConstraintException;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.constraints.furniture.BacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
-import interiores.business.models.constraints.room.RoomInexhaustiveTrimmer;
-import interiores.shared.backtracking.NoSolutionException;
 import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * This constraint checks that each furniture piece of the room is reacheable
@@ -18,9 +15,12 @@ import java.util.List;
  * It is not implemented
  * @author Nil
  */
+@XmlRootElement
 public class ConnectivityConstraint
     extends GlobalConstraint implements RoomBacktrackingTimeTrimmer {
-
+    
+    public ConnectivityConstraint()
+    { }
 
     @Override
     public void trim(List<FurnitureVariable> assignedVariables,

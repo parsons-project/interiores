@@ -4,27 +4,33 @@
  */
 package interiores.business.models.constraints.room.global;
 
-import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureVariable;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
-import java.awt.Color;
-import java.util.ArrayList;
+import interiores.business.models.room.FurnitureModel;
+import interiores.utils.CoolColor;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * All variables must have the color color.
  * @author Nil
  */
+@XmlRootElement
 public class SpecificColorConstraint 
     extends GlobalConstraint implements RoomPreliminarTrimmer {
-
-    private Color color;
-
-    public SpecificColorConstraint(Color color) {
+    
+    @XmlElement
+    private CoolColor color;
+    
+    public SpecificColorConstraint()
+    { }
+    
+    public SpecificColorConstraint(CoolColor color) {
         this.color = color;
     }
     
@@ -35,7 +41,7 @@ public class SpecificColorConstraint
             HashSet<FurnitureModel> validModels = new HashSet(variable.getDomain().getModels(0));
             Iterator<FurnitureModel> it = validModels.iterator();
             while (it.hasNext()) {
-                if (! it.next().getColor().equals(color))
+                if (! it.next().getColor().equals(color.getColor()))
                     it.remove();
             }
             variable.eliminateExceptM(validModels);

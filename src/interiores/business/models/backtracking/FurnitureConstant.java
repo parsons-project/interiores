@@ -1,14 +1,20 @@
 package interiores.business.models.backtracking;
 
+import interiores.business.models.room.elements.WantedFixed;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  *
  * @author hector
  */
 @XmlRootElement
+@XmlSeeAlso(WantedFixed.class)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FurnitureConstant
     extends InterioresVariable
 {

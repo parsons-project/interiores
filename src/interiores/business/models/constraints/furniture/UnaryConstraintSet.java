@@ -2,13 +2,17 @@ package interiores.business.models.constraints.furniture;
 
 import java.util.Collection;
 import java.util.HashMap;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author hector
  */
+@XmlRootElement
 public class UnaryConstraintSet
 {
+    @XmlElementWrapper
     private HashMap<Class<? extends UnaryConstraint>, UnaryConstraint> unaryConstraints;
     
     public UnaryConstraintSet() {

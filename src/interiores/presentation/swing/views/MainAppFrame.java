@@ -241,7 +241,7 @@ public class MainAppFrame extends JFrame
                 roomController.save(file.getAbsolutePath());
             }
             catch(JAXBException e) {
-                
+                e.printStackTrace();
             }
         }
     }//GEN-LAST:event_saveMenuItemActionPerformed
@@ -312,7 +312,7 @@ private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//
                 roomController.load(file.getAbsolutePath());
             }
             catch(JAXBException e) {
-                
+                e.printStackTrace();
             }
         }
     }

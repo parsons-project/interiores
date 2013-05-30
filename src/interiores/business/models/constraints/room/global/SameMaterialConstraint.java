@@ -4,14 +4,15 @@ package interiores.business.models.constraints.room.global;
 import interiores.business.models.backtracking.FurnitureConstant;
 import interiores.business.models.backtracking.FurnitureValue;
 import interiores.business.models.backtracking.FurnitureVariable;
-import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.GlobalConstraint;
+import interiores.business.models.constraints.room.RoomBacktrackingTimeTrimmer;
 import interiores.business.models.constraints.room.RoomPreliminarTrimmer;
 import interiores.business.models.room.FurnitureModel;
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Represents a global constraint imposed over the material of all the elements in a room.
@@ -19,11 +20,13 @@ import java.util.List;
  * of which specific material it is
  * @author nmamano
  */
+@XmlRootElement
 public class SameMaterialConstraint 
     extends GlobalConstraint
     implements RoomPreliminarTrimmer, RoomBacktrackingTimeTrimmer {
     
-    public SameMaterialConstraint() { }
+    public SameMaterialConstraint()
+    { }
 
     /**
      * Finds a list of materials such that for each variable, at least one model

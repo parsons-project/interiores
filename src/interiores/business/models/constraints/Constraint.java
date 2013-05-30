@@ -26,13 +26,20 @@
  */
 package interiores.business.models.constraints;
 
+import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
+import interiores.business.models.constraints.furniture.UnaryConstraint;
+import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.core.business.BusinessException;
 import java.util.Map;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  *
  * @author Nil
  */
+@XmlRootElement
+@XmlSeeAlso({GlobalConstraint.class, BinaryConstraintEnd.class, UnaryConstraint.class})
 public abstract class Constraint
 {    
     public static void addConstraintClass(Map<String,

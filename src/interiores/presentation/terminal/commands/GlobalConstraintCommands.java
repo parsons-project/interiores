@@ -62,7 +62,7 @@ public class GlobalConstraintCommands
     public void addSpecificColorConstraint() {
         String color = readString("Enter the color that all the elements should have\n"+
                                   CoolColor.getNames());
-        constraintController.addSpecificColorConstraint(CoolColor.valueOf(color).getColor());
+        constraintController.addSpecificColorConstraint(color);
     }
     
     public void addSpecificMaterialConstraint() {

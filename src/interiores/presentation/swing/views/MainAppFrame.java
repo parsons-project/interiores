@@ -265,7 +265,7 @@ public class MainAppFrame extends JFrame
 
 private void generalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generalHelpMenuActionPerformed
     HelpView helpFrame = presentation.getNew(HelpView.class);
-    helpFrame.load("", "");
+    helpFrame.load("gui/guia-gui.html", "Guia");
 }//GEN-LAST:event_generalHelpMenuActionPerformed
 
 private void terminalHelpMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_terminalHelpMenuActionPerformed

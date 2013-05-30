@@ -1,0 +1,158 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[utf8]{inputenc}
+
+
+\begin{document}
+
+En este documento se especifica como usar la interf\'{i}cie gr\'{a}fica del
+programa Interiores.
+
+\section{Menu}
+\subsection{File}
+\subsubsection{New Room Design}
+Crea un nuevo dise\~{n}o. Abre una nueva ventana en la que se piden los
+par\'{e}metros de la habitaci\'{o}n teniendo en cuenta el cat\'{a}logo actual.
+Dado un tipo se muestran los muebles que deben ir por obligaci\'{o}n y los
+muebles que no pueden ir en ella.
+\subsubsection{Open Room Design}
+Abre un dise\~{n}o desde el disco. Se abre una nueva ventana que pide el
+\emph{path} del archivo y lo carga al mapa de dise\~{n}os.
+\subsubsection{Save Room Design}
+Guarda un dise\~{n}o ya creado a un archivo de disco. Este podr\'{a} ser
+recuperado luego. Avisa de sobreescritura en caso de que el archivo ya
+exista. El dise\~{n}o se guarda completamente: los muebles y su posici\'{o}n,
+las restricciones y los elementos fijos.
+\subsubsection{Exit}
+Sale del programa. Cierra todas las ventanas y acaba con todos los
+procesos que estaba usando.
+
+\subsection{Edit}
+\subsubsection{Room types catalog}
+Abre el editor de cat\'{a}logos de tipos de habitaciones. En \'{e}l se puede
+crear nuevos tipos y modificar o eliminar ya existentes. Se piden
+par\'{a}metros necesarios para el programa como tama\~{n}o m\'{i}nimo y m\'{a}ximo,
+elementos prohibidos y obligatorios... Pueden crearse nuevos cat\'{a}logos
+y guardarlos en disco para posteriormente recuperarlos.
+\subsubsection{Furniture types catalog}
+Abre el editor de tipos de mueble. En \'{e}l se puede crear nuevos tipos
+de muebles, modificar o eliminar ya existentes. Se piden valores como
+funcionalidad, dimensiones, si debe ir o no pegado a una pared... Los
+cat\'{a}logos generados pueden ser guardados en disco y luego ser
+cargados.
+\subsubsection{Furniture models catalog}
+Abre el editor de modelos de un tipo de mueble concreto. Se pueden
+introducir los atributos de un mueble, as\'{i} como su tama\~{n}o, precio,
+color... Los cat\'{a}logos se pueden modificar y guardar en disco para
+luego ser recuperados.
+
+\subsection{Tools}
+\subsubsection{Select}
+Esta herramienta permite seleccionar elementos ya colocados en el mapa
+mediante click al bot\'{o}n izquierdo del rat\'{o}n. Un click derecho sobre el
+mueble colocado abre su editor de restricciones.
+\subsubsection{Move}
+Esta herramienta permite mover libremente los elementos seleccionados
+por la habitaci\'{o}n.  Para ello se debe clickar el bot\'{o}n izquierdo del
+rat\'{o}n y desplazarlo mientras se mantiene pulsado.
+\subsubsection{Door}
+Esta herramienta permite a\~{n}adir puertas a la habitaci\'{o}n. Para ello
+debe clickarse con bot\'{o}n izquierdo y la puerta ser\'{a} a\~{n}adida a la pared
+m\'{a}s cercana. Si se mantiene pulsado y se arrastra en cualquier
+direcci\'{o}n se podr\'{a} definir el tama\~{n}o de la puerta as\'{i} como su
+sentido. Se puede cancelar su creaci\'{o}n, si mientras se est\'{e} pulsando
+el bot\'{o}n izquierdo del rat\'{o}n se pulsa la tecla 'ESC'.  En el momento
+de dejar ir el bot\'{o}n del rat\'{o}, la puerta ser\'{a} a\~{n}adida a la habitaci\'{o}n
+autom\'{a}ticamente.
+\subsubsection{Window}
+Esta herramienta permite a\~{n}adir ventanas a la habitaci\'{o}n. Para ello
+debe clickarse con bot\'{o}n izquierdo y la ventana ser\'{a} a\~{n}adida a la
+pared m\'{a}s cercana. Si se mantiene pulsado y se arrastra en cualquier
+direcci\'{o}n se podr\'{a} definir el tama\~{n}o de la ventana. Se puede cancelar
+la operaci\'{o}n pulsando 'ESC' mientras se est\'{a} arrastrando el rat\'{o}n.
+\subsubsection{Pillar}
+Esta herramienta permite a\~{n}adir bloques macizos para representar
+columnas o para simular habitaciones no rectangulares.  Para colocar
+un bloque basta con hacer click con el bot\'{o}n izquierdo del rat\'{o}n y
+arrastrar en cualquier direcci\'{o}n.  Si se pulsa la tecla 'ESC' durante
+el proceso, \'{e}ste ser\'{a} cancelado. En el momento de dejar ir el bot\'{o}n,
+si no se ha cancelado la operaci\'{o}n un nuevo bloque ser\'{a} a\~{n}adido a la
+habitaci\'{o}n.
+
+\subsection{View}
+\subsubsection{Terminal}
+Abre una terminal virtual conectada con el programa. En ella se pueden
+escribir los comandos definidos en \emph{Help}: \emph{Terminal} (pulsando F2).
+
+\section{Map}
+\subsection{Tools bar}
+Es el panel lateral izquierdo. Permite seleccionar r\'{a}pidamente las
+herramientas anteriormente descritas, haciendo click en los botones
+con el icono de cada herramienta.
+\subsection{Grid}
+Es el panel central de la ventana. En el se muestran los dise\~{n}os, as\'{i}
+como la informaci\'{o}n del \emph{debugger}.  Las operaciones que permiten
+las herramientas se ejecutan sobre est\'{a} parte de la ventana. Los
+muebles colocados pueden ser movidos, seleccionados... Click con el
+bot\'{o}n derecho sobre un mueble colocado, mostrar\'{a} el editor de
+restricciones de ese mueble. Se pueden suprimir los muebles
+seleccionados pulsando la tecla 'SUPR'.
+\subsection{Wishlist}
+En la parte derecha superior de la ventana se muestran los muebles
+disponibles para a\~{n}adir a la habitaci\'{o}n.  Efectivamente, no se
+muestran los muebles prohibidos para ese tipo de habitaci\'{o}n. En la
+parte inferior se muestran los ya elejidos que contienen desde el
+principio los tipos obligatorios para esa habitaci\'{o}n. Si se hace doble
+click (o bien intro sobre el seleccionado) se accede al editor de
+restricciones de ese mueble en concreto.  Para eliminar un mueble de
+entre los elegidos, se debe seleccionar y seguidamente pulsar
+'SUPR'. Si el elemento ya se estaba mostrando en el mapa, \'{e}ste ser\'{a}
+actualizado consecuentemente.
+\subsection{Solve}
+Los botones de la parte inferior derecha sirven para lanzar el
+algoritmo con posibles opciones. Si la \emph{checkbox} de {\tt Time}
+est\'{a} activa, se cronometrar\'{a} el tiempo tardado para generar la
+habitaci\'{o}n. Si la opci\'{o}n {\tt Debug} est\'{a} activada se abrir\'{a} el
+debugger. Una vez se ha encontrado soluci\'{o}n, si se vuelve a accionar
+el bot\'{o}n de 'Solve Design', el algoritmo continuar\'{a} desde donde lo dejo.
+\section{Constraints editor}
+Esta ventana permite editar las restricciones de un mueble concreto.
+Se puede acceder a \'{e}l mediante doble click sobre el elemento elegido,
+con la tecla 'ENTER' o bien con el bot\'{o}n derecho sobre el elemento del
+mapa al que se le quieran editar las restricciones. En este editor se
+pueden a\~{n}adir y/o quitar todas las restricciones disponibles excepto
+las globales.  Una vez elegidos los par\'{a}metros, al pulsarse 'Add
+Constraint', se a\~{n}adir\'{a} la restricci\'{o}n a ese elemento del dise\~{n}o en
+concreto. La parte superior derecha muestra las restricciones unarias,
+la central las binarias, y la inferior las que vienen por defecto en
+el mueble por ser del tipo que es. En esta ventana tambi\'{e}n se indica
+si es un mueble que va pegado a una pared por defecto. Una vez
+a\~{n}adidas todas la restricciones que se quieran se puede pulsar 'Close'
+para cerrar la ventana.  Para quitar restricciones se puede
+seleccionar la restricci\'{o}n correpondiente y pulsar la tecla 'SUPR'.
+\section{Catalog Editor}
+Los tres tipos de cat\'{a}logos (tipo de habitaci\'{o}n, tipo de mueble y modelo de mueble) comparten
+una interfaz similar. Los elementos comunes m\'{a}s destacables son:
+\begin{description}
+\item[La persistencia] Todos los cat\'{a}logos pueden guardarse y
+  recuperarse de disco. Para ello pueden usarse los botones de 'Save
+  Catalog' y 'Load Catalog'. Adem\'{a}s se pueden crear nuevos cat\'{a}logos
+  pulsando el bot\'{o}n de 'New Catalog' o bien eliminarlos pulsando el
+  bot\'{o}n 'Remove Catalog'.
+\item[A\~{n}adir] Para a\~{n}adir nuevos elementos a un cat\'{a}logo basta con
+  hacer click en el bot\'{o}n con el s\'{i}mbolo '+' de la parte inferior.
+\item[Eliminar] Para eliminar un elemento del cat\'{a}logo basta con hacer
+  click en el bot\'{o}n con una cruz del lado izquierdo del mueble que se
+  desee eliminar.
+\item[Modificar] Para modificar un elemento del cat\'{a}logo basta con
+  escribir sobreescribir el campo que se quiera con el valor deseado.
+\end{description}
+
+\section{Debugger}
+Esta ventana permite ejecutar el algoritmo con control absoluto. Se
+muestra el valor que tiene cada variable en cada momento. Se muestran
+las posiciones que prueba cada mueble (con colores distintos para cada
+uno). Se puede ejecutar el algoritmo a tramos con 'Resume'/'Pause' y
+parar la ejecuci\'{o}n con 'Stop' o bien iterar paso a paso indicando el
+numero de iteraciones que debe hacer y pulsando 'Iterate'.
+
+\end{document}

@@ -14,10 +14,8 @@ import interiores.business.events.constraints.UnaryConstraintRemovedEvent;
 import interiores.business.models.Orientation;
 import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
-import interiores.core.Debug;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
-import interiores.utils.BinaryConstraintAssociation;
 import interiores.utils.CoolColor;
 import interiores.utils.Material;
 import interiores.utils.Range;
@@ -25,7 +23,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -34,7 +31,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 /**
- *
+ * This frame is to edit the constraints of a given element in the wishlist
  * @author alvaro
  */
 public class ConstraintEditorFrame extends JFrame {
@@ -48,7 +45,10 @@ public class ConstraintEditorFrame extends JFrame {
     private Collection<String> relatableFurniture;
     private Collection<JComponent> components;
     
-    /** Creates new form ConstraintEditorFrame */
+    /**
+     * Default creator of the cosntraint editor frame
+     * @param presentation The swing controller of the application
+     */
     public ConstraintEditorFrame(SwingController presentation) {
         initComponents();
         
@@ -73,10 +73,19 @@ public class ConstraintEditorFrame extends JFrame {
         
     }
     
+    /**
+     * Gets the name of the type stripping the number from the variable name
+     * @param id The identifier of the variable
+     * @return The name of the type of the variable
+     */
     private String getTypeName(String id) {
         return id.replaceAll("\\d+", "");
     }
     
+    /**
+     * Sets the current selected id. The variable which the restrictions will be applied
+     * @param selectedId The id of the variable in the wishlist
+     */
     public void setSelectedId(String selectedId) {
         this.selectedId = selectedId;
         String title = "";
@@ -88,7 +97,9 @@ public class ConstraintEditorFrame extends JFrame {
         updateConstraintEditorFrame();
     }
 
-    
+    /**
+     * Updates the view of the frame and prepares it to be displayed
+     */
     private void updateConstraintEditorFrame() {
         
        // This is done to avoid aliasing
@@ -102,6 +113,10 @@ public class ConstraintEditorFrame extends JFrame {
        updateActiveConstraintsList();
     }
     
+    /**
+     * Shows only the JComponents contained in toShowComponents. The other elements are hided.
+     * @param toShowComponents A collection of the components that must be showed
+     */
     private void showOnly(Collection<JComponent> toShowComponents) {
         for (JComponent component : this.components) {
             if (toShowComponents.contains(component))
@@ -111,22 +126,41 @@ public class ConstraintEditorFrame extends JFrame {
         }
     }
     
-    private void updateComboBox(JComboBox combo, Collection<? extends Object> constraintList) {
+    /**
+     * Updates a combobox with new data
+     * @param combo The combobox to be updated
+     * @param objects The collection of elements that the combobox should contain
+     */
+    private void updateComboBox(JComboBox combo, Collection<? extends Object> objects) {
         combo.removeAllItems();
-        for (Object item : constraintList)
+        for (Object item : objects)
             combo.addItem(item.toString());
     }
     
+    /**
+     * Updates a combobox with new data
+     * @param combo The combobox to be updated
+     * @param objects An array of objects to be putted in the combobox
+     */
     private void updateComboBox(JComboBox combo, Object[] objects) {
         combo.removeAllItems();
         for (Object item : objects)
             combo.addItem(item.toString());
     }
     
+    /**
+     * Set the values of the collection to the jlist
+     * @param jlist The jlist to be updated
+     * @param objects The array of objects to be putted in the jlist
+     */
     private void setListValues(JList jlist, Collection<? extends Object> objects) {
             jlist.setListData(objects.toArray(new Object[objects.size()]));
     }
     
+    /**
+     * Collects the selected orientations from the checkboxes
+     * @return An array containing the selected Orientations
+     */
     private Orientation[] getOrientations() {
         ArrayList<Orientation> orientations = new ArrayList();
         if (NCheckBox.isSelected()) orientations.add(Orientation.N);
@@ -139,6 +173,9 @@ public class ConstraintEditorFrame extends JFrame {
     @Listen({UnaryConstraintAddedEvent.class, UnaryConstraintRemovedEvent.class,
              BinaryConstraintAddedEvent.class, BinaryConstraintRemovedEvent.class,
              FTModifiedEvent.class})
+    /**
+     * Updates the constraint lists of the frame to show the current active constriants
+     */
     public void updateActiveConstraintsList() {      
         setListValues(activePlacement, furnitureTypeController.getPlacementDescriptions(getTypeName(selectedId)));
         setListValues(activeUnaries, unaryConstraintController.getConstraints(selectedId));
@@ -646,13 +683,23 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private javax.swing.JPanel wallPanel;
     // End of variables declaration//GEN-END:variables
 
-
+    /**
+     * Sets the label text of the range panel
+     * @param left The text to show on the left label
+     * @param right The text to show on the right label
+     */
     private void prepareRangePanel(String left, String right) {
         rangeMinLabel.setText(left);
         rangeMaxLabel.setText(right);
         rangePanel.setVisible(true);
     }
     
+    /**
+     * Adds a binary constraint to the selected elements
+     * @param otherId The identifier of the other element
+     * @param type The type of the constraint
+     * @param dist THe distance. This is only used if the type is a distance one.
+     */
     private void addBinaryConstraint(String otherId, String type, int dist) {
         if (type.equals("distance-max"))
             binaryConstraintController.addMaxDistanceConstraint(selectedId, otherId, dist);
@@ -662,10 +709,18 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
             binaryConstraintController.addStraightFacingConstraint(selectedId, otherId);
         else if (type.equals("facing-partial"))
             binaryConstraintController.addPartialFacingConstraint(selectedId, otherId);
-        
-        // @TODO Add variable distance to facing constraints
     }
 
+    /**
+     * Adds a unary constraint to the selectedId element
+     * @param type The type of the constraint
+     * @param value Can represent an orientation, a color, a model,...
+     * @param floatValue A price
+     * @param range A range of two integers
+     * @param posX The range of x positions in a unary of area
+     * @param posY The range of y positions in a unary of area
+     * @param orientations The orientations read from the checkboxes
+     */
     private void addUnaryConstraint(String type, String value, float floatValue,
                                     Range range, Range posX, Range posY, Orientation[] orientations) {
         if (type.equals("color"))
@@ -693,36 +748,61 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
             unaryConstraintController.addWallConstraint(selectedId, orientations);
     }
     
+    /**
+     * Prepares the panel of the uanry constraints that need only a property
+     * @param label
+     * @param visibleComponents 
+     */
     private void propertyConstraintView(String label, Collection<JComponent> visibleComponents) {
         propertyLabel.setText(label);
         visibleComponents.add(propertyLabel);
         showOnly(visibleComponents);
     }
     
+    /**
+     * Prepares the view to receive a position constraint
+     */
     private void positionConstraintView() {
         updateComboBox(relatableCombo, new String[]{"area", "at"});
         showOnly((Collection) Arrays.asList(constPropEditor, positionPanel, relatableCombo));
     }
     
+    /**
+     * Prepares the view to receive a range constraint
+     */
     private void rangeConstraintView() {
         prepareRangePanel("min:", "max:");
         showOnly((Collection) Arrays.asList(constPropEditor,rangePanel));
     }
     
+    /**
+     * Prepares the view to receive a Wall constraint
+     */
     private void wallsConstraintView() {
         relatableCombo.setVisible(false);
         showOnly((Collection) Arrays.asList(constPropEditor, wallPanel));
     }
     
+    /**
+     * Prepares the view to receive a simple unary constraint
+     * @param objects The objects to be in the combo number 2
+     */
     private void simpleUnaryConstraintView(Object[] objects) {
         updateComboBox(relatableCombo, objects);
         showOnly((Collection) Arrays.asList(relatableCombo));
     }
     
+    /**
+     * Prepares the view to receive a simple unary constraint
+     * @param collection The objects to be in the combo number 2
+     */
     private void simpleUnaryConstraintView(Collection<? extends Object> collection) {
         simpleUnaryConstraintView(collection.toArray());
     }
     
+    /**
+     * Updates the view to receive a simple uanry depending on what's selected on the first combobox
+     */
     private void updateUnaryView() {
         String type = (String) constraintTypeList.getSelectedItem();
         if (type != null) {
@@ -748,6 +828,10 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
         }
     }
 
+    /**
+     * Prepares the view to show binary constraints
+     * @param consName The name of the constraint
+     */
     private void updateBinaryView(String consName) {
         if (consName.startsWith("dist"))
             propertyConstraintView("Distance:", new ArrayList(Arrays.asList(relatableCombo, constPropEditor,
@@ -756,6 +840,9 @@ private void relatableComboActionPerformed(java.awt.event.ActionEvent evt) {//GE
             showOnly((Collection) Arrays.asList(relatableCombo));
     }
 
+    /**
+     * Resets all the spinners to 0
+     */
     private void resetSpinners() {
        JSpinner[] spinners = {minSpinner, maxSpinner, minXSpinner, maxXSpinner, minYSpinner, maxYSpinner};
        for (JSpinner spinner: spinners)  {

@@ -63,7 +63,7 @@ public class GlobalConstraintController
     }
     
     public void removeGlobalConstraint(Class<? extends GlobalConstraint> gc) {
-        getWishList().removeGlobalConstraint(gc.getName());
+        getWishList().removeGlobalConstraint(gc);
     }
     
     public Collection<GlobalConstraint> getConstraints() {

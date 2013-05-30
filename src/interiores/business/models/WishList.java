@@ -158,7 +158,11 @@ public class WishList
     
     
     public void removeGlobalConstraint(String name) {
-        globalConstraints.remove(GlobalConstraint.getConstraintClass(name).getName());
+        removeGlobalConstraint(GlobalConstraint.getConstraintClass(name));
+    }
+    
+    public void removeGlobalConstraint(Class<? extends GlobalConstraint> gcClass) {
+        globalConstraints.remove(gcClass.getName());
     }
     
     /**

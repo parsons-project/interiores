@@ -14,10 +14,12 @@ import interiores.core.business.BusinessException;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.views.ConstraintEditorFrame;
+import interiores.presentation.swing.views.GlobalConstraintsFrame;
 import java.awt.event.KeyEvent;
 import java.util.Collection;
 import java.util.TimerTask;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -46,6 +48,10 @@ public class WishListPanel extends JPanel {
         furnitureTypeController = presentation.getBusinessController(FurnitureTypeController.class);
         fixedElementController = presentation.getBusinessController(FixedElementController.class);
         listModel = new DefaultListModel();
+        
+        ImageIcon im = new ImageIcon("src/resources/padlock.png");
+        im.setImage( im.getImage().getScaledInstance(15,15,java.awt.Image.SCALE_SMOOTH) );
+        globalConstraintsButton.setIcon(im);
         
         initLists();
     }
@@ -92,6 +98,11 @@ public class WishListPanel extends JPanel {
         cef.setVisible(true);
     }
     
+    private void launchRoomConstraintsEditor() {
+        GlobalConstraintsFrame roomConst = swing.getNew(GlobalConstraintsFrame.class);
+        roomConst.setVisible(true);
+    }
+    
     @Listen(SolveDesignStartedEvent.class)
     public void setTimeoutTimer(SolveDesignStartedEvent evt) {
         timeout = new java.util.Timer();
@@ -133,6 +144,7 @@ public class WishListPanel extends JPanel {
         solveButton = new javax.swing.JButton();
         debugCheckBox = new javax.swing.JCheckBox();
         timeCheckBox = new javax.swing.JCheckBox();
+        globalConstraintsButton = new javax.swing.JButton();
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Furniture");
         selectable.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
@@ -168,6 +180,15 @@ public class WishListPanel extends JPanel {
 
         timeCheckBox.setText("Time");
 
+        globalConstraintsButton.setBorderPainted(false);
+        globalConstraintsButton.setContentAreaFilled(false);
+        globalConstraintsButton.setLabel("Global constraints");
+        globalConstraintsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                globalConstraintsButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -175,23 +196,30 @@ public class WishListPanel extends JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(solveButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(debugCheckBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(timeCheckBox))
-                    .addComponent(scrollSelectable, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
-                    .addComponent(scrollSelected, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
-                .addGap(14, 14, 14))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(globalConstraintsButton)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(scrollSelectable, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(solveButton)
+                                .addGap(18, 18, 18)
+                                .addComponent(debugCheckBox)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(timeCheckBox))
+                            .addComponent(scrollSelected, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
+                        .addGap(14, 14, 14))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(scrollSelectable, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(globalConstraintsButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(scrollSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollSelectable, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(scrollSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(solveButton)
@@ -256,8 +284,13 @@ private void selectedKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
    }
 }//GEN-LAST:event_selectedKeyPressed
 
+private void globalConstraintsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_globalConstraintsButtonActionPerformed
+    launchRoomConstraintsEditor();
+}//GEN-LAST:event_globalConstraintsButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox debugCheckBox;
+    private javax.swing.JButton globalConstraintsButton;
     private javax.swing.JScrollPane scrollSelectable;
     private javax.swing.JScrollPane scrollSelected;
     private javax.swing.JTree selectable;

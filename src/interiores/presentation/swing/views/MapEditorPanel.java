@@ -48,7 +48,7 @@ public class MapEditorPanel extends JPanel
     
     private void addTools(SwingController swing) {
         tools.add(new SelectionTool(swing));
-        tools.add(new MoveTool());
+        tools.add(new MoveTool(swing));
         tools.add(new DoorTool(swing));
         tools.add(new WindowTool(swing));
         tools.add(new PillarTool(swing));

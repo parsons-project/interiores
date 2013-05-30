@@ -36,6 +36,10 @@ public class RoomElement
         return name;
     }
     
+    public Point getPosition() {
+        return rectangle.getLocation();
+    }
+    
     public void setColor(String c)
     {
         color = Color.decode(c);

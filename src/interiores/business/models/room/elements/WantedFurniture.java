@@ -6,6 +6,7 @@ import interiores.business.models.constraints.furniture.BinaryConstraintEnd;
 import interiores.business.models.constraints.furniture.BinaryConstraintSet;
 import interiores.business.models.constraints.furniture.UnaryConstraint;
 import interiores.business.models.constraints.furniture.UnaryConstraintSet;
+import java.awt.Point;
 import java.util.Collection;
 import java.util.HashSet;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -40,6 +41,13 @@ public class WantedFurniture
         
         unaryConstraints = new UnaryConstraintSet();
         binaryConstraints = new BinaryConstraintSet();
+    }
+    
+    public void setPosition(Point p) {
+        if(!isAssigned())
+            return;
+        
+        getAssignedValue().setPosition(p);
     }
     
     @Override

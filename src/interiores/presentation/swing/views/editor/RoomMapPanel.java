@@ -129,7 +129,7 @@ public class RoomMapPanel
     {//GEN-HEADEREND:event_formKeyReleased
         boolean shouldRepaint = false;
         if(evt.getKeyCode() == KeyEvent.VK_DELETE) {
-            for(String id : map.getSelected())
+            for(String id : map.getSelectedNames())
                 ftController.unselect(id);
             
             shouldRepaint = true;

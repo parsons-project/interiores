@@ -1,6 +1,10 @@
 package interiores.presentation.swing.views.editor.tools;
 
+import interiores.business.controllers.DesignController;
+import interiores.business.models.room.elements.WantedFurniture;
+import interiores.core.presentation.SwingController;
 import interiores.presentation.swing.views.map.InteractiveRoomMap;
+import interiores.presentation.swing.views.map.RoomElement;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -12,10 +16,24 @@ import java.awt.event.MouseEvent;
 public class MoveTool
     extends EditorTool
 {
+    private DesignController design;
     private Point previous;
     
-    public MoveTool() {
+    public MoveTool(SwingController swing) {
         super("Move", "move.png", KeyEvent.VK_M);
+        
+        this.design = swing.getBusinessController(DesignController.class);
+    }
+    
+    @Override
+    public boolean mouseReleased(MouseEvent evt, InteractiveRoomMap map) {
+        for(RoomElement element : map.getSelected()) {
+            Point p = element.getPosition();
+            
+            design.setPosition(element.getName(), map.unpad(p));
+        }
+        
+        return true;
     }
     
     @Override

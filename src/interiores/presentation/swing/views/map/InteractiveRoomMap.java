@@ -65,13 +65,17 @@ public class InteractiveRoomMap
         selected.clear();
     }
     
-    public Collection<String> getSelected() {
+    public Collection<String> getSelectedNames() {
         Collection<String> names = new TreeSet();
         
         for(RoomElement element : selected)
             names.add(element.getName());
         
         return names;
+    }
+    
+    public Collection<RoomElement> getSelected() {
+        return selected;
     }
     
     public String getLastSelected() {

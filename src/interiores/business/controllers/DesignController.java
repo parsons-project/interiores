@@ -11,6 +11,7 @@ import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.Observer;
 import interiores.core.data.JAXBDataController;
+import java.awt.Point;
 import java.util.Collection;
 
 
@@ -90,5 +91,10 @@ public class DesignController
     public boolean isSolving()
     {
         return solver.isSolving();
+    }
+    
+    public void setPosition(String furnitureName, Point position) {
+        WantedFurniture wf = getWishList().getWantedFurniture(furnitureName);
+        wf.setPosition(position);
     }
 }

@@ -72,6 +72,11 @@ public class FurnitureValue extends Value {
         return activeArea.getOrientation();
     }
     
+    public void setPosition(Point p) {
+        activeArea.setLocation(p);
+        wholeArea = activeArea.applySpaceAround(model.getPassiveSpace());
+    }
+    
     @Override
     public String toString() {
         return "Model Name: " + model.getName() + " Location: (" + activeArea.x + "," + activeArea.y + ")" +

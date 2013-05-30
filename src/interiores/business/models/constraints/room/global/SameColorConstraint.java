@@ -164,4 +164,8 @@ public class SameColorConstraint
         
     }
     
+    @Override
+    public String toString() {
+        return "All elements must have the same color";
+    }
 }

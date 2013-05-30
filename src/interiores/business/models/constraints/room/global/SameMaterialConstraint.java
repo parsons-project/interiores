@@ -155,4 +155,9 @@ public class SameMaterialConstraint
         FurnitureVariable actual, FurnitureValue actualValue) {
 
     }
+    
+    @Override
+    public String toString() {
+        return "All elements must have the same material";
+    }
 }

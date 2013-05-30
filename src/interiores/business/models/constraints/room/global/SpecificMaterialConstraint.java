@@ -47,4 +47,9 @@ public class SpecificMaterialConstraint
             variable.eliminateExceptM(validModels);
         }
     }
+    
+    @Override
+    public String toString() {
+        return "All elements must have material " + material.name();
+    }
 }

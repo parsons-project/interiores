@@ -129,5 +129,10 @@ public class BudgetConstraint
         
         currentBudget -= actualValue.getModel().getPrice();
     }
+    
+    @Override
+    public String toString() {
+        return "Maximum Budget: " + maxBudget;
+    }
 
 }

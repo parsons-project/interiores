@@ -47,4 +47,9 @@ public class SpecificColorConstraint
             variable.eliminateExceptM(validModels);
         }
     }
+    
+    @Override
+    public String toString() {
+        return "All elements must be color " + color.name();
+    }
 }

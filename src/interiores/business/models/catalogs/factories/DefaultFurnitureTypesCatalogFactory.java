@@ -55,6 +55,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return catalog;
     }
     
+    // Cama de matrimonio
     private static FurnitureType bedDouble() throws BusinessException {
         FurnitureType ft = new FurnitureType("bedDouble", new Range(120, 240), new Range(180, 210),
                 new SpaceAround(50, 50, 0, 50), new Functionality[]{ Functionality.SLEEP },true);
@@ -83,9 +84,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Cama individual
     private static FurnitureType bedSingle() throws BusinessException {
         FurnitureType ft = new FurnitureType("bedSingle", new Range(70, 150), new Range(180, 210),
-                new SpaceAround(50, 0, 0, 0), new Functionality[]{ Functionality.SLEEP },true);
+                new SpaceAround(50, 50, 0, 0), new Functionality[]{ Functionality.SLEEP },true);
         
         ft.addFurnitureModel(new FurnitureModel("TERESJI", new Dimension(90, 190), 129.99f, "glazed",
                 "beech"));
@@ -107,8 +109,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Mesilla de noche
     private static FurnitureType tableBedside() throws BusinessException {
-        FurnitureType ft = new FurnitureType("tableBedside", new Range(20, 80), new Range(20, 70));
+        FurnitureType ft = new FurnitureType("tableBedside", new Range(20, 80), new Range(20, 70),
+                new SpaceAround(20, 10, 0, 10));
         
         ft.addFurnitureModel(new FurnitureModel("YANVIK", new Dimension(60, 40), 23.99f, "glazed",
                 "beech"));
@@ -134,6 +138,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Escritorio
     private static FurnitureType bureau() throws BusinessException {
         FurnitureType ft = new FurnitureType("bureau", new Range(40, 200), new Range(20, 100));
         
@@ -163,8 +168,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Vitrina
     private static FurnitureType cabinet() throws BusinessException {
-        FurnitureType ft = new FurnitureType("cabinet", new Range(40, 250), new Range(25, 90));
+        FurnitureType ft = new FurnitureType("cabinet", new Range(40, 250), new Range(25, 90),
+                new SpaceAround(30, 0, 0, 0));
         ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("JASMINN", new Dimension(190, 50), 189.99f, "brown",
@@ -231,9 +238,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
     
+    // Espejo
     private static FurnitureType mirror() throws BusinessException {
         FurnitureType ft = new FurnitureType("mirror", new Range(30, 200), new Range(5, 5),
-                new SpaceAround(50, 0, 0, 0));
+                new SpaceAround(100, 0, 0, 0));
         ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("NONN", new Dimension(80, 5), 49.99f, "gray",
@@ -258,6 +266,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Pila (grifo)
     private static FurnitureType sink() throws BusinessException {
         FurnitureType ft = new FurnitureType("sink", new Range(55, 150), new Range(48, 64),
                 new SpaceAround(50, 0, 0, 0));
@@ -277,9 +286,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Horno
     private static FurnitureType oven() throws BusinessException {
         FurnitureType ft = new FurnitureType("oven", new Range(50, 70), new Range(40, 60),
-                new SpaceAround(30, 0, 0, 0));
+                new SpaceAround(40, 0, 0, 0));
         ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("NOHN", new Dimension(60, 55), 259f, "gray",
@@ -294,6 +304,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Microondas
     private static FurnitureType microwave() throws BusinessException {
         FurnitureType ft = new FurnitureType("microwave", new Range(50, 70), new Range(35, 60),
                 new SpaceAround(30, 0, 0, 0));
@@ -311,6 +322,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Quemador, fogones
     private static FurnitureType hob() throws BusinessException {
         FurnitureType ft = new FurnitureType("hob", new Range(50, 70), new Range(40, 60),
                 new SpaceAround(60, 0, 0, 0));
@@ -330,6 +342,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Estufa
     private static FurnitureType stove() throws BusinessException {
         FurnitureType ft = new FurnitureType("stove", new Range(50, 75), new Range(40, 60),
                 new SpaceAround(60, 0, 0, 0));
@@ -349,6 +362,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Extractor
     private static FurnitureType extractor() throws BusinessException {
         FurnitureType ft = new FurnitureType("extractor", new Range(50, 90), new Range(40, 60));
         ft.setToWalls(true);
@@ -369,8 +383,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Firgorífico, nevera
     private static FurnitureType fridge() throws BusinessException {
-        FurnitureType ft = new FurnitureType("fridge", new Range(50, 70), new Range(40, 60));
+        FurnitureType ft = new FurnitureType("fridge", new Range(50, 70), new Range(40, 60),
+                new SpaceAround(50, 0, 0, 0));
         ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("ARZU", new Dimension(60, 60), 389f, "gray",
@@ -395,8 +411,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Lavaplatos (lavavajillas)
     private static FurnitureType dishwasher() throws BusinessException {
-        FurnitureType ft = new FurnitureType("dishwasher", new Range(50, 70), new Range(40, 60));
+        FurnitureType ft = new FurnitureType("dishwasher", new Range(50, 70), new Range(40, 60),
+                new SpaceAround(50, 0, 0, 0));
         ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("PASJKAL", new Dimension(60, 55), 249f, "gray",
@@ -413,6 +431,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Lavabo
     private static FurnitureType washer() throws BusinessException {
         FurnitureType ft = new FurnitureType("washer", new Range(50, 70), new Range(40, 60),
                 new SpaceAround(50, 0, 0, 0));
@@ -432,6 +451,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Estante
     private static FurnitureType shelf() throws BusinessException {
         FurnitureType ft = new FurnitureType("shelf", new Range(30, 180), new Range(5, 50),
                 new SpaceAround(50, 0, 0, 0));
@@ -471,9 +491,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Basura, papelera
     private static FurnitureType trash() throws BusinessException {
         FurnitureType ft = new FurnitureType("trash", new Range(20, 50), new Range(20, 50),
-                new SpaceAround(50, 0, 0, 0));
+                new SpaceAround(10, 10, 0, 10));
         
         ft.addFurnitureModel(new FurnitureModel("DAIDDERIKKH", new Dimension(40, 40), 8.99f, "red",
                 "steel"));
@@ -489,6 +510,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Bidet
     private static FurnitureType bidet() throws BusinessException {
         FurnitureType ft = new FurnitureType("bidet", new Range(30, 50), new Range(40, 60),
                 new SpaceAround(50, 25, 0, 25));
@@ -508,9 +530,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Lavabo
     private static FurnitureType washbasin() throws BusinessException {
         FurnitureType ft = new FurnitureType("washbasin", new Range(40, 60), new Range(30, 60),
-                new SpaceAround(50, 20, 0, 20));
+                new SpaceAround(50, 0, 0, 0));
         ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("SKLLADDIYSJZ", new Dimension(55, 45), 37.99f, "white",
@@ -533,9 +556,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Retrete
     private static FurnitureType toilet() throws BusinessException {
         FurnitureType ft = new FurnitureType("toilet", new Range(40, 60), new Range(50, 80),
-                new SpaceAround(50, 25, 0, 25));
+                new SpaceAround(60, 25, 0, 25));
         ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("SVOJTEKH", new Dimension(55, 70), 219f, "black",
@@ -560,10 +584,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Bañera
     private static FurnitureType bathtub() throws BusinessException {
         FurnitureType ft = new FurnitureType("bathtub", new Range(60, 90), new Range(100, 210),
-                new Functionality[]{ Functionality.BATH });
-        ft.setToWalls(true);
+                new SpaceAround(50, 0, 0, 0), new Functionality[]{ Functionality.BATH },true);
         
         ft.addFurnitureModel(new FurnitureModel("SLARS", new Dimension(70, 160), 129f, "white",
                 "porcelain"));
@@ -585,6 +609,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Ducha
     private static FurnitureType shower() throws BusinessException {
         FurnitureType ft = new FurnitureType("shower", new Range(60, 120), new Range(60, 120),
                 new SpaceAround(50, 0, 0, 0), new Functionality[]{ Functionality.BATH },true);
@@ -609,6 +634,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Secadora
     private static FurnitureType dryer() throws BusinessException {
         FurnitureType ft = new FurnitureType("dryer", new Range(50, 70), new Range(40, 60),
                 new SpaceAround(50, 0, 0, 0));
@@ -626,9 +652,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Mesa (espacio pasivo a todos lados)
     private static FurnitureType table() throws BusinessException {
         FurnitureType ft = new FurnitureType("table", new Range(40, 300), new Range(30, 500),
-                new SpaceAround(60, 0, 0, 0));
+                new SpaceAround(10, 10, 10, 10));
         
         ft.addFurnitureModel(new FurnitureModel("JENGO", new Dimension(90, 140), 59.99f, "glazed",
                 "pine"));
@@ -690,6 +717,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Silla
     private static FurnitureType chair() throws BusinessException {
         FurnitureType ft = new FurnitureType("chair", new Range(40, 60), new Range(40, 60),
                 new SpaceAround(30, 20, 0, 20));
@@ -720,6 +748,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Sillón
     private static FurnitureType armchair() throws BusinessException {
         FurnitureType ft = new FurnitureType("armchair", new Range(40, 80), new Range(40, 80),
                 new SpaceAround(40, 0, 0, 0));
@@ -734,6 +763,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Encimera
     private static FurnitureType worktop() throws BusinessException {
         FurnitureType ft = new FurnitureType("worktop", new Range(5, 300), new Range(60, 80),
                 new SpaceAround(60, 0, 0, 0));
@@ -760,9 +790,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Exprimidor
     private static FurnitureType wringer() throws BusinessException {
         FurnitureType ft = new FurnitureType("wringer", new Range(50, 70), new Range(50, 60),
-                new SpaceAround(50, 0, 0, 0));
+                new SpaceAround(30, 10, 0, 10));
         
         ft.addFurnitureModel(new FurnitureModel("MARTIND", new Dimension(60, 60), 59.99f, "gray",
                 "steel"));
@@ -776,9 +807,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Sofá
     private static FurnitureType sofa() throws BusinessException {
         FurnitureType ft = new FurnitureType("sofa", new Range(60, 300), new Range(40, 80),
-                new SpaceAround(20, 0, 0, 0));
+                new SpaceAround(30, 0, 0, 0));
         
         ft.addFurnitureModel(new FurnitureModel("SYSVANNDORD", new Dimension(155, 60), 329.99f, "black",
                 "steel"));
@@ -824,6 +856,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Estantería
     private static FurnitureType shelves() throws BusinessException {
         FurnitureType ft = new FurnitureType("shelves", new Range(30, 400), new Range(20, 70),
                 new SpaceAround(50, 0, 0, 0));
@@ -859,9 +892,10 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Anaquel, (como una estantería)
     private static FurnitureType rack() throws BusinessException {
         FurnitureType ft = new FurnitureType("rack", new Range(20, 80), new Range(20, 80),
-                new SpaceAround(30, 0, 30, 0));
+                new SpaceAround(50, 20, 0, 20));
         ft.setToWalls(true);
         
         ft.addFurnitureModel(new FurnitureModel("SKARD", new Dimension(45, 45), 79.99f, "glazed",
@@ -878,6 +912,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Televisión
     private static FurnitureType tv() throws BusinessException {
         FurnitureType ft = new FurnitureType("tv", new Range(40, 100), new Range(5, 70),
                 new SpaceAround(100, 0, 0, 0));
@@ -903,6 +938,7 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
+    // Buffet (francés): Como un armario
     private static FurnitureType buffet() throws BusinessException {
         FurnitureType ft = new FurnitureType("buffet", new Range(20, 100), new Range(20, 100),
                 new SpaceAround(50, 0, 0, 0));

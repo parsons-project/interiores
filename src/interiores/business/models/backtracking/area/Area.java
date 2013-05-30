@@ -248,6 +248,10 @@ public class Area
     }
     
     
+    /**
+     * Initializes the edges and data structures of this area from the set of
+     * its vertexs.
+     */
     private void initializeAreaFromVertexs() {
         
 //        if (! isValidArea())
@@ -478,6 +482,11 @@ public class Area
         return intersectionPoints;
     }
 
+    /**
+     * This area is the result of the symmetric difference of this area and a.
+     * a is not modified.
+     * @param a 
+     */
     private void symmetricDifference(Area a) {
         Set<GridPoint> vertexSet = new HashSet<GridPoint>();
         vertexSet.addAll(vertexs);
@@ -557,7 +566,6 @@ public class Area
      * randomly. From these, an estimation of the density of area inside the
      * bounding rectangle is infered.
      * (operation 7 of the opening explanation)
-     * This can be optimized using uniformly distributed squares.
      * 
      * @return an estimation of the size.
      */
@@ -714,8 +722,7 @@ public class Area
 
         /**
          * Given that square is a non-contained square of this area, returns the
-         * next contained square in the same row, assuming squares are sorted
-         * from left to right.
+         * next contained square in the same row.
          * To find the next square, we have to find the first edge that
          * intersects the ray projected by the square to the right.
          * If there is none, returns null.

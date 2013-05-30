@@ -4,6 +4,7 @@
 package interiores.business.models.backtracking.area;
 
 /**
+ * Represents a wide ray of the GridPlane that propagates the right.
  * @author nil.mamano
  */
 class RightRay {

@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
+ * Represents a grid point of the Grid Plane.
  * @author nil.mamano
  */
 @XmlRootElement

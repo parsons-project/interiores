@@ -6,7 +6,7 @@ package interiores.business.models.backtracking.area;
 
 
 /**
- *
+ * Represents a horizontal edge of an Area of the GridPlane.
  * @author nil.mamano
  */
 class HorizontalEdge {

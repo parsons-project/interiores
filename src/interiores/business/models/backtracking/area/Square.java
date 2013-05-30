@@ -4,7 +4,7 @@
 package interiores.business.models.backtracking.area;
 
 /**
- *
+ * Represents a Square of the GridPlane.
  * @author Nil
  */
 class Square {

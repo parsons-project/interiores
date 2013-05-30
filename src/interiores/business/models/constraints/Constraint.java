@@ -1,6 +1,4 @@
 /**
- * A Constraint is a class that represents any form of restriction upon the
- * values the variables might take.
  * 
  * Package structure
  * 
@@ -35,7 +33,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
- *
+ * A Constraint is a class that represents any form of restriction upon the
+ * values the variables might take.
  * @author Nil
  */
 @XmlRootElement

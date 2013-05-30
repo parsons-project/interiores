@@ -15,7 +15,7 @@ import interiores.utils.Range;
  */
 public class DefaultFurnitureTypesCatalogFactory
 {
-    private static final boolean includePlacementConstraints = false;
+    private static final boolean includePlacementConstraints = true;
     
     public static NamedCatalog<FurnitureType> getCatalog() throws BusinessException {
         NamedCatalog<FurnitureType> catalog = new NamedCatalog();

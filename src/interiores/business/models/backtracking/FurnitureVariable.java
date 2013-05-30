@@ -298,7 +298,7 @@ abstract public class FurnitureVariable
     }
 
     void addBacktrackingConstraint(Constraint c) {
-        if (backtrackingConstraints == null) backtrackingConstraints = new ArrayList();
+        
         backtrackingConstraints.add(c);
     }
 }

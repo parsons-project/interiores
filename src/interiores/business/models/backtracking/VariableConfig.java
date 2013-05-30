@@ -68,7 +68,10 @@ public class VariableConfig
             FurnitureType ftype = furnitureTypes.get(variable);
             variable.undoAssignValue();
             variable.createDomain(ftype.getFurnitureModels(), areaSize, variables.size());
-            
+        }
+        
+        for(FurnitureVariable variable : variables) {
+            FurnitureType ftype = furnitureTypes.get(variable);
             addDefaultConstraints(ftype, variable);
         }
     }

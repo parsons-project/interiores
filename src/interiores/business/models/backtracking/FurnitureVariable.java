@@ -8,6 +8,7 @@ import interiores.business.models.constraints.furniture.InexhaustiveTrimmer;
 import interiores.business.models.constraints.furniture.PreliminarTrimmer;
 import interiores.business.models.room.FurnitureModel;
 import interiores.business.models.room.elements.WantedFurniture;
+import interiores.core.Debug;
 import interiores.shared.backtracking.Value;
 import interiores.shared.backtracking.Variable;
 import interiores.utils.Dimension;
@@ -297,6 +298,7 @@ abstract public class FurnitureVariable
     }
 
     void addBacktrackingConstraint(Constraint c) {
+        if (backtrackingConstraints == null) backtrackingConstraints = new ArrayList();
         backtrackingConstraints.add(c);
     }
 }

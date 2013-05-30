@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
- * Generic class for representing constraints over a furniture piece.
+ * Generic class for representing unary constraints over a furniture piece.
  */
 @XmlRootElement
 @XmlSeeAlso({AreaConstraint.class, ColorConstraint.class, MaterialConstraint.class, ModelConstraint.class,

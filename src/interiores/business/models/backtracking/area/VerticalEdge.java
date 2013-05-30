@@ -5,7 +5,7 @@
 package interiores.business.models.backtracking.area;
 
 /**
- *
+ * Represents a Vertical edge of an Area of the Grid Plane.
  * @author nil.mamano
  */
 class VerticalEdge {

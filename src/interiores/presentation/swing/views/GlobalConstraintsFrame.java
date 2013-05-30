@@ -65,7 +65,7 @@ public class GlobalConstraintsFrame extends javax.swing.JFrame {
         subtypeCombo = new javax.swing.JComboBox();
         priceSpinner = new javax.swing.JSpinner();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Global constraints editor");
         setAlwaysOnTop(true);
         setResizable(false);
@@ -111,9 +111,7 @@ public class GlobalConstraintsFrame extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(priceSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(38, 38, 38))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(subtypeCombo, 0, 140, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                    .addComponent(subtypeCombo, 0, 140, Short.MAX_VALUE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)

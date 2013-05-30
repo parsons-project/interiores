@@ -80,6 +80,9 @@ public class ThreadSolver
         }
         catch (NoSolutionException nse) {
             isSolutionFound = false;
+            
+            if(shouldStop)
+                notify(new RoomDesignChangedEvent());
         }
         
         if(isTimerEnabled)

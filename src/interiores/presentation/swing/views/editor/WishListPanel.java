@@ -104,7 +104,7 @@ public class WishListPanel extends JPanel {
     }
     
     @Listen(SolveDesignStartedEvent.class)
-    public void setTimeoutTimer(SolveDesignStartedEvent evt) {
+    public void setTimeoutTimer() {
         timeout = new java.util.Timer();
         if( ! debugCheckBox.isSelected() ) {
             timeout.schedule(new TimerTask() {
@@ -120,11 +120,14 @@ public class WishListPanel extends JPanel {
                 }
             }, 30000);
         }
+        
+        solveButton.setText("Abort");
     }
     
     @Listen(SolveDesignFinishedEvent.class)
     public void setTimeoutTimer(SolveDesignFinishedEvent evt) {
         timeout.cancel();
+        solveButton.setText("Solve design");
     }
     
     
@@ -232,7 +235,12 @@ public class WishListPanel extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 private void solveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_solveButtonActionPerformed
-    solveDesign();
+    if(designController.isSolving()) {
+        designController.stopSolver();
+        solveButton.setText("Solve design");
+    }
+    else
+        solveDesign();
 }//GEN-LAST:event_solveButtonActionPerformed
 
 private void selectedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_selectedMouseClicked

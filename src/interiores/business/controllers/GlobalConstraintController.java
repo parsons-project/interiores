@@ -1,6 +1,8 @@
 package interiores.business.controllers;
 
 import interiores.business.controllers.abstracted.InterioresController;
+import interiores.business.events.constraints.GlobalConstraintAdded;
+import interiores.business.events.constraints.GlobalConstraintRemoved;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.constraints.room.global.BudgetConstraint;
 import interiores.business.models.constraints.room.global.SameColorConstraint;
@@ -36,34 +38,41 @@ public class GlobalConstraintController
     public void addBudgetConstraint(float maxBudget) {
         GlobalConstraint constraint = new BudgetConstraint(maxBudget);
         getWishList().addGlobalConstraint(constraint);
+        notify(new GlobalConstraintAdded());
     }
     
     public void addSameColorConstraint() {
         GlobalConstraint constraint = new SameColorConstraint();
         getWishList().addGlobalConstraint(constraint);
+        notify(new GlobalConstraintAdded());
     }
     
     public void addSameMaterialConstraint() {
         GlobalConstraint constraint = new SameMaterialConstraint();
         getWishList().addGlobalConstraint(constraint);
+        notify(new GlobalConstraintAdded());
     }
     
     public void addSpecificColorConstraint(String color) {
         GlobalConstraint constraint = new SpecificColorConstraint(CoolColor.getEnum(color));
         getWishList().addGlobalConstraint(constraint);
+        notify(new GlobalConstraintAdded());
     }
     
     public void addSpecificMaterialConstraint(Material material) {
         GlobalConstraint constraint = new SpecificMaterialConstraint(material);
         getWishList().addGlobalConstraint(constraint);
+        notify(new GlobalConstraintAdded());
     }
     
     public void removeGlobalConstraint(String name) {
         getWishList().removeGlobalConstraint(name);
+        notify(new GlobalConstraintRemoved());
     }
     
     public void removeGlobalConstraint(Class<? extends GlobalConstraint> gc) {
         getWishList().removeGlobalConstraint(gc);
+        notify(new GlobalConstraintRemoved());
     }
     
     public Collection<GlobalConstraint> getConstraints() {

@@ -1,8 +1,11 @@
 package interiores.presentation.swing.views;
 
 import interiores.business.controllers.GlobalConstraintController;
+import interiores.business.events.constraints.GlobalConstraintAdded;
+import interiores.business.events.constraints.GlobalConstraintRemoved;
 import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.core.presentation.SwingController;
+import interiores.core.presentation.annotation.Listen;
 import interiores.utils.CoolColor;
 import interiores.utils.Material;
 import java.awt.event.KeyEvent;
@@ -63,6 +66,8 @@ public class GlobalConstraintsFrame extends javax.swing.JFrame {
         priceSpinner = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Global constraints editor");
+        setAlwaysOnTop(true);
         setResizable(false);
 
         globalConstraintsList.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -188,6 +193,7 @@ private void globalConstraintsListKeyReleased(java.awt.event.KeyEvent evt) {//GE
     private javax.swing.JComboBox typeCombo;
     // End of variables declaration//GEN-END:variables
 
+    @Listen({GlobalConstraintAdded.class, GlobalConstraintRemoved.class})
     private void updateActiveConstraintsList() {
         setListValues(globalConstraintsList, globalConstraintController.getConstraints());
     }

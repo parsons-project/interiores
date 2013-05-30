@@ -9,6 +9,7 @@ import interiores.business.models.constraints.furniture.binary.StraightFacingCon
 import interiores.business.models.constraints.furniture.unary.WallConstraint;
 import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedFurniture;
+import interiores.core.Debug;
 import interiores.core.business.BusinessException;
 import interiores.utils.Dimension;
 import java.awt.Point;
@@ -106,7 +107,9 @@ public class VariableConfig
                 bce.setOtherVariable(end);
                 variable.addBacktrackingConstraint(bce);
                 
+                Debug.println("getting counterpart for " + bce + " respect from " + variable);
                 BinaryConstraintEnd bceCounterPart = bce.getCounterPart(variable);
+                Debug.println("otype = " + otype + ", bce = " + bce + ", counterpart = " + bceCounterPart);
                 end.addBacktrackingConstraint(bceCounterPart);
             }
         }

@@ -353,12 +353,17 @@ public class Stage {
      */
     HashSet<FurnitureModel> intersectionM(HashSet<FurnitureModel> validModels) {
         HashSet<FurnitureModel> notContainedModels = new HashSet<FurnitureModel>();
-        for (FurnitureModel model : models) {
+        
+        Iterator<FurnitureModel> it = models.iterator();
+        while(it.hasNext()) {
+            FurnitureModel model = it.next();
+            
             if (! validModels.contains(model)) {
                 notContainedModels.add(model);
-                models.remove(model);
+                it.remove();
             }
         }
+        
         return notContainedModels;
     }
     

@@ -15,6 +15,8 @@ import interiores.utils.Range;
  */
 public class DefaultFurnitureTypesCatalogFactory
 {
+    private static final boolean includePlacementConstraints = false;
+    
     public static NamedCatalog<FurnitureType> getCatalog() throws BusinessException {
         NamedCatalog<FurnitureType> catalog = new NamedCatalog();
         
@@ -61,7 +63,8 @@ public class DefaultFurnitureTypesCatalogFactory
                 new SpaceAround(50, 50, 0, 50), new Functionality[]{ Functionality.SLEEP },true);
         
         // Placement constraints
-        ft.addPlacementConstraint("tv", "in-front-of");
+        if (includePlacementConstraints)
+            ft.addPlacementConstraint("tv", "in-front-of");
         
         ft.addFurnitureModel(new FurnitureModel("SFORANVIK", new Dimension(140, 205), 269f, "glazed",
                 "pine"));
@@ -93,7 +96,8 @@ public class DefaultFurnitureTypesCatalogFactory
                 new SpaceAround(50, 50, 0, 0), new Functionality[]{ Functionality.SLEEP },true);
         
         // Placement constraints
-        ft.addPlacementConstraint("tv", "in-front-of");
+        if (includePlacementConstraints)
+            ft.addPlacementConstraint("tv", "in-front-of");
         
         ft.addFurnitureModel(new FurnitureModel("TERESJI", new Dimension(90, 190), 129.99f, "glazed",
                 "beech"));
@@ -121,8 +125,10 @@ public class DefaultFurnitureTypesCatalogFactory
                 new SpaceAround(20, 10, 0, 10));
         
         // Placement constraints
-        ft.addPlacementConstraint("bedSingle", "next-to");
-        ft.addPlacementConstraint("bedDouble", "next-to");
+        if (includePlacementConstraints) {
+            ft.addPlacementConstraint("bedSingle", "next-to");
+            ft.addPlacementConstraint("bedDouble", "next-to");
+        }
         
         ft.addFurnitureModel(new FurnitureModel("YANVIK", new Dimension(60, 40), 23.99f, "glazed",
                 "beech"));
@@ -153,8 +159,8 @@ public class DefaultFurnitureTypesCatalogFactory
         FurnitureType ft = new FurnitureType("bureau", new Range(40, 200), new Range(20, 100));
         
         // Placement constraints
-        ft.addPlacementConstraint("chair", "next-to");
-        ft.addPlacementConstraint("trash", "next-to");
+        if (includePlacementConstraints)
+            ft.addPlacementConstraint("trash", "next-to");
         
         ft.addFurnitureModel(new FurnitureModel("BJYLJANNA", new Dimension(55, 45), 48.99f, "brown",
                 "agglomerate"));
@@ -259,10 +265,10 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.setToWalls(true);
         
         // Placement constraints
-        ft.addPlacementConstraint("washbasin", "next-to");
-        ft.addPlacementConstraint("washer", "next-to");
-        ft.addPlacementConstraint("toilet", "away-from");
-        ft.addPlacementConstraint("bidet", "away-from");
+        if (includePlacementConstraints) {
+            ft.addPlacementConstraint("toilet", "away-from");
+            ft.addPlacementConstraint("bidet", "away-from");
+        }
         
         ft.addFurnitureModel(new FurnitureModel("NONN", new Dimension(80, 5), 49.99f, "gray",
                 "plastic"));
@@ -293,10 +299,10 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.setToWalls(true);
         
         // Placement constraints
-        ft.addPlacementConstraint("worktop", "next-to");
-        ft.addPlacementConstraint("dishwasher", "next-to");
-        ft.addPlacementConstraint("oven", "away-from");
-        ft.addPlacementConstraint("hob", "away-from");
+        if (includePlacementConstraints) {
+            ft.addPlacementConstraint("oven", "away-from");
+            ft.addPlacementConstraint("hob", "away-from");
+        }
         
         ft.addFurnitureModel(new FurnitureModel("TAYKA", new Dimension(110, 50), 179.99f, "gray",
                 "steel"));
@@ -319,8 +325,8 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.setToWalls(true);
         
         // Placement constraints
-        ft.addPlacementConstraint("hob", "next-to");
-        ft.addPlacementConstraint("fridge", "away-from");
+        if (includePlacementConstraints)
+            ft.addPlacementConstraint("fridge", "away-from");
         
         ft.addFurnitureModel(new FurnitureModel("NOHN", new Dimension(60, 55), 259f, "gray",
                 "steel"));
@@ -360,9 +366,10 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.setToWalls(true);
         
         // Placement constraints
-        ft.addPlacementConstraint("extractor", "next-to");
-        ft.addPlacementConstraint("fridge", "away-from");
-        ft.addPlacementConstraint("sink", "away-from");
+        if (includePlacementConstraints) {
+            ft.addPlacementConstraint("fridge", "away-from");
+            ft.addPlacementConstraint("sink", "away-from");
+        }
         
         
         ft.addFurnitureModel(new FurnitureModel("HOA", new Dimension(60, 50), 279f, "black",
@@ -386,8 +393,10 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.setToWalls(true);
         
         // Placement constraints
-        ft.addPlacementConstraint("fridge", "away-from");
-        ft.addPlacementConstraint("hob", "away-from");
+        if (includePlacementConstraints) {
+            ft.addPlacementConstraint("fridge", "away-from");
+            ft.addPlacementConstraint("hob", "away-from");
+        }
         
         
         ft.addFurnitureModel(new FurnitureModel("KRSTO", new Dimension(60, 50), 199.99f, "gray",
@@ -410,8 +419,8 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.setToWalls(true);
         
         // Placement constraints
-        ft.addPlacementConstraint("hob", "next-to");
-        ft.addPlacementConstraint("oven", "next-to");
+        if (includePlacementConstraints)
+            ft.addPlacementConstraint("hob", "next-to");
         
         
         ft.addFurnitureModel(new FurnitureModel("MYRKE", new Dimension(60, 50), 249f, "gray",
@@ -437,8 +446,10 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.setToWalls(true);
         
         // Placement constraints
-        ft.addPlacementConstraint("oven", "away-from");
-        ft.addPlacementConstraint("hob", "away-from");
+        if (includePlacementConstraints) {
+            ft.addPlacementConstraint("oven", "away-from");
+            ft.addPlacementConstraint("hob", "away-from");
+        }
         
         ft.addFurnitureModel(new FurnitureModel("ARZU", new Dimension(60, 60), 389f, "gray",
                 "steel"));
@@ -469,8 +480,8 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.setToWalls(true);
         
         // Placement constraints
-        ft.addPlacementConstraint("sink", "next-to");
-        ft.addPlacementConstraint("washer", "next-to");
+        if (includePlacementConstraints)
+            ft.addPlacementConstraint("wringer", "next-to");
         
         
         ft.addFurnitureModel(new FurnitureModel("PASJKAL", new Dimension(60, 55), 249f, "gray",
@@ -494,8 +505,10 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.setToWalls(true);
         
         // Placement constraints
-        ft.addPlacementConstraint("mirror", "next-to");
-        ft.addPlacementConstraint("toilet", "away-from");
+        if (includePlacementConstraints) {
+            ft.addPlacementConstraint("mirror", "next-to");
+            ft.addPlacementConstraint("toilet", "away-from");
+        }
         
         ft.addFurnitureModel(new FurnitureModel("SLIUBJAMIR", new Dimension(60, 55), 219f, "gray",
                 "steel"));
@@ -557,8 +570,10 @@ public class DefaultFurnitureTypesCatalogFactory
                 new SpaceAround(10, 10, 0, 10));
         
         // Placement constraints
-        ft.addPlacementConstraint("bedSingle", "away-from");
-        ft.addPlacementConstraint("bedDouble", "away-from");
+        if (includePlacementConstraints) {
+            ft.addPlacementConstraint("bedSingle", "away-from");
+            ft.addPlacementConstraint("bedDouble", "away-from");
+        }
         
         ft.addFurnitureModel(new FurnitureModel("DAIDDERIKKH", new Dimension(40, 40), 8.99f, "red",
                 "steel"));
@@ -601,8 +616,10 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.setToWalls(true);
         
         // Placement constraints
-        ft.addPlacementConstraint("mirror", "next-to");
-        ft.addPlacementConstraint("toilet", "away-from");
+        if (includePlacementConstraints) {
+            ft.addPlacementConstraint("mirror", "next-to");
+            ft.addPlacementConstraint("toilet", "away-from");
+        }
         
         ft.addFurnitureModel(new FurnitureModel("SKLLADDIYSJZ", new Dimension(55, 45), 37.99f, "white",
                 "porcelain"));
@@ -631,7 +648,8 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.setToWalls(true);
         
         // Placement constraints
-        ft.addPlacementConstraint("bidet", "next-to");
+        if (includePlacementConstraints)
+            ft.addPlacementConstraint("bidet", "next-to");
         
         
         ft.addFurnitureModel(new FurnitureModel("SVOJTEKH", new Dimension(55, 70), 219f, "black",
@@ -713,8 +731,10 @@ public class DefaultFurnitureTypesCatalogFactory
         ft.setToWalls(true);
         
         // Placement constraints
-        ft.addPlacementConstraint("bathtub", "away-from");
-        ft.addPlacementConstraint("shower", "away-from");
+        if (includePlacementConstraints) {
+            ft.addPlacementConstraint("bathtub", "away-from");
+            ft.addPlacementConstraint("shower", "away-from");
+        }
         
         ft.addFurnitureModel(new FurnitureModel("KELLAGH", new Dimension(60, 55), 239f, "gray",
                 "steel"));
@@ -734,7 +754,8 @@ public class DefaultFurnitureTypesCatalogFactory
                 new SpaceAround(10, 10, 10, 10));
         
         // Placement constraints
-        ft.addPlacementConstraint("tv", "in-front-of");
+        if (includePlacementConstraints)
+            ft.addPlacementConstraint("tv", "in-front-of");
         
         
         ft.addFurnitureModel(new FurnitureModel("JENGO", new Dimension(90, 140), 59.99f, "glazed",
@@ -803,7 +824,10 @@ public class DefaultFurnitureTypesCatalogFactory
                 new SpaceAround(30, 20, 0, 20));
         
         // Placement constraints
-        ft.addPlacementConstraint("table", "next-to");
+        if (includePlacementConstraints) {
+            ft.addPlacementConstraint("table", "next-to");
+            ft.addPlacementConstraint("bureau", "next-to");
+        }
         
         ft.addFurnitureModel(new FurnitureModel("SAMMHAYRLL", new Dimension(45, 45), 14.99f, "black",
                 "plastic"));
@@ -837,7 +861,8 @@ public class DefaultFurnitureTypesCatalogFactory
                 new SpaceAround(40, 0, 0, 0));
         
         // Placement constraints
-        ft.addPlacementConstraint("tv", "in-front-of");
+        if (includePlacementConstraints)
+            ft.addPlacementConstraint("tv", "in-front-of");
         
         ft.addFurnitureModel(new FurnitureModel("JOSUNN", new Dimension(60, 60), 38.99f, "blue",
                 "agglomerate"));
@@ -876,10 +901,15 @@ public class DefaultFurnitureTypesCatalogFactory
         return ft;
     }
 
-    // Exprimidor
+    // Escurreplatos
     private static FurnitureType wringer() throws BusinessException {
         FurnitureType ft = new FurnitureType("wringer", new Range(50, 70), new Range(50, 60),
                 new SpaceAround(30, 10, 0, 10));
+        
+        // Placement constraints
+        if (includePlacementConstraints)
+            ft.addPlacementConstraint("sink", "next-to");
+        
         
         ft.addFurnitureModel(new FurnitureModel("MARTIND", new Dimension(60, 60), 59.99f, "gray",
                 "steel"));
@@ -899,7 +929,8 @@ public class DefaultFurnitureTypesCatalogFactory
                 new SpaceAround(30, 0, 0, 0));
         
         // Placement constraints
-        ft.addPlacementConstraint("tv", "in-front-of");
+        if (includePlacementConstraints)
+            ft.addPlacementConstraint("tv", "in-front-of");
         
         ft.addFurnitureModel(new FurnitureModel("SYSVANNDORD", new Dimension(155, 60), 329.99f, "black",
                 "steel"));

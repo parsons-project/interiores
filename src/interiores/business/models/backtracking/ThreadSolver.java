@@ -100,7 +100,7 @@ public class ThreadSolver
     }
     
     public boolean isPaused() {
-        return (thread.getState() == Thread.State.WAITING);
+        return (thread.getState() == Thread.State.WAITING || !thread.isAlive());
     }
     
     public void resumeSolving() {

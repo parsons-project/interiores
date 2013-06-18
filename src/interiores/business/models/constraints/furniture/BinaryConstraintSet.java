@@ -63,6 +63,17 @@ public class BinaryConstraintSet
         end.removeBinaryConstraint(binaryConstraintClass, furnitureName);
     }
     
+    public void clear(String furnitureName)
+    {
+        for(BinaryConstraintEnd bc : binaryConstraints.values()) {
+            if(! bc.hasCounterPart())
+                return;
+        
+            WantedFurniture end = (WantedFurniture) bc.getOtherVariable();
+            end.removeBinaryConstraint(bc.getClass(), furnitureName);
+        }
+    }
+    
     public void add(BinaryConstraintEnd bc, String elementId) {
         binaryConstraints.put(getKey(bc.getClass(), elementId), bc);
     }

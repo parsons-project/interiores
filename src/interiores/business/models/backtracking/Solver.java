@@ -120,7 +120,7 @@ public class Solver
      * 
      * The matrix of dependence is built
      */
-    public Solver(VariableConfig variableConfig, Collection<GlobalConstraint> gconst)
+    public Solver(VariableConfig variableConfig)
             throws BusinessException
     {
         this.variableConfig = variableConfig;
@@ -130,7 +130,7 @@ public class Solver
         shouldStop = false;
         actual = null;
         
-        globalConstraints = new ArrayList<GlobalConstraint>(gconst);
+        globalConstraints = new ArrayList(variableConfig.getGlobalConstraints());
         addGlobalConstraints();
     }
     

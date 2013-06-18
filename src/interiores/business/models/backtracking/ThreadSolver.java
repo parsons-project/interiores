@@ -29,11 +29,11 @@ public class ThreadSolver
     private long time;
     
     public ThreadSolver() {
-        this(new VariableConfig(new Dimension(0, 0)), new ArrayList<GlobalConstraint>()); // Default empty solver
+        this(new VariableConfig(new Dimension(0, 0), new ArrayList<GlobalConstraint>())); // Default empty solver
     }
     
-    public ThreadSolver(VariableConfig variableConfig, Collection<GlobalConstraint> gconst) {
-        super(variableConfig, gconst);
+    public ThreadSolver(VariableConfig variableConfig) {
+        super(variableConfig);
         
         listeners = new ArrayList();
         isTimerEnabled = false;

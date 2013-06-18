@@ -45,14 +45,13 @@ public class DesignController
             throw new SolverNotFinishedException();
         
         VariableConfig variableConfig = getWishList().getVariableConfig(getActiveCatalog());
-        Collection<GlobalConstraint> gconst = getWishList().getGlobalConstraints();
         
         if(debugMode || solver.shouldRenew(variableConfig)) {
             if(debugMode) {
-                solver = new ThreadSolverDebugger(variableConfig, gconst);
+                solver = new ThreadSolverDebugger(variableConfig);
             }
             else {
-                solver = new ThreadSolver(variableConfig, gconst);
+                solver = new ThreadSolver(variableConfig);
             }
             
             solver.addListener(this);

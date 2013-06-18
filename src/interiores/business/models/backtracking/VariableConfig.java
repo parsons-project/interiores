@@ -7,6 +7,7 @@ import interiores.business.models.constraints.furniture.binary.MaxDistanceConstr
 import interiores.business.models.constraints.furniture.binary.MinDistanceConstraint;
 import interiores.business.models.constraints.furniture.binary.StraightFacingConstraint;
 import interiores.business.models.constraints.furniture.unary.WallConstraint;
+import interiores.business.models.constraints.room.GlobalConstraint;
 import interiores.business.models.room.FurnitureType;
 import interiores.business.models.room.elements.WantedFurniture;
 import interiores.core.Debug;
@@ -28,15 +29,17 @@ public class VariableConfig
     private List<FurnitureConstant> constants;
     private List<FurnitureVariable> variables;
     private Map<FurnitureVariable, FurnitureType> furnitureTypes;
+    private List<GlobalConstraint> globalConstraints;
     
     private static final int AWAY_DISTANCE = 200;
     
-    public VariableConfig(Dimension areaSize) {
+    public VariableConfig(Dimension areaSize, List<GlobalConstraint> globalConstraints) {
         this.areaSize = areaSize;
         
         constants = new ArrayList();
         variables = new ArrayList();
         furnitureTypes = new HashMap();
+        this.globalConstraints  = globalConstraints;
     }
     
     public void addVariable(FurnitureVariable variable, FurnitureType ftype) {
@@ -86,6 +89,10 @@ public class VariableConfig
     
     public OrientedRectangle getTotalArea() {
         return new OrientedRectangle(new Point(0, 0), areaSize, Orientation.S);
+    }
+    
+    public List<GlobalConstraint> getGlobalConstraints() {
+        return globalConstraints;
     }
     
     private void addDefaultConstraints(FurnitureType ftype, FurnitureVariable variable) {
@@ -157,6 +164,9 @@ public class VariableConfig
     
     public boolean equals(VariableConfig other) {
         if(! areaSize.equals(other.areaSize))
+            return false;
+        
+        if(! globalConstraints.equals(other.globalConstraints))
             return false;
         
         if(! constants.equals(other.constants))

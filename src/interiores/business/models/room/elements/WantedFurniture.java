@@ -106,4 +106,9 @@ public class WantedFurniture
     public Collection<BinaryConstraintEnd> getBinaryConstraints() {
         return binaryConstraints.getAll();
     }
+    
+    public void removeBinaryConstraints()
+    {
+        binaryConstraints.clear(name);
+    }
 }

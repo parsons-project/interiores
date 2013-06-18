@@ -16,6 +16,7 @@ import interiores.business.models.room.elements.WantedElementSet;
 import interiores.business.models.room.elements.WantedFixed;
 import interiores.business.models.room.elements.WantedFurniture;
 import interiores.utils.Functionality;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -90,6 +91,7 @@ public class WishList
         if(room.isMandatory(typeName) && furniture.getTypeCount(typeName) == 1)
             throw new MandatoryFurnitureException(typeName, room.getTypeName());
         
+        furniture.get(elementId).removeBinaryConstraints();
         furniture.remove(elementId);
     }
 
@@ -277,7 +279,7 @@ public class WishList
         if(! functionsNotSatisfied.isEmpty())
             throw new RoomFunctionalitiesNotSatisfiedException(functionsNotSatisfied);
         
-        VariableConfig variableSet = new VariableConfig(room.getDimension());
+        VariableConfig variableSet = new VariableConfig(room.getDimension(), new ArrayList(globalConstraints.values()));
         
         for(WantedFixed wfixed : fixed.getAll())
             variableSet.addConstant(wfixed);

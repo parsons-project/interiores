@@ -136,8 +136,10 @@ public class Walls implements Drawable {
         
         RightDoor previewDoor = new RightDoor("preview", length, CoolColor.BROWN.getColor(), position, wall);
         
-        elements.put(position, previewDoor);
-        previewKey = position;
+        if(! elements.containsKey(position)) {
+            elements.put(position, previewDoor);
+            previewKey = position;
+        }
     }
     
     public void addWindow(WantedFixed window) {
@@ -155,8 +157,10 @@ public class Walls implements Drawable {
         
         MapWindow previewWindow = new MapWindow("previewWin", length, CoolColor.WHITE.getColor(), position, wall);
         
-        elements.put(position, previewWindow);
-        previewKey = position;
+        if(! elements.containsKey(position)) {
+            elements.put(position, previewWindow);
+            previewKey = position;
+        }
     }
     
     public void clear() {

@@ -1,0 +1,1261 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wishList>
+    <room>
+        <type identifier="bathroom">
+            <minDimension depth="200" width="200"/>
+            <mustHave>
+                <mustHave>bidet</mustHave>
+                <mustHave>mirror</mustHave>
+                <mustHave>toilet</mustHave>
+                <mustHave>washbasin</mustHave>
+            </mustHave>
+            <cantHave>
+                <cantHave>armchair</cantHave>
+                <cantHave>bedDouble</cantHave>
+                <cantHave>bedSingle</cantHave>
+                <cantHave>dishwasher</cantHave>
+                <cantHave>extractor</cantHave>
+                <cantHave>fridge</cantHave>
+                <cantHave>hob</cantHave>
+                <cantHave>microwave</cantHave>
+                <cantHave>oven</cantHave>
+                <cantHave>sink</cantHave>
+                <cantHave>sofa</cantHave>
+                <cantHave>stove</cantHave>
+                <cantHave>tableBedside</cantHave>
+                <cantHave>worktop</cantHave>
+                <cantHave>wringer</cantHave>
+            </cantHave>
+            <neededFunctions/>
+        </type>
+        <size depth="600" width="600"/>
+    </room>
+    <furniture name="furniture">
+        <elements>
+            <entry>
+                <key>bidet1</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFurniture" typeName="bidet" name="bidet1">
+                    <assignedValue>
+                        <activeArea orientation="E">
+                            <rectangle height="40" width="60">
+<location y="205" x="435"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="90" width="110">
+                            <location y="180" x="435"/>
+                        </wholeArea>
+                        <model material="PORCELAIN" color="GRAY" price="209.0" name="DEKEBJAL" type="bidet">
+                            <size depth="60" width="40"/>
+                            <passiveSpace passiveOffsets="50 25 0 25"/>
+                        </model>
+                    </assignedValue>
+                    <unaryConstraints>
+                        <unaryConstraints/>
+                    </unaryConstraints>
+                    <binaryConstraints>
+                        <binaryConstraints/>
+                    </binaryConstraints>
+                </value>
+            </entry>
+            <entry>
+                <key>mirror1</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFurniture" typeName="mirror" name="mirror1">
+                    <assignedValue>
+                        <activeArea orientation="E">
+                            <rectangle height="30" width="5">
+<location y="210" x="275"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="30" width="105">
+                            <location y="210" x="275"/>
+                        </wholeArea>
+                        <model material="PLASTIC" color="WHITE" price="6.99" name="TOIRDHELBAK" type="mirror">
+                            <size depth="5" width="30"/>
+                            <passiveSpace passiveOffsets="100 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                    <unaryConstraints>
+                        <unaryConstraints/>
+                    </unaryConstraints>
+                    <binaryConstraints>
+                        <binaryConstraints/>
+                    </binaryConstraints>
+                </value>
+            </entry>
+            <entry>
+                <key>toilet1</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFurniture" typeName="toilet" name="toilet1">
+                    <assignedValue>
+                        <activeArea orientation="E">
+                            <rectangle height="40" width="75">
+<location y="120" x="430"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="90" width="135">
+                            <location y="95" x="430"/>
+                        </wholeArea>
+                        <model material="PORCELAIN" color="WHITE" price="109.99" name="SLUUK" type="toilet">
+                            <size depth="75" width="40"/>
+                            <passiveSpace passiveOffsets="60 25 0 25"/>
+                        </model>
+                    </assignedValue>
+                    <unaryConstraints>
+                        <unaryConstraints/>
+                    </unaryConstraints>
+                    <binaryConstraints>
+                        <binaryConstraints/>
+                    </binaryConstraints>
+                </value>
+            </entry>
+            <entry>
+                <key>washbasin1</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFurniture" typeName="washbasin" name="washbasin1">
+                    <assignedValue>
+                        <activeArea orientation="E">
+                            <rectangle height="50" width="40">
+<location y="155" x="165"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="50" width="90">
+                            <location y="155" x="165"/>
+                        </wholeArea>
+                        <model material="PORCELAIN" color="WHITE" price="49.99" name="SFYNYEYKKEN" type="washbasin">
+                            <size depth="40" width="50"/>
+                            <passiveSpace passiveOffsets="50 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                    <unaryConstraints>
+                        <unaryConstraints/>
+                    </unaryConstraints>
+                    <binaryConstraints>
+                        <binaryConstraints/>
+                    </binaryConstraints>
+                </value>
+            </entry>
+        </elements>
+        <typesCount>
+            <entry>
+                <key>bidet</key>
+                <value>1</value>
+            </entry>
+            <entry>
+                <key>mirror</key>
+                <value>1</value>
+            </entry>
+            <entry>
+                <key>shower</key>
+                <value>0</value>
+            </entry>
+            <entry>
+                <key>toilet</key>
+                <value>1</value>
+            </entry>
+            <entry>
+                <key>washbasin</key>
+                <value>1</value>
+            </entry>
+        </typesCount>
+    </furniture>
+    <fixed name="fixed element">
+        <elements>
+            <entry>
+                <key>door1</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="door" name="door1">
+                    <assignedValue>
+                        <activeArea orientation="N">
+                            <rectangle height="5" width="100">
+<location y="-5" x="180"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="105" width="100">
+                            <location y="-5" x="180"/>
+                        </wholeArea>
+                        <model material="WOOD" color="BROWN" price="0.0" name="door">
+                            <size depth="5" width="100"/>
+                            <passiveSpace passiveOffsets="0 0 100 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>door10</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="door" name="door10">
+                    <assignedValue>
+                        <activeArea orientation="E">
+                            <rectangle height="100" width="5">
+<location y="310" x="600"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="100" width="105">
+                            <location y="310" x="500"/>
+                        </wholeArea>
+                        <model material="WOOD" color="BROWN" price="0.0" name="door">
+                            <size depth="5" width="100"/>
+                            <passiveSpace passiveOffsets="0 0 100 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>door11</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="door" name="door11">
+                    <assignedValue>
+                        <activeArea orientation="N">
+                            <rectangle height="5" width="100">
+<location y="-5" x="25"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="105" width="100">
+                            <location y="-5" x="25"/>
+                        </wholeArea>
+                        <model material="WOOD" color="BROWN" price="0.0" name="door">
+                            <size depth="5" width="100"/>
+                            <passiveSpace passiveOffsets="0 0 100 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>door12</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="door" name="door12">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="35" width="5">
+<location y="130" x="-5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="35" width="40">
+                            <location y="130" x="-5"/>
+                        </wholeArea>
+                        <model material="WOOD" color="BROWN" price="0.0" name="door">
+                            <size depth="5" width="35"/>
+                            <passiveSpace passiveOffsets="0 0 35 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>door14</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="door" name="door14">
+                    <assignedValue>
+                        <activeArea orientation="N">
+                            <rectangle height="5" width="5">
+<location y="-5" x="150"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="10" width="5">
+                            <location y="-5" x="150"/>
+                        </wholeArea>
+                        <model material="WOOD" color="BROWN" price="0.0" name="door">
+                            <size depth="5" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 5 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>door15</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="door" name="door15">
+                    <assignedValue>
+                        <activeArea orientation="N">
+                            <rectangle height="5" width="5">
+<location y="-5" x="505"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="10" width="5">
+                            <location y="-5" x="505"/>
+                        </wholeArea>
+                        <model material="WOOD" color="BROWN" price="0.0" name="door">
+                            <size depth="5" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 5 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>door5</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="door" name="door5">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="100" width="5">
+<location y="175" x="-5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="100" width="105">
+                            <location y="175" x="-5"/>
+                        </wholeArea>
+                        <model material="WOOD" color="BROWN" price="0.0" name="door">
+                            <size depth="5" width="100"/>
+                            <passiveSpace passiveOffsets="0 0 100 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>door6</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="door" name="door6">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="25" width="5">
+<location y="425" x="-5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="25" width="30">
+                            <location y="425" x="-5"/>
+                        </wholeArea>
+                        <model material="WOOD" color="BROWN" price="0.0" name="door">
+                            <size depth="5" width="25"/>
+                            <passiveSpace passiveOffsets="0 0 25 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>door7</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="door" name="door7">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="100">
+<location y="600" x="260"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="105" width="100">
+                            <location y="500" x="260"/>
+                        </wholeArea>
+                        <model material="WOOD" color="BROWN" price="0.0" name="door">
+                            <size depth="5" width="100"/>
+                            <passiveSpace passiveOffsets="0 0 100 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>door8</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="door" name="door8">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="100">
+<location y="600" x="145"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="105" width="100">
+                            <location y="500" x="145"/>
+                        </wholeArea>
+                        <model material="WOOD" color="BROWN" price="0.0" name="door">
+                            <size depth="5" width="100"/>
+                            <passiveSpace passiveOffsets="0 0 100 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>door9</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="door" name="door9">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="100">
+<location y="600" x="415"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="105" width="100">
+                            <location y="500" x="415"/>
+                        </wholeArea>
+                        <model material="WOOD" color="BROWN" price="0.0" name="door">
+                            <size depth="5" width="100"/>
+                            <passiveSpace passiveOffsets="0 0 100 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar1</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar1">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="15" width="5">
+<location y="245" x="140"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="15" width="5">
+                            <location y="245" x="140"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="15" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar10</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar10">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="155" width="15">
+<location y="105" x="260"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="155" width="15">
+                            <location y="105" x="260"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="155" width="15"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar11</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar11">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="35" width="20">
+<location y="105" x="275"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="35" width="20">
+                            <location y="105" x="275"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="35" width="20"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar12</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar12">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="35" width="20">
+<location y="140" x="295"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="35" width="20">
+                            <location y="140" x="295"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="35" width="20"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar13</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar13">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="20" width="30">
+<location y="175" x="315"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="20" width="30">
+                            <location y="175" x="315"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="20" width="30"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar14</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar14">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="30" width="20">
+<location y="140" x="345"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="30" width="20">
+                            <location y="140" x="345"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="30" width="20"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar15</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar15">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="20">
+<location y="170" x="345"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="20">
+                            <location y="170" x="345"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="5" width="20"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar16</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar16">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="30" width="20">
+<location y="105" x="365"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="30" width="20">
+                            <location y="105" x="365"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="30" width="20"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar17</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar17">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="20">
+<location y="135" x="365"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="20">
+                            <location y="135" x="365"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="5" width="20"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar18</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar18">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="155" width="15">
+<location y="105" x="385"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="155" width="15">
+                            <location y="105" x="385"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="155" width="15"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar19</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar19">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="15" width="120">
+<location y="105" x="420"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="15" width="120">
+                            <location y="105" x="420"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="15" width="120"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar2</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar2">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="115" width="15">
+<location y="130" x="125"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="115" width="15">
+                            <location y="130" x="125"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="115" width="15"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar20</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar20">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="140" width="15">
+<location y="120" x="420"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="140" width="15">
+                            <location y="120" x="420"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="140" width="15"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar21</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar21">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="15" width="110">
+<location y="245" x="435"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="15" width="110">
+                            <location y="245" x="435"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="15" width="110"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar22</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar22">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="55" width="15">
+<location y="185" x="530"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="55" width="15">
+                            <location y="185" x="530"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="55" width="15"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar23</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar23">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="15" width="45">
+<location y="185" x="480"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="15" width="45">
+                            <location y="185" x="480"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="15" width="45"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar24</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar24">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="15">
+<location y="240" x="530"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="15">
+                            <location y="240" x="530"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="5" width="15"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar25</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar25">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="10" width="5">
+<location y="185" x="525"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="10" width="5">
+                            <location y="185" x="525"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="10" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar26</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar26">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="5">
+<location y="195" x="525"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="5">
+                            <location y="195" x="525"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="5" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar27</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar27">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="130" width="15">
+<location y="105" x="560"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="130" width="15">
+                            <location y="105" x="560"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="130" width="15"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar28</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar28">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="15" width="15">
+<location y="245" x="560"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="15" width="15">
+                            <location y="245" x="560"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="15" width="15"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar3</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar3">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="15" width="75">
+<location y="245" x="145"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="15" width="75">
+                            <location y="245" x="145"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="15" width="75"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar4</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar4">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="10" width="80">
+<location y="105" x="140"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="10" width="80">
+                            <location y="105" x="140"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="10" width="80"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar5</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar5">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="125" width="15">
+<location y="120" x="225"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="125" width="15">
+                            <location y="120" x="225"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="125" width="15"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar6</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar6">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="85">
+<location y="115" x="140"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="85">
+                            <location y="115" x="140"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="5" width="85"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar7</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar7">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="10" width="5">
+<location y="105" x="220"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="10" width="5">
+                            <location y="105" x="220"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="10" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar8</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar8">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="15" width="5">
+<location y="245" x="220"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="15" width="5">
+                            <location y="245" x="220"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="15" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar9</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar9">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="10" width="15">
+<location y="120" x="125"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="10" width="15">
+                            <location y="120" x="125"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="10" width="15"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window1</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window1">
+                    <assignedValue>
+                        <activeArea orientation="E">
+                            <rectangle height="100" width="5">
+<location y="455" x="600"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="100" width="5">
+                            <location y="455" x="600"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="100"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window10</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window10">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="10">
+<location y="600" x="5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="10">
+                            <location y="600" x="5"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="10"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window11</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window11">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="15" width="5">
+<location y="570" x="-5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="15" width="5">
+                            <location y="570" x="-5"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="15"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window12</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window12">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="5" width="5">
+<location y="555" x="-5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="5">
+                            <location y="555" x="-5"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window13</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window13">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="5" width="5">
+<location y="540" x="-5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="5">
+                            <location y="540" x="-5"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window14</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window14">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="5" width="5">
+<location y="530" x="-5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="5">
+                            <location y="530" x="-5"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window15</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window15">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="10" width="5">
+<location y="520" x="-5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="10" width="5">
+                            <location y="520" x="-5"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="10"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window16</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window16">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="20" width="5">
+<location y="490" x="-5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="20" width="5">
+                            <location y="490" x="-5"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="20"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window17</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window17">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="10" width="5">
+<location y="475" x="-5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="10" width="5">
+                            <location y="475" x="-5"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="10"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window18</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window18">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="10" width="5">
+<location y="460" x="-5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="10" width="5">
+                            <location y="460" x="-5"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="10"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window2</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window2">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="35">
+<location y="600" x="540"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="35">
+                            <location y="600" x="540"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="35"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window3</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window3">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="15">
+<location y="600" x="380"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="15">
+                            <location y="600" x="380"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="15"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window4</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window4">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="5">
+<location y="600" x="250"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="5">
+                            <location y="600" x="250"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window5</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window5">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="105">
+<location y="600" x="20"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="105">
+                            <location y="600" x="20"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="105"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window6</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window6">
+                    <assignedValue>
+                        <activeArea orientation="E">
+                            <rectangle height="20" width="5">
+<location y="275" x="600"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="20" width="5">
+                            <location y="275" x="600"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="20"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window7</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window7">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="70" width="5">
+<location y="325" x="-5"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="70" width="5">
+                            <location y="325" x="-5"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="70"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window8</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window8">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="5">
+<location y="600" x="125"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="5">
+                            <location y="600" x="125"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window9</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window9">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="5" width="5">
+<location y="600" x="135"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="5" width="5">
+                            <location y="600" x="135"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="5"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+        </elements>
+        <typesCount>
+            <entry>
+                <key>door</key>
+                <value>11</value>
+            </entry>
+            <entry>
+                <key>pillar</key>
+                <value>28</value>
+            </entry>
+            <entry>
+                <key>window</key>
+                <value>18</value>
+            </entry>
+        </typesCount>
+    </fixed>
+    <globalConstraints/>
+</wishList>

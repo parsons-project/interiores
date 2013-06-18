@@ -27,6 +27,10 @@ public class Range {
         this.max = max;
     }
     
+    public int average() {
+        return (min + max) / 2;
+    }
+    
     @Override
     public String toString() {
         return "min=" + min + ", max=" + max;

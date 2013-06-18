@@ -107,6 +107,7 @@ public class NewDesignDialog extends JDialog
     
     private void setSpinnerModel(JSpinner spinner, Range range) {
         int value = (Integer) spinner.getValue();
+        if (value == 0) value = range.average();
         
         if(value < range.min) value = range.min;
         else if(value > range.max) value = range.max;

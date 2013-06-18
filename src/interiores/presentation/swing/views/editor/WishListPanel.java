@@ -110,6 +110,7 @@ public class WishListPanel extends JPanel {
     
     @Listen(SolveDesignStartedEvent.class)
     public void setTimeoutTimer() {
+        if (timeout != null) timeout.cancel();
         timeout = new java.util.Timer();
         if( ! debugCheckBox.isSelected() ) {
             timeout.schedule(new TimerTask() {

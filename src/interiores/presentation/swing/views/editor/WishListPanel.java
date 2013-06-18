@@ -1,16 +1,16 @@
 package interiores.presentation.swing.views.editor;
 
+import com.apple.crypto.provider.Debug;
 import interiores.business.controllers.DesignController;
 import interiores.business.controllers.FixedElementController;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.events.backtracking.SolveDesignFinishedEvent;
 import interiores.business.events.backtracking.SolveDesignStartedEvent;
+import interiores.business.events.catalogs.FTCatalogCheckoutEvent;
+import interiores.business.events.catalogs.FTCatalogSetModifiedEvent;
 import interiores.business.events.furniture.ElementSelectedEvent;
 import interiores.business.events.furniture.ElementUnselectedEvent;
-import interiores.business.exceptions.ElementNotFoundBusinessException;
 import interiores.business.exceptions.WantedElementNotFoundException;
-import interiores.core.Debug;
-import interiores.core.business.BusinessException;
 import interiores.core.presentation.SwingController;
 import interiores.core.presentation.annotation.Listen;
 import interiores.presentation.swing.views.ConstraintEditorFrame;
@@ -66,13 +66,17 @@ public class WishListPanel extends JPanel {
         designController.solve(debugCheckBox.isSelected(), timeCheckBox.isSelected());
     }
     
+    @Listen({FTCatalogCheckoutEvent.class})
     public void updateSelectable() {
         Collection<String> selectableFurniture = furnitureTypeController.getSelectableFurniture();
         DefaultTreeModel model = (DefaultTreeModel) selectable.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+        root.removeAllChildren();
         for (String sf: selectableFurniture) {
             root.add(new DefaultMutableTreeNode(sf));
         }
+        
+        model.reload();
     }
     
     public void updateSelected() {

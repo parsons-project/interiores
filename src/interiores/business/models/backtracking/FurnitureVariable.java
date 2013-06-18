@@ -237,7 +237,7 @@ abstract public class FurnitureVariable
     }
 
     public int getMaxSize() {
-        return Math.max(maxWidth, maxWidth);
+        return Math.max(maxWidth, maxDepth);
     }
     
     //FUNCTIONS TO MODIFY THE DOMAIN

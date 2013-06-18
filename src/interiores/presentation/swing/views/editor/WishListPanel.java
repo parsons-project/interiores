@@ -64,7 +64,7 @@ public class WishListPanel extends JPanel {
         designController.solve(debugCheckBox.isSelected(), timeCheckBox.isSelected());
     }
     
-    @Listen({FTCatalogCheckoutEvent.class})
+    @Listen(FTCatalogCheckoutEvent.class)
     public void updateSelectable() {
         Collection<String> selectableFurniture = furnitureTypeController.getSelectableFurniture();
         DefaultTreeModel model = (DefaultTreeModel) selectable.getModel();
@@ -124,7 +124,7 @@ public class WishListPanel extends JPanel {
                                  JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (choice == JOptionPane.YES_OPTION) designController.stopSolver();
                 }
-            }, 30000);
+            }, 3000);
         }
         
         solveButton.setText("Abort");

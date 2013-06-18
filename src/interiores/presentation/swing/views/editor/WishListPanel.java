@@ -1,13 +1,11 @@
 package interiores.presentation.swing.views.editor;
 
-import com.apple.crypto.provider.Debug;
 import interiores.business.controllers.DesignController;
 import interiores.business.controllers.FixedElementController;
 import interiores.business.controllers.FurnitureTypeController;
 import interiores.business.events.backtracking.SolveDesignFinishedEvent;
 import interiores.business.events.backtracking.SolveDesignStartedEvent;
 import interiores.business.events.catalogs.FTCatalogCheckoutEvent;
-import interiores.business.events.catalogs.FTCatalogSetModifiedEvent;
 import interiores.business.events.furniture.ElementSelectedEvent;
 import interiores.business.events.furniture.ElementUnselectedEvent;
 import interiores.business.exceptions.WantedElementNotFoundException;

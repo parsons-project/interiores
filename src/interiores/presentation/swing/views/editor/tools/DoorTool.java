@@ -30,6 +30,7 @@ public class DoorTool
         if(length == 0)
             return true;
         
+        if (length > 150) length = 150; else if (length < -150) length = -150;
         int displacement = getDisplacement(length);
         
         fixedController.addDoor(wallWhere.toString(false), pad(displacement), pad(Math.abs(length)));
@@ -47,6 +48,7 @@ public class DoorTool
         if(length == 0)
             return true;
         
+        if (length > 150) length = 150; else if (length < -150) length = -150;
         int displacement = getDisplacement(length);
         
         map.previewDoor(wallWhere, pad(displacement), pad(Math.abs(length)));

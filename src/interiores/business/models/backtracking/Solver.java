@@ -88,9 +88,9 @@ public class Solver
      * The importance of each factor is proportional to the value of the
      * constant.
      */
-    private static final int DOMAIN_SIZE_FACTOR = 30;
-    private static final int SMALLEST_MODEL_FACTOR = 5;
-    private static final int BINARY_CONSTRAINTS_FACTOR = 12;
+    private static final int DOMAIN_SIZE_FACTOR = 60;
+    private static final int SMALLEST_MODEL_FACTOR = 10;
+    private static final int BINARY_CONSTRAINTS_FACTOR = 5;
     
     /**
      * Constructor.
@@ -243,7 +243,7 @@ public class Solver
             int i = 0;
             //get value of each factor for each variable and compute maximums
             for (FurnitureVariable variable : unassignedVariables) {
-                domainSize[i] = variable.domainSize();
+                domainSize[i] = variable.domainSize(depth);
                 if (domainSize[i] > maxDomainSize) maxDomainSize = domainSize[i];
 
                 // the weight of all binary constraints between this variable and
@@ -282,7 +282,7 @@ public class Solver
                         (binaryConstraintsLoad[i] * BINARY_CONSTRAINTS_FACTOR) / maxBinaryConstraints;
                 else binaryConstraintsWeight = 0;
                 
-                int smallestModelSizeWeight =
+                int smallestModelSizeWeight = maxSmallestModelArea -
                         (smallestModelSize[i] * SMALLEST_MODEL_FACTOR) / maxSmallestModelArea;
 
                 int variableWeight = domainSizeWeight + binaryConstraintsWeight +

@@ -202,7 +202,7 @@ abstract public class FurnitureVariable
         if (minSize == -1) minSize = 0;
     }
 
-    public int domainSize() {
+    public int domainSize(int iteration) {
         return domain.domainSize(iteration);
     }
 

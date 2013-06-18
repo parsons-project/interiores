@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<wishList>
+    <room>
+        <type identifier="livingRoom">
+            <minDimension depth="270" width="270"/>
+            <mustHave>
+                <mustHave>chair</mustHave>
+                <mustHave>table</mustHave>
+            </mustHave>
+            <cantHave>
+                <cantHave>bathtub</cantHave>
+                <cantHave>bedDouble</cantHave>
+                <cantHave>bedSingle</cantHave>
+                <cantHave>bidet</cantHave>
+                <cantHave>cabinet</cantHave>
+                <cantHave>dishwasher</cantHave>
+                <cantHave>dryer</cantHave>
+                <cantHave>extractor</cantHave>
+                <cantHave>fridge</cantHave>
+                <cantHave>hob</cantHave>
+                <cantHave>oven</cantHave>
+                <cantHave>shower</cantHave>
+                <cantHave>sink</cantHave>
+                <cantHave>stove</cantHave>
+                <cantHave>tableBedside</cantHave>
+                <cantHave>toilet</cantHave>
+                <cantHave>washbasin</cantHave>
+                <cantHave>washer</cantHave>
+                <cantHave>wringer</cantHave>
+            </cantHave>
+            <neededFunctions/>
+        </type>
+        <size depth="270" width="270"/>
+    </room>
+    <furniture name="furniture">
+        <elements>
+            <entry>
+                <key>chair1</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFurniture" typeName="chair" name="chair1">
+                    <assignedValue>
+                        <activeArea orientation="E">
+                            <rectangle height="45" width="45">
+<location y="85" x="0"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="85" width="75">
+                            <location y="65" x="0"/>
+                        </wholeArea>
+                        <model material="PLASTIC" color="WHITE" price="16.99" name="ILLSA" type="chair">
+                            <size depth="45" width="45"/>
+                            <passiveSpace passiveOffsets="30 20 0 20"/>
+                        </model>
+                    </assignedValue>
+                    <unaryConstraints>
+                        <unaryConstraints/>
+                    </unaryConstraints>
+                    <binaryConstraints>
+                        <binaryConstraints>
+                            <entry>
+<key>MaxDistanceConstraint-table1-</key>
+<value xsi:type="maxDistanceConstraint" distance="100">
+    <otherVariable>table1</otherVariable>
+</value>
+                            </entry>
+                            <entry>
+<key>StraightFacingConstraint-chair5-</key>
+<value xsi:type="straightFacingConstraint">
+    <otherVariable>chair5</otherVariable>
+</value>
+                            </entry>
+                        </binaryConstraints>
+                    </binaryConstraints>
+                </value>
+            </entry>
+            <entry>
+                <key>chair2</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFurniture" typeName="chair" name="chair2">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="45" width="45">
+<location y="20" x="115"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="85" width="75">
+                            <location y="0" x="85"/>
+                        </wholeArea>
+                        <model material="PLASTIC" color="WHITE" price="16.99" name="ILLSA" type="chair">
+                            <size depth="45" width="45"/>
+                            <passiveSpace passiveOffsets="30 20 0 20"/>
+                        </model>
+                    </assignedValue>
+                    <unaryConstraints>
+                        <unaryConstraints/>
+                    </unaryConstraints>
+                    <binaryConstraints>
+                        <binaryConstraints>
+                            <entry>
+<key>StraightFacingConstraint-chair4-</key>
+<value xsi:type="straightFacingConstraint">
+    <otherVariable>chair4</otherVariable>
+</value>
+                            </entry>
+                        </binaryConstraints>
+                    </binaryConstraints>
+                </value>
+            </entry>
+            <entry>
+                <key>chair3</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFurniture" typeName="chair" name="chair3">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="45" width="45">
+<location y="90" x="200"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="85" width="75">
+                            <location y="70" x="170"/>
+                        </wholeArea>
+                        <model material="PLASTIC" color="WHITE" price="16.99" name="ILLSA" type="chair">
+                            <size depth="45" width="45"/>
+                            <passiveSpace passiveOffsets="30 20 0 20"/>
+                        </model>
+                    </assignedValue>
+                    <unaryConstraints>
+                        <unaryConstraints/>
+                    </unaryConstraints>
+                    <binaryConstraints>
+                        <binaryConstraints>
+                            <entry>
+<key>StraightFacingConstraint-table1-</key>
+<value xsi:type="straightFacingConstraint">
+    <otherVariable>table1</otherVariable>
+</value>
+                            </entry>
+                        </binaryConstraints>
+                    </binaryConstraints>
+                </value>
+            </entry>
+            <entry>
+                <key>chair4</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFurniture" typeName="chair" name="chair4">
+                    <assignedValue>
+                        <activeArea orientation="E">
+                            <rectangle height="45" width="45">
+<location y="20" x="0"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="85" width="75">
+                            <location y="0" x="0"/>
+                        </wholeArea>
+                        <model material="PLASTIC" color="WHITE" price="16.99" name="ILLSA" type="chair">
+                            <size depth="45" width="45"/>
+                            <passiveSpace passiveOffsets="30 20 0 20"/>
+                        </model>
+                    </assignedValue>
+                    <unaryConstraints>
+                        <unaryConstraints/>
+                    </unaryConstraints>
+                    <binaryConstraints>
+                        <binaryConstraints>
+                            <entry>
+<key>StraightFacingConstraint-chair2-</key>
+<value xsi:type="straightFacingConstraint">
+    <otherVariable>chair2</otherVariable>
+</value>
+                            </entry>
+                        </binaryConstraints>
+                    </binaryConstraints>
+                </value>
+            </entry>
+            <entry>
+                <key>chair5</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFurniture" typeName="chair" name="chair5">
+                    <assignedValue>
+                        <activeArea orientation="W">
+                            <rectangle height="45" width="45">
+<location y="85" x="75"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="85" width="75">
+                            <location y="65" x="45"/>
+                        </wholeArea>
+                        <model material="PLASTIC" color="WHITE" price="16.99" name="ILLSA" type="chair">
+                            <size depth="45" width="45"/>
+                            <passiveSpace passiveOffsets="30 20 0 20"/>
+                        </model>
+                    </assignedValue>
+                    <unaryConstraints>
+                        <unaryConstraints/>
+                    </unaryConstraints>
+                    <binaryConstraints>
+                        <binaryConstraints>
+                            <entry>
+<key>StraightFacingConstraint-chair1-</key>
+<value xsi:type="straightFacingConstraint">
+    <otherVariable>chair1</otherVariable>
+</value>
+                            </entry>
+                        </binaryConstraints>
+                    </binaryConstraints>
+                </value>
+            </entry>
+            <entry>
+                <key>table1</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFurniture" typeName="table" name="table1">
+                    <assignedValue>
+                        <activeArea orientation="E">
+                            <rectangle height="50" width="40">
+<location y="87" x="130"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="70" width="60">
+                            <location y="77" x="120"/>
+                        </wholeArea>
+                        <model material="AGGLOMERATE" color="BROWN" price="59.99" name="SVERONYKA" type="table">
+                            <size depth="40" width="50"/>
+                            <passiveSpace passiveOffsets="10 10 10 10"/>
+                        </model>
+                    </assignedValue>
+                    <unaryConstraints>
+                        <unaryConstraints/>
+                    </unaryConstraints>
+                    <binaryConstraints>
+                        <binaryConstraints>
+                            <entry>
+<key>MaxDistanceConstraint-chair1-</key>
+<value xsi:type="maxDistanceConstraint" distance="100">
+    <otherVariable>chair1</otherVariable>
+</value>
+                            </entry>
+                            <entry>
+<key>StraightFacingConstraint-chair3-</key>
+<value xsi:type="straightFacingConstraint">
+    <otherVariable>chair3</otherVariable>
+</value>
+                            </entry>
+                        </binaryConstraints>
+                    </binaryConstraints>
+                </value>
+            </entry>
+        </elements>
+        <typesCount>
+            <entry>
+                <key>chair</key>
+                <value>5</value>
+            </entry>
+            <entry>
+                <key>table</key>
+                <value>1</value>
+            </entry>
+        </typesCount>
+    </furniture>
+    <fixed name="fixed element">
+        <elements>
+            <entry>
+                <key>door1</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="door" name="door1">
+                    <assignedValue>
+                        <activeArea orientation="N">
+                            <rectangle height="5" width="60">
+<location y="-5" x="55"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="65" width="60">
+                            <location y="-5" x="55"/>
+                        </wholeArea>
+                        <model material="WOOD" color="BROWN" price="0.0" name="door">
+                            <size depth="5" width="60"/>
+                            <passiveSpace passiveOffsets="0 0 60 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>pillar1</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="pillar" name="pillar1">
+                    <assignedValue>
+                        <activeArea orientation="S">
+                            <rectangle height="65" width="70">
+<location y="205" x="0"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="65" width="70">
+                            <location y="205" x="0"/>
+                        </wholeArea>
+                        <model material="BRICK" color="GRAY" price="0.0" name="pillar">
+                            <size depth="65" width="70"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+            <entry>
+                <key>window1</key>
+                <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wantedFixed" typeName="window" name="window1">
+                    <assignedValue>
+                        <activeArea orientation="E">
+                            <rectangle height="120" width="5">
+<location y="100" x="270"/>
+                            </rectangle>
+                        </activeArea>
+                        <wholeArea height="120" width="5">
+                            <location y="100" x="270"/>
+                        </wholeArea>
+                        <model material="GLASS" color="BLUE" price="0.0" name="window">
+                            <size depth="5" width="120"/>
+                            <passiveSpace passiveOffsets="0 0 0 0"/>
+                        </model>
+                    </assignedValue>
+                </value>
+            </entry>
+        </elements>
+        <typesCount>
+            <entry>
+                <key>door</key>
+                <value>1</value>
+            </entry>
+            <entry>
+                <key>pillar</key>
+                <value>1</value>
+            </entry>
+            <entry>
+                <key>window</key>
+                <value>1</value>
+            </entry>
+        </typesCount>
+    </fixed>
+    <globalConstraints/>
+</wishList>

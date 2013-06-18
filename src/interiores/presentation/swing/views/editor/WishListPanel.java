@@ -80,6 +80,9 @@ public class WishListPanel extends JPanel {
         
         for(String element : furnitureTypeController.getRoomFurniture())
              listModel.addElement(element);
+        
+        for(String element : fixedElementController.getFixedNames())
+            listModel.addElement(element);
     }
     
     @Listen(ElementSelectedEvent.class)

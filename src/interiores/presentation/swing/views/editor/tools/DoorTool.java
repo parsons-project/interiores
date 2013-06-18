@@ -13,7 +13,7 @@ import java.awt.event.MouseEvent;
 public class DoorTool
     extends OnWallElementTool 
 {
-    
+    private static int MAX_LENGTH = 100;
     
     public DoorTool(SwingController swing) {
         super("Door", "door.png", KeyEvent.VK_D);   
@@ -30,7 +30,7 @@ public class DoorTool
         if(length == 0)
             return true;
         
-        if (length > 150) length = 150; else if (length < -150) length = -150;
+        if (length > MAX_LENGTH) length = MAX_LENGTH; else if (length < -MAX_LENGTH) length = -MAX_LENGTH;
         int displacement = getDisplacement(length);
         
         fixedController.addDoor(wallWhere.toString(false), pad(displacement), pad(Math.abs(length)));
@@ -48,7 +48,7 @@ public class DoorTool
         if(length == 0)
             return true;
         
-        if (length > 150) length = 150; else if (length < -150) length = -150;
+        if (length > MAX_LENGTH) length = MAX_LENGTH; else if (length < -MAX_LENGTH) length = -MAX_LENGTH;
         int displacement = getDisplacement(length);
         
         map.previewDoor(wallWhere, pad(displacement), pad(Math.abs(length)));

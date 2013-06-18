@@ -27,25 +27,19 @@ public class FixedElementController extends InterioresController{
     }
     
     
-    public void addDoor(String wall, int displacement, int length) {
-        String id = getWishList().addWantedFixed(new Door(wall, displacement, length, getRoom().getDimension()));
-        
-        notify(new WantedFixedChangedEvent());
-        notify(new ElementSelectedEvent(id));
+    public void addDoor(String door, int displacement, int length) {
+        WantedFixed wf = new Door( door, displacement, length, getRoom().getDimension() );
+        addFixedElement(wf);
     }
     
     public void addWindow(String wall, int displacement, int length) {
-        String id = getWishList().addWantedFixed(new Window(wall, displacement, length, getRoom().getDimension()));
-        
-        notify(new WantedFixedChangedEvent());
-        notify(new ElementSelectedEvent(id));
+        WantedFixed wf = new Window( wall, displacement, length, getRoom().getDimension() );
+        addFixedElement(wf);
     }
     
     public void addPillar(Point point, Dimension dimension) {
-        String id = getWishList().addWantedFixed(new Pillar(point, dimension));
-        
-        notify(new WantedFixedChangedEvent());
-        notify(new ElementSelectedEvent(id));
+        WantedFixed wf = new Pillar(point, dimension);
+        addFixedElement(wf);
     }
     
     public void remove(String name) {
@@ -65,5 +59,22 @@ public class FixedElementController extends InterioresController{
 
     public Collection<String> getSelectable() {
         return selectable;
+    }
+    
+    private boolean isWellPositioned(WantedFixed wf) {
+        Collection<WantedFixed> wfc = getWantedFixed();
+        
+        for (WantedFixed w : wfc)
+            if ( w.assignedValue.getWholeArea().intersects(wf.assignedValue.getWholeArea()) ) return false;
+        
+        return true;
+    }
+    
+    private void addFixedElement(WantedFixed wf) {
+        if (isWellPositioned(wf)) {
+            String id = getWishList().addWantedFixed(wf);
+            notify(new WantedFixedChangedEvent());
+            notify(new ElementSelectedEvent(id));
+        }
     }
 }

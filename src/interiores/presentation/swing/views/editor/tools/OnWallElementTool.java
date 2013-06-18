@@ -7,6 +7,7 @@ import interiores.presentation.swing.views.map.RoomMap;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,6 +27,7 @@ public class OnWallElementTool
     
     @Override
     public boolean mousePressed(MouseEvent evt, InteractiveRoomMap map) {
+                
         position  = map.normDiscretize(evt.getPoint());
         wallWhere = map.getNearestWall(evt.getX(), evt.getY());
    
